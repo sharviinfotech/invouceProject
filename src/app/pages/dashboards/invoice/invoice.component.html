@@ -1,0 +1,311 @@
+
+
+<div class="tabCard">
+     <!-- Tabs -->
+ <div class="row selectedTab">
+    <!-- Left Side: Tabs -->
+    <div class="col-lg-8">
+      <button [class.active]="activeTab === 'Preview'" (click)="setTab('Preview')">Preview</button>
+      <button [class.active]="activeTab === 'Edit'" (click)="setTab('Edit')">Edit</button>
+      <!-- <button [class.active]="activeTab === 'paid'" (click)="setTab('paid')">Paid</button> -->
+    </div>
+  
+    <!-- Right Side: Search & New Invoice -->
+    <div class="col-lg-4" style="text-align: end;">
+      <!-- <input type="text" class="search-box" placeholder="Search by Client Name" /> -->
+      <button class="new-invoice-btn" [class.active]="activeTab === 'NewInvoice'" (click)="setTab('NewInvoice')">New Invoice</button>
+
+      <!-- <button class="new-invoice-btn" (click)="toggleNewInvoice()">New Invoice</button> -->
+    </div>
+  </div>
+</div>
+
+<div class="invoice-container" *ngIf="activeTab">
+    <!-- Invoice List -->
+    <div *ngIf="activeTab == 'Preview' " >
+      <h>preview</h>
+    </div>
+    <div *ngIf="activeTab == 'Edit' " >
+       <h>edit</h>
+      </div>
+
+  
+    <!-- New Invoice Form -->
+    <div *ngIf="activeTab == 'NewInvoice' " class="invoice-form">
+      <form [formGroup]="newInvoiceCreation">
+      <h2>New Invoice</h2>
+      <div class="invoice-container">
+     <div class="invoice-header">
+      <!-- <div class="logo-upload" (click)="logoInput.click()" (mouseenter)="isHoveringLogo = true" (mouseleave)="isHoveringLogo = false">
+        <input
+          #logoInput
+          type="file"
+          (change)="onLogoSelected($event)"
+          accept="image/*"
+          style="display: none"
+        >
+        <div *ngIf="!logoUrl" class="logo-placeholder">
+          <i>+ Logo</i>
+          <div>Add your logo</div>
+        </div>
+        <ng-container *ngIf="logoUrl">
+          <button class="remove-logo" 
+                  (click)="removeLogo($event)"
+                  (mouseenter)="isHoveringRemove = true"
+                  (mouseleave)="isHoveringRemove = false">×</button>
+          <div class="hover-text">{{ isHoveringRemove ? 'Remove your logo' : 'Update your logo' }}</div>
+          <img [src]="logoUrl" alt="Company Logo">
+        </ng-container>
+      </div> -->
+      
+      <input type="text" formControlName="invoiceHeader" placeholder="Invoice" class="w-50">
+
+        <div class="logo-upload" (click)="logoInput.click()" (mouseenter)="isHoveringLogo = true" (mouseleave)="isHoveringLogo = false">
+          <input
+            #logoInput
+            type="file"
+            (change)="onLogoSelected($event)"
+            accept="image/*"
+            style="display: none"
+          >
+          <div *ngIf="!logoUrl" class="logo-placeholder">
+            <i>+ Logo</i>
+            <div>Add your logo</div>
+          </div>
+          <ng-container *ngIf="logoUrl">
+            <button class="remove-logo" 
+                    (click)="removeLogo($event)"
+                    (mouseenter)="isHoveringRemove = true"
+                    (mouseleave)="isHoveringRemove = false">×</button>
+            <div class="hover-text">{{ isHoveringRemove ? 'Remove your logo' : 'Update your logo' }}</div>
+            <img [src]="logoUrl" alt="Company Logo">
+          </ng-container>
+        </div>
+      </div>
+  
+        <div class="form-grid">
+          <div class="from-section">
+            <h3>From</h3>
+            <div class="form-group">
+              <label>Name</label>
+              <input type="text" formControlName="fromName" placeholder="Name">
+            </div>
+            <div class="form-group">
+              <label>Email</label>
+              <input type="email" formControlName="fromEmail" placeholder="name@gmail.com">
+            </div>
+            <div class="form-group">
+              <label>Address</label>
+              <input type="text" formControlName="fromAddress" placeholder="">
+            </div>
+            <div class="form-group">
+              <label>Mobile Number</label>
+              <input type="tel" formControlName="fromMobileNumber" placeholder="">
+            </div>
+            
+          </div>
+  
+          <div class="bill-to-section">
+            <h3>To</h3>
+            <div class="form-group">
+              <label>Name</label>
+              <input type="text" formControlName="toName" placeholder="Name">
+            </div>
+            <div class="form-group">
+              <label>Email</label>
+              <input type="email" formControlName="toEmail" placeholder="example@gmail.com">
+            </div>
+            <div class="form-group">
+              <label>Address</label>
+              <input type="text" formControlName="toAddress" placeholder="">
+            </div>
+            <div class="form-group">
+              <label>Mobile Number</label>
+              <input type="tel" formControlName="toMobileNumber" placeholder="">
+            </div>
+            <div class="form-group">
+              <label>GSTIN No</label>
+              <input type="tel" formControlName="toGstinNo" placeholder="">
+            </div>
+            <div class="form-group">
+              <label>Pan</label>
+              <input type="tel" formControlName="toPan" placeholder="">
+            </div>
+          </div>
+        </div>
+  
+        <div class="row">
+          <div class="col-lg-4">
+            <div class="form-group">
+              <label>Invoice Number</label>
+              <input type="text" formControlName="invoiceNumber" class="form-control" placeholder="INV0001">
+            </div>
+          </div>
+          <div class="col-lg-4">
+            <div class="form-group">
+              <label>Date</label>
+              <input type="date" formControlName="invoiceDate" class="form-control">
+            </div>
+          </div>
+          <div class="col-lg-4">
+            <div class="form-group">
+              <label>PAN</label>
+              <input type="text" formControlName="panNumber" class="form-control" placeholder="">
+            </div>
+          </div>
+          <div class="col-lg-4">
+            <div class="form-group">
+              <label>GSTIN No</label>
+              <input type="text" formControlName="gstinNo" class="form-control" placeholder="">
+            </div>
+          </div>
+          <div class="col-lg-4">
+            <div class="form-group">
+              <label>Type of Aircraft</label>
+              <input type="text" formControlName="typeOfAircraft" class="form-control" placeholder="">
+            </div>
+          </div>
+        </div>
+        
+        <div class="invoice-container">
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th>S.No</th>
+                <th>Description</th>
+                <th>Units (Hrs.)</th>
+                <th>Rate</th>
+                <th>Amount (INR)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Charges Section -->
+              <tr>
+                <td>1</td>
+                <td class="bold">Charges</td>
+                <td class="text-right">
+                  <input type="text" [(ngModel)]="mainHours"  [ngModelOptions]="{standalone: true}"
+                         (input)="calculateTotals()"
+                         class="hours-input">
+                </td>
+                <td class="text-right">
+                  <input type="number" [(ngModel)]="mainRate" [ngModelOptions]="{standalone: true}"
+                         (input)="calculateTotals()"
+                         class="rate-input">
+                </td>
+                <td></td>
+              </tr>
+              
+              <tr *ngFor="let item of chargeItems; let i = index">
+                <td></td>
+                <td class="indent">
+                  <input type="text" [(ngModel)]="item.description" [ngModelOptions]="{standalone: true}"
+                         class="description-input"
+                         (input)="calculateTotals()">
+                </td>
+                <td></td>
+                <td class="text-right">
+                  <input type="number" [(ngModel)]="item.rate"  [ngModelOptions]="{standalone: true}"
+                         class="rate-input"
+                         (input)="calculateTotals()">
+                </td>
+                <td class="text-right">
+                  <input type="number" [(ngModel)]="item.amount" [ngModelOptions]="{standalone: true}"
+                         class="amount-input"
+                         (input)="calculateTotals()">
+                </td>
+              </tr>
+              
+              <tr>
+                <td colspan="4" class="text-right">
+                  
+                </td>
+                <td style="text-align: end"><button (click)="addChargeItem()" class="add-btn">+ Add Charge</button></td>
+              </tr>
+    
+              <tr >
+                <td></td>
+                <td class="bold">TOTAL</td>
+                <td></td>
+                <td></td>
+                <td class="text-right bold">{{subtotal | number:'1.0-0'}}</td>
+              </tr>
+    
+              <!-- Taxes Section -->
+              <tr>
+                <td>2</td>
+                <td class="bold">Taxes:</td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+    
+              <tr *ngFor="let tax of taxItems; let i = index">
+                <td></td>
+                <td class="indent">
+                  {{tax.description}}
+                  <!-- <input type="text" [(ngModel)]="tax.description" [ngModelOptions]="{standalone: true}"
+                         class="description-input"
+                         (input)="calculateTotals()"> -->
+                </td>
+                <td></td>
+                <td class="text-right">
+                  <!-- <input type="number" [(ngModel)]="tax.percentage"  [ngModelOptions]="{standalone: true}"
+                         class="percentage-input"
+                         (input)="calculateTotals()">% -->
+                </td>
+                <td class="text-right">{{tax.amount | number:'1.0-0'}}</td>
+              </tr>
+    
+              <!-- <tr>
+                <td colspan="4" class="text-right">
+                  <button (click)="addTaxItem()" class="add-btn">+ Add Tax</button>
+                </td>
+                <td></td>
+              </tr> -->
+    
+              <tr >
+                <td></td>
+                <td  class="bold">GRAND TOTAL</td>
+                <td></td>
+                <td></td>
+                <td class="text-right bold">{{grandTotal | number:'1.0-0'}}</td>
+              </tr>
+            </tbody>
+          </table>
+    
+          <div class="amount-in-words">
+            Rupees in words: {{amountInWords}}
+          </div>
+        </div>
+  
+        <div class="notes-section">
+          <label>Notes</label>
+          <textarea formControlName="notes" placeholder="Notes - any relevant information not covered, additional terms and conditions"></textarea>
+        </div>
+  
+        <div class="signature-section">
+          <label>Signature</label>
+          <div class="btnPlus">
+            <button>+</button>
+          </div>
+        </div>
+  
+        <!-- <div class="photos-section">
+          <label>Photos</label>
+          <button class="add-photo">Add Photo</button>
+        </div> -->
+  
+       
+        <div class="col-sm-12 col-md-12 col-lg-12 text-right" style="text-align: end;">
+            <button class="btnSave btn" (click)="saveInvoice()">Save Invoice</button>
+        <button class="btnClose btn">Close Invoice</button>
+        </div>
+       
+      </div>
+    </form>
+    </div>
+  </div>
+  
+
+  

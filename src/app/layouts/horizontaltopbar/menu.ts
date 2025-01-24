@@ -2,17 +2,28 @@ import { MenuItem } from './menu.model';
 
 export const MENU: MenuItem[] = [
     {
-        id: 1,
+        id: 2,
         label: 'MENUITEMS.DASHBOARDS.TEXT',
         icon: 'bx-home-circle',
-        isCollapsed: false,
         subItems: [
             {
-                id: 2,
+                id: 3,
                 label: 'MENUITEMS.DASHBOARDS.LIST.DEFAULT',
                 link: '/dashboard',
+                parentId: 2
+            },
+            {
+                id: 3,
+                label: 'Invoice',
+                link: '/Invoice',
                 parentId: 1
-            }
+            },
+            {
+                id: 4,
+                label: 'Invoice Layout',
+                link: '/InvoiceLayout',
+                parentId: 1
+            },
         ]
     },
     {

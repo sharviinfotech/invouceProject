@@ -7,6 +7,8 @@ import { CryptoComponent } from './crypto/crypto.component';
 import { BlogComponent } from './blog/blog.component';
 import { JobsComponent } from "./jobs/jobs.component";
 import { SampleComponentComponent } from './default/sample-component/sample-component.component';
+import { InvoiceComponent } from './invoice/invoice.component';
+import { InvoiceLayoutComponent } from './invoice-layout/invoice-layout.component';
 
 const routes: Routes = [
     {
@@ -16,6 +18,14 @@ const routes: Routes = [
     {
         path: 'sampleComponent',
         component: SampleComponentComponent
+    },
+    {
+        path: 'Invoice',
+        component: InvoiceComponent
+    },
+    {
+        path: 'InvoiceLayout',
+        component: InvoiceLayoutComponent
     },
     // {
     //     path: 'saas',

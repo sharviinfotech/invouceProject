@@ -100,6 +100,7 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
    * On menu click
    */
   onMenuClick(parentIndex: number, item: any) {
+    console.log("parentIndex",parentIndex,this.menuItems)
     if (!parentIndex) {
       this.menuItems.forEach((element) => {
         if (item == element) {
@@ -287,8 +288,10 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
    * @param item menuItem
    */
   hasItems(item: MenuItem) {
+    console.log("menuItems",this.menuItems)
     return item.subItems !== undefined ? item.subItems.length > 0 : false;
   }
+  
   _activateMenuDropdown() {
     this._removeAllClass('mm-active');
     this._removeAllClass('mm-show');
