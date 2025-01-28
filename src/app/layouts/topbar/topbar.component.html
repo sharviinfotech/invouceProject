@@ -3,7 +3,8 @@
     <div class="d-flex">
       <!-- LOGO -->
       <div class="navbar-brand-box">
-        <a routerLink="/" class="logo logo-dark">
+        <img src="assets/images/aircraftimage.png" alt="" height="100" width="200" style="padding: 30px 10px 10px 10px !important;"> 
+        <!-- <a routerLink="/" class="logo logo-dark">
           <span class="logo-sm">
             <img src="assets/images/logo.svg" alt="" height="22">
           </span>
@@ -19,7 +20,7 @@
           <span class="logo-lg">
             <img src="assets/images/logo-light.png" alt="" height="19">
           </span>
-        </a>
+        </a> -->
       </div>
 
       <button type="button" class="btn btn-sm px-3 font-size-16 header-item" [ngClass]="{ 'd-none': theme === 'horizontal' }" id="vertical-menu-btn" (click)="toggleMobileMenu($event)">
