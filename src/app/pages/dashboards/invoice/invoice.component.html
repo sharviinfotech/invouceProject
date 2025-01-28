@@ -91,8 +91,14 @@
             <div class="col-lg-4">
               <div class="form-group">
                 <label for="state">State</label>
-                <input type="text" formControlName="ProformaSate" placeholder="">
-                
+                <select formControlName="ProformaSate" class="form-control">
+                  <option value="" disabled selected>Select a state</option>
+                  <option value="draft">Andhra Pradesh</option>
+                  <option value="submitted">Telangana</option>
+                  <option value="karnataka">Karnataka</option>
+                  <option value="maharashtra">Maharashtra</option>
+                  <option value="tamilnadu">Tamil Nadu</option>
+                </select>
               </div>
             </div>
             <div class="col-lg-4">
@@ -462,6 +468,9 @@
                 <option value="" disabled selected>Select a state</option>
                 <option value="draft">Andhra Pradesh</option>
                 <option value="submitted">Telangana</option>
+                <option value="karnataka">Karnataka</option>
+                <option value="maharashtra">Maharashtra</option>
+                <option value="tamilnadu">Tamil Nadu</option>
               </select>
             </div>
           </div>
@@ -857,10 +866,13 @@
             <div class="col-lg-4">
               <div class="form-group">
                 <label for="state">State</label>
-                <select formControlName="ProformaSate" class="form-control" id="state">
+                <select formControlName="ProformaSate" class="form-control">
                   <option value="" disabled selected>Select a state</option>
                   <option value="draft">Andhra Pradesh</option>
                   <option value="submitted">Telangana</option>
+                  <option value="karnataka">Karnataka</option>
+                  <option value="maharashtra">Maharashtra</option>
+                  <option value="tamilnadu">Tamil Nadu</option>
                 </select>
               </div>
             </div>

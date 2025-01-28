@@ -88,6 +88,7 @@ export class InvoiceComponent {
   @ViewChild('logoInput') logoInput!: ElementRef;
   allInvoiceList: any;
   invoiceRefNo: number;
+  // getstateList: any;
  
 
   constructor(private fb: FormBuilder, private numberToWordsService:NumberToWordsService,private service:GeneralserviceService) {
@@ -136,6 +137,7 @@ export class InvoiceComponent {
   }
   ngOnInit(): void {
 this.getAllInvoice()
+// this.getstateList()
   }
 
   getAllInvoice(){
@@ -150,6 +152,7 @@ this.getAllInvoice()
 
   selectedInvoice: any = null; // Stores the selected invoice
   isEditing = false; // Determines whether edit mode is active
+  
 
   // Field configurations for form rendering
   invoiceFields = [
@@ -158,6 +161,7 @@ this.getAllInvoice()
     { label: 'City', controlName: 'city', placeholder: 'Enter city' },
     { label: 'invoiceReferenceNo', controlName: 'invoiceReferenceNo', placeholder: 'Enter invoiceReferenceNo' },
   ];
+  
 
   // Method to select and show an invoice
   selectInvoice(invoice: any) {
@@ -472,6 +476,7 @@ console.log("amountInWords", this.amountInWords);
       console.log('Form is invalid');
     }
   }
+  
 
    
 }
