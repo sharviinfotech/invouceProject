@@ -97,24 +97,26 @@ export class InvoiceComponent {
       ProformaAddress: [''],
       ProformaCity: [''],
       ProformaSate: [''],
-      pinCode: ['', [Validators.required, Validators.pattern(/^[0-9]{1,6}$/)]],      
+      ProformaPincode: ['', [Validators.required, Validators.pattern(/^[0-9]{6}$/)]], 
       ProformaGstNo: [''],
       ProformaPanNO: [
         '',
         [
           Validators.required,
-          Validators.pattern(/^[A-Z]{4}[0-9]{4}[A-Z]$/), // PAN number format
-        ],
+          Validators.pattern(/^[A-Z]{4}[0-9]{4}[A-Z]{1}$/) // PAN format validation: 4 capital letters, 4 numbers, 1 capital letter
+        ]
       ],
+      
       ProformaInvoiceNumber: [''],
       ProformaInvoiceDate: [''],
-      ProformaPannumber: [
+      ProformaPanNumber: [
         '',
         [
           Validators.required,
-          Validators.pattern(/^[A-Z]{4}[0-9]{4}[A-Z]$/), // PAN number format
-        ],
+          Validators.pattern(/^[A-Z]{4}[0-9]{4}[A-Z]{1}$/)  // PAN format validation: 4 capital letters, 4 digits, 1 capital letter
+        ]
       ],
+
       ProformaGstNumber: [''],
       proformatypeOfAircraft: [''],
       proformaseatingcapasity: [''],
@@ -245,6 +247,7 @@ this.getAllInvoice()
       ifscCode:"" 
     })
   }
+ 
   backButton(){
     this.show = true
     this.activeTab = "AllInvoice"

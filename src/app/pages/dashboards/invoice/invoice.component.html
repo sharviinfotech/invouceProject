@@ -97,20 +97,21 @@
             </div>
             <div class="col-lg-4">
               <div class="form-group">
-                <label>Pin Code</label>
+                <label for="Pincode">Pincode</label>
                 <input
-                id="pinCode"
+                id="Pincode"
                 type="text"
-                formControlName="pinCode"
+                formControlName="ProformaPincode"
                 maxlength="6"
-                placeholder="Enter your PIN"
+                placeholder="Enter Pincode"
               />
-              <div *ngIf="pinCode['pinCode'].hasError('pattern') && pinCode['pinCode'].touched">
-                Only digits are allowed.
-              </div>
-              <div *ngIf="pinCode['pinCode'].hasError('required') && pinCode['pinCode'].touched">
-                PIN code is required.
-              </div>              </div>
+              <!-- <div *ngIf="newInvoiceCreation.get('ProformaPincode')?.hasError('required')">
+                Pincode is required.
+              </div> -->
+              <div *ngIf="newInvoiceCreation.get('ProformaPincode')?.hasError('pattern')">
+                Pincode must be exactly 6 digits.
+              </div>          
+            </div>
             </div>
             <div class="col-lg-4">
               <div class="form-group">
@@ -128,12 +129,14 @@
                 maxlength="10"
                 placeholder="Enter PAN Number (e.g., ABCD1234E)"
               />
-              <div *ngIf="newInvoiceCreation['ProformaPanNO'].hasError('pattern') && newInvoiceCreation['ProformaPanNO'].touched">
+              <div *ngIf="newInvoiceCreation.get('ProformaPanNO')?.hasError('pattern') && newInvoiceCreation.get('ProformaPanNO')?.touched">
                 PAN number must be in the format: 4 capital letters, 4 numbers, and 1 capital letter (e.g., ABCD1234E).
               </div>
-              <div *ngIf="newInvoiceCreation['ProformaPanNO'].hasError('required') && newInvoiceCreation['ProformaPanNO'].touched">
+              <div *ngIf="newInvoiceCreation.get('ProformaPanNO')?.hasError('required') && newInvoiceCreation.get('ProformaPanNO')?.touched">
                 PAN number is required.
-              </div>              </div>
+              </div>
+                          
+             </div>
             </div>
           </div>
           <div class="row">
@@ -151,7 +154,7 @@
             </div>
             <div class="col-lg-4">
               <div class="form-group">
-                <label>PAN</label>
+                <label>PAN Number</label>
                 <input
                 id="ProformaPanNumber"
                 type="text"
@@ -159,13 +162,15 @@
                 maxlength="10"
                 placeholder="Enter PAN Number (e.g., ABCD1234E)"
               />
-              <div *ngIf="newInvoiceCreation['ProformaPanNumber'].hasError('pattern') && newInvoiceCreation['ProformaPanNumber'].touched">
+              <div *ngIf="newInvoiceCreation.get('ProformaPanNumber')?.hasError('pattern') && newInvoiceCreation.get('ProformaPanNumber')?.touched">
                 PAN number must be in the format: 4 capital letters, 4 numbers, and 1 capital letter (e.g., ABCD1234E).
               </div>
-              <div *ngIf="newInvoiceCreation['ProformaPanNumber'].hasError('required') && newInvoiceCreation['ProformaPanNumber'].touched">
+              <div *ngIf="newInvoiceCreation.get('ProformaPanNumber')?.hasError('required') && newInvoiceCreation.get('ProformaPanNumber')?.touched">
                 PAN number is required.
-              </div>              </div>
+              </div>         
+             </div>
             </div>
+
             <div class="col-lg-4">
               <div class="form-group">
                 <label>GST No</label>
@@ -256,9 +261,9 @@
                          (input)="calculateTotals()">
                 </td>
                 <td class="text-right">
-                  <input type="number" [(ngModel)]="item.rate" [ngModelOptions]="{standalone: true}"
+                  <input type="text" [(ngModel)]="item.rate" [ngModelOptions]="{standalone: true}"
                          class="rate-input"
-                         (input)="calculateTotals()">
+                         (input)="calculateTotals()" (keyup)="numbersOnly($event)">
                 </td>
                 <td class="text-right">
                   <!-- Amount is now calculated automatically, no input needed -->
@@ -454,20 +459,21 @@
           </div>
           <div class="col-lg-4">
             <div class="form-group">
-              <label>Pin Code</label>
+              <label for="Pincode">Pincode</label>
               <input
-              id="pinCode"
+              id="Pincode"
               type="text"
-              formControlName="pinCode"
+              formControlName="ProformaPincode"
               maxlength="6"
-              placeholder="Enter your PIN"
+              placeholder="Enter Pincode"
             />
-            <div *ngIf="pinCode['pinCode'].hasError('pattern') && pinCode['pinCode'].touched">
-              Only digits are allowed.
-            </div>
-            <div *ngIf="pinCode['pinCode'].hasError('required') && pinCode['pinCode'].touched">
-              PIN code is required.
-            </div>            </div>
+            <!-- <div *ngIf="newInvoiceCreation.get('ProformaPincode')?.hasError('required')">
+              Pincode is required.
+            </div> -->
+            <div *ngIf="newInvoiceCreation.get('ProformaPincode')?.hasError('pattern')">
+              Pincode must be exactly 6 digits.
+            </div>          
+          </div>
           </div>
           <div class="col-lg-4">
             <div class="form-group">
@@ -485,12 +491,14 @@
               maxlength="10"
               placeholder="Enter PAN Number (e.g., ABCD1234E)"
             />
-            <div *ngIf="newInvoiceCreation['ProformaPanNO'].hasError('pattern') && newInvoiceCreation['ProformaPanNO'].touched">
+            <div *ngIf="newInvoiceCreation.get('ProformaPanNO')?.hasError('pattern') && newInvoiceCreation.get('ProformaPanNO')?.touched">
               PAN number must be in the format: 4 capital letters, 4 numbers, and 1 capital letter (e.g., ABCD1234E).
             </div>
-            <div *ngIf="newInvoiceCreation['ProformaPanNO'].hasError('required') && newInvoiceCreation['ProformaPanNO'].touched">
+            <div *ngIf="newInvoiceCreation.get('ProformaPanNO')?.hasError('required') && newInvoiceCreation.get('ProformaPanNO')?.touched">
               PAN number is required.
-            </div>            </div>
+            </div>
+                         
+           </div>
           </div>
         </div>
         <div class="row">
@@ -508,7 +516,7 @@
           </div>
           <div class="col-lg-4">
             <div class="form-group">
-              <label>PAN</label>
+              <label>PAN Number</label>
               <input
               id="ProformaPanNumber"
               type="text"
@@ -516,13 +524,15 @@
               maxlength="10"
               placeholder="Enter PAN Number (e.g., ABCD1234E)"
             />
-            <div *ngIf="newInvoiceCreation['ProformaPanNumber'].hasError('pattern') && newInvoiceCreation['ProformaPanNumber'].touched">
+            <div *ngIf="newInvoiceCreation.get('ProformaPanNumber')?.hasError('pattern') && newInvoiceCreation.get('ProformaPanNumber')?.touched">
               PAN number must be in the format: 4 capital letters, 4 numbers, and 1 capital letter (e.g., ABCD1234E).
             </div>
-            <div *ngIf="newInvoiceCreation['ProformaPanNumber'].hasError('required') && newInvoiceCreation['ProformaPanNumber'].touched">
+            <div *ngIf="newInvoiceCreation.get('ProformaPanNumber')?.hasError('required') && newInvoiceCreation.get('ProformaPanNumber')?.touched">
               PAN number is required.
-            </div>            </div>
+            </div>           
+           </div>
           </div>
+
           <div class="col-lg-4">
             <div class="form-group">
               <label>GST No</label>
@@ -614,9 +624,9 @@
                        (input)="calculateTotals()">
               </td>
               <td class="text-right">
-                <input type="number" [(ngModel)]="item.rate" [ngModelOptions]="{standalone: true}"
+                <input type="text" [(ngModel)]="item.rate" [ngModelOptions]="{standalone: true}"
                        class="rate-input"
-                       (input)="calculateTotals()">
+                       (input)="calculateTotals()" (keyup)="numbersOnly($event)">
               </td>
               <td class="text-right">
                 <!-- Amount is now calculated automatically, no input needed -->
@@ -840,20 +850,21 @@
             </div>
             <div class="col-lg-4">
               <div class="form-group">
-                <label>Pin Code</label>
+                <label for="Pincode">Pincode</label>
                 <input
-                id="pinCode"
+                id="Pincode"
                 type="text"
-                formControlName="pinCode"
+                formControlName="ProformaPincode"
                 maxlength="6"
-                placeholder="Enter your PIN"
+                placeholder="Enter Pincode"
               />
-              <div *ngIf="pinCode['pinCode'].hasError('pattern') && pinCode['pinCode'].touched">
-                Only digits are allowed.
-              </div>
-              <div *ngIf="pinCode['pinCode'].hasError('required') && pinCode['pinCode'].touched">
-                PIN code is required.
-              </div>              </div>
+              <!-- <div *ngIf="newInvoiceCreation.get('ProformaPincode')?.hasError('required')">
+                Pincode is required.
+              </div> -->
+              <div *ngIf="newInvoiceCreation.get('ProformaPincode')?.hasError('pattern')">
+                Pincode must be exactly 6 digits.
+              </div>          
+            </div>
             </div>
             <div class="col-lg-4">
               <div class="form-group">
@@ -871,12 +882,14 @@
                 maxlength="10"
                 placeholder="Enter PAN Number (e.g., ABCD1234E)"
               />
-              <div *ngIf="newInvoiceCreation['ProformaPanNO'].hasError('pattern') && newInvoiceCreation['ProformaPanNO'].touched">
+              <div *ngIf="newInvoiceCreation.get('ProformaPanNO')?.hasError('pattern') && newInvoiceCreation.get('ProformaPanNO')?.touched">
                 PAN number must be in the format: 4 capital letters, 4 numbers, and 1 capital letter (e.g., ABCD1234E).
               </div>
-              <div *ngIf="newInvoiceCreation['ProformaPanNO'].hasError('required') && newInvoiceCreation['ProformaPanNO'].touched">
+              <div *ngIf="newInvoiceCreation.get('ProformaPanNO')?.hasError('required') && newInvoiceCreation.get('ProformaPanNO')?.touched">
                 PAN number is required.
-              </div>              </div>
+              </div>
+                          
+             </div>
             </div>
           </div>
           <div class="row">
@@ -894,20 +907,21 @@
             </div>
             <div class="col-lg-4">
               <div class="form-group">
-                <label>PAN</label>
+                <label>PAN Number</label>
                 <input
-                id="ProformaPanNO"
+                id="ProformaPanNumber"
                 type="text"
-                formControlName="ProformaPanNO"
+                formControlName="ProformaPanNumber"
                 maxlength="10"
                 placeholder="Enter PAN Number (e.g., ABCD1234E)"
               />
-              <div *ngIf="newInvoiceCreation['ProformaPanNO'].hasError('pattern') && newInvoiceCreation['ProformaPanNO'].touched">
+              <div *ngIf="newInvoiceCreation.get('ProformaPanNumber')?.hasError('pattern') && newInvoiceCreation.get('ProformaPanNumber')?.touched">
                 PAN number must be in the format: 4 capital letters, 4 numbers, and 1 capital letter (e.g., ABCD1234E).
               </div>
-              <div *ngIf="newInvoiceCreation['ProformaPanNO'].hasError('required') && newInvoiceCreation['ProformaPanNO'].touched">
+              <div *ngIf="newInvoiceCreation.get('ProformaPanNumber')?.hasError('required') && newInvoiceCreation.get('ProformaPanNumber')?.touched">
                 PAN number is required.
-              </div>              </div>
+              </div>            
+             </div>
             </div>
             <div class="col-lg-4">
               <div class="form-group">
@@ -1003,9 +1017,9 @@
                          (input)="calculateTotals()">
                 </td>
                 <td class="text-right">
-                  <input type="number" [(ngModel)]="item.rate" [ngModelOptions]="{standalone: true}"
+                  <input type="text" [(ngModel)]="item.rate" [ngModelOptions]="{standalone: true}"
                          class="rate-input"
-                         (input)="calculateTotals()">
+                         (input)="calculateTotals()" (keyup)="numbersOnly($event)">
                 </td>
                 <td class="text-right">
                   <!-- Amount is now calculated automatically, no input needed -->
