@@ -12,4 +12,11 @@ export class GeneralserviceService {
   getAllInvoice(){
     return this.http.get('http://localhost:3000/api/invoice/getAllInvoices');
   }
+  CreateInvoice(obj){
+    return this.http.post('localhost:3000/api/invoice/createNewInvoice',obj);
+  }
+  UpdateInvoice(obj,invoiceRefNo){
+    return this.http.post('http://localhost:3000/api/updateInvoiceByReferenceNo/invoiceRefNo',obj);
+  }
+  
 }

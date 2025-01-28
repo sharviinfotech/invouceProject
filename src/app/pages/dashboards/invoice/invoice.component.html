@@ -98,8 +98,19 @@
             <div class="col-lg-4">
               <div class="form-group">
                 <label>Pin Code</label>
-                <input type="text" formControlName="ProformaPincode" placeholder="700031">
+                <input
+                id="pinCode"
+                type="text"
+                formControlName="pinCode"
+                maxlength="6"
+                placeholder="Enter your PIN"
+              />
+              <div *ngIf="pinCode['pinCode'].hasError('pattern') && pinCode['pinCode'].touched">
+                Only digits are allowed.
               </div>
+              <div *ngIf="pinCode['pinCode'].hasError('required') && pinCode['pinCode'].touched">
+                PIN code is required.
+              </div>              </div>
             </div>
             <div class="col-lg-4">
               <div class="form-group">
@@ -110,8 +121,19 @@
             <div class="col-lg-4">
               <div class="form-group">
                 <label>PAN No</label>
-                <input type="text" formControlName="ProformaPanNO" placeholder="AAAPA1234A">
+                <input
+                id="ProformaPanNO"
+                type="text"
+                formControlName="ProformaPanNO"
+                maxlength="10"
+                placeholder="Enter PAN Number (e.g., ABCD1234E)"
+              />
+              <div *ngIf="newInvoiceCreation['ProformaPanNO'].hasError('pattern') && newInvoiceCreation['ProformaPanNO'].touched">
+                PAN number must be in the format: 4 capital letters, 4 numbers, and 1 capital letter (e.g., ABCD1234E).
               </div>
+              <div *ngIf="newInvoiceCreation['ProformaPanNO'].hasError('required') && newInvoiceCreation['ProformaPanNO'].touched">
+                PAN number is required.
+              </div>              </div>
             </div>
           </div>
           <div class="row">
@@ -130,8 +152,19 @@
             <div class="col-lg-4">
               <div class="form-group">
                 <label>PAN</label>
-                <input type="text" formControlName="proformaPanNumber" class="form-control" placeholder="AAAPA1234A">
+                <input
+                id="ProformaPanNumber"
+                type="text"
+                formControlName="ProformaPanNumber"
+                maxlength="10"
+                placeholder="Enter PAN Number (e.g., ABCD1234E)"
+              />
+              <div *ngIf="newInvoiceCreation['ProformaPanNumber'].hasError('pattern') && newInvoiceCreation['ProformaPanNumber'].touched">
+                PAN number must be in the format: 4 capital letters, 4 numbers, and 1 capital letter (e.g., ABCD1234E).
               </div>
+              <div *ngIf="newInvoiceCreation['ProformaPanNumber'].hasError('required') && newInvoiceCreation['ProformaPanNumber'].touched">
+                PAN number is required.
+              </div>              </div>
             </div>
             <div class="col-lg-4">
               <div class="form-group">
@@ -237,13 +270,13 @@
               
               
               
-              <tr>
+              <!-- <tr>
                 <td colspan="4" class="text-right">
                 </td>
                 <td style="text-align: end">
                   <button (click)="addChargeItem()" class="add-btn">+ Add Charge</button>
                 </td>
-              </tr>
+              </tr> -->
         
               <tr>
                 <td></td>
@@ -422,8 +455,19 @@
           <div class="col-lg-4">
             <div class="form-group">
               <label>Pin Code</label>
-              <input type="text" formControlName="ProformaPincode" placeholder="700031">
+              <input
+              id="pinCode"
+              type="text"
+              formControlName="pinCode"
+              maxlength="6"
+              placeholder="Enter your PIN"
+            />
+            <div *ngIf="pinCode['pinCode'].hasError('pattern') && pinCode['pinCode'].touched">
+              Only digits are allowed.
             </div>
+            <div *ngIf="pinCode['pinCode'].hasError('required') && pinCode['pinCode'].touched">
+              PIN code is required.
+            </div>            </div>
           </div>
           <div class="col-lg-4">
             <div class="form-group">
@@ -434,8 +478,19 @@
           <div class="col-lg-4">
             <div class="form-group">
               <label>PAN No</label>
-              <input type="text" formControlName="ProformaPanNO" placeholder="AAAPA1234A">
+              <input
+              id="ProformaPanNO"
+              type="text"
+              formControlName="ProformaPanNO"
+              maxlength="10"
+              placeholder="Enter PAN Number (e.g., ABCD1234E)"
+            />
+            <div *ngIf="newInvoiceCreation['ProformaPanNO'].hasError('pattern') && newInvoiceCreation['ProformaPanNO'].touched">
+              PAN number must be in the format: 4 capital letters, 4 numbers, and 1 capital letter (e.g., ABCD1234E).
             </div>
+            <div *ngIf="newInvoiceCreation['ProformaPanNO'].hasError('required') && newInvoiceCreation['ProformaPanNO'].touched">
+              PAN number is required.
+            </div>            </div>
           </div>
         </div>
         <div class="row">
@@ -454,8 +509,19 @@
           <div class="col-lg-4">
             <div class="form-group">
               <label>PAN</label>
-              <input type="text" formControlName="proformaPanNumber" class="form-control" placeholder="AAAPA1234A">
+              <input
+              id="ProformaPanNumber"
+              type="text"
+              formControlName="ProformaPanNumber"
+              maxlength="10"
+              placeholder="Enter PAN Number (e.g., ABCD1234E)"
+            />
+            <div *ngIf="newInvoiceCreation['ProformaPanNumber'].hasError('pattern') && newInvoiceCreation['ProformaPanNumber'].touched">
+              PAN number must be in the format: 4 capital letters, 4 numbers, and 1 capital letter (e.g., ABCD1234E).
             </div>
+            <div *ngIf="newInvoiceCreation['ProformaPanNumber'].hasError('required') && newInvoiceCreation['ProformaPanNumber'].touched">
+              PAN number is required.
+            </div>            </div>
           </div>
           <div class="col-lg-4">
             <div class="form-group">
@@ -775,8 +841,19 @@
             <div class="col-lg-4">
               <div class="form-group">
                 <label>Pin Code</label>
-                <input type="text" formControlName="ProformaPincode" placeholder="700031">
+                <input
+                id="pinCode"
+                type="text"
+                formControlName="pinCode"
+                maxlength="6"
+                placeholder="Enter your PIN"
+              />
+              <div *ngIf="pinCode['pinCode'].hasError('pattern') && pinCode['pinCode'].touched">
+                Only digits are allowed.
               </div>
+              <div *ngIf="pinCode['pinCode'].hasError('required') && pinCode['pinCode'].touched">
+                PIN code is required.
+              </div>              </div>
             </div>
             <div class="col-lg-4">
               <div class="form-group">
@@ -787,8 +864,19 @@
             <div class="col-lg-4">
               <div class="form-group">
                 <label>PAN No</label>
-                <input type="text" formControlName="ProformaPanNO" placeholder="AAAPA1234A">
+                <input
+                id="ProformaPanNO"
+                type="text"
+                formControlName="ProformaPanNO"
+                maxlength="10"
+                placeholder="Enter PAN Number (e.g., ABCD1234E)"
+              />
+              <div *ngIf="newInvoiceCreation['ProformaPanNO'].hasError('pattern') && newInvoiceCreation['ProformaPanNO'].touched">
+                PAN number must be in the format: 4 capital letters, 4 numbers, and 1 capital letter (e.g., ABCD1234E).
               </div>
+              <div *ngIf="newInvoiceCreation['ProformaPanNO'].hasError('required') && newInvoiceCreation['ProformaPanNO'].touched">
+                PAN number is required.
+              </div>              </div>
             </div>
           </div>
           <div class="row">
@@ -807,8 +895,19 @@
             <div class="col-lg-4">
               <div class="form-group">
                 <label>PAN</label>
-                <input type="text" formControlName="proformaPanNumber" class="form-control" placeholder="AAAPA1234A">
+                <input
+                id="ProformaPanNO"
+                type="text"
+                formControlName="ProformaPanNO"
+                maxlength="10"
+                placeholder="Enter PAN Number (e.g., ABCD1234E)"
+              />
+              <div *ngIf="newInvoiceCreation['ProformaPanNO'].hasError('pattern') && newInvoiceCreation['ProformaPanNO'].touched">
+                PAN number must be in the format: 4 capital letters, 4 numbers, and 1 capital letter (e.g., ABCD1234E).
               </div>
+              <div *ngIf="newInvoiceCreation['ProformaPanNO'].hasError('required') && newInvoiceCreation['ProformaPanNO'].touched">
+                PAN number is required.
+              </div>              </div>
             </div>
             <div class="col-lg-4">
               <div class="form-group">
@@ -1038,7 +1137,7 @@
   
        
         <div class="col-sm-12 col-md-12 col-lg-12 text-right" style="text-align: end;">
-            <button class="btnSave btn" (click)="saveInvoice()">Save Invoice</button>
+            <button class="btnSave btn" (click)="CreateInvoice()">Create Invoice</button>
         <button class="btnClose btn">Close Invoice</button>
         </div>
        

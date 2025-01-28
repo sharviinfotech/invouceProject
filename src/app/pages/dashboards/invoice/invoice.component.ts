@@ -87,6 +87,7 @@ export class InvoiceComponent {
 
   @ViewChild('logoInput') logoInput!: ElementRef;
   allInvoiceList: any;
+  invoiceRefNo: number;
  
 
   constructor(private fb: FormBuilder, private numberToWordsService:NumberToWordsService,private service:GeneralserviceService) {
@@ -96,12 +97,24 @@ export class InvoiceComponent {
       ProformaAddress: [''],
       ProformaCity: [''],
       ProformaSate: [''],
-      ProformaPincode: [''],
+      pinCode: ['', [Validators.required, Validators.pattern(/^[0-9]{1,6}$/)]],      
       ProformaGstNo: [''],
-      ProformaPanNO: [''],
+      ProformaPanNO: [
+        '',
+        [
+          Validators.required,
+          Validators.pattern(/^[A-Z]{4}[0-9]{4}[A-Z]$/), // PAN number format
+        ],
+      ],
       ProformaInvoiceNumber: [''],
       ProformaInvoiceDate: [''],
-      proformaPanNumber:[''],
+      ProformaPannumber: [
+        '',
+        [
+          Validators.required,
+          Validators.pattern(/^[A-Z]{4}[0-9]{4}[A-Z]$/), // PAN number format
+        ],
+      ],
       ProformaGstNumber: [''],
       proformatypeOfAircraft: [''],
       proformaseatingcapasity: [''],
@@ -153,6 +166,8 @@ this.getAllInvoice()
     this.selectedInvoice = null
     this.selectedInvoice = invoice;
     console.log("this.selectedInvoice",this.selectedInvoice)
+    this.invoiceRefNo = null
+    this.invoiceRefNo = this.selectedInvoice.header.invoiceReferenceNo
     this.isEditing = false;
     this.activeTab = "Edit"
     this.show = false;
@@ -349,10 +364,50 @@ console.log("amountInWords", this.amountInWords);
     return hours + minutes / 60; // Convert units to decimal hours
   }
 
-  saveInvoice(): void {
+  CreateInvoice(): void {
     if (this.newInvoiceCreation.valid) {
       console.log('Invoice Saved', this.newInvoiceCreation.value);
       // Implement saving logic here
+      let createobj = {
+        "header": {
+            "invoiceHeader": this.newInvoiceCreation.value.invoiceHeader,
+            "invoiceImage": this.logoUrl,
+            "ProformaCompanyName": this.newInvoiceCreation.value.ProformaCompanyName,
+            "ProformaAddress": this.newInvoiceCreation.value.ProformaAddress,
+            "ProformaCity": this.newInvoiceCreation.value.ProformaCity,
+            "ProformaSate": this.newInvoiceCreation.value.ProformaSate,
+            "ProformaPincode": this.newInvoiceCreation.value.ProformaPincode,
+            "ProformaGstNo": this.newInvoiceCreation.value.ProformaGstNo,
+            "ProformaPanNO": this.newInvoiceCreation.value.ProformaPanNO,
+            "ProformaInvoiceNumber": this.newInvoiceCreation.value.ProformaInvoiceNumber,
+            "ProformaInvoiceDate": this.newInvoiceCreation.value.ProformaInvoiceDate,
+            "ProformaPan": this.newInvoiceCreation.value.ProformaPan,
+            "ProformaGstNumber": this.newInvoiceCreation.value.ProformaGstNumber,
+            "ProformaTypeOfAircraft": this.newInvoiceCreation.value.proformatypeOfAircraft,
+            "ProformaSeatingCapasity": this.newInvoiceCreation.value.proformaseatingcapasity,
+            "notes": this.newInvoiceCreation.value.notes,
+            "BookingDateOfJourny": this.newInvoiceCreation.value.bookingdateofjourney,
+            "BookingSector": this.newInvoiceCreation.value.bookingsector,
+            "BookingBillingFlyingTime": this.newInvoiceCreation.value.bookingbillingflyingtime
+        },
+        "chargesList": this.chargeItems,
+        "taxList": this.taxItems,
+        "subtotal": this.subtotal,
+        "grandTotal": this.grandTotal,
+        "amountInWords":this.amountInWords,
+        "bankDetails":{
+            "accountName":this.newInvoiceCreation.value.accountName,
+            "bank":this.newInvoiceCreation.value.bank,
+            "accountNumber":this.newInvoiceCreation.value.accountNumber,
+            "branch":this.newInvoiceCreation.value.branch,
+            "ifscCode":this.newInvoiceCreation.value.ifscCode
+        }
+    }
+
+    this.service.CreateInvoice(createobj).subscribe((res:any)=>{
+      console.log("CreateInvoice",res);
+      
+    })
     } else {
       console.log('Form is invalid');
     }
@@ -365,13 +420,55 @@ console.log("amountInWords", this.amountInWords);
     }
   }
 
-  Update(): void {
+  UpdateInvoice(): void {
     if (this.newInvoiceCreation.valid) {
       console.log('Invoice Updated', this.newInvoiceCreation.value);
       // Implement update logic here
+      let updateobj = {
+        
+          "invoiceReferenceNo": this.invoiceRefNo,
+          "header": {
+              "invoiceHeader": this.newInvoiceCreation.value.invoiceHeader,
+              "invoiceImage": this.logoUrl,
+              "ProformaCompanyName": this.newInvoiceCreation.value.ProformaCompanyName,
+              "ProformaAddress": this.newInvoiceCreation.value.ProformaAddress,
+              "ProformaCity": this.newInvoiceCreation.value.ProformaCity,
+              "ProformaSate": this.newInvoiceCreation.value.ProformaSate,
+              "ProformaPincode": this.newInvoiceCreation.value.ProformaPincode,
+              "ProformaGstNo":  this.newInvoiceCreation.value.ProformaGstNo,
+              "ProformaPanNO":  this.newInvoiceCreation.value.ProformaPanNO,
+              "ProformaInvoiceNumber": this.newInvoiceCreation.value.ProformaInvoiceNumber,
+              "ProformaInvoiceDate": this.newInvoiceCreation.value.ProformaInvoiceDate,
+              "ProformaPan": this.newInvoiceCreation.value.ProformaPan,
+              "ProformaGstNumber":this.newInvoiceCreation.value.ProformaGstNumber,
+              "ProformaTypeOfAircraft":  this.newInvoiceCreation.value.proformatypeOfAircraft,
+              "ProformaSeatingCapasity":  this.newInvoiceCreation.value.proformaseatingcapasity,
+              "notes": this.newInvoiceCreation.value.notes,
+              "BookingDateOfJourny": this.newInvoiceCreation.value.bookingdateofjourney,
+              "BookingSector":  this.newInvoiceCreation.value.bookingsector,
+              "BookingBillingFlyingTime": this.newInvoiceCreation.value.bookingbillingflyingtime
+          },
+          "chargesList":  this.chargeItems,
+          "taxList": this.taxItems,
+          "subtotal":  this.subtotal,
+          "grandTotal":  this.grandTotal,
+          "bankDetails":{
+              "accountName":this.newInvoiceCreation.value.accountName,
+              "bank":this.newInvoiceCreation.value.bank,
+              "accountNumber":this.newInvoiceCreation.value.accountNumber,
+              "branch":this.newInvoiceCreation.value.branch,
+              "ifscCode":this.newInvoiceCreation.value.ifscCode
+          }
+      }
+      this.service.UpdateInvoice(updateobj,this.invoiceRefNo).subscribe((res:any)=>{
+        console.log("UpdateInvoice",res);
+        
+      })
+      
     } else {
       console.log('Form is invalid');
     }
   }
+
    
 }
