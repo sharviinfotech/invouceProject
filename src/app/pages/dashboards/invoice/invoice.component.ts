@@ -127,11 +127,11 @@ export class InvoiceComponent {
       bookingdateOfjourny: [''],
       bookingsector: [''],
       bookingbillingflyingtime: [''],
-      accountName: [''],
-      bankname: [''],
-      accountNumber: [''],
-      branch:[''],
-      ifscCode: ['']
+      // accountName: [''],
+      // bankname: [''],
+      // accountNumber: [''],
+      // branch:[''],
+      // ifscCode: ['']
     });
   }
   ngOnInit(): void {
@@ -195,11 +195,11 @@ this.getAllInvoice()
       bookingdateOfjourny:this.selectedInvoice.header.BookingDateOfJourny ,
       bookingsector: this.selectedInvoice.header.BookingSector,
       bookingbillingflyingtime: this.selectedInvoice.header.BookingBillingFlyingTime,
-      accountName: this.selectedInvoice.bankDetails.accountName,
-      bankname: this.selectedInvoice.bankDetails.bank,
-      accountNumber: this.selectedInvoice.bankDetails.accountNumber,
-      branch:this.selectedInvoice.bankDetails.branch,
-      ifscCode:this.selectedInvoice.bankDetails.ifscCode 
+      // accountName: this.selectedInvoice.bankDetails.accountName,
+      // bankname: this.selectedInvoice.bankDetails.bank,
+      // accountNumber: this.selectedInvoice.bankDetails.accountNumber,
+      // branch:this.selectedInvoice.bankDetails.branch,
+      // ifscCode:this.selectedInvoice.bankDetails.ifscCode 
     })
 
     this.chargeItems = this.selectedInvoice .chargesList;
@@ -240,11 +240,11 @@ this.getAllInvoice()
       bookingdateOfjourny:"" ,
       bookingsector: "",
       bookingbillingflyingtime: "",
-      accountName: "",
-      bankname: "",
-      accountNumber:"",
-      branch:"",
-      ifscCode:"" 
+      // accountName: "",
+      // bankname: "",
+      // accountNumber:"",
+      // branch:"",
+      // ifscCode:"" 
     })
   }
  
@@ -398,13 +398,13 @@ console.log("amountInWords", this.amountInWords);
         "subtotal": this.subtotal,
         "grandTotal": this.grandTotal,
         "amountInWords":this.amountInWords,
-        "bankDetails":{
-            "accountName":this.newInvoiceCreation.value.accountName,
-            "bank":this.newInvoiceCreation.value.bank,
-            "accountNumber":this.newInvoiceCreation.value.accountNumber,
-            "branch":this.newInvoiceCreation.value.branch,
-            "ifscCode":this.newInvoiceCreation.value.ifscCode
-        }
+        // "bankDetails":{
+        //     "accountName":this.newInvoiceCreation.value.accountName,
+        //     "bank":this.newInvoiceCreation.value.bank,
+        //     "accountNumber":this.newInvoiceCreation.value.accountNumber,
+        //     "branch":this.newInvoiceCreation.value.branch,
+        //     "ifscCode":this.newInvoiceCreation.value.ifscCode
+        // }
     }
 
     this.service.CreateInvoice(createobj).subscribe((res:any)=>{
@@ -455,13 +455,13 @@ console.log("amountInWords", this.amountInWords);
           "taxList": this.taxItems,
           "subtotal":  this.subtotal,
           "grandTotal":  this.grandTotal,
-          "bankDetails":{
-              "accountName":this.newInvoiceCreation.value.accountName,
-              "bank":this.newInvoiceCreation.value.bank,
-              "accountNumber":this.newInvoiceCreation.value.accountNumber,
-              "branch":this.newInvoiceCreation.value.branch,
-              "ifscCode":this.newInvoiceCreation.value.ifscCode
-          }
+          // "bankDetails":{
+          //     "accountName":this.newInvoiceCreation.value.accountName,
+          //     "bank":this.newInvoiceCreation.value.bank,
+          //     "accountNumber":this.newInvoiceCreation.value.accountNumber,
+          //     "branch":this.newInvoiceCreation.value.branch,
+          //     "ifscCode":this.newInvoiceCreation.value.ifscCode
+          // }
       }
       this.service.UpdateInvoice(updateobj,this.invoiceRefNo).subscribe((res:any)=>{
         console.log("UpdateInvoice",res);
