@@ -13,17 +13,18 @@ export const MENU: MenuItem[] = [
                 parentId: 2
             },
             {
-                id: 3,
-                label: 'Invoice',
-                link: '/Invoice',
-                parentId: 1
-            },
-            {
                 id: 4,
                 label: 'Invoice Layout',
                 link: '/InvoiceLayout',
                 parentId: 1
             },
+            {
+                id: 3,
+                label: 'Invoice',
+                link: '/Invoice',
+                parentId: 1
+            },
+           
         ]
     },
     // {

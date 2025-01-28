@@ -65,7 +65,8 @@ button {
 .table th {
   padding: 10px !important;
   border-bottom: 2px solid #ddd !important;
-  background-color: #090979 !important;
+  /* background-color: #090979 !important; */
+  background-color: rgb(88 98 145)!important;
   color: white;
 
 }
@@ -556,9 +557,11 @@ input:focus {
 
 .card-header{
   padding: 8px !important;
-  background-color: rgb(85 110 230) !important;
+  /* background-color: rgb(85 110 230) !important; */
   color: white !important;
-  border-radius: 0px !important;
+  border-radius: 4px !important;
+  /* background: radial-gradient(circle, rgba(63,94,251,1) 0%, rgba(225,70,252,1) 100%); */
+  background: #6ba3cd !important;
 }
 
 .hover-card {
