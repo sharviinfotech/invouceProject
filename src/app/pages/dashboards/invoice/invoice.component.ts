@@ -271,6 +271,7 @@ this.getAllInvoice()
   setTab(tabName: string) {
     this.activeTab = tabName;
     console.log("this.activeTab",this.activeTab);
+    this.resetAll()
   }
   
 
