@@ -1,1 +1,38 @@
-<p>invoice-layout works!</p>
+<div class="">
+  <div class="mt-3">
+    <div class="row">
+      <!-- Card 1 with Form Preview -->
+      <div class="col-md-6" (click)="showImage1 = true; showImage2 = false">
+        <div class="card hover-card">
+          <div class="card-body">
+            <h4>Layout 1</h4>
+            <!-- Preview for Layout 1 -->
+            <img src="/assets/images/backgroundimage.png" alt="Layout 1 Preview" class="img-fluid" />
+          </div>
+        </div>
+      </div>
+  
+      <!-- Card 2 with Form Preview -->
+      <div class="col-md-6" (click)="showImage1 = false; showImage2 = true">
+        <div class="card hover-card">
+          <div class="card-body">
+            <h4>Layout 2</h4>
+            <!-- Preview for Layout 2 -->
+            <div class="form-preview">
+              <p><strong>From:</strong> Name, Email</p>
+              <p><strong>To:</strong> Name, GSTIN</p>
+              <p><strong>Invoice Details:</strong> #INV0002</p>
+              <p><strong>Items:</strong> Different taxes, Charges</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Display selected image -->
+    <div class="image-preview mt-3">
+      <img *ngIf="showImage1" src="/assets/images/backgroundimage.png" alt="Layout 1 Preview" class="img-fluid" />
+      <img *ngIf="showImage2" src="/assets/images/backgroundimage 1.png" alt="Layout 2 Preview" class="img-fluid" />
+    </div>
+  </div>
+</div>
