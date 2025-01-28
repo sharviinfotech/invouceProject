@@ -18,5 +18,7 @@ export class GeneralserviceService {
   UpdateInvoice(obj,invoiceRefNo){
     return this.http.post('http://localhost:3000/api/updateInvoiceByReferenceNo/invoiceRefNo',obj);
   }
-  
+  getstateList(){
+    return this.http.get('localhost:3000/api/invoice/stateList');
+  }
 }
