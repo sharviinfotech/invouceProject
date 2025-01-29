@@ -3,6 +3,10 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { GeneralserviceService } from 'src/app/generalservice.service';
 import { NumberToWordsService } from 'src/app/number-to-words.service';
+import { DatePipe } from '@angular/common';
+import Swal from 'sweetalert2';
+import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+ 
 
 interface TaxItem {
   description: string;
@@ -20,7 +24,7 @@ interface ChargeItem {
   selector: 'app-invoice',
   templateUrl: './invoice.component.html',
   styleUrls: ['./invoice.component.css'],
-  imports: [CommonModule, ReactiveFormsModule, FormsModule],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule, BsDatepickerModule],
   standalone: true
 })
 export class InvoiceComponent implements OnInit {
@@ -140,11 +144,10 @@ export class InvoiceComponent implements OnInit {
       // branch:[''],
       // ifscCode: ['']
     });
+    
+    
   }
-  bsConfig = {
-    dateInputFormat: 'DD-MM-YYYY', // Set the date format
-    containerClass: 'theme-blue', // Optional: Use a predefined theme
-  };
+ 
   ngOnInit(): void {
     console.log("taxlist",this.taxItems)
 
