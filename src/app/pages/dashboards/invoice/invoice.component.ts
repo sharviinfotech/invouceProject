@@ -6,7 +6,7 @@ import { NumberToWordsService } from 'src/app/number-to-words.service';
 import { DatePipe } from '@angular/common';
 import Swal from 'sweetalert2';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
- 
+import { NgxSpinnerService } from "ngx-spinner";
 
 interface TaxItem {
   description: string;
@@ -101,7 +101,7 @@ export class InvoiceComponent implements OnInit {
     dateInputFormat: 'DD-MM-YYYY', // Set the date format
     containerClass: 'theme-blue', // Optional: Use a predefined theme
   };
-  constructor(private fb: FormBuilder, private numberToWordsService:NumberToWordsService,private service:GeneralserviceService, private datePipe: DatePipe) {
+  constructor(private fb: FormBuilder, private numberToWordsService:NumberToWordsService,private service:GeneralserviceService, private datePipe: DatePipe,private spinner: NgxSpinnerService) {
     this.newInvoiceCreation = this.fb.group({
       invoiceHeader: [''],
       ProformaCustomerName: [''],
@@ -147,13 +147,16 @@ export class InvoiceComponent implements OnInit {
  
   ngOnInit(): void {
     console.log("taxlist",this.taxItems)
+  
+    this.getAllInvoice()
+    this.getStates();
 
-this.getAllInvoice()
-this.getStates();
   }
   getStates() {
+    this.spinner.show();
     this.service.getstateList().subscribe(
       (response:any) => {
+        this.spinner.hide()
         if (response && response.responseData) {
           this.statesList = response.responseData.data;
         }
@@ -198,8 +201,10 @@ console.log("seletedObj",seletedObj)
   
   getAllInvoice(){
     this.allInvoiceList = []
+    this.spinner.show()
     this.service.getAllInvoice().subscribe((res:any)=>{
       console.log("getAllInvoice",res);
+      this.spinner.hide()
       this.allInvoiceList = res.invoices;
     })
   }
@@ -479,10 +484,10 @@ console.log("amountInWords", this.amountInWords);
         // }
     };
     console.log('Payload sent to backend:', createobj);
-
+    this.spinner.show()
     this.service.CreateInvoice(createobj).subscribe((response:any)=>{
       console.log("CreateInvoice",response);
-      
+      this.spinner.hide()
       const resp = response.data;
       if (resp) {
           Swal.fire({
@@ -502,6 +507,7 @@ console.log("amountInWords", this.amountInWords);
           this.resetAll()
           this.getAllInvoice()
       } else {
+        this.spinner.hide()
           Swal.fire({
               text: 'failed to fetch data ',
               icon: 'error',
@@ -509,7 +515,8 @@ console.log("amountInWords", this.amountInWords);
           });
       }
   }, (error) => {
-      // Handle error
+      // Handle error'
+      this.spinner.hide()
       console.log('Error creating invoice:', error);
       Swal.fire({
           text: 'An error occurred while creating the invoice',
@@ -578,10 +585,10 @@ console.log("amountInWords", this.amountInWords);
           //     "ifscCode":this.newInvoiceCreation.value.ifscCode
         };
           console.log('Payload sent to backend:', updateobj);
-
+          this.spinner.show()
           this.service.UpdateInvoice(updateobj,this.invoiceRefNo).subscribe((response:any)=>{
             console.log("updateInvoice",response);
-            
+            this.spinner.hide()
             const resp = response.data;
             if (resp) {
                 Swal.fire({
@@ -599,6 +606,7 @@ console.log("amountInWords", this.amountInWords);
                 this.grandTotal = 0;
                 this.amountInWords = '';
             } else {
+              this.spinner.hide()
                 Swal.fire({
                     text: 'failed to fetch data ',
                     icon: 'error',
@@ -607,6 +615,7 @@ console.log("amountInWords", this.amountInWords);
             }
         }, (error) => {
             // Handle error
+             this.spinner.hide()
             console.log('Error updating invoice:', error);
             Swal.fire({
                 text: 'An error occurred while updating the invoice',
@@ -615,6 +624,7 @@ console.log("amountInWords", this.amountInWords);
             });
         });
       } else {
+        this.spinner.hide()
         console.log('Form is invalid');
         Swal.fire({
             text: 'Please fill out the form correctly.',

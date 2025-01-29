@@ -6,7 +6,6 @@
     "start": "ng serve",
     "build": "ng build",
     "test": "ng test",
-    
     "e2e": "ng e2e",
     "build-prod": "node --max_old_space_size=8000 ./node_modules/@angular/cli/bin/ng build --prod",
     "cypress:open": "cypress open",
@@ -74,6 +73,7 @@
     "ngx-masonry": "^14.0.1",
     "ngx-slick-carousel": "^17.0.0",
     "ngx-slider-v2": "^17.0.0",
+    "ngx-spinner": "^17.0.0",
     "ngx-toastr": "^19.0.0",
     "ngx-ui-switch": "^15.0.0",
     "ngx-youtube-player": "^18.0.0",

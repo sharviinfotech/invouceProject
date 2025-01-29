@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { NgxSpinnerService } from 'ngx-spinner';
 import { GeneralserviceService } from 'src/app/generalservice.service';
 import { NumberToWordsService } from 'src/app/number-to-words.service';
 import Swal from 'sweetalert2';
@@ -97,7 +98,7 @@ export class InvoiceLayoutComponent {
    allInvoiceList: any;
   
  
-   constructor(private fb: FormBuilder, private numberToWordsService:NumberToWordsService,private service:GeneralserviceService) {
+   constructor(private fb: FormBuilder, private numberToWordsService:NumberToWordsService,private service:GeneralserviceService,private spinner: NgxSpinnerService) {
     this.creationInvoiceLayout = this.fb.group({
       invoiceHeader: [''],
       ProformaCustomerName: [''],
@@ -132,9 +133,10 @@ export class InvoiceLayoutComponent {
    }
  
    getAllInvoice(){
- 
+    this.spinner.show()
      this.service.getAllInvoice().subscribe((res:any)=>{
        console.log("getAllInvoice",res);
+       this.spinner.hide()
        this.allInvoiceList = res.invoices;
      })
    }
@@ -398,8 +400,9 @@ export class InvoiceLayoutComponent {
         //     "ifscCode":this.creationInvoiceLayout.value.ifscCode
         // }
     }
+    this.spinner.show()
       this.service.invoiceTemplate(obj).subscribe((res:any)=>{
-
+        this.spinner.hide()
         console.log("res",res)
          Swal.fire({
             text: res.message,
@@ -408,8 +411,11 @@ export class InvoiceLayoutComponent {
           });
 
 
+      },error =>{
+        this.spinner.hide()
       })
      } else {
+      this.spinner.hide()
        console.log('Form is invalid');
      }
    }

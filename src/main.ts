@@ -9,7 +9,9 @@ import { HTTP_INTERCEPTORS, provideHttpClient } from '@angular/common/http';
 import { JwtInterceptor } from './app/core/helpers/jwt.interceptor';
 import { ErrorInterceptor } from './app/core/helpers/error.interceptor';
 import { provideRouter } from '@angular/router';
-
+import { NgxSpinnerModule } from 'ngx-spinner';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { importProvidersFrom } from '@angular/core';
 // ** Update Firebase Imports **
 import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
@@ -44,12 +46,15 @@ const auth = getAuth(firebaseApp);
 
 bootstrapApplication(AppComponent, {
   providers: [
+    provideHttpClient(), // Required for API calls
+    importProvidersFrom(NgxSpinnerModule), // Import Spinner Module Here 
     provideRouter([]),
     provideHttpClient(),
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: FakeBackendInterceptor, multi: true },
     ...appConfig.providers,
+    
   ],
 })
   .catch((err) =>

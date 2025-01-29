@@ -21,7 +21,7 @@
             <tr *ngFor="let invoice of allInvoiceList" (click)="selectInvoice(invoice)">
               <td>{{ invoice.invoiceUniqueNumber }}</td>
               <td>{{ invoice.header.ProformaInvoiceDate }}</td>
-              <td>{{ invoice.header.ProformaCompanyName }}</td>
+              <td>{{ invoice.header.ProformaCustomerName }}</td>
               <td>{{ invoice.header.ProformaTypeOfAircraft }}</td>
               <td>{{ invoice.header.ProformaCity }}</td>
               <td>{{ invoice.header.BookingSector }}</td>
