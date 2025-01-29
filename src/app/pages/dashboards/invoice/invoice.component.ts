@@ -3,7 +3,7 @@ import { Component, ElementRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { GeneralserviceService } from 'src/app/generalservice.service';
 import { NumberToWordsService } from 'src/app/number-to-words.service';
-
+import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 interface TaxItem {
   description: string;
   percentage: number;
@@ -20,7 +20,7 @@ interface ChargeItem {
   selector: 'app-invoice',
   templateUrl: './invoice.component.html',
   styleUrls: ['./invoice.component.css'],
-  imports: [CommonModule, ReactiveFormsModule, FormsModule],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule,BsDatepickerModule],
   standalone: true
 })
 export class InvoiceComponent {
@@ -134,7 +134,12 @@ export class InvoiceComponent {
       // branch:[''],
       // ifscCode: ['']
     });
+    
   }
+  bsConfig = {
+    dateInputFormat: 'DD-MM-YYYY', // Set the date format
+    containerClass: 'theme-blue', // Optional: Use a predefined theme
+  };
   ngOnInit(): void {
 this.getAllInvoice()
 // this.getstateList()

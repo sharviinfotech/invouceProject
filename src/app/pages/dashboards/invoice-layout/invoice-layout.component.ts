@@ -97,34 +97,34 @@ export class InvoiceLayoutComponent {
   
  
    constructor(private fb: FormBuilder, private numberToWordsService:NumberToWordsService,private service:GeneralserviceService) {
-     this.creationInvoiceLayout = this.fb.group({
-       invoiceHeader: [''],
-       ProformaCompanyName: [''],
-       ProformaAddress: [''],
-       ProformaCity: [''],
-       ProformaSate: [''],
-       ProformaPincode: [''],
-       ProformaGstNo: [''],
-       ProformaPanNO: [''],
-       ProformaInvoiceNumber: [''],
-       ProformaInvoiceDate: [''],
-       proformaPanNumber:[''],
-       ProformaGstNumber: [''],
-       proformatypeOfAircraft: [''],
-       proformaseatingcapasity: [''],
-       bookingdetailsdateofjourney: [''],
-       bookingdetailssector: [''],
-       bookingdetailsbillingflyingtime: [''],
-       notes: [''],
-       bookingdateOfjourny: [''],
-       bookingsector: [''],
-       bookingbillingflyingtime: [''],
-       accountName: [''],
-       bankname: [''],
-       accountNumber: [''],
-       branch:[''],
-       ifscCode: ['']
-     });
+    this.creationInvoiceLayout = this.fb.group({
+      invoiceHeader: [''],
+      ProformaCompanyName: [''],
+      ProformaAddress: [''],
+      ProformaCity: [''],
+      ProformaSate: [''],
+      ProformaPincode: [''], 
+      ProformaGstNo: [''],
+      ProformaPanNO: ['',],
+      ProformaInvoiceNumber: [''],
+      ProformaInvoiceDate: [''],
+      ProformaPanNumber: [''],
+      ProformaGstNumber: [''],
+      proformatypeOfAircraft: [''],
+      proformaseatingcapasity: [''],
+      bookingdetailsdateofjourney: [''],
+      bookingdetailssector: [''],
+      bookingdetailsbillingflyingtime: [''],
+      notes: [''],
+      bookingdateOfjourny: [''],
+      bookingsector: [''],
+      bookingbillingflyingtime: [''],
+      // accountName: [''],
+      // bankname: [''],
+      // accountNumber: [''],
+      // branch:[''],
+      // ifscCode: ['']
+    });
    }
    ngOnInit(): void {
  this.getAllInvoice()
@@ -260,24 +260,25 @@ export class InvoiceLayoutComponent {
    
  
    onLogoSelected(event: Event) {
-     const input = event.target as HTMLInputElement;
-  
-     if (input.files && input.files[0]) {
-       const reader = new FileReader();
-      
-       reader.onload = () => {
-         this.logoUrl = reader.result as string; // Store the image URL
-         console.log("Image logoUrl:", this.logoUrl);
-       };
-  
-       reader.readAsDataURL(input.files[0]); // Convert file to base64 URL
-     }
-   }
+    const input = event.target as HTMLInputElement;
  
-   removeLogo(event: Event): void {
-     event.preventDefault();
-     this.logoUrl = null;
-   }
+    if (input.files && input.files[0]) {
+      const reader = new FileReader();
+     
+      reader.onload = () => {
+        this.logoUrl = reader.result as string; // Store the image URL
+        console.log("Image logoUrl:", this.logoUrl);
+      };
+ 
+      reader.readAsDataURL(input.files[0]); // Convert file to base64 URL
+    }
+  }
+
+  removeLogo(event: Event): void {
+    event.preventDefault();
+    this.logoUrl = null;
+  }
+
  
    addChargeItem() {
      this.chargeItems.push({
@@ -357,9 +358,49 @@ export class InvoiceLayoutComponent {
    }
  
    createLayout(): void {
+    console.log("this.activeTab",this.activeTab)
      if (this.creationInvoiceLayout.valid) {
-       console.log('Invoice Saved', this.creationInvoiceLayout.value);
-       // Implement saving logic here
+      
+      let obj = {
+        "invoiceLayoutId":Number(this.activeTab),
+        "header": {
+            "invoiceHeader": this.creationInvoiceLayout.value.invoiceHeader,
+            "invoiceImage": this.logoUrl,
+            "ProformaCompanyName": this.creationInvoiceLayout.value.ProformaCompanyName,
+            "ProformaAddress": this.creationInvoiceLayout.value.ProformaAddress,
+            "ProformaCity": this.creationInvoiceLayout.value.ProformaCity,
+            "ProformaSate": this.creationInvoiceLayout.value.ProformaSate,
+            "ProformaPincode": this.creationInvoiceLayout.value.ProformaPincode,
+            "ProformaGstNo": this.creationInvoiceLayout.value.ProformaGstNo,
+            "ProformaPanNO": this.creationInvoiceLayout.value.ProformaPanNO,
+            "ProformaInvoiceNumber": this.creationInvoiceLayout.value.ProformaInvoiceNumber,
+            "ProformaInvoiceDate": this.creationInvoiceLayout.value.ProformaInvoiceDate,
+            "ProformaPan": this.creationInvoiceLayout.value.ProformaPan,
+            "ProformaGstNumber": this.creationInvoiceLayout.value.ProformaGstNumber,
+            "ProformaTypeOfAircraft": this.creationInvoiceLayout.value.proformatypeOfAircraft,
+            "ProformaSeatingCapasity": this.creationInvoiceLayout.value.proformaseatingcapasity,
+            "notes": this.creationInvoiceLayout.value.notes,
+            "BookingDateOfJourny": this.creationInvoiceLayout.value.bookingdateofjourney,
+            "BookingSector": this.creationInvoiceLayout.value.bookingsector,
+            "BookingBillingFlyingTime": this.creationInvoiceLayout.value.bookingbillingflyingtime
+        },
+        "chargesList": this.chargeItems,
+        "taxList": this.taxItems,
+        "subtotal": this.subtotal,
+        "grandTotal": this.grandTotal,
+        "amountInWords":this.amountInWords,
+        // "bankDetails":{
+        //     "accountName":this.creationInvoiceLayout.value.accountName,
+        //     "bank":this.creationInvoiceLayout.value.bank,
+        //     "accountNumber":this.creationInvoiceLayout.value.accountNumber,
+        //     "branch":this.creationInvoiceLayout.value.branch,
+        //     "ifscCode":this.creationInvoiceLayout.value.ifscCode
+        // }
+    }
+      this.service.invoiceTemplate(obj).subscribe((res:any)=>{
+
+
+      })
      } else {
        console.log('Form is invalid');
      }

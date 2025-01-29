@@ -21,4 +21,9 @@ export class GeneralserviceService {
   getstateList(){
     return this.http.get('localhost:3000/api/invoice/stateList');
   }
+
+  invoiceTemplate(obj){
+    return this.http.post('http://localhost:3000/api/invoice/invoiceTemplate',obj);
+
+  }
 }

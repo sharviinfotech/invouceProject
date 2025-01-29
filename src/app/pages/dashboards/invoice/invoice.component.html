@@ -196,6 +196,14 @@
             <div class="col-lg-4">
               <div class="form-group">
                 <label>Date</label>
+                <input
+                type="text"
+                placeholder="Date"
+                formControlName="ProformaInvoiceDate"
+                class="form-control form-control-sm"
+                [bsConfig]="bsConfig"
+                bsDatepicker
+              />
                 <input type="date" formControlName="ProformaInvoiceDate" class="form-control">
               </div>
             </div>
@@ -571,7 +579,16 @@
             <div class="col-lg-4">
               <div class="form-group">
                 <label>Date Of Journey</label>
-                <input type="date" formControlName="bookingdetailsdateofjourney" class="form-control" placeholder="">
+                <input
+                type="text"
+                placeholder="Enter Posting Date"
+                formControlName="bookingdetailsdateofjourney"
+                class="form-control form-control-sm"
+                [bsConfig]="bsConfig"
+                bsDatepicker
+              />
+ 
+                <!-- <input type="date" formControlName="bookingdetailsdateofjourney" class="form-control" placeholder=""> -->
               </div>
             </div>
             <div class="col-lg-4">
@@ -833,7 +850,15 @@
             <div class="col-lg-4">
               <div class="form-group">
                 <label>Date</label>
-                <input type="date" formControlName="ProformaInvoiceDate" class="form-control">
+                <input
+                type="text"
+                placeholder="Date"
+                formControlName="ProformaInvoiceDate"
+                class="form-control form-control-sm"
+                [bsConfig]="bsConfig"
+                bsDatepicker
+              />
+                <!-- <input type="date" formControlName="ProformaInvoiceDate" class="form-control"> -->
               </div>
             </div>
             <div class="col-lg-4">
