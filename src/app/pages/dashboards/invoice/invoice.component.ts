@@ -1,9 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { GeneralserviceService } from 'src/app/generalservice.service';
 import { NumberToWordsService } from 'src/app/number-to-words.service';
-import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+
 interface TaxItem {
   description: string;
   percentage: number;
@@ -20,11 +20,11 @@ interface ChargeItem {
   selector: 'app-invoice',
   templateUrl: './invoice.component.html',
   styleUrls: ['./invoice.component.css'],
-  imports: [CommonModule, ReactiveFormsModule, FormsModule,BsDatepickerModule],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule],
   standalone: true
 })
-export class InvoiceComponent {
-  
+export class InvoiceComponent implements OnInit {
+  statesList: any[] = [];  
   newInvoiceCreation!: FormGroup;
   showNewInvoice = false;
   panForm: FormGroup;
@@ -33,7 +33,9 @@ export class InvoiceComponent {
   logoUrl: string | null = null;
   isHoveringLogo: boolean = false;
   isHoveringRemove: boolean = false;
-  
+  StateName: string = '';
+  showCGST_SGST = false;
+  showIGST = false;
 
   // chargeItems: ChargeItem[] = [
   //   {
@@ -62,24 +64,24 @@ export class InvoiceComponent {
   //   }
   // ];
   chargeItems: ChargeItem[] = [];
-  taxItems: TaxItem[] = [];
-  // taxItems: TaxItem[] = [
-  //   {
-  //     description: 'CGST @ 9%',
-  //     percentage: 9,
-  //     amount: 51863
-  //   },
-  //   {
-  //     description: 'SGST/UDST @ 9%',
-  //     percentage: 9,
-  //     amount: 51863
-  //   },
-  //   {
-  //     description: 'IGST @ 18%',
-  //     percentage: 0,
-  //     amount: 0
-  //   }
-  // ];
+  // taxItems: TaxItem[] = [];
+  taxItems: TaxItem[] = [
+    {
+      description: 'CGST @ 9%',
+      percentage: 9,
+      amount: 0
+    },
+    {
+      description: 'SGST/UDST @ 9%',
+      percentage: 9,
+      amount: 0
+    },
+    {
+      description: 'IGST @ 18%',
+      percentage: 18,
+      amount: 0
+    }
+  ];
   show:boolean=true
   subtotal: number;
   grandTotal: number;
@@ -88,23 +90,27 @@ export class InvoiceComponent {
   @ViewChild('logoInput') logoInput!: ElementRef;
   allInvoiceList: any;
   invoiceRefNo: number;
+  
   // getstateList: any;
  
-
-  constructor(private fb: FormBuilder, private numberToWordsService:NumberToWordsService,private service:GeneralserviceService) {
+  bsConfig = {
+    dateInputFormat: 'DD-MM-YYYY', // Set the date format
+    containerClass: 'theme-blue', // Optional: Use a predefined theme
+  };
+  constructor(private fb: FormBuilder, private numberToWordsService:NumberToWordsService,private service:GeneralserviceService, private datePipe: DatePipe) {
     this.newInvoiceCreation = this.fb.group({
       invoiceHeader: [''],
       ProformaCompanyName: [''],
       ProformaAddress: [''],
       ProformaCity: [''],
-      ProformaSate: [''],
+      ProformaState: [''],
       ProformaPincode: ['', [Validators.required, Validators.pattern(/^[0-9]{6}$/)]], 
       ProformaGstNo: [''],
       ProformaPanNO: [
         '',
         [
           Validators.required,
-          Validators.pattern(/^[A-Z]{4}[0-9]{4}[A-Z]{1}$/) // PAN format validation: 4 capital letters, 4 numbers, 1 capital letter
+          Validators.pattern(/^[A-Z]{5}[0-9]{4}[A-Z]$/)  // Correct PAN format
         ]
       ],
       
@@ -114,14 +120,14 @@ export class InvoiceComponent {
         '',
         [
           Validators.required,
-          Validators.pattern(/^[A-Z]{4}[0-9]{4}[A-Z]{1}$/)  // PAN format validation: 4 capital letters, 4 digits, 1 capital letter
+          Validators.pattern(/^[A-Z]{5}[0-9]{4}[A-Z]$/)  // PAN format validation: 4 capital letters, 4 digits, 1 capital letter
         ]
       ],
 
       ProformaGstNumber: [''],
       proformatypeOfAircraft: [''],
       proformaseatingcapasity: [''],
-      bookingdetailsdateofjourney: [''],
+      bookingdetailsdateofjourny: [''],
       bookingdetailssector: [''],
       bookingdetailsbillingflyingtime: [''],
       notes: [''],
@@ -134,17 +140,62 @@ export class InvoiceComponent {
       // branch:[''],
       // ifscCode: ['']
     });
-    
   }
   bsConfig = {
     dateInputFormat: 'DD-MM-YYYY', // Set the date format
     containerClass: 'theme-blue', // Optional: Use a predefined theme
   };
   ngOnInit(): void {
-this.getAllInvoice()
-// this.getstateList()
-  }
+    console.log("taxlist",this.taxItems)
 
+this.getAllInvoice()
+this.getStates();
+  }
+  getStates() {
+    this.service.getstateList().subscribe(
+      (response:any) => {
+        if (response && response.responseData) {
+          this.statesList = response.responseData.data;
+        }
+      },
+      (error) => {
+     
+        console.error('Error fetching statesList:', error);
+      }
+    );
+  }
+  onChangeState(){
+    this.taxItems = []
+    const selectedState = this.newInvoiceCreation.value.ProformaState
+   const seletedObj =  this.statesList.find(item =>item.stateName == selectedState);
+console.log("seletedObj",seletedObj)
+   if(seletedObj.stateName == 'Telangana'){
+    this.taxItems= [
+      {
+        description: 'CGST @ 9%',
+        percentage: 9,
+        amount: 0
+      },
+      {
+        description: 'SGST/UDST @ 9%',
+        percentage: 9,
+        amount: 0
+      },
+     
+    ];
+   }else{
+    this.taxItems= [
+      
+      {
+        description: 'IGST @ 18%',
+        percentage: 18,
+        amount: 0
+      }
+    ];
+   }
+  }
+  
+  
   getAllInvoice(){
 
     this.service.getAllInvoice().subscribe((res:any)=>{
@@ -178,7 +229,8 @@ this.getAllInvoice()
     this.selectedInvoice = invoice;
     console.log("this.selectedInvoice",this.selectedInvoice)
     this.invoiceRefNo = null
-    this.invoiceRefNo = this.selectedInvoice.header.invoiceReferenceNo
+    this.invoiceRefNo = this.selectedInvoice.invoiceReferenceNo
+    console.log("this.invoiceRefNo",this.invoiceRefNo)
     this.isEditing = false;
     this.activeTab = "Edit"
     this.show = false;
@@ -187,19 +239,16 @@ this.getAllInvoice()
       ProformaCompanyName: this.selectedInvoice.header.ProformaCompanyName,
       ProformaAddress: this.selectedInvoice.header.ProformaAddress ,
       ProformaCity: this.selectedInvoice.header.ProformaCity,
-      ProformaSate: this.selectedInvoice.header.ProformaSate,
+      ProformaState: this.selectedInvoice.header.ProformaState,
       ProformaPincode: this.selectedInvoice.header.ProformaPincode,
       ProformaGstNo: this.selectedInvoice.header.ProformaGstNo,
       ProformaPanNO: this.selectedInvoice.header.ProformaPan,
-      ProformaInvoiceNumber: this.selectedInvoice.header.ProformaInvoiceNumber,
+      ProformaInvoiceNumber: this.selectedInvoice.header.invoiceUniqueNumber,
       ProformaInvoiceDate: this.selectedInvoice.header.ProformaInvoiceDate,
-      proformaPanNumber:this.selectedInvoice.header.ProformaPanNO,
+      ProformaPanNumber:this.selectedInvoice.header.ProformaPanNO,
       ProformaGstNumber: this.selectedInvoice.header.ProformaGstNumber,
       proformatypeOfAircraft: this.selectedInvoice.header.ProformaTypeOfAircraft,
       proformaseatingcapasity: this.selectedInvoice.header.ProformaSeatingCapasity,
-      bookingdetailsdateofjourney:this.selectedInvoice.header.BookingDateOfJourny ,
-      bookingdetailssector: this.selectedInvoice.header.bookingdetailssector,
-      bookingdetailsbillingflyingtime: this.selectedInvoice.header.BookingBillingFlyingTime,
       notes: this.selectedInvoice.header.notes,
       bookingdateOfjourny:this.selectedInvoice.header.BookingDateOfJourny ,
       bookingsector: this.selectedInvoice.header.BookingSector,
@@ -217,8 +266,8 @@ this.getAllInvoice()
     this.grandTotal = this.selectedInvoice.grandTotal
     this.amountInWords = this.selectedInvoice.amountInWords
     this.logoUrl = this.selectedInvoice.header.invoiceImage
-
-
+console.log("this.selectedInvoice.header.invoiceUniqueNumber",this.selectedInvoice.header.invoiceUniqueNumber)
+console.log("this.newInvoiceCreation",this.newInvoiceCreation.value.ProformaInvoiceNumber)
   }
   resetAll(){
     this.amountInWords =  ""
@@ -232,7 +281,7 @@ this.getAllInvoice()
       ProformaCompanyName: "",
       ProformaAddress: "",
       ProformaCity: "",
-      ProformaSate: "",
+      ProformaState: "",
       ProformaPincode: "",
       ProformaGstNo: "",
       ProformaPanNO: "",
@@ -242,9 +291,9 @@ this.getAllInvoice()
       ProformaGstNumber: "",
       proformatypeOfAircraft: "",
       proformaseatingcapasity: "",
-      bookingdetailsdateofjourney:"" ,
-      bookingdetailssector: "",
-      bookingdetailsbillingflyingtime: "",
+      // bookingdetailsdateofjourney:"" ,
+      // bookingdetailssector: "",
+      // bookingdetailsbillingflyingtime: "",
       notes: "",
       bookingdateOfjourny:"" ,
       bookingsector: "",
@@ -276,7 +325,7 @@ this.getAllInvoice()
   setTab(tabName: string) {
     this.activeTab = tabName;
     console.log("this.activeTab",this.activeTab);
-    this.resetAll()
+    // this.resetAll()
   }
   
 
@@ -376,11 +425,23 @@ console.log("amountInWords", this.amountInWords);
   
     return hours + minutes / 60; // Convert units to decimal hours
   }
+  formatDate(proformaInvoiceDate: string): string {
+    const date = new Date(proformaInvoiceDate);
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-based
+    const year = date.getFullYear();
+  
+    return `${day}-${month}-${year}`;
+  }
 
   CreateInvoice(): void {
+    const invoiceDateSplit = this.formatDate(this.newInvoiceCreation.value.ProformaInvoiceDate);
+    const bokingDateSplit = this.formatDate(this.newInvoiceCreation.value.bookingdateOfjourny);
+
     if (this.newInvoiceCreation.valid) {
       console.log('Invoice Saved', this.newInvoiceCreation.value);
       // Implement saving logic here
+      
       let createobj = {
         "header": {
             "invoiceHeader": this.newInvoiceCreation.value.invoiceHeader,
@@ -388,18 +449,18 @@ console.log("amountInWords", this.amountInWords);
             "ProformaCompanyName": this.newInvoiceCreation.value.ProformaCompanyName,
             "ProformaAddress": this.newInvoiceCreation.value.ProformaAddress,
             "ProformaCity": this.newInvoiceCreation.value.ProformaCity,
-            "ProformaSate": this.newInvoiceCreation.value.ProformaSate,
+            "ProformaState": this.newInvoiceCreation.value.ProformaState,
             "ProformaPincode": this.newInvoiceCreation.value.ProformaPincode,
             "ProformaGstNo": this.newInvoiceCreation.value.ProformaGstNo,
             "ProformaPanNO": this.newInvoiceCreation.value.ProformaPanNO,
             "ProformaInvoiceNumber": this.newInvoiceCreation.value.ProformaInvoiceNumber,
-            "ProformaInvoiceDate": this.newInvoiceCreation.value.ProformaInvoiceDate,
-            "ProformaPan": this.newInvoiceCreation.value.ProformaPan,
+            "ProformaInvoiceDate": invoiceDateSplit,
+            "ProformaPan": this.newInvoiceCreation.value.ProformaPanNumber,
             "ProformaGstNumber": this.newInvoiceCreation.value.ProformaGstNumber,
             "ProformaTypeOfAircraft": this.newInvoiceCreation.value.proformatypeOfAircraft,
             "ProformaSeatingCapasity": this.newInvoiceCreation.value.proformaseatingcapasity,
             "notes": this.newInvoiceCreation.value.notes,
-            "BookingDateOfJourny": this.newInvoiceCreation.value.bookingdateofjourney,
+            "BookingDateOfJourny": bokingDateSplit,
             "BookingSector": this.newInvoiceCreation.value.bookingsector,
             "BookingBillingFlyingTime": this.newInvoiceCreation.value.bookingbillingflyingtime
         },
@@ -415,15 +476,52 @@ console.log("amountInWords", this.amountInWords);
         //     "branch":this.newInvoiceCreation.value.branch,
         //     "ifscCode":this.newInvoiceCreation.value.ifscCode
         // }
-    }
+    };
+    console.log('Payload sent to backend:', createobj);
 
-    this.service.CreateInvoice(createobj).subscribe((res:any)=>{
-      console.log("CreateInvoice",res);
+    this.service.CreateInvoice(createobj).subscribe((response:any)=>{
+      console.log("CreateInvoice",response);
       
-    })
-    } else {
-      console.log('Form is invalid');
-    }
+      const resp = response.data;
+      if (resp) {
+          Swal.fire({
+              text: response.message +' with Invoice Number '+resp.invoiceUniqueNumber,
+              icon: 'success',
+              showConfirmButton: true
+          });
+         this.activeTab = 'AllInvoice'
+          // Reset form and related data
+          this.newInvoiceCreation.reset();
+          this.logoUrl = '';
+          this.chargeItems = [];
+          this.taxItems = [];
+          this.subtotal = 0;
+          this.grandTotal = 0;
+          this.amountInWords = '';
+      } else {
+          Swal.fire({
+              text: 'failed to fetch data ',
+              icon: 'error',
+              showConfirmButton: true
+          });
+      }
+  }, (error) => {
+      // Handle error
+      console.log('Error creating invoice:', error);
+      Swal.fire({
+          text: 'An error occurred while creating the invoice',
+          icon: 'error',
+          showConfirmButton: true
+      });
+  });
+} else {
+  console.log('Form is invalid');
+  Swal.fire({
+      text: 'Please fill out the form correctly.',
+      icon: 'warning',
+      showConfirmButton: true
+  });
+}
   }
        
   numbersOnly(event:any) {
@@ -434,8 +532,12 @@ console.log("amountInWords", this.amountInWords);
   }
 
   UpdateInvoice(): void {
+    const invoiceDateSplit = this.formatDate(this.newInvoiceCreation.value.ProformaInvoiceDate);
+    const bokingDateSplit = this.formatDate(this.newInvoiceCreation.value.bookingdateOfjourny);
     if (this.newInvoiceCreation.valid) {
       console.log('Invoice Updated', this.newInvoiceCreation.value);
+
+
       // Implement update logic here
       let updateobj = {
         
@@ -446,18 +548,18 @@ console.log("amountInWords", this.amountInWords);
               "ProformaCompanyName": this.newInvoiceCreation.value.ProformaCompanyName,
               "ProformaAddress": this.newInvoiceCreation.value.ProformaAddress,
               "ProformaCity": this.newInvoiceCreation.value.ProformaCity,
-              "ProformaSate": this.newInvoiceCreation.value.ProformaSate,
+              "ProformaState": this.newInvoiceCreation.value.ProformaState,
               "ProformaPincode": this.newInvoiceCreation.value.ProformaPincode,
               "ProformaGstNo":  this.newInvoiceCreation.value.ProformaGstNo,
               "ProformaPanNO":  this.newInvoiceCreation.value.ProformaPanNO,
               "ProformaInvoiceNumber": this.newInvoiceCreation.value.ProformaInvoiceNumber,
-              "ProformaInvoiceDate": this.newInvoiceCreation.value.ProformaInvoiceDate,
+              "ProformaInvoiceDate": invoiceDateSplit,
               "ProformaPan": this.newInvoiceCreation.value.ProformaPan,
               "ProformaGstNumber":this.newInvoiceCreation.value.ProformaGstNumber,
               "ProformaTypeOfAircraft":  this.newInvoiceCreation.value.proformatypeOfAircraft,
               "ProformaSeatingCapasity":  this.newInvoiceCreation.value.proformaseatingcapasity,
               "notes": this.newInvoiceCreation.value.notes,
-              "BookingDateOfJourny": this.newInvoiceCreation.value.bookingdateofjourney,
+              "BookingDateOfJourny": bokingDateSplit,
               "BookingSector":  this.newInvoiceCreation.value.bookingsector,
               "BookingBillingFlyingTime": this.newInvoiceCreation.value.bookingbillingflyingtime
           },
@@ -471,17 +573,54 @@ console.log("amountInWords", this.amountInWords);
           //     "accountNumber":this.newInvoiceCreation.value.accountNumber,
           //     "branch":this.newInvoiceCreation.value.branch,
           //     "ifscCode":this.newInvoiceCreation.value.ifscCode
-          // }
-      }
-      this.service.UpdateInvoice(updateobj,this.invoiceRefNo).subscribe((res:any)=>{
-        console.log("UpdateInvoice",res);
-        
-      })
+        };
+          console.log('Payload sent to backend:', updateobj);
+
+          this.service.UpdateInvoice(updateobj,this.invoiceRefNo).subscribe((response:any)=>{
+            console.log("updateInvoice",response);
+            
+            const resp = response.data;
+            if (resp) {
+                Swal.fire({
+                    text: response.message,
+                    icon: 'success',
+                    showConfirmButton: true
+                });
       
-    } else {
-      console.log('Form is invalid');
-    }
-  }
+                // Reset form and related data
+                this.newInvoiceCreation.reset();
+                this.logoUrl = '';
+                this.chargeItems = [];
+                this.taxItems = [];
+                this.subtotal = 0;
+                this.grandTotal = 0;
+                this.amountInWords = '';
+            } else {
+                Swal.fire({
+                    text: 'failed to fetch data ',
+                    icon: 'error',
+                    showConfirmButton: true
+                });
+            }
+        }, (error) => {
+            // Handle error
+            console.log('Error updating invoice:', error);
+            Swal.fire({
+                text: 'An error occurred while updating the invoice',
+                icon: 'error',
+                showConfirmButton: true
+            });
+        });
+      } else {
+        console.log('Form is invalid');
+        Swal.fire({
+            text: 'Please fill out the form correctly.',
+            icon: 'warning',
+            showConfirmButton: true
+        });
+      }
+        }
+      
   
 
    
