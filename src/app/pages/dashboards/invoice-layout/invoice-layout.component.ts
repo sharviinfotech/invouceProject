@@ -3,6 +3,7 @@ import { Component, ElementRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { GeneralserviceService } from 'src/app/generalservice.service';
 import { NumberToWordsService } from 'src/app/number-to-words.service';
+import Swal from 'sweetalert2';
 interface TaxItem {
   description: string;
   percentage: number;
@@ -99,7 +100,7 @@ export class InvoiceLayoutComponent {
    constructor(private fb: FormBuilder, private numberToWordsService:NumberToWordsService,private service:GeneralserviceService) {
     this.creationInvoiceLayout = this.fb.group({
       invoiceHeader: [''],
-      ProformaCompanyName: [''],
+      ProformaCustomerName: [''],
       ProformaAddress: [''],
       ProformaCity: [''],
       ProformaSate: [''],
@@ -165,7 +166,7 @@ export class InvoiceLayoutComponent {
      this.show = false;
      this.creationInvoiceLayout.patchValue({
        invoiceHeader: this.selectedInvoice.header.invoiceHeader,
-       ProformaCompanyName: this.selectedInvoice.header.ProformaCompanyName,
+       ProformaCustomerName: this.selectedInvoice.header.ProformaCustomerName,
        ProformaAddress: this.selectedInvoice.header.ProformaAddress ,
        ProformaCity: this.selectedInvoice.header.ProformaCity,
        ProformaSate: this.selectedInvoice.header.ProformaSate,
@@ -210,7 +211,7 @@ export class InvoiceLayoutComponent {
      this.selectedInvoice = null
      this.creationInvoiceLayout.patchValue({
        invoiceHeader: "",
-       ProformaCompanyName: "",
+       ProformaCustomerName: "",
        ProformaAddress: "",
        ProformaCity: "",
        ProformaSate: "",
@@ -366,7 +367,7 @@ export class InvoiceLayoutComponent {
         "header": {
             "invoiceHeader": this.creationInvoiceLayout.value.invoiceHeader,
             "invoiceImage": this.logoUrl,
-            "ProformaCompanyName": this.creationInvoiceLayout.value.ProformaCompanyName,
+            "ProformaCustomerName": this.creationInvoiceLayout.value.ProformaCustomerName,
             "ProformaAddress": this.creationInvoiceLayout.value.ProformaAddress,
             "ProformaCity": this.creationInvoiceLayout.value.ProformaCity,
             "ProformaSate": this.creationInvoiceLayout.value.ProformaSate,
@@ -398,6 +399,13 @@ export class InvoiceLayoutComponent {
         // }
     }
       this.service.invoiceTemplate(obj).subscribe((res:any)=>{
+
+        console.log("res",res)
+         Swal.fire({
+            text: res.message,
+            icon: 'success',
+            showConfirmButton: true
+          });
 
 
       })

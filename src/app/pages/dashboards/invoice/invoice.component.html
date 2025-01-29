@@ -30,27 +30,35 @@
         All Invoices
       </div>
       <div class="card-body">
-        <table class="table table-bordered table-hover">
-          <thead class="thead-light">
-            <tr>
-              <th>Invoice ReferenceNo</th>
-              <th>Company Name</th>
-              <th>Type Of Aircraft</th>
-              <th>Date</th>
-              <th>City</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let invoice of allInvoiceList" (click)="selectInvoice(invoice)">
-              <td>{{ invoice.invoiceReferenceNo }}</td>
-              <td>{{ invoice.header.ProformaCompanyName }}</td>
-              <td>{{ invoice.header.ProformaTypeOfAircraft }}</td>
-              <td>{{ invoice.header.ProformaInvoiceDate }}</td>
-              <td>{{ invoice.header.ProformaCity }}</td>
-
-            </tr>
-          </tbody>
-        </table>
+        <div class="table-responsive">
+          <table class="table table-bordered table-stripped">
+            <thead class="thead-light">
+              <tr>
+                <th class="text-nowrap">Invoice Number</th>
+                <th class="text-nowrap">Invoice Date</th>
+                <th class="text-nowrap">Customer Name</th>
+                <th class="text-nowrap">Type Of Aircraft</th>
+                <th class="text-nowrap">City</th>
+                <th class="text-nowrap">Destination</th>
+                <th class="text-nowrap">Date Of Journey</th>
+                <th class="text-nowrap">Total Amount</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let invoice of allInvoiceList" (click)="selectInvoice(invoice)">
+                <td>{{ invoice.invoiceUniqueNumber }}</td>
+                <td>{{ invoice.header.ProformaInvoiceDate }}</td>
+                <td>{{ invoice.header.ProformaCustomerName }}</td>
+                <td>{{ invoice.header.ProformaTypeOfAircraft }}</td>
+                <td>{{ invoice.header.ProformaCity }}</td>
+                <td>{{ invoice.header.BookingSector }}</td>
+                <td>{{ invoice.header.BookingDateOfJourny }}</td>
+                <td>{{ invoice.grandTotal | number: '1.2-2'}}</td>
+                
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
 
@@ -120,8 +128,8 @@
           <div class="row">
             <div class="col-lg-4">
               <div class="form-group">
-                <label>Company Name</label>
-                <input type="text" formControlName="ProformaCompanyName" placeholder="">
+                <label>Customer Name</label>
+                <input type="text" formControlName="ProformaCustomerName" placeholder="">
               </div>
             </div>
             <div class="col-lg-4">
@@ -139,13 +147,10 @@
             <div class="col-lg-4">
               <div class="form-group">
                 <label for="state">State</label>
-                <select formControlName="ProformaSate" class="form-control">
-                  <option value="" disabled selected>Select a state</option>
-                  <option value="draft">Andhra Pradesh</option>
-                  <option value="submitted">Telangana</option>
-                  <option value="karnataka">Karnataka</option>
-                  <option value="maharashtra">Maharashtra</option>
-                  <option value="tamilnadu">Tamil Nadu</option>
+                <select formControlName="ProformaState" class="form-control" (change)="onChangeState()">
+                  <option value="">Select a state</option>
+                  <option *ngFor="let state of statesList" [value]="state.stateName">{{state.stateName}}</option>
+                  
                 </select>
               </div>
             </div>
@@ -172,7 +177,7 @@
               <div class="form-group">
                 <label>PAN No</label>
                 <input id="ProformaPanNO" type="text" formControlName="ProformaPanNO" maxlength="10"
-                  placeholder="Enter PAN Number (e.g., ABCD1234E)" />
+                  placeholder="Enter PAN NO (e.g., ABCD1234E)" />
                 <div
                   *ngIf="newInvoiceCreation.get('ProformaPanNO')?.hasError('pattern') && newInvoiceCreation.get('ProformaPanNO')?.touched">
                   PAN number must be in the format: 4 capital letters, 4 numbers, and 1 capital letter (e.g.,
@@ -187,12 +192,12 @@
             </div>
           </div>
           <div class="row">
-            <div class="col-lg-4">
+            <!-- <div class="col-lg-4">
               <div class="form-group">
                 <label>Invoice Number</label>
                 <input type="text" formControlName="ProformaInvoiceNumber" class="form-control" placeholder="INV0001">
               </div>
-            </div>
+            </div> -->
             <div class="col-lg-4">
               <div class="form-group">
                 <label>Date</label>
@@ -204,21 +209,20 @@
                 [bsConfig]="bsConfig"
                 bsDatepicker
               />
-                <input type="date" formControlName="ProformaInvoiceDate" class="form-control">
               </div>
             </div>
             <div class="col-lg-4">
               <div class="form-group">
                 <label>PAN Number</label>
-                <input id="ProformaPanNumber" type="text" formControlName="ProformaPanNumber" maxlength="10"
+                <input id="ProformaPanNumber" type="text" formControlName="ProformaPan" maxlength="10"
                   placeholder="Enter PAN Number (e.g., ABCD1234E)" />
                 <div
-                  *ngIf="newInvoiceCreation.get('ProformaPanNumber')?.hasError('pattern') && newInvoiceCreation.get('ProformaPanNumber')?.touched">
+                  *ngIf="newInvoiceCreation.get('ProformaPan')?.hasError('pattern') && newInvoiceCreation.get('ProformaPan')?.touched">
                   PAN number must be in the format: 4 capital letters, 4 numbers, and 1 capital letter (e.g.,
                   ABCD1234E).
                 </div>
                 <div
-                  *ngIf="newInvoiceCreation.get('ProformaPanNumber')?.hasError('required') && newInvoiceCreation.get('ProformaPanNumber')?.touched">
+                  *ngIf="newInvoiceCreation.get('ProformaPan')?.hasError('required') && newInvoiceCreation.get('ProformaPan')?.touched">
                   PAN number is required.
                 </div>
               </div>
@@ -255,8 +259,14 @@
             <div class="col-lg-4">
               <div class="form-group">
                 <label>Date Of Journey</label>
-                <input type="date" formControlName="bookingdetailsdateofjourney" class="form-control" placeholder="">
-              </div>
+                <input
+                type="text"
+                placeholder="Date"
+                formControlName="bookingdateOfjourny"
+                class="form-control form-control-sm"
+                [bsConfig]="bsConfig"
+                bsDatepicker
+              />              </div>
             </div>
             <div class="col-lg-4">
               <div class="form-group">
@@ -267,7 +277,7 @@
             <div class="col-lg-4">
               <div class="form-group">
                 <label>Billing Flying Time</label>
-                <input type="text" formControlName="bookingdetailsbillingflyingtime" class="form-control"
+                <input type="text" formControlName="bookingbillingflyingtime" class="form-control"
                   placeholder="">
               </div>
             </div>
@@ -456,8 +466,8 @@
           <div class="row">
             <div class="col-lg-4">
               <div class="form-group">
-                <label>Company Name</label>
-                <input type="text" formControlName="ProformaCompanyName" placeholder="">
+                <label>Customer Name</label>
+                <input type="text" formControlName="ProformaCustomerName" placeholder="">
               </div>
             </div>
             <div class="col-lg-4">
@@ -475,7 +485,11 @@
             <div class="col-lg-4">
               <div class="form-group">
                 <label for="state">State</label>
-                <input type="text" formControlName="ProformaSate" placeholder="">
+                <select formControlName="ProformaState" class="form-control" (change)="onChangeState()">
+                  <option value="">Select a state</option>
+                  <option *ngFor="let state of statesList" [value]="state.stateName">{{state.stateName}}</option>
+                  
+                </select>
 
               </div>
             </div>
@@ -502,7 +516,7 @@
               <div class="form-group">
                 <label>PAN No</label>
                 <input id="ProformaPanNO" type="text" formControlName="ProformaPanNO" maxlength="10"
-                  placeholder="Enter PAN Number (e.g., ABCD1234E)" />
+                  placeholder="Enter PAN No (e.g., ABCD1234E)" />
                 <div
                   *ngIf="newInvoiceCreation.get('ProformaPanNO')?.hasError('pattern') && newInvoiceCreation.get('ProformaPanNO')?.touched">
                   PAN number must be in the format: 4 capital letters, 4 numbers, and 1 capital letter (e.g.,
@@ -526,21 +540,27 @@
             <div class="col-lg-4">
               <div class="form-group">
                 <label>Date</label>
-                <input type="date" formControlName="ProformaInvoiceDate" class="form-control">
-              </div>
+                <input
+                type="text"
+                placeholder="Date"
+                formControlName="ProformaInvoiceDate"
+                class="form-control form-control-sm"
+                [bsConfig]="bsConfig"
+                bsDatepicker
+              />              </div>
             </div>
             <div class="col-lg-4">
               <div class="form-group">
                 <label>PAN Number</label>
-                <input id="ProformaPanNumber" type="text" formControlName="ProformaPanNumber" maxlength="10"
+                <input id="ProformaPanNumber" type="text" formControlName="ProformaPan" maxlength="10"
                   placeholder="Enter PAN Number (e.g., ABCD1234E)" />
                 <div
-                  *ngIf="newInvoiceCreation.get('ProformaPanNumber')?.hasError('pattern') && newInvoiceCreation.get('ProformaPanNumber')?.touched">
+                  *ngIf="newInvoiceCreation.get('ProformaPan')?.hasError('pattern') && newInvoiceCreation.get('ProformaPan')?.touched">
                   PAN number must be in the format: 4 capital letters, 4 numbers, and 1 capital letter (e.g.,
                   ABCD1234E).
                 </div>
                 <div
-                  *ngIf="newInvoiceCreation.get('ProformaPanNumber')?.hasError('required') && newInvoiceCreation.get('ProformaPanNumber')?.touched">
+                  *ngIf="newInvoiceCreation.get('ProformaPan')?.hasError('required') && newInvoiceCreation.get('ProformaPan')?.touched">
                   PAN number is required.
                 </div>
               </div>
@@ -581,13 +601,13 @@
                 <input
                 type="text"
                 placeholder="Enter Posting Date"
-                formControlName="bookingdetailsdateofjourney"
+                formControlName="bookingdateOfjourny"
                 class="form-control form-control-sm"
                 [bsConfig]="bsConfig"
                 bsDatepicker
               />
  
-                <!-- <input type="date" formControlName="bookingdetailsdateofjourney" class="form-control" placeholder=""> -->
+                <!-- <input type="date" formControlName="bookingdateOfjourny" class="form-control" placeholder=""> -->
               </div>
             </div>
             <div class="col-lg-4">
@@ -599,7 +619,7 @@
             <div class="col-lg-4">
               <div class="form-group">
                 <label>Billing Flying Time</label>
-                <input type="text" formControlName="bookingdetailsbillingflyingtime" class="form-control"
+                <input type="text" formControlName="bookingbillingflyingtime" class="form-control"
                   placeholder="">
               </div>
             </div>
@@ -776,8 +796,8 @@
           <div class="row">
             <div class="col-lg-4">
               <div class="form-group">
-                <label>Company Name</label>
-                <input type="text" formControlName="ProformaCompanyName" placeholder="">
+                <label>Customer Name</label>
+                <input type="text" formControlName="ProformaCustomerName" placeholder="">
               </div>
             </div>
             <div class="col-lg-4">
@@ -795,10 +815,10 @@
             <div class="col-lg-4">
               <div class="form-group">
                 <label for="state">State</label>
-                <select formControlName="ProformaSate" class="form-control">
-                  <option value="" disabled selected>Select a state</option>
-                  <option value="draft">Andhra Pradesh</option>
-                  <option value="submitted">Telangana</option>
+                <select formControlName="ProformaState" class="form-control" (change)="onChangeState()">
+                  <option value="">Select a state</option>
+                  <option *ngFor="let state of statesList" [value]="state.stateName">{{state.stateName}}</option>
+                  
                 </select>
               </div>
             </div>
@@ -825,7 +845,7 @@
               <div class="form-group">
                 <label>PAN No</label>
                 <input id="ProformaPanNO" type="text" formControlName="ProformaPanNO" maxlength="10"
-                  placeholder="Enter PAN Number (e.g., ABCD1234E)" />
+                  placeholder="Enter PAN No (e.g., ABCD1234E)" />
                 <div
                   *ngIf="newInvoiceCreation.get('ProformaPanNO')?.hasError('pattern') && newInvoiceCreation.get('ProformaPanNO')?.touched">
                   PAN number must be in the format: 4 capital letters, 4 numbers, and 1 capital letter (e.g.,
@@ -857,21 +877,20 @@
                 [bsConfig]="bsConfig"
                 bsDatepicker
               />
-                <!-- <input type="date" formControlName="ProformaInvoiceDate" class="form-control"> -->
               </div>
             </div>
             <div class="col-lg-4">
               <div class="form-group">
                 <label>PAN Number</label>
-                <input id="ProformaPanNumber" type="text" formControlName="ProformaPanNumber" maxlength="10"
+                <input id="ProformaPan" type="text" formControlName="ProformaPan" maxlength="10"
                   placeholder="Enter PAN Number (e.g., ABCD1234E)" />
                 <div
-                  *ngIf="newInvoiceCreation.get('ProformaPanNumber')?.hasError('pattern') && newInvoiceCreation.get('ProformaPanNumber')?.touched">
+                  *ngIf="newInvoiceCreation.get('ProformaPan')?.hasError('pattern') && newInvoiceCreation.get('ProformaPan')?.touched">
                   PAN number must be in the format: 4 capital letters, 4 numbers, and 1 capital letter (e.g.,
                   ABCD1234E).
                 </div>
                 <div
-                  *ngIf="newInvoiceCreation.get('ProformaPanNumber')?.hasError('required') && newInvoiceCreation.get('ProformaPanNumber')?.touched">
+                  *ngIf="newInvoiceCreation.get('ProformaPan')?.hasError('required') && newInvoiceCreation.get('ProformaPan')?.touched">
                   PAN number is required.
                 </div>
               </div>
@@ -909,7 +928,14 @@
             <div class="col-lg-4">
               <div class="form-group">
                 <label>Date Of Journey</label>
-                <input type="date" formControlName="bookingdetailsdateofjourney" class="form-control" placeholder="">
+                <input
+                type="text"
+                placeholder="Date"
+                formControlName="bookingdateOfjourny"
+                class="form-control form-control-sm"
+                [bsConfig]="bsConfig"
+                bsDatepicker
+              />
               </div>
             </div>
             <div class="col-lg-4">
@@ -921,7 +947,7 @@
             <div class="col-lg-4">
               <div class="form-group">
                 <label>Billing Flying Time</label>
-                <input type="text" formControlName="bookingdetailsbillingflyingtime" class="form-control"
+                <input type="text" formControlName="bookingbillingflyingtime" class="form-control"
                   placeholder="">
               </div>
             </div>
@@ -1054,7 +1080,7 @@
     
 
     <div class="col-sm-12 col-md-12 col-lg-12 text-right" style="text-align: end;">
-      <button class="btnSave btn" (click)="Update()">Update</button>
+      <button class="btnSave btn" (click)="UpdateInvoice()">Update</button>
     </div>
 
 

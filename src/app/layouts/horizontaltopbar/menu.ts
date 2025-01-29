@@ -24,6 +24,12 @@ export const MENU: MenuItem[] = [
                 link: '/InvoiceLayout',
                 parentId: 1
             },
+            {
+                id: 5,
+                label: 'Invoice Reports',
+                link: '/InvoiceReports',
+                parentId: 1
+            },
         ]
     },
     {

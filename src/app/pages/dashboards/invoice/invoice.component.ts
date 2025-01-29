@@ -104,7 +104,7 @@ export class InvoiceComponent implements OnInit {
   constructor(private fb: FormBuilder, private numberToWordsService:NumberToWordsService,private service:GeneralserviceService, private datePipe: DatePipe) {
     this.newInvoiceCreation = this.fb.group({
       invoiceHeader: [''],
-      ProformaCompanyName: [''],
+      ProformaCustomerName: [''],
       ProformaAddress: [''],
       ProformaCity: [''],
       ProformaState: [''],
@@ -120,7 +120,7 @@ export class InvoiceComponent implements OnInit {
       
       ProformaInvoiceNumber: [''],
       ProformaInvoiceDate: [''],
-      ProformaPanNumber: [
+      ProformaPan: [
         '',
         [
           Validators.required,
@@ -131,9 +131,6 @@ export class InvoiceComponent implements OnInit {
       ProformaGstNumber: [''],
       proformatypeOfAircraft: [''],
       proformaseatingcapasity: [''],
-      bookingdetailsdateofjourny: [''],
-      bookingdetailssector: [''],
-      bookingdetailsbillingflyingtime: [''],
       notes: [''],
       bookingdateOfjourny: [''],
       bookingsector: [''],
@@ -200,7 +197,7 @@ console.log("seletedObj",seletedObj)
   
   
   getAllInvoice(){
-
+    this.allInvoiceList = []
     this.service.getAllInvoice().subscribe((res:any)=>{
       console.log("getAllInvoice",res);
       this.allInvoiceList = res.invoices;
@@ -239,16 +236,16 @@ console.log("seletedObj",seletedObj)
     this.show = false;
     this.newInvoiceCreation.patchValue({
       invoiceHeader: this.selectedInvoice.header.invoiceHeader,
-      ProformaCompanyName: this.selectedInvoice.header.ProformaCompanyName,
+      ProformaCustomerName: this.selectedInvoice.header.ProformaCustomerName,
       ProformaAddress: this.selectedInvoice.header.ProformaAddress ,
       ProformaCity: this.selectedInvoice.header.ProformaCity,
       ProformaState: this.selectedInvoice.header.ProformaState,
       ProformaPincode: this.selectedInvoice.header.ProformaPincode,
       ProformaGstNo: this.selectedInvoice.header.ProformaGstNo,
-      ProformaPanNO: this.selectedInvoice.header.ProformaPan,
-      ProformaInvoiceNumber: this.selectedInvoice.header.invoiceUniqueNumber,
+      ProformaPanNO: this.selectedInvoice.header.ProformaPanNO,
+      ProformaInvoiceNumber: this.selectedInvoice.invoiceUniqueNumber,
       ProformaInvoiceDate: this.selectedInvoice.header.ProformaInvoiceDate,
-      ProformaPanNumber:this.selectedInvoice.header.ProformaPanNO,
+      ProformaPan:this.selectedInvoice.header.ProformaPan,
       ProformaGstNumber: this.selectedInvoice.header.ProformaGstNumber,
       proformatypeOfAircraft: this.selectedInvoice.header.ProformaTypeOfAircraft,
       proformaseatingcapasity: this.selectedInvoice.header.ProformaSeatingCapasity,
@@ -273,6 +270,7 @@ console.log("this.selectedInvoice.header.invoiceUniqueNumber",this.selectedInvoi
 console.log("this.newInvoiceCreation",this.newInvoiceCreation.value.ProformaInvoiceNumber)
   }
   resetAll(){
+    this.logoUrl = ""
     this.amountInWords =  ""
     this.chargeItems = [];
     this.taxItems = [];
@@ -281,7 +279,7 @@ console.log("this.newInvoiceCreation",this.newInvoiceCreation.value.ProformaInvo
     this.selectedInvoice = null
     this.newInvoiceCreation.patchValue({
       invoiceHeader: "",
-      ProformaCompanyName: "",
+      ProformaCustomerName: "",
       ProformaAddress: "",
       ProformaCity: "",
       ProformaState: "",
@@ -290,7 +288,7 @@ console.log("this.newInvoiceCreation",this.newInvoiceCreation.value.ProformaInvo
       ProformaPanNO: "",
       ProformaInvoiceNumber: "",
       ProformaInvoiceDate: "",
-      proformaPanNumber:"",
+      ProformaPan :"",
       ProformaGstNumber: "",
       proformatypeOfAircraft: "",
       proformaseatingcapasity: "",
@@ -328,7 +326,7 @@ console.log("this.newInvoiceCreation",this.newInvoiceCreation.value.ProformaInvo
   setTab(tabName: string) {
     this.activeTab = tabName;
     console.log("this.activeTab",this.activeTab);
-    // this.resetAll()
+    this.resetAll()
   }
   
 
@@ -449,7 +447,7 @@ console.log("amountInWords", this.amountInWords);
         "header": {
             "invoiceHeader": this.newInvoiceCreation.value.invoiceHeader,
             "invoiceImage": this.logoUrl,
-            "ProformaCompanyName": this.newInvoiceCreation.value.ProformaCompanyName,
+            "ProformaCustomerName": this.newInvoiceCreation.value.ProformaCustomerName,
             "ProformaAddress": this.newInvoiceCreation.value.ProformaAddress,
             "ProformaCity": this.newInvoiceCreation.value.ProformaCity,
             "ProformaState": this.newInvoiceCreation.value.ProformaState,
@@ -458,7 +456,7 @@ console.log("amountInWords", this.amountInWords);
             "ProformaPanNO": this.newInvoiceCreation.value.ProformaPanNO,
             "ProformaInvoiceNumber": this.newInvoiceCreation.value.ProformaInvoiceNumber,
             "ProformaInvoiceDate": invoiceDateSplit,
-            "ProformaPan": this.newInvoiceCreation.value.ProformaPanNumber,
+            "ProformaPan": this.newInvoiceCreation.value.ProformaPan,
             "ProformaGstNumber": this.newInvoiceCreation.value.ProformaGstNumber,
             "ProformaTypeOfAircraft": this.newInvoiceCreation.value.proformatypeOfAircraft,
             "ProformaSeatingCapasity": this.newInvoiceCreation.value.proformaseatingcapasity,
@@ -488,7 +486,7 @@ console.log("amountInWords", this.amountInWords);
       const resp = response.data;
       if (resp) {
           Swal.fire({
-              text: response.message +' with Invoice Number '+resp.invoiceUniqueNumber,
+              text: response.message +' with Invoice Number    '+ resp.invoiceUniqueNumber,
               icon: 'success',
               showConfirmButton: true
           });
@@ -501,6 +499,8 @@ console.log("amountInWords", this.amountInWords);
           this.subtotal = 0;
           this.grandTotal = 0;
           this.amountInWords = '';
+          this.resetAll()
+          this.getAllInvoice()
       } else {
           Swal.fire({
               text: 'failed to fetch data ',
@@ -548,7 +548,7 @@ console.log("amountInWords", this.amountInWords);
           "header": {
               "invoiceHeader": this.newInvoiceCreation.value.invoiceHeader,
               "invoiceImage": this.logoUrl,
-              "ProformaCompanyName": this.newInvoiceCreation.value.ProformaCompanyName,
+              "ProformaCustomerName": this.newInvoiceCreation.value.ProformaCustomerName,
               "ProformaAddress": this.newInvoiceCreation.value.ProformaAddress,
               "ProformaCity": this.newInvoiceCreation.value.ProformaCity,
               "ProformaState": this.newInvoiceCreation.value.ProformaState,

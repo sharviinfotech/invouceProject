@@ -1,0 +1,36 @@
+<div class="card">
+    <div class="card-header" style="text-align: center;">
+      All Invoices
+    </div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-bordered table-stripped">
+          <thead class="thead-light">
+            <tr>
+              <th class="text-nowrap">Invoice Number</th>
+              <th class="text-nowrap">Invoice Date</th>
+              <th class="text-nowrap">Customer Name</th>
+              <th class="text-nowrap">Type Of Aircraft</th>
+              <th class="text-nowrap">City</th>
+              <th class="text-nowrap">Destination</th>
+              <th class="text-nowrap">Date Of Journey</th>
+              <th class="text-nowrap">Total Amount</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let invoice of allInvoiceList" (click)="selectInvoice(invoice)">
+              <td>{{ invoice.invoiceUniqueNumber }}</td>
+              <td>{{ invoice.header.ProformaInvoiceDate }}</td>
+              <td>{{ invoice.header.ProformaCompanyName }}</td>
+              <td>{{ invoice.header.ProformaTypeOfAircraft }}</td>
+              <td>{{ invoice.header.ProformaCity }}</td>
+              <td>{{ invoice.header.BookingSector }}</td>
+              <td>{{ invoice.header.BookingDateOfJourny }}</td>
+              <td>{{ invoice.grandTotal | number: '1.2-2'}}</td>
+              
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>

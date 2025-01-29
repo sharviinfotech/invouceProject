@@ -9,6 +9,7 @@ import { JobsComponent } from "./jobs/jobs.component";
 import { SampleComponentComponent } from './default/sample-component/sample-component.component';
 import { InvoiceComponent } from './invoice/invoice.component';
 import { InvoiceLayoutComponent } from './invoice-layout/invoice-layout.component';
+import { InvoiceReportsComponent } from './invoice-reports/invoice-reports.component';
 
 const routes: Routes = [
     {
@@ -26,6 +27,10 @@ const routes: Routes = [
     {
         path: 'InvoiceLayout',
         component: InvoiceLayoutComponent
+    },
+    {
+        path: 'InvoiceReports',
+        component: InvoiceReportsComponent
     },
     // {
     //     path: 'saas',
