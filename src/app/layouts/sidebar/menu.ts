@@ -1,38 +1,41 @@
 import { MenuItem } from './menu.model';
 
 export const MENU: MenuItem[] = [
-    {
-        id: 2,
-        label: 'MENUITEMS.DASHBOARDS.TEXT',
-        icon: 'bx-home-circle',
-        subItems: [
-            {
-                id: 3,
-                label: 'MENUITEMS.DASHBOARDS.LIST.DEFAULT',
-                link: '/dashboard',
-                parentId: 2
-            },
+    // {
+    //     id: 2,
+    //     label: 'MENUITEMS.DASHBOARDS.TEXT',
+    //     icon: 'bx-home-circle',
+    //     subItems: [
+            // {
+            //     id: 3,
+            //     label: 'MENUITEMS.DASHBOARDS.LIST.DEFAULT',
+            //     link: '/dashboard',
+            //     parentId: 2
+            // },
             {
                 id: 4,
                 label: 'Invoice Layout',
                 link: '/InvoiceLayout',
-                parentId: 1
+                parentId: 1,
+                icon: 'bx bx-layout',
             },
             {
                 id: 3,
                 label: 'Invoice',
                 link: '/Invoice',
-                parentId: 1
+                parentId: 1,
+                icon: 'bx bx-plus',
             },
             {
                 id: 5,
                 label: 'Invoice Reports',
                 link: '/InvoiceReports',
-                parentId: 1
+                parentId: 1,
+                icon: 'bx bx-spreadsheet',
             },
            
-        ]
-    },
+    //     ]
+    // },
     // {
     //     id: 66,
     //     label: 'MENUITEMS.PAGES.TEXT',

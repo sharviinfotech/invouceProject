@@ -3,27 +3,27 @@
     <div class="d-flex">
       <!-- LOGO -->
       <div class="navbar-brand-box">
-        <img src="assets/images/aircraftimage.png" alt="" height="100" width="200" style="padding: 30px 10px 10px 10px !important;"> 
-        <!-- <a routerLink="/" class="logo logo-dark">
+        <!-- <img src="assets/images/aircraftimage.png" alt="" height="100" width="200" style="padding: 30px 10px 10px 10px !important;">  -->
+        <a routerLink="/" class="logo logo-dark">
           <span class="logo-sm">
-            <img src="assets/images/logo.svg" alt="" height="22">
+            <img src="assets/images/aircraftimage.png" alt="" height="50" width="50" style="padding: 30px 10px 10px 10px !important;"> 
           </span>
           <span class="logo-lg">
-            <img src="assets/images/logo-dark.png" alt="" height="17">
+            <img src="assets/images/aircraftimage.png" alt="" height="100" width="200" style="padding: 30px 10px 10px 10px !important;"> 
           </span>
         </a>
 
         <a routerLink="/" class="logo logo-light">
           <span class="logo-sm">
-            <img src="assets/images/logo-light.svg" alt="" height="22">
+            <img src="assets/images/aircraftimage.png" alt="" height="50" width="50" style="padding: 30px 10px 10px 10px !important;"> 
           </span>
           <span class="logo-lg">
-            <img src="assets/images/logo-light.png" alt="" height="19">
+            <img src="assets/images/aircraftimage.png" alt="" height="100" width="200" style="padding: 30px 10px 10px 10px !important;"> 
           </span>
-        </a> -->
+        </a>
       </div>
 
-      <button type="button" class="btn btn-sm px-3 font-size-16 header-item" [ngClass]="{ 'd-none': theme === 'horizontal' }" id="vertical-menu-btn" (click)="toggleMobileMenu($event)">
+      <button type="button" class="btn btn-sm px-3 mt-3 font-size-16 header-item" [ngClass]="{ 'd-none': theme === 'horizontal' }" id="vertical-menu-btn" (click)="toggleMobileMenu($event)">
         <i class="fa fa-fw fa-bars"></i>
       </button>
 
@@ -368,7 +368,12 @@
             {{ 'HEADER.LOGIN.LOGOUT' | translate}}</a>
         </div>
       </div> -->
-      <div class="d-inline-block">
+      <div class="dropdown d-inline-block">
+        <button type="button" class="btn header-item noti-icon right-bar-toggle" (click)="toggleRightSidebar()">
+          <i class="bx bx-cog bx-spin"></i>
+        </button>
+      </div>
+      <div class="d-inline-block mt-3">
         <button 
           type="button" 
           class="btn btn-raised cancelBtn" 
@@ -378,11 +383,7 @@
         </button>
       </div>
       
-      <div class="dropdown d-inline-block">
-        <button type="button" class="btn header-item noti-icon right-bar-toggle" (click)="toggleRightSidebar()">
-          <i class="bx bx-cog bx-spin"></i>
-        </button>
-      </div>
+    
 
     </div>
   </div>

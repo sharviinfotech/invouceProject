@@ -7017,6 +7017,13 @@ ngx-masonry@^14.0.1:
   dependencies:
     tslib "^2.0.0"
 
+ngx-print@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.npmjs.org/ngx-print/-/ngx-print-2.0.0.tgz"
+  integrity sha512-AMdLvMlch2FmqiSI5RLDS5qtvb/4Dvhm4NbOeQ3EvmRXiqmM185vBt7EW1NVWCkqOicYXtfn3Rx87GXqPVyauw==
+  dependencies:
+    tslib "^2.3.0"
+
 ngx-slick-carousel@^17.0.0:
   version "17.0.0"
   resolved "https://registry.npmjs.org/ngx-slick-carousel/-/ngx-slick-carousel-17.0.0.tgz"

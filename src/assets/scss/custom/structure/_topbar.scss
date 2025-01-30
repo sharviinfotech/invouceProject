@@ -31,7 +31,7 @@
 }
 
 .navbar-brand-box {
-    padding: 0 1.5rem;
+    padding: 10px;
     text-align: center;
     width: $navbar-brand-box-width;
 }
@@ -111,7 +111,8 @@
 .header-item {
     height: $header-height;
     box-shadow: none !important;
-    color: var(--#{$prefix}header-item-color);
+    // color: var(--#{$prefix}header-item-color);
+    color: white !important;
     border: 0;
     border-radius: 0px;
 
@@ -130,7 +131,8 @@
 .noti-icon {
     i {
         font-size: 22px;
-        color: var(--#{$prefix}header-item-color);
+        // color: var(--#{$prefix}header-item-color);
+        color: white !important;
     }
 
     .badge {
