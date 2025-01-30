@@ -15,6 +15,7 @@ export class GeneralserviceService {
   CreateInvoice(obj){
     return this.http.post('http://localhost:3000/api/invoice/createNewInvoice',obj);
   }
+  
   UpdateInvoice(obj,invoiceRefNo){
     return this.http.post('http://localhost:3000/api/updateInvoiceByReferenceNo/:referenceNo/'+invoiceRefNo,obj);
   }
