@@ -128,40 +128,56 @@
           <div class="row">
             <div class="col-lg-4">
               <div class="form-group">
-                <label>Customer Name</label>
+                <label>Customer Name<span class="text-danger">*</span></label>
                 <input type="text" formControlName="ProformaCustomerName" placeholder="">
               </div>
+              <div class="text-danger" style="color: red;"
+                  *ngIf="newInvoiceCreation.get('ProformaCustomerName')?.hasError('required') && newInvoiceCreation.get('ProformaCustomerName')?.touched">
+                   Customer Name is required.
+                </div>
             </div>
             <div class="col-lg-4">
               <div class="form-group">
-                <label>Address</label>
+                <label>Address<span class="text-danger">*</span></label>
                 <input type="text" formControlName="ProformaAddress" placeholder="">
               </div>
+              <div class="text-danger"
+                  *ngIf="newInvoiceCreation.get('ProformaAddress')?.hasError('required') && newInvoiceCreation.get('ProformaAddress')?.touched">
+                  Address is required.
+                </div>
             </div>
             <div class="col-lg-4">
               <div class="form-group">
-                <label>City</label>
+                <label>City<span class="text-danger">*</span></label>
                 <input type="text" formControlName="ProformaCity" placeholder="">
               </div>
+              <div class="text-danger"
+                  *ngIf="newInvoiceCreation.get('ProformaCity')?.hasError('required') && newInvoiceCreation.get('ProformaCity')?.touched">
+                  city name is required.
+                </div>
             </div>
             <div class="col-lg-4">
               <div class="form-group">
-                <label for="state">State</label>
+                <label for="state">State<span class="text-danger">*</span></label>
                 <select formControlName="ProformaState" class="form-control" (change)="onChangeState()">
                   <option value="">Select a state</option>
                   <option *ngFor="let state of statesList" [value]="state.stateName">{{state.stateName}}</option>
                   
                 </select>
               </div>
+              <div class="text-danger"
+                  *ngIf="newInvoiceCreation.get('ProformaState')?.hasError('required') && newInvoiceCreation.get('ProformaState')?.touched">
+                  state is required.
+                </div>
             </div>
             <div class="col-lg-4">
               <div class="form-group">
-                <label for="Pincode">Pincode</label>
+                <label for="Pincode">Pincode<span class="text-danger">*</span></label>
                 <input id="Pincode" type="text" formControlName="ProformaPincode" maxlength="6"
                   placeholder="Enter Pincode" />
-                <!-- <div *ngIf="newInvoiceCreation.get('ProformaPincode')?.hasError('required')">
+                <div class="text-danger" *ngIf="newInvoiceCreation.get('ProformaPincode')?.hasError('required') && newInvoiceCreation.get('ProformaPincode')?.touched">
               Pincode is required.
-            </div> -->
+            </div>
                 <div *ngIf="newInvoiceCreation.get('ProformaPincode')?.hasError('pattern')">
                   Pincode must be exactly 6 digits.
                 </div>
@@ -169,13 +185,17 @@
             </div>
             <div class="col-lg-4">
               <div class="form-group">
-                <label>Gst No</label>
+                <label>Gst No<span class="text-danger">*</span></label>
                 <input type="text" formControlName="ProformaGstNo" placeholder="">
               </div>
+              <div class="text-danger"
+                  *ngIf="newInvoiceCreation.get('ProformaGstNo')?.hasError('required') && newInvoiceCreation.get('ProformaGstNo')?.touched">
+                  GST No is required.
+                </div>
             </div>
             <div class="col-lg-4">
               <div class="form-group">
-                <label>PAN No</label>
+                <label>PAN No<span class="text-danger">*</span></label>
                 <input id="ProformaPanNO" type="text" formControlName="ProformaPanNO" maxlength="10"
                   placeholder="Enter PAN NO (e.g., ABCD1234E)" />
                 <div
@@ -183,7 +203,7 @@
                   PAN number must be in the format: 4 capital letters, 4 numbers, and 1 capital letter (e.g.,
                   ABCD1234E).
                 </div>
-                <div
+                <div class="text-danger"
                   *ngIf="newInvoiceCreation.get('ProformaPanNO')?.hasError('required') && newInvoiceCreation.get('ProformaPanNO')?.touched">
                   PAN number is required.
                 </div>
@@ -200,7 +220,7 @@
             </div> -->
             <div class="col-lg-4">
               <div class="form-group">
-                <label>Date</label>
+                <label>Date<span class="text-danger">*</span></label>
                 <input
                 type="text"
                 placeholder="Date"
@@ -210,10 +230,14 @@
                 bsDatepicker
               />
               </div>
+              <div class="text-danger"
+                  *ngIf="newInvoiceCreation.get('ProformaInvoiceDate')?.hasError('required') && newInvoiceCreation.get('ProformaInvoiceDate')?.touched">
+                  Date is required.
+                </div>
             </div>
             <div class="col-lg-4">
               <div class="form-group">
-                <label>PAN Number</label>
+                <label>PAN Number<span class="text-danger">*</span></label>
                 <input id="ProformaPanNumber" type="text" formControlName="ProformaPan" maxlength="10"
                   placeholder="Enter PAN Number (e.g., ABCD1234E)" />
                 <div
@@ -221,7 +245,7 @@
                   PAN number must be in the format: 4 capital letters, 4 numbers, and 1 capital letter (e.g.,
                   ABCD1234E).
                 </div>
-                <div
+                <div class="text-danger"
                   *ngIf="newInvoiceCreation.get('ProformaPan')?.hasError('required') && newInvoiceCreation.get('ProformaPan')?.touched">
                   PAN number is required.
                 </div>
@@ -229,21 +253,33 @@
             </div>
             <div class="col-lg-4">
               <div class="form-group">
-                <label>GST No</label>
+                <label>GST No<span class="text-danger">*</span></label>
                 <input type="text" formControlName="ProformaGstNumber" class="form-control" placeholder="">
               </div>
+              <div class="text-danger"
+                  *ngIf="newInvoiceCreation.get('ProformaGstNumber')?.hasError('required') && newInvoiceCreation.get('ProformaGstNumber')?.touched">
+                  GST No is required.
+                </div>
             </div>
             <div class="col-lg-4">
               <div class="form-group">
-                <label>Type of Aircraft</label>
+                <label>Type of Aircraft<span class="text-danger">*</span></label>
                 <input type="text" formControlName="proformatypeOfAircraft" class="form-control" placeholder="">
               </div>
+              <div class="text-danger"
+                  *ngIf="newInvoiceCreation.get('proformatypeOfAircraft')?.hasError('required') && newInvoiceCreation.get('proformatypeOfAircraft')?.touched">
+                  Type of Aircraft is required.
+                </div>
             </div>
             <div class="col-lg-4">
               <div class="form-group">
-                <label>Seating Capasity</label>
+                <label>Seating Capasity<span class="text-danger">*</span></label>
                 <input type="text" formControlName="proformaseatingcapasity" class="form-control" placeholder="">
               </div>
+              <div class="text-danger"
+                  *ngIf="newInvoiceCreation.get('proformaseatingcapasity')?.hasError('required') && newInvoiceCreation.get('proformaseatingcapasity')?.touched">
+                  Seating Capasity is required.
+                </div>
             </div>
           </div>
         </div>
@@ -258,7 +294,7 @@
           <div class="row">
             <div class="col-lg-4">
               <div class="form-group">
-                <label>Date Of Journey</label>
+                <label>Date Of Journey<span class="text-danger">*</span></label>
                 <input
                 type="text"
                 placeholder="Date"
@@ -266,20 +302,34 @@
                 class="form-control form-control-sm"
                 [bsConfig]="bsConfig"
                 bsDatepicker
-              />              </div>
+              />              
+            </div>
+            <div class="text-danger"
+                  *ngIf="newInvoiceCreation.get('bookingdateOfjourny')?.hasError('required') && newInvoiceCreation.get('bookingdateOfjourny')?.touched">
+                  Date Of Journey is required.
+                </div>
             </div>
             <div class="col-lg-4">
               <div class="form-group">
                 <label>Sector</label>
                 <input type="text" formControlName="bookingsector" class="form-control" placeholder="">
               </div>
+              <div class="text-danger"
+                  *ngIf="newInvoiceCreation.get('bookingsector')?.hasError('required') && newInvoiceCreation.get('bookingsector')?.touched">
+                  Sector is required.
+                </div>
             </div>
             <div class="col-lg-4">
               <div class="form-group">
-                <label>Billing Flying Time</label>
+                <label>Billing Flying Time<span class="text-danger">*</span></label>
                 <input type="text" formControlName="bookingbillingflyingtime" class="form-control"
                   placeholder="">
               </div>
+              <div class="text-danger"
+                  *ngIf="newInvoiceCreation.get('bookingbillingflyingtime')?.hasError('required') && newInvoiceCreation.get('bookingbillingflyingtime')?.touched">
+                  Billing Flying Time is required.
+                </div>
+              
             </div>
           </div>
         </div>
@@ -401,7 +451,7 @@
         <div class="row">
           <div class="col-lg-12">
             <div class="notes-section form-group">
-              <label>Notes</label>
+              <label>Notes<span class="text-danger">*</span></label>
               <textarea formControlName="notes" class="form-control"
                 placeholder="Notes - any relevant information not covered, additional terms and conditions"></textarea>
             </div>
@@ -498,9 +548,9 @@
                 <label for="Pincode">Pincode</label>
                 <input id="Pincode" type="text" formControlName="ProformaPincode" maxlength="6"
                   placeholder="Enter Pincode" />
-                <!-- <div *ngIf="newInvoiceCreation.get('ProformaPincode')?.hasError('required')">
+                <div *ngIf="newInvoiceCreation.get('ProformaPincode')?.hasError('required')">
               Pincode is required.
-            </div> -->
+            </div>
                 <div *ngIf="newInvoiceCreation.get('ProformaPincode')?.hasError('pattern')">
                   Pincode must be exactly 6 digits.
                 </div>
@@ -796,40 +846,58 @@
           <div class="row">
             <div class="col-lg-4">
               <div class="form-group">
-                <label>Customer Name</label>
+                <label>Customer Name<span class="text-danger">*</span></label>
                 <input type="text" formControlName="ProformaCustomerName" placeholder="">
               </div>
+              <div class="text-danger" style="color: red;"
+                  *ngIf="newInvoiceCreation.get('ProformaCustomerName')?.hasError('required') && newInvoiceCreation.get('ProformaCustomerName')?.touched">
+                   Customer Name is required.
+                </div>
+
             </div>
             <div class="col-lg-4">
               <div class="form-group">
-                <label>Address</label>
+                <label>Address<span class="text-danger">*</span></label>
                 <input type="text" formControlName="ProformaAddress" placeholder="">
               </div>
+              <div class="text-danger" style="color: red;"
+                  *ngIf="newInvoiceCreation.get('ProformaAddress')?.hasError('required') && newInvoiceCreation.get('ProformaAddress')?.touched">
+                  Address is required.
+                </div>
             </div>
             <div class="col-lg-4">
               <div class="form-group">
-                <label>City</label>
+                <label>City<span class="text-danger">*</span></label>
                 <input type="text" formControlName="ProformaCity" placeholder="">
               </div>
+              <div class="text-danger" style="color: red;"
+                  *ngIf="newInvoiceCreation.get('ProformaCity')?.hasError('required') && newInvoiceCreation.get('ProformaCity')?.touched">
+                  City is required.
+                </div>
             </div>
             <div class="col-lg-4">
               <div class="form-group">
-                <label for="state">State</label>
+                <label for="state">State<span class="text-danger">*</span></label>
                 <select formControlName="ProformaState" class="form-control" (change)="onChangeState()">
                   <option value="">Select a state</option>
                   <option *ngFor="let state of statesList" [value]="state.stateName">{{state.stateName}}</option>
                   
                 </select>
               </div>
+              <div class="text-danger" style="color: red;"
+                  *ngIf="newInvoiceCreation.get('ProformaState')?.hasError('required') && newInvoiceCreation.get('ProformaState')?.touched">
+                  State is required.
+                </div>
+
             </div>
             <div class="col-lg-4">
               <div class="form-group">
-                <label for="Pincode">Pincode</label>
+                <label for="Pincode">Pincode<span class="text-danger">*</span></label>
                 <input id="Pincode" type="text" formControlName="ProformaPincode" maxlength="6"
                   placeholder="Enter Pincode" />
-                <!-- <div *ngIf="newInvoiceCreation.get('ProformaPincode')?.hasError('required')">
+                <div *ngIf="newInvoiceCreation.get('ProformaPincode')?.hasError('required')">
               Pincode is required.
-            </div> -->
+            </div>
                 <div *ngIf="newInvoiceCreation.get('ProformaPincode')?.hasError('pattern')">
                   Pincode must be exactly 6 digits.
                 </div>
@@ -837,13 +905,13 @@
             </div>
             <div class="col-lg-4">
               <div class="form-group">
-                <label>Gst No</label>
+                <label>Gst No<span class="text-danger">*</span></label>
                 <input type="text" formControlName="ProformaGstNo" placeholder="">
               </div>
             </div>
             <div class="col-lg-4">
               <div class="form-group">
-                <label>PAN No</label>
+                <label>PAN No<span class="text-danger">*</span></label>
                 <input id="ProformaPanNO" type="text" formControlName="ProformaPanNO" maxlength="10"
                   placeholder="Enter PAN No (e.g., ABCD1234E)" />
                 <div
@@ -862,13 +930,17 @@
           <div class="row">
             <div class="col-lg-4">
               <div class="form-group">
-                <label>Invoice Number</label>
+                <label>Invoice Number<span class="text-danger">*</span></label>
                 <input type="text" formControlName="ProformaInvoiceNumber" class="form-control" placeholder="INV0001">
               </div>
+              <div class="text-danger" style="color: red;"
+                  *ngIf="newInvoiceCreation.get('ProformaInvoiceNumber')?.hasError('required') && newInvoiceCreation.get('ProformaInvoiceNumber')?.touched">
+                  Invoice Number is required.
+                </div>
             </div>
             <div class="col-lg-4">
               <div class="form-group">
-                <label>Date</label>
+                <label>Date<span class="text-danger">*</span></label>
                 <input
                 type="text"
                 placeholder="Date"
@@ -878,10 +950,15 @@
                 bsDatepicker
               />
               </div>
+              <div class="text-danger" style="color: red;"
+                  *ngIf="newInvoiceCreation.get('ProformaInvoiceDate')?.hasError('required') && newInvoiceCreation.get('ProformaInvoiceDate')?.touched">
+                  Date is required.
+                </div>
+
             </div>
             <div class="col-lg-4">
               <div class="form-group">
-                <label>PAN Number</label>
+                <label>PAN Number<span class="text-danger">*</span></label>
                 <input id="ProformaPan" type="text" formControlName="ProformaPan" maxlength="10"
                   placeholder="Enter PAN Number (e.g., ABCD1234E)" />
                 <div
@@ -898,21 +975,36 @@
 
             <div class="col-lg-4">
               <div class="form-group">
-                <label>GST No</label>
+                <label>GST No<span class="text-danger">*</span></label>
                 <input type="text" formControlName="ProformaGstNumber" class="form-control" placeholder="">
               </div>
+              <div class="text-danger" style="color: red;"
+                  *ngIf="newInvoiceCreation.get('ProformaGstNumber')?.hasError('required') && newInvoiceCreation.get('ProformaGstNumber')?.touched">
+                  GST No is required.
+                </div>
+
+
             </div>
             <div class="col-lg-4">
               <div class="form-group">
-                <label>Type of Aircraft</label>
+                <label>Type of Aircraft<span class="text-danger">*</span></label>
                 <input type="text" formControlName="proformatypeOfAircraft" class="form-control" placeholder="">
               </div>
+              <div class="text-danger" style="color: red;"
+                  *ngIf="newInvoiceCreation.get('proformatypeOfAircraft')?.hasError('required') && newInvoiceCreation.get('proformatypeOfAircraft')?.touched">
+                  Type of Aircraft is required.
+                </div>
+
             </div>
             <div class="col-lg-4">
               <div class="form-group">
-                <label>Seating Capasity</label>
+                <label>Seating Capasity<span class="text-danger">*</span></label>
                 <input type="text" formControlName="proformaseatingcapasity" class="form-control" placeholder="">
               </div>
+              <div class="text-danger" style="color: red;"
+                  *ngIf="newInvoiceCreation.get('proformaseatingcapasity')?.hasError('required') && newInvoiceCreation.get('proformaseatingcapasity')?.touched">
+                  Seating Capasity is required.
+                </div>
             </div>
           </div>
         </div>
@@ -927,7 +1019,7 @@
           <div class="row">
             <div class="col-lg-4">
               <div class="form-group">
-                <label>Date Of Journey</label>
+                <label>Date Of Journey<span class="text-danger">*</span></label>
                 <input
                 type="text"
                 placeholder="Date"
@@ -937,19 +1029,33 @@
                 bsDatepicker
               />
               </div>
+              <div class="text-danger" style="color: red;"
+                  *ngIf="newInvoiceCreation.get('bookingdateOfjourny')?.hasError('required') && newInvoiceCreation.get('bookingdateOfjourny')?.touched">
+                  Date Of Journey is required.
+                </div>
+
             </div>
             <div class="col-lg-4">
               <div class="form-group">
-                <label>Sector</label>
+                <label>Sector<span class="text-danger">*</span></label>
                 <input type="text" formControlName="bookingsector" class="form-control" placeholder="">
               </div>
+              <div class="text-danger" style="color: red;"
+                  *ngIf="newInvoiceCreation.get('bookingsector')?.hasError('required') && newInvoiceCreation.get('bookingsector')?.touched">
+                  Sector is required.
+                </div>
             </div>
             <div class="col-lg-4">
               <div class="form-group">
-                <label>Billing Flying Time</label>
+                <label>Billing Flying Time<span class="text-danger">*</span></label>
                 <input type="text" formControlName="bookingbillingflyingtime" class="form-control"
                   placeholder="">
               </div>
+              <div class="text-danger" style="color: red;"
+                  *ngIf="newInvoiceCreation.get('bookingbillingflyingtime')?.hasError('required') && newInvoiceCreation.get('bookingbillingflyingtime')?.touched">
+                  Billing Flying Time is required.
+                </div>
+
             </div>
           </div>
         </div>
@@ -1068,7 +1174,7 @@
         <div class="row">
           <div class="col-lg-12">
             <div class="notes-section form-group">
-              <label>Notes</label>
+              <label>Notes<span class="text-danger">*</span></label>
               <textarea formControlName="notes" class="form-control"
                 placeholder="Notes - any relevant information not covered, additional terms and conditions"></textarea>
             </div>
