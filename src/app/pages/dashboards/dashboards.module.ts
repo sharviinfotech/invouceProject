@@ -5,10 +5,12 @@ import { SampleComponentComponent } from './default/sample-component/sample-comp
 import { InvoiceComponent } from './invoice/invoice.component';
 import { InvoiceLayoutComponent } from './invoice-layout/invoice-layout.component';
 import { InvoiceReportsComponent } from './invoice-reports/invoice-reports.component';
+import { InvoiceUserCreationComponent } from './invoice-user-creation/invoice-user-creation.component';
 
 @NgModule({
   declarations: [
     SampleComponentComponent,
+    InvoiceUserCreationComponent,
     // InvoiceReportsComponent,
     // InvoiceComponent,
     // InvoiceLayoutComponent

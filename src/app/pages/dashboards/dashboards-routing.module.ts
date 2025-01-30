@@ -10,6 +10,7 @@ import { SampleComponentComponent } from './default/sample-component/sample-comp
 import { InvoiceComponent } from './invoice/invoice.component';
 import { InvoiceLayoutComponent } from './invoice-layout/invoice-layout.component';
 import { InvoiceReportsComponent } from './invoice-reports/invoice-reports.component';
+import { InvoiceUserCreationComponent } from './invoice-user-creation/invoice-user-creation.component';
 
 const routes: Routes = [
     {
@@ -31,6 +32,10 @@ const routes: Routes = [
     {
         path: 'InvoiceReports',
         component: InvoiceReportsComponent
+    },
+    {
+        path: 'InvoiceUserCreation',
+        component: InvoiceUserCreationComponent
     },
     // {
     //     path: 'saas',

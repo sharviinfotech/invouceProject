@@ -30,6 +30,13 @@ export const MENU: MenuItem[] = [
                 link: '/InvoiceReports',
                 parentId: 1
             },
+            {
+                id: 5,
+                label: 'User Creation',
+                link: '/InvoiceUserCreation',
+                parentId: 1,
+                icon: 'bx bx-user-pin',
+            },
         ]
     },
     {

@@ -33,6 +33,18 @@ export const MENU: MenuItem[] = [
                 parentId: 1,
                 icon: 'bx bx-spreadsheet',
             },
+            {
+                id: 5,
+                label: 'User Creation',
+                link: '/InvoiceUserCreation',
+                parentId: 1,
+                icon: 'bx bx-user-check',
+            },
+
+            // <i class="bx bx-user-plus"></i>  
+            // <i class="bx bx-user-check"></i> 
+            // <i class="bx bx-user-pin"></i>  
+
            
     //     ]
     // },
