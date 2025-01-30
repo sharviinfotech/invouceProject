@@ -1,1 +1,297 @@
-<p>invoice-user-creation works!</p>
+
+<div class="">
+    <form >
+
+    <div class="card">
+        <div class="card-header" style="text-align: center;">
+        User Creation
+        </div>
+        <div class="card-body">
+
+            <button type="button" class="btn btn-raised btn-md btnSubmitApproval" style="background-color: lightskyblue;" (click)="newUserCreation(newUserTemplate)">
+                Create New User
+              </button>
+              
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                           
+                            <th>User Name</th>
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                            <th>Email</th>
+                            <th>Contact</th>
+                            <th>Action</th>
+                            
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let data of userList">
+                            
+                            <td>{{data.userName}}</td>
+                            <td>{{data.firstName}}</td>
+                            <td>{{data.lastName}}</td>
+                            <td>{{data.email}}</td>
+                            <td>{{data.contact}}</td>
+                            <td>
+                              <button class="btn btn-sm btn-warning" (click)="openEditModal(data,editUserTemplate)">
+                                <i class="fa fa-edit"></i>
+                              </button>
+                            </td>
+                            
+                        </tr>
+                       
+                        
+                    </tbody>
+                </table>
+
+            </div>
+            
+        </div>
+
+    </div>
+    
+
+</form>
+
+</div>
+
+<ng-template #newUserTemplate let-c="close" let-d="dismiss">
+  <div class="card mb-4" style="background-color: #3f51b5;">
+      <div class="modal-header">
+          Create New User
+      </div>
+      <div class="card-body" style="background-color: #f9f9f9; box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); border-radius: 8px;">
+          <form [formGroup]="userCreationForm">
+              <div class="row">
+                  <!-- User Name -->
+                  <div class="col-lg-4 col-md-4 col-sm-4">
+                      <div class="form-group">
+                          <label>User Name<span class="text-danger">*</span></label>
+                          <input class="form-control form-control-sm" formControlName="userName" type="text" placeholder="">
+                          <div class="text-danger" *ngIf="f.userName?.hasError('required') && f.userName?.touched">
+                              User Name is required.
+                          </div>
+                      </div>
+                  </div>
+                  <!-- First Name -->
+                  <div class="col-lg-4 col-md-4 col-sm-4">
+                      <div class="form-group">
+                          <label>First Name<span class="text-danger">*</span></label>
+                          <input class="form-control form-control-sm" formControlName="firstName" type="text" placeholder="">
+                          <div class="text-danger" *ngIf="f.firstName?.hasError('required') && f.firstName?.touched">
+                              First Name is required.
+                          </div>
+                      </div>
+                  </div>
+                  <!-- Last Name -->
+                  <div class="col-lg-4 col-md-4 col-sm-4">
+                      <div class="form-group">
+                          <label>Last Name<span class="text-danger">*</span></label>
+                          <input class="form-control form-control-sm" formControlName="lastName" type="text" placeholder="">
+                          <div class="text-danger" *ngIf="f.lastName?.hasError('required') && f.lastName?.touched">
+                              Last Name is required.
+                          </div>
+                      </div>
+                  </div>
+                  <!-- Email -->
+                  <div class="col-lg-4 col-md-4 col-sm-4">
+                      <div class="form-group">
+                          <label>Email<span class="text-danger">*</span></label>
+                          <input class="form-control form-control-sm" formControlName="email" type="text" placeholder="">
+                          <div class="text-danger" *ngIf="f.email?.hasError('required') && f.email?.touched">
+                              Email is required.
+                          </div>
+                          <div class="text-danger" *ngIf="f.email?.hasError('email') && f.email?.touched">
+                              Please enter a valid email address.
+                          </div>
+                      </div>
+                  </div>
+                  <!-- Contact -->
+                  <div class="col-lg-4 col-md-4 col-sm-4">
+                      <div class="form-group">
+                          <label>Contact<span class="text-danger">*</span></label>
+                          <input class="form-control form-control-sm" formControlName="contact" type="text" placeholder="">
+                          <div class="text-danger" *ngIf="f.contact?.hasError('required') && f.contact?.touched">
+                              Contact is required.
+                          </div>
+                      </div>
+                  </div>
+                  <!-- Password -->
+                  <div class="mb-3">
+                      <label for="password">Password<span class="text-danger">*</span></label>
+                      <div class="input-group auth-pass-inputgroup">
+                          <input
+                              [type]="fieldTextType ? 'text' : 'password'"
+                              class="form-control"
+                              formControlName="password"
+                              placeholder="Enter password"
+                              [ngClass]="{ 'is-invalid': submitted && f.password.errors }"
+                          />
+                          <button class="btn btn-light ms-0" type="button" (click)="toggleFieldTextType()">
+                              <i
+                                  class="mdi mdi-eye-outline"
+                                  [ngClass]="{ 'mdi-eye-off-outline': !fieldTextType, 'mdi-eye-outline': fieldTextType }"
+                              ></i>
+                          </button>
+                      </div>
+                      <div class="text-danger" *ngIf="f.password?.hasError('required') && f.password?.touched">
+                          Password is required.
+                      </div>
+                  </div>
+                  <!-- Confirm Password -->
+                  <div class="mb-3">
+                      <label for="confirmPassword">Confirm Password<span class="text-danger">*</span></label>
+                      <div class="input-group auth-pass-inputgroup">
+                          <input
+                              [type]="confirmFieldTextType ? 'text' : 'password'"
+                              class="form-control"
+                              formControlName="confirmPassword"
+                              placeholder="Confirm password"
+                              [ngClass]="{ 'is-invalid': submitted && f.confirmPassword.errors }"
+                          />
+                          <button class="btn btn-light ms-0" type="button" (click)="toggleConfirmFieldTextType()">
+                              <i
+                                  class="mdi mdi-eye-outline"
+                                  [ngClass]="{ 'mdi-eye-off-outline': !confirmFieldTextType, 'mdi-eye-outline': confirmFieldTextType }"
+                              ></i>
+                          </button>
+                      </div>
+                      <div class="text-danger" *ngIf="f.confirmPassword?.hasError('required') && f.confirmPassword?.touched">
+                          Confirm password is required.
+                      </div>
+                      <div class="text-danger" *ngIf="f.confirmPassword?.hasError('mustMatch')">
+                          Password and Confirm Password do not match.
+                      </div>
+                  </div>
+                  <div class="card-footer" style="text-align: right;">
+                    <button type="button" class="btn btn-primary"  (click)="submitNewUser(newUserTemplate)">Create User</button>
+                    <button type="button" class="btn btn-secondary" (click)="d('Close click')">Close</button>
+                  </div>
+                 
+              </div>
+          </form>
+      </div>
+  </div>
+</ng-template>
+  <ng-template #editUserTemplate let-c="close" let-d="dismiss">
+    <div class="card mb-4" style="background-color: #3f51b5;">
+      <div class="modal-header">
+        Edit User
+      </div>
+      <div class="card-body" style="background-color: #f9f9f9; box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); border-radius: 8px;">
+        <form [formGroup]="userEditForm">
+          <div class="row">
+            <!-- User Name -->
+            <div class="col-lg-4 col-md-4 col-sm-4">
+              <div class="form-group">
+                <label>User Name<span class="text-danger">*</span></label>
+                <input class="form-control form-control-sm" formControlName="userName" type="text" placeholder="">
+                <div class="text-danger" *ngIf="userCreationForm.get('userName')?.hasError('required') && userCreationForm.get('userName')?.touched">
+                  User Name is required.
+                </div>
+              </div>
+            </div>
+            <!-- First Name -->
+            <div class="col-lg-4 col-md-4 col-sm-4">
+              <div class="form-group">
+                <label>First Name<span class="text-danger">*</span></label>
+                <input class="form-control form-control-sm" formControlName="firstName" type="text" placeholder="">
+                <div class="text-danger" *ngIf="userCreationForm.get('firstName')?.hasError('required') && userCreationForm.get('firstName')?.touched">
+                  First Name is required.
+                </div>
+              </div>
+            </div>
+            <!-- Last Name -->
+            <div class="col-lg-4 col-md-4 col-sm-4">
+              <div class="form-group">
+                <label>Last Name<span class="text-danger">*</span></label>
+                <input class="form-control form-control-sm" formControlName="lastName" type="text" placeholder="">
+                <div class="text-danger" *ngIf="userCreationForm.get('lastName')?.hasError('required') && userCreationForm.get('lastName')?.touched">
+                  Last Name is required.
+                </div>
+              </div>
+            </div>
+            <!-- Email -->
+            <div class="col-lg-4 col-md-4 col-sm-4">
+              <div class="form-group">
+                <label>Email<span class="text-danger">*</span></label>
+                <input class="form-control form-control-sm" formControlName="email" type="text" placeholder="">
+                <div class="text-danger" *ngIf="userCreationForm.get('email')?.hasError('required') && userCreationForm.get('email')?.touched">
+                  Email is required.
+                </div>
+                <div class="text-danger" *ngIf="userCreationForm.get('email')?.hasError('email') && userCreationForm.get('email')?.touched">
+                  Please enter a valid email address.
+                </div>
+              </div>
+            </div>
+            <!-- Contact -->
+            <div class="col-lg-4 col-md-4 col-sm-4">
+              <div class="form-group">
+                <label>Contact<span class="text-danger">*</span></label>
+                <input class="form-control form-control-sm" formControlName="contact" type="text" placeholder="">
+                <div class="text-danger" *ngIf="userCreationForm.get('contact')?.hasError('required') && userCreationForm.get('contact')?.touched">
+                  Contact is required.
+                </div>
+              </div>
+            </div>
+            <!-- Password -->
+            <div class="mb-3">
+              <label for="password">Password<span class="text-danger">*</span></label>
+              <div class="input-group auth-pass-inputgroup">
+                  <input
+                      [type]="fieldTextType ? 'text' : 'password'"
+                      class="form-control"
+                      formControlName="password"
+                      placeholder="Enter password"
+                      [ngClass]="{ 'is-invalid': submitted && f.password.errors }"
+                  />
+                  <button class="btn btn-light ms-0" type="button" (click)="toggleFieldTextType()">
+                      <i
+                          class="mdi mdi-eye-outline"
+                          [ngClass]="{ 'mdi-eye-off-outline': !fieldTextType, 'mdi-eye-outline': fieldTextType }"
+                      ></i>
+                  </button>
+              </div>
+              <div class="text-danger" *ngIf="userCreationForm.get('password')?.hasError('required') && userCreationForm.get('password')?.touched">
+                Password is required.
+              </div>
+          </div>
+            <!-- Confirm Password -->
+            <div class="mb-3">
+              <label for="confirmPassword">Confirm Password<span class="text-danger">*</span></label>
+              <div class="input-group auth-pass-inputgroup">
+                  <input
+                      [type]="confirmFieldTextType ? 'text' : 'password'"
+                      class="form-control"
+                      formControlName="confirmPassword"
+                      placeholder="Confirm password"
+                      [ngClass]="{ 'is-invalid': submitted && f.confirmPassword.errors }"
+                  />
+                  <button class="btn btn-light ms-0" type="button" (click)="toggleConfirmFieldTextType()">
+                      <i
+                          class="mdi mdi-eye-outline"
+                          [ngClass]="{ 'mdi-eye-off-outline': !confirmFieldTextType, 'mdi-eye-outline': confirmFieldTextType }"
+                      ></i>
+                  </button>
+              </div>
+              <div class="text-danger" *ngIf="userCreationForm.get('confirmPassword')?.hasError('required') && userCreationForm.get('confirmPassword')?.touched">
+                Confirm Password is required.
+              </div>
+              <div class="text-danger" *ngIf="userCreationForm.get('confirmPassword')?.hasError('mustMatch') && userCreationForm.get('confirmPassword')?.touched">
+                Passwords do not match.
+              </div>
+          </div>
+          
+          </div>
+        </form>
+      </div>
+      <div class="card-footer" style="text-align: right;">
+        <button type="button" class="btn btn-primary" (click)="updateUserCreation(c)">Update User</button>
+        <button type="button" class="btn btn-secondary" (click)="d('Close click')">Close</button>
+      </div>
+    </div>
+  </ng-template>
+  
+  
