@@ -101,9 +101,10 @@ export class InvoiceComponent implements OnInit {
     dateInputFormat: 'DD-MM-YYYY', // Set the date format
     containerClass: 'theme-blue', // Optional: Use a predefined theme
   };
+  invoiceItem: any;
   constructor(private fb: FormBuilder, private numberToWordsService: NumberToWordsService, private service: GeneralserviceService, private datePipe: DatePipe, private spinner: NgxSpinnerService) {
     this.newInvoiceCreation = this.fb.group({
-      invoiceHeader: ['', Validators.required],
+      invoiceHeader: [''],
       ProformaCustomerName: ['', Validators.required],
       ProformaAddress: ['', Validators.required],
       ProformaCity: ['', Validators.required],
@@ -124,7 +125,7 @@ export class InvoiceComponent implements OnInit {
         ]
       ],
 
-      ProformaInvoiceNumber: ['', Validators.required],
+      ProformaInvoiceNumber: [''],
       ProformaInvoiceDate: ['', Validators.required],
       ProformaPan: [
         '',
@@ -137,7 +138,7 @@ export class InvoiceComponent implements OnInit {
       ProformaGstNumber: ['', Validators.required],
       proformatypeOfAircraft: ['', Validators.required],
       proformaseatingcapasity: ['', Validators.required],
-      notes: ['', Validators.required],
+      notes: [''],
       bookingdateOfjourny: ['', Validators.required],
       bookingsector: ['', Validators.required],
       bookingbillingflyingtime: ['', Validators.required],
@@ -232,6 +233,27 @@ export class InvoiceComponent implements OnInit {
 
   // Method to select and show an invoice
   selectInvoice(invoice: any) {
+    this.invoiceItem = invoice
+    console.log("invoice",invoice)
+    console.log("this.invoiceItem",this.invoiceItem)
+     Swal.fire({
+          // title: 'question',
+          text: 'Do you want Edit Invoice ?',
+          icon: 'question',
+          showCancelButton: true,
+          showConfirmButton: true,
+        }).then((result) => {
+          if (result.isConfirmed) {
+           this.editRow(invoice); 
+          }else{
+            this.invoiceItem = invoice
+            console.log("this.invoiceItem",this.invoiceItem)
+            this.activeTab = 'Preview'
+          }
+        });
+    
+  }
+  editRow(invoice){
     this.chargeItems = [];
     this.taxItems = [];
     this.subtotal = 0;
@@ -500,11 +522,8 @@ export class InvoiceComponent implements OnInit {
         this.spinner.hide()
         const resp = response.data;
         if (resp) {
-          Swal.fire({
-            text: response.message + ' with Invoice Number    ' + resp.invoiceUniqueNumber,
-            icon: 'success',
-            showConfirmButton: true
-          });
+          this.getAllInvoice()
+          
           this.activeTab = 'AllInvoice'
           // Reset form and related data
           this.newInvoiceCreation.reset();
@@ -515,7 +534,12 @@ export class InvoiceComponent implements OnInit {
           this.grandTotal = 0;
           this.amountInWords = '';
           this.resetAll()
-          this.getAllInvoice()
+          Swal.fire({
+            text: response.message + ' with Invoice Number    ' + resp.invoiceUniqueNumber,
+            icon: 'success',
+            showConfirmButton: true
+          });
+          
         } else {
           this.spinner.hide()
           Swal.fire({
@@ -545,8 +569,8 @@ export class InvoiceComponent implements OnInit {
   }
 
   UpdateInvoice(): void {
-    const invoiceDateSplit = this.formatDate(this.newInvoiceCreation.value.ProformaInvoiceDate);
-    const bokingDateSplit = this.formatDate(this.newInvoiceCreation.value.bookingdateOfjourny);
+    var invoiceDateSplit = this.formatDate(this.newInvoiceCreation.value.ProformaInvoiceDate);
+    var bokingDateSplit = this.formatDate(this.newInvoiceCreation.value.bookingdateOfjourny);
     if (this.newInvoiceCreation.valid) {
       console.log('Invoice Updated', this.newInvoiceCreation.value);
 
@@ -592,14 +616,9 @@ export class InvoiceComponent implements OnInit {
       this.service.UpdateInvoice(updateobj, this.invoiceRefNo).subscribe((response: any) => {
         console.log("updateInvoice", response);
         this.spinner.hide()
-        const resp = response.data;
+        const resp = response.updatedInvoice;
         if (resp) {
-          Swal.fire({
-            text: response.message,
-            icon: 'success',
-            showConfirmButton: true
-          });
-
+          this.getAllInvoice()
           // Reset form and related data
           this.newInvoiceCreation.reset();
           this.logoUrl = '';
@@ -608,10 +627,19 @@ export class InvoiceComponent implements OnInit {
           this.subtotal = 0;
           this.grandTotal = 0;
           this.amountInWords = '';
+          this.activeTab="AllInvoice"
+          this.resetAll()
+         
+          Swal.fire({
+            text: response.message,
+            icon: 'success',
+            showConfirmButton: true
+          });
+
         } else {
           this.spinner.hide()
           Swal.fire({
-            text: 'failed to fetch data ',
+            text: 'Failed to Update data ',
             icon: 'error',
             showConfirmButton: true
           });

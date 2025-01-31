@@ -29,3 +29,24 @@
 .table td {
     padding: 10px !important;
   }
+
+  ::ng-deep .text-blue-600 {
+    color: #2563eb !important;
+  }
+  
+  ::ng-deep .text-green-600 {
+    color: #16a34a !important;
+  }
+  
+  ::ng-deep .text-orange-600 {
+    color: #ea580c !important;
+  }
+  
+  ::ng-deep .text-red-600 {
+    color: #dc2626 !important;
+  }
+  
+  .cursor-pointer {
+    cursor: pointer;
+  }
+  

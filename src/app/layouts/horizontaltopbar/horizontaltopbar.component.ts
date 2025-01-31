@@ -1,5 +1,5 @@
 import { Component, OnInit, AfterViewInit, Inject, ViewChild, Input, ElementRef } from '@angular/core';
-import { Router, NavigationEnd } from '@angular/router';
+import { Router, NavigationEnd, RouterModule } from '@angular/router';
 import MetisMenu from 'metismenujs';
 import { CookieService } from 'ngx-cookie-service';
 import { LanguageService } from '../../core/services/language.service';
@@ -20,7 +20,7 @@ import { TranslateModule } from '@ngx-translate/core';
   templateUrl: './horizontaltopbar.component.html',
   styleUrls: ['./horizontaltopbar.component.scss'],
   standalone:true,
-  imports:[CommonModule,TranslateModule]
+  imports:[CommonModule,TranslateModule,RouterModule]
 })
 
 /**
@@ -99,20 +99,7 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
   /**
    * On menu click
    */
-  onMenuClick(parentIndex: number, item: any) {
-    console.log("parentIndex",parentIndex,this.menuItems)
-    if (!parentIndex) {
-      this.menuItems.forEach((element) => {
-        if (item == element) {
-          // Toggle the clicked item
-          element.isCollapsed = !element.isCollapsed;
-        } else {
-          // Close all other items of other parent items
-          element.isCollapsed = false
-        }
-      })
-    }
-  }
+  
 
   ngAfterViewInit() {
     // this.menu = new MetisMenu(this.sideMenu.nativeElement);
@@ -279,18 +266,13 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
   /**
    * Initialize
    */
-  initialize(): void {
-    this.menuItems = MENU;
-  }
+  
 
   /**
    * Returns true or false if given menu item has child or not
    * @param item menuItem
    */
-  hasItems(item: MenuItem) {
-    console.log("menuItems",this.menuItems)
-    return item.subItems !== undefined ? item.subItems.length > 0 : false;
-  }
+ 
   
   _activateMenuDropdown() {
     this._removeAllClass('mm-active');
@@ -341,4 +323,49 @@ export class HorizontaltopbarComponent implements OnInit, AfterViewInit {
     }
 
   }
+  private setupLanguage() {
+    this.cookieValue = this._cookiesService.get('lang');
+    const val = this.listLang.filter(x => x.lang === this.cookieValue);
+    this.countryName = val.map(element => element.text);
+    if (val.length === 0) {
+      if (this.flagvalue === undefined) {
+        this.valueset = 'assets/images/flags/us.jpg';
+      }
+    } else {
+      this.flagvalue = val.map(element => element.flag);
+    }
+  }
+  onMenuClick(parentId: number, item: MenuItem) {
+    // Close other dropdowns when opening a new one
+    this.menuItems.forEach((menuItem) => {
+      if (menuItem !== item) {
+        menuItem.isCollapsed = false;
+        if (menuItem.subItems) {
+          menuItem.subItems.forEach(subItem => {
+            subItem.isCollapsed = false;
+          });
+        }
+      }
+    });
+     // Toggle the clicked item
+     item.isCollapsed = !item.isCollapsed;
+    }
+    private closeOtherDropdowns() {
+      this.menuItems.forEach((item) => {
+        item.isCollapsed = false;
+        if (item.subItems) {
+          item.subItems.forEach(subItem => {
+            subItem.isCollapsed = false;
+          });
+        }
+      });
+    }
+    hasItems(item: MenuItem): boolean {
+      return item.subItems !== undefined && item.subItems.length > 0;
+    }
+ 
+    initialize(): void {
+      this.menuItems = MENU;
+    }
+
 }

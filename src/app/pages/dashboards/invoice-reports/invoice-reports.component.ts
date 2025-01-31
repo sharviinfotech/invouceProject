@@ -1,18 +1,71 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { GeneralserviceService } from 'src/app/generalservice.service';
 import { NgxPrintModule } from 'ngx-print';
+import Swal from 'sweetalert2';
+import { Component, ElementRef, ViewChild, ViewEncapsulation } from '@angular/core';
+
+interface ChargeItem {
+  description: string;
+  units: string;
+  rate: string;
+  amount: string;
+  _id: string;
+}
+
+interface TaxItem {
+  description: string;
+  percentage: string;
+  amount: string;
+  _id: string;
+}
+
+interface InvoiceHeader {
+  invoiceHeader: string;
+  invoiceImage: string;
+  ProformaCustomerName: string;
+  ProformaAddress: string;
+  ProformaCity: string;
+  ProformaState: string;
+  ProformaPincode: string;
+  ProformaGstNo: string;
+  ProformaPanNO: string;
+  ProformaInvoiceNumber: string;
+  ProformaInvoiceDate: string;
+  ProformaPan: string;
+  ProformaGstNumber: string;
+  ProformaTypeOfAircraft: string;
+  ProformaSeatingCapasity: number;
+  notes: string;
+  BookingDateOfJourny: string;
+  BookingSector: string;
+  BookingBillingFlyingTime: string;
+}
+
+interface InvoiceItem {
+  header: InvoiceHeader;
+  _id: string;
+  invoiceReferenceNo: number;
+  chargesList: ChargeItem[];
+  taxList: TaxItem[];
+  subtotal: number;
+  grandTotal: number;
+  amountInWords: string;
+  status: string;
+  invoiceUniqueNumber: string;
+}
 @Component({
   selector: 'app-invoice-reports',
   templateUrl: './invoice-reports.component.html',
   styleUrl: './invoice-reports.component.css',
-  imports: [CommonModule, FormsModule,NgxPrintModule],
-  standalone: true
-  
+  imports: [CommonModule, FormsModule, NgxPrintModule],
+  standalone: true,
+  // encapsulation: ViewEncapsulation.None
+
 })
 export class InvoiceReportsComponent {
+  // @ViewChild('invoiceContent', { static: false }) invoiceContent!: ElementRef;
   allInvoiceList: any;
   invoice = {
     invoiceNumber: 'INV-5678',
@@ -22,27 +75,766 @@ export class InvoiceReportsComponent {
     },
     amount: '$500'
   };
-constructor(private service:GeneralserviceService,private spinner: NgxSpinnerService) {
-   
- 
+  constructor(private service: GeneralserviceService, private spinner: NgxSpinnerService) {
+
+
   }
   ngOnInit(): void {
     this.getAllInvoice()
-      }
+  }
 
-  getAllInvoice(){
+  getAllInvoice() {
     this.allInvoiceList = []
     this.spinner.show()
-    this.service.getAllInvoice().subscribe((res:any)=>{
-      console.log("getAllInvoice",res);
+    this.service.getAllInvoice().subscribe((res: any) => {
+      console.log("getAllInvoice", res);
       this.spinner.hide()
       this.allInvoiceList = res.invoices;
-    },error =>{
+    }, error => {
       this.spinner.hide()
     })
   }
-  selectInvoice(data){
-    console.log("data",data)
+  selectInvoice(data) {
+    console.log("data", data)
 
   }
+  openInvoicePopup(invoice) {
+    console.log('item', invoice)
+    const invoiceItem = invoice;
+    // this.isPopupOpen = true;
+    Swal.fire({
+      // title: 'question',
+      text: 'Do you want Print Invoice ?',
+      icon: 'question',
+      showCancelButton: true,
+      showConfirmButton: true,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.generateInvoiceHTML(invoiceItem)
+        // this.InvoicePrint(); 
+      }
+    });
+  }
+  // InvoicePrint(){
+  //   const printContents = this.invoiceContent.nativeElement.innerHTML;
+  //   const originalContents = document.body.innerHTML;
+
+  //   document.body.innerHTML = printContents;
+  //   window.print();
+  //   document.body.innerHTML = originalContents;
+  //   window.location.reload(); // Refresh to restore original state
+  // }
+
+  // generateInvoiceHTML() {
+  //   const invoiceHTML = `
+  //     <html>
+  //       <head>
+  //         <title>Proforma Invoice</title>
+  //         <style>
+  //           /* General styles */
+  //           body {
+  //             font-family: Arial, sans-serif;
+  //             margin: 0;
+  //             padding: 0;
+  //             background-color: white;
+  //           }
+  //           .container {
+  //             width: 100%;
+  //             padding: 20px;
+  //           }
+  //           .yellow-background {
+  //             background-color: yellow !important;
+  //             padding: 10px !important;
+  //             color: white !important;
+  //             border-radius: 0px !important;
+  //           }
+  //           .card-header {
+  //             background-color: yellow !important;
+  //             color: white;
+  //           }
+  //           .booking-title {
+  //             background-color: yellow !important;
+  //             color: white;
+  //           }
+  //           .table-bordered {
+  //             border: 2px solid black !important;
+  //             width: 100%;
+  //           }
+  
+  //           /* Print-specific styles */
+  //           @media print {
+  //             body {
+  //               background-color: white;
+  //             }
+  //             .yellow-background {
+  //              background-color: rgb(63, 63, 185) !important;
+  //               color: white !important;
+  //             }
+  //             .table-bordered {
+  //               border: 1px solid black !important;
+  //             }
+  //             .card-header, .booking-title {
+  //             background-color: rgb(63, 63, 185) !important;
+  //               color: white !important;
+  //             }
+              
+  //              .table thead th{
+  //                vertical-align: middle !important;
+  //                padding: 5px !important;
+  //                border-bottom: 0px solid #a9a9a9;
+  //               background-color: rgb(63, 63, 185) !important;
+  //               color: white;
+  //               font-weight: 500;
+  //               text-align: center !important;
+  //               font-size: 12px !important;
+  //             }
+  //             .table td, .table th {
+  //              padding: 10px !important;
+  //              vertical-align: top;
+  //              border-top: 1px solid #dee2e6;
+  //             }
+  //             .table{
+  //                font-size: 12px !important;
+  //                 font-weight: 500 !important;
+  //               }
+  //           }
+  //         </style>
+  //       </head>
+  //       <body>
+  //         <div class="border">
+  //           <div style="display: flex; align-items: flex-start; flex-wrap: wrap; justify-content: space-evenly;">
+  //             <div><img src="assets/images/logo.jpg" alt="Company Logo" class="img-fluid" style="height: 50px;"></div>
+  //             <div>
+  //               <h3 class="company-name">RITHWIK GREEN POWER & AVIATION PRIVATE LIMITED</h3>
+  //               <img src="assets/images/logo.jpg" alt="Company Logo" class="img-fluid" style="height: 50px;">
+  //             </div>
+  //              <div><img src="assets/images/logo.jpg" alt="Company Logo" class="img-fluid" style="height: 50px;"></div>
+  //           </div>
+            
+  //           <div style="margin-bottom: 24px;">
+  //             <div class="yellow-background">
+  //               PROFORMA INVOICE
+  //             </div>
+  //             <div style="padding: 10px;">
+  //               <table class="table table-bordered">
+  //                 <tr><td>To:</td><td> INVOICE NO  RGPAPL/PI-803/12-2024</td></tr>
+  //                 <tr><td>MYTHRI MOVIE MAKERS</td><td> DATE 29-12-2024</td></tr>
+  //                 <tr><td>ROAD NO.25,HYDERABAD</td><td>PAN   AAICS 9057Q</td></tr>
+  //                 <tr><td>TELANGANA-500033</td><td>GST NO   36AAICS9057Q1Z2D</td></tr>
+  //                 <tr><td>GST NO. 36AAWFM8714H1ZO</td><td>TYPE OF Aircraft B-250 GT (VT-VIN)</td></tr>
+  //                 <tr><td>PAN NO.AAWFM8714H</td><td>SEATING CAPACITY  7</td></tr>
+  //               </table>
+  //             </div>
+  //           </div>
+  
+  //           <div class="card-header text-center">
+  //             BOOKING DETAILS
+  //           </div>
+  //           <div class="card-body">
+  //             <table class="table table-bordered">
+  //               <tr><td>Date Of Journey</td><td>29-Dec-2024</td></tr>
+  //               <tr><td>SECTOR</td><td>HYDERABAD-CHENNAI-HYDERABAD</td></tr>
+  //               <tr><td>BILLING FLYING TIME</td><td>03:30 Hrs.</td></tr>
+  //             </table>
+  
+  //             <table class="table table-bordered text-center align-middle">
+  //               <thead style="background-color: #f4f4f4; font-weight: bold;">
+  //                 <tr>
+  //                   <th>S.No</th>
+  //                   <th>Description</th>
+  //                   <th>Units (Hrs.)</th>
+  //                   <th>Rate (INR)</th>
+  //                   <th>Amount (INR)</th>
+  //                 </tr>
+  //               </thead>
+  //               <tbody>
+  //                 <tr>
+  //                   <td>1</td>
+  //                   <td>Hyderabad-Chennai-Hyderabad</td>
+  //                   <td>03:30</td>
+  //                   <td>1,50,000</td>
+  //                   <td>5,25,000</td>
+  //                 </tr>
+  //                 <tr>
+  //                   <td>2</td>
+  //                   <td>Ground Handling Charges</td>
+  //                   <td>-</td>
+  //                   <td>1,20,000</td>
+  //                   <td>1,20,000</td>
+  //                 </tr>
+  //                 <tr>
+  //                   <td colspan="4"><strong>Total</strong></td>
+  //                   <td><strong>6,45,000</strong></td>
+  //                 </tr>
+  //                 <tr>
+  //                   <td colspan="4">CGST 9% + SGST 9%</td>
+  //                   <td>1,16,100</td>
+  //                 </tr>
+  //                 <tr>
+  //                   <td colspan="4"><strong>Grand Total</strong></td>
+  //                   <td><strong>7,61,100</strong></td>
+  //                 </tr>
+  //               </tbody>
+  //             </table>
+  //           </div>
+  
+  //           <div class="border mb-4">
+  //             <h5 class="text-center booking-title">BANK DETAILS</h5>
+  //             <div class="row">
+  //               <div class="col-md-6">
+  //                 <p><strong>Note:</strong> 1. In case of any discrepancy contact accounts within 5 days of receiving the bill</p>
+  //                 <p>2. Payment to be made within 2 days after receiving the invoice</p>
+  //                 <p>3. In case of Payments delayed beyond 30 days, an 18% penal Interest per Annum will apply</p>
+  //               </div>
+  //             </div>
+  
+  //             <div class="text-center mt-4">
+  //               <p class="footer-text">RITHWIK GREEN POWER & AVIATION PRIVATE LIMITED</p>
+  //               <p>Authorised Signatory</p>
+  //               <div class="row">
+  //                 <div class="col-md-6">
+  //                   <table>
+  //                     <tr><td>ACCOUNT NAME:</td><td>RITHWIK GREEN POWER & AVIATION PRIVATE LIMITED</td></tr>
+  //                     <tr><td>BANK:</td><td>KOTAK MAHINDRA BANK</td></tr>
+  //                     <tr><td>ACCOUNT NO:</td><td>0745211990</td></tr>
+  //                     <tr><td>BRANCH:</td><td>BANJARAHILLS</td></tr>
+  //                     <tr><td>IFSC CODE:</td><td>KKBK00007461(NEFT/RTGS)</td></tr>
+  //                   </table>
+  //                 </div>
+  //               </div>
+  //             </div>
+  //           </div>
+  //         </div>
+  //       </body>
+  //     </html>
+  //   `;
+
+  //   const newWindow = window.open('', '', 'height=600,width=800');
+  //   newWindow.document.write(invoiceHTML);
+  //   newWindow.document.close();
+
+  //   // Wait for the content to load before triggering print
+  //   setTimeout(() => {
+  //     newWindow.print();
+  //   }, 1000); // Delay the print for 1 second
+  // }
+
+
+
+  // generateInvoiceHTML (){
+  //   const invoiceHTML = `
+  //     <html>
+  //       <head>
+  //         <title>Proforma Invoice</title>
+  //         <style>
+  //           /* General styles */
+  //           body {
+  //             font-family: Arial, sans-serif;
+  //             margin: 0;
+  //             padding: 10px;
+  //             background-color: white;
+  //             -webkit-print-color-adjust: exact !important;
+  //             print-color-adjust: exact !important;
+  //           }
+  //           .container {
+  //             width: 100%;
+  //             max-width: 1000px;
+  //             margin: 0 auto;
+  //           }
+  //           .yellow-background {
+  //             background-color: yellow;
+  //             padding: 10px;
+  //             color: black;
+  //             font-weight: bold;
+  //             text-align: center;
+  //             margin-bottom: 15px;
+  //           }
+  //           .card-header {
+  //             background-color: yellow;
+  //             color: black;
+  //             padding: 10px;
+  //             text-align: center;
+  //             font-weight: bold;
+  //             margin: 15px 0;
+  //           }
+  //           .booking-title {
+  //             background-color: yellow;
+  //             color: black;
+  //             padding: 10px;
+  //             text-align: center;
+  //             margin: 15px 0;
+  //           }
+  //           .table-bordered {
+  //             border-collapse: collapse;
+  //             width: 100%;
+  //             margin-bottom: 15px;
+  //           }
+  //           .table-bordered td,
+  //           .table-bordered th {
+  //             border: 1px solid black;
+  //             padding: 8px;
+  //           }
+  //           .border {
+  //             border: 1px solid black;
+  //             padding: 5px;
+  //           }
+  //           .text-center {
+  //             text-align: center;
+  //           }
+  //           .mb-4 {
+  //             margin-bottom: 1.5rem;
+  //           }
+  //           .mt-4 {
+  //             margin-top: 1.5rem;
+  //           }
+  //           .company-name {
+  //             text-align: center;
+  //             margin: 10px 0;
+  //           }
+  //           .footer-text {
+  //             font-weight: bold;
+  //             margin-bottom: 5px;
+  //           }
+
+  //           /* Print-specific styles */
+  //           @media print {
+  //             body {
+  //               -webkit-print-color-adjust: exact !important;
+  //               print-color-adjust: exact !important;
+  //             }
+  //             .yellow-background,
+  //             .card-header,
+  //             .booking-title {
+  //               background-color: yellow ;
+  //               color: white !important;
+  //               -webkit-print-color-adjust: exact !important;
+  //               print-color-adjust: exact !important;
+  //             }
+  //             .table thead th {
+  //               background-color: rgb(63, 63, 185) !important;
+  //               color: white !important;
+  //               vertical-align: middle !important;
+  //               padding: 5px !important;
+  //               font-weight: 500;
+  //               text-align: center !important;
+  //               font-size: 12px !important;
+  //               -webkit-print-color-adjust: exact !important;
+  //               print-color-adjust: exact !important;
+  //             }
+  //             .table {
+  //               font-size: 12px !important;
+  //               font-weight: 500 !important;
+  //             }
+  //             .table td,
+  //             .table th {
+  //               padding: 10px !important;
+  //               vertical-align: top;
+  //               border: 1px solid black !important;
+  //             }
+  //             img {
+  //               -webkit-print-color-adjust: exact !important;
+  //               print-color-adjust: exact !important;
+  //             }
+  //           }
+  //         </style>
+  //       </head>
+  //       <body>
+  //         <div class="border">
+  //           <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;">
+  //             <div><img src="assets/images/logo.jpg" alt="Company Logo" style="height: 50px;"></div>
+  //             <div style="text-align: center;">
+  //               <h3 class="company-name">RITHWIK GREEN POWER & AVIATION PRIVATE LIMITED</h3>
+  //             </div>
+  //             <div><img src="assets/images/logo.jpg" alt="Company Logo" style="height: 50px;"></div>
+  //           </div>
+            
+  //           <div class="yellow-background">
+  //             PROFORMA INVOICE
+  //           </div>
+            
+  //           <table class="table-bordered">
+  //             <tr><td width="50%">To:</td><td>INVOICE NO  RGPAPL/PI-803/12-2024</td></tr>
+  //             <tr><td>MYTHRI MOVIE MAKERS</td><td>DATE 29-12-2024</td></tr>
+  //             <tr><td>ROAD NO.25,HYDERABAD</td><td>PAN   AAICS 9057Q</td></tr>
+  //             <tr><td>TELANGANA-500033</td><td>GST NO   36AAICS9057Q1Z2D</td></tr>
+  //             <tr><td>GST NO. 36AAWFM8714H1ZO</td><td>TYPE OF Aircraft B-250 GT (VT-VIN)</td></tr>
+  //             <tr><td>PAN NO.AAWFM8714H</td><td>SEATING CAPACITY  7</td></tr>
+  //           </table>
+
+  //           <div class="card-header">
+  //             BOOKING DETAILS
+  //           </div>
+            
+  //           <table class="table-bordered">
+  //             <tr><td width="50%">Date Of Journey</td><td>29-Dec-2024</td></tr>
+  //             <tr><td>SECTOR</td><td>HYDERABAD-CHENNAI-HYDERABAD</td></tr>
+  //             <tr><td>BILLING FLYING TIME</td><td>03:30 Hrs.</td></tr>
+  //           </table>
+
+  //           <table class="table-bordered">
+  //             <thead>
+  //               <tr style="background-color: yellow;">
+  //                 <th>S.No</th>
+  //                 <th>Description</th>
+  //                 <th>Units (Hrs.)</th>
+  //                 <th>Rate (INR)</th>
+  //                 <th>Amount (INR)</th>
+  //               </tr>
+  //             </thead>
+  //             <tbody>
+  //               <tr>
+  //                 <td class="text-center">1</td>
+  //                 <td>Hyderabad-Chennai-Hyderabad</td>
+  //                 <td class="text-center">03:30</td>
+  //                 <td class="text-center">1,50,000</td>
+  //                 <td class="text-center">5,25,000</td>
+  //               </tr>
+  //               <tr>
+  //                 <td class="text-center">2</td>
+  //                 <td>Ground Handling Charges</td>
+  //                 <td class="text-center">-</td>
+  //                 <td class="text-center">1,20,000</td>
+  //                 <td class="text-center">1,20,000</td>
+  //               </tr>
+  //               <tr>
+  //                 <td colspan="4" class="text-center"><strong>Total</strong></td>
+  //                 <td class="text-center"><strong>6,45,000</strong></td>
+  //               </tr>
+  //               <tr>
+  //                 <td colspan="4" class="text-center">CGST 9% + SGST 9%</td>
+  //                 <td class="text-center">1,16,100</td>
+  //               </tr>
+  //               <tr>
+  //                 <td colspan="4" class="text-center"><strong>Grand Total</strong></td>
+  //                 <td class="text-center"><strong>7,61,100</strong></td>
+  //               </tr>
+  //             </tbody>
+  //           </table>
+
+  //           <div class="border mb-4">
+  //             <h5 class="booking-title">BANK DETAILS</h5>
+  //             <div style="padding: 15px;">
+  //               <p><strong>Note:</strong></p>
+  //               <p>1. In case of any discrepancy contact accounts within 5 days of receiving the bill</p>
+  //               <p>2. Payment to be made within 2 days after receiving the invoice</p>
+  //               <p>3. In case of Payments delayed beyond 30 days, an 18% penal Interest per Annum will apply</p>
+
+  //               <div class="text-center mt-4">
+  //                 <p class="footer-text">RITHWIK GREEN POWER & AVIATION PRIVATE LIMITED</p>
+  //                 <p>Authorised Signatory</p>
+                  
+  //                 <table class="table-bordered" style="margin-top: 20px;">
+  //                   <tr><td width="30%">ACCOUNT NAME:</td><td>RITHWIK GREEN POWER & AVIATION PRIVATE LIMITED</td></tr>
+  //                   <tr><td>BANK:</td><td>KOTAK MAHINDRA BANK</td></tr>
+  //                   <tr><td>ACCOUNT NO:</td><td>0745211990</td></tr>
+  //                   <tr><td>BRANCH:</td><td>BANJARAHILLS</td></tr>
+  //                   <tr><td>IFSC CODE:</td><td>KKBK00007461(NEFT/RTGS)</td></tr>
+  //                 </table>
+  //               </div>
+  //             </div>
+  //           </div>
+  //         </div>
+  //       </body>
+  //     </html>
+  //   `;
+
+  //   const newWindow = window.open('', '', 'height=600,width=800');
+  //   if (newWindow) {
+  //     newWindow.document.write(invoiceHTML);
+  //     newWindow.document.close();
+
+  //     // Wait for the content to load before triggering print
+  //     setTimeout(() => {
+  //       newWindow.print();
+  //       // Don't close the window immediately after print to allow the print dialog to work properly
+  //     }, 500);
+  //   }
+  // };
+
+
+  generateInvoiceHTML (invoiceItem: InvoiceItem) {
+    const invoiceHTML = `
+      <html>
+        <head>
+          <title>Proforma Invoice</title>
+          <style>
+            /* General styles */
+            body {
+              font-family: Arial, sans-serif;
+              margin: 0;
+              padding: 5px;
+              background-color: white;
+              -webkit-print-color-adjust: exact !important;
+              print-color-adjust: exact !important;
+              font-size: 12px;
+            }
+            .container {
+              width: 100%;
+              max-width: 1000px;
+              margin: 0 auto;
+            }
+            .orange-background {
+              background-color: rgb(255, 165, 0) !important;
+              padding: 8px;
+              color: black !important;
+              font-weight: bold;
+              text-align: center;
+              -webkit-print-color-adjust: exact !important;
+              print-color-adjust: exact !important;
+            }
+            .card-header {
+              background-color: rgb(255, 165, 0) !important;
+              color: black !important;
+              padding: 8px;
+              text-align: center;
+              font-weight: bold;
+              -webkit-print-color-adjust: exact !important;
+              print-color-adjust: exact !important;
+            }
+            .booking-title {
+              background-color: rgb(255, 165, 0) !important;
+              color: black !important;
+              padding: 8px;
+              text-align: center;
+              -webkit-print-color-adjust: exact !important;
+              print-color-adjust: exact !important;
+            }
+            .table-bordered {
+              border-collapse: collapse;
+              width: 100%;
+              margin-bottom: 10px;
+            }
+            .table-bordered td,
+            .table-bordered th {
+              border: 1px solid black;
+              padding: 5px;
+            }
+            .border {
+              border: 1px solid black;
+              padding: 5px;
+            }
+            .text-center {
+              text-align: center;
+            }
+            .text-right {
+              text-align: right;
+            }
+            .mb-4 {
+              margin-bottom: 1rem;
+            }
+            .mt-4 {
+              margin-top: 1rem;
+            }
+            .company-name {
+              text-align: center;
+              margin: 5px 0;
+              font-size: 14px;
+              font-weight: bold;
+            }
+            .footer-text {
+              font-weight: bold;
+              margin-bottom: 5px;
+            }
+            .header-row {
+              display: flex;
+              align-items: center;
+              justify-content: space-between;
+              margin-bottom: 10px;
+            }
+            .logo {
+              height: 40px;
+            }
+            .notes {
+              margin: 5px 0;
+              font-size: 11px;
+            }
+            .bank-details {
+              margin-top: 10px;
+            }
+            .bold {
+              font-weight: bold;
+            }
+            
+            /* Print-specific styles */
+            @media print {
+              body {
+                margin: 0;
+                padding: 5px;
+              }
+              .orange-background,
+              .card-header,
+              .booking-title {
+                background-color: rgb(255, 165, 0) !important;
+                color: black !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+              }
+              thead tr {
+                background-color: rgb(255, 165, 0) !important;
+                color: black !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+              }
+              thead th {
+                background-color: rgb(255, 165, 0) !important;
+                color: black !important;
+                vertical-align: middle !important;
+                padding: 5px !important;
+                font-weight: bold;
+                text-align: center !important;
+                font-size: 12px !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+              }
+            }
+          </style>
+        </head>
+        <body>
+          <div class="border">
+            <div class="header-row">
+              <div><img src="${invoiceItem.header.invoiceImage}" alt="Company Logo" class="logo"></div>
+              <div>
+                <h3 class="company-name">RITHWIK GREEN POWER & AVIATION PRIVATE LIMITED</h3>
+              </div>
+              <div><img src="${invoiceItem.header.invoiceImage}" alt="Company Logo" class="logo"></div>
+            </div>
+            
+            <div class="orange-background">
+             Proforma Invoice
+            </div>
+            
+            <table class="table-bordered">
+              <tr><td width="50%">To:</td><td>INVOICE NO : ${invoiceItem.invoiceUniqueNumber}</td></tr>
+              <tr><td>${invoiceItem.header.ProformaCustomerName}</td><td>DATE :${invoiceItem.header.ProformaInvoiceDate}</td></tr>
+              <tr><td>${invoiceItem.header.ProformaAddress}</td><td>PAN :${invoiceItem.header.ProformaPanNO}</td></tr>
+              <tr><td>${invoiceItem.header.ProformaCity}-${invoiceItem.header.ProformaPincode}</td><td>GST NO :${invoiceItem.header.ProformaGstNumber}</td></tr>
+              <tr><td>GST NO : ${invoiceItem.header.ProformaGstNo}</td><td>TYPE OF Aircraft : ${invoiceItem.header.ProformaTypeOfAircraft}</td></tr>
+              <tr><td>PAN NO :${invoiceItem.header.ProformaPan}</td><td>SEATING CAPACITY : ${invoiceItem.header.ProformaSeatingCapasity}</td></tr>
+            </table>
+
+            <div class="card-header">
+              Charges DETAILS
+            </div>
+            
+            <table class="table-bordered">
+              <tr><td width="50%">Date Of Journey</td><td>${invoiceItem.header.BookingDateOfJourny}</td></tr>
+              <tr><td>SECTOR</td><td>${invoiceItem.header.BookingSector}</td></tr>
+              <tr><td>BILLING FLYING TIME</td><td>${invoiceItem.header.BookingBillingFlyingTime} Hrs.</td></tr>
+            </table>
+
+            <table class="table-bordered">
+              <thead>
+                <tr>
+                  <th>S.No</th>
+                  <th>Description</th>
+                  <th>Units (Hrs.)</th>
+                  <th>Rate (INR)</th>
+                  <th>Amount (INR)</th>
+                </tr>
+              </thead>
+              <tbody>
+             <tr>
+              <td>1</td>
+              <td class="bold">Charges</td>
+              <td class="text-right"></td>
+              <td class="text-right"></td>
+              <td></td>
+            </tr>
+                ${invoiceItem.chargesList.map((charge, index) => `
+                  <tr>
+                   
+                     <td class="text-center"></td>
+                    <td>${charge.description}</td>
+                    <td class="text-center">${charge.units}</td>
+                    <td class="text-right">${charge.rate}</td>
+                    <td class="text-right">${charge.amount}</td>
+                  </tr>
+                `).join('')}
+                
+                <tr>
+                  <td colspan="4" class="text-right bold">Total</td>
+                  <td class="text-right bold">${invoiceItem.subtotal}</td>
+                </tr>
+                <tr>
+              <td>2</td>
+                    <td class="bold">Taxes:</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+              </tr>
+
+                ${invoiceItem.taxList.map(tax => `
+                  <tr>
+                    <td></td>
+                    <td>${tax.description}</td>
+                    <td></td>
+                    <td></td>
+                    <td class="text-right">${tax.amount}</td>
+                  </tr>
+                `).join('')}
+
+                <tr>
+                  <td colspan="4" class="text-right bold">Grand Total</td>
+                  <td class="text-right bold">${invoiceItem.grandTotal}</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <div class="border">
+            
+            <div class="card-header">
+              Bank DETAILS
+            </div>
+              <div style="padding: 5px;">
+                <div class="notes">
+                  <p><strong>Note:</strong></p>
+                  <p>${invoiceItem.header.notes}</p>
+                  
+                </div>
+                  <div class="header-row">
+                    <div>
+                      <div style="display: flex; flex-wrap: wrap; margin-bottom: 5px;">
+                        <div style="width: 30%; font-weight: bold;">ACCOUNT NAME:</div>
+                        <div style="width: 70%;">RITHWIK GREEN POWER & AVIATION PRIVATE LIMITED</div>
+                      </div>
+                      <div style="display: flex; flex-wrap: wrap; margin-bottom: 5px;">
+                        <div style="width: 30%; font-weight: bold;">BANK:</div>
+                        <div style="width: 70%;">KOTAK MAHINDRA BANK</div>
+                      </div>
+                      <div style="display: flex; flex-wrap: wrap; margin-bottom: 5px;">
+                        <div style="width: 30%; font-weight: bold;">ACCOUNT NO:</div>
+                        <div style="width: 70%;">0745211990</div>
+                      </div>
+                      <div style="display: flex; flex-wrap: wrap; margin-bottom: 5px;">
+                        <div style="width: 30%; font-weight: bold;">BRANCH:</div>
+                        <div style="width: 70%;">BANJARAHILLS</div>
+                      </div>
+                      <div style="display: flex; flex-wrap: wrap; margin-bottom: 5px;">
+                        <div style="width: 30%; font-weight: bold;">IFSC CODE:</div>
+                        <div style="width: 70%;">KKBK00007461(NEFT/RTGS)</div>
+                      </div>
+                    </div>
+                    <div><p class="footer-text">RITHWIK GREEN POWER & AVIATION PRIVATE LIMITED</p>
+                  <p>Authorised Signatory</p></div>
+                  </div>
+                
+              </div>
+            </div>
+          </div>
+        </body>
+      </html>
+    `;
+
+    const newWindow = window.open('', '', 'height=600,width=800');
+    if (newWindow) {
+      newWindow.document.write(invoiceHTML);
+      newWindow.document.close();
+
+      setTimeout(() => {
+        newWindow.print();
+      }, 500);
+    }
+  };
+
+
 }
