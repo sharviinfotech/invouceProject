@@ -6,6 +6,7 @@ import { InvoiceComponent } from './invoice/invoice.component';
 import { InvoiceLayoutComponent } from './invoice-layout/invoice-layout.component';
 import { InvoiceReportsComponent } from './invoice-reports/invoice-reports.component';
 import { InvoiceUserCreationComponent } from './invoice-user-creation/invoice-user-creation.component';
+import { CommonModule } from '@angular/common'; 
 
 @NgModule({
   declarations: [
@@ -17,6 +18,7 @@ import { InvoiceUserCreationComponent } from './invoice-user-creation/invoice-us
   ],
   imports: [
     DashboardsRoutingModule,
+    CommonModule,
   ],
   providers: [BsDropdownConfig],
 })
