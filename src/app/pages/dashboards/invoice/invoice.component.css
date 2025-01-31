@@ -622,3 +622,6 @@ input:focus {
   max-width: 1000px;
   margin: 0 auto;
 }
+.selected {
+  border: 2px solid blue;  /* Change color as needed */
+}

@@ -76,7 +76,7 @@ export class InvoiceComponent implements OnInit {
       amount: 0
     },
     {
-      description: 'SGST/UDST @ 9%',
+      description: 'SGST @ 9%',
       percentage: 9,
       amount: 0
     },
@@ -233,13 +233,54 @@ export class InvoiceComponent implements OnInit {
 
   // Method to select and show an invoice
   selectInvoice(invoice: any) {
+    this.invoiceItem = null
     this.invoiceItem = invoice
     console.log("invoice",invoice)
-    console.log("this.invoiceItem",this.invoiceItem)
-     Swal.fire({
+    console.log("this.invoiceItem",this.invoiceItem.invoiceReferenceNo);
+    console.log("this.invoiceItem.header.status",this.invoiceItem.header.status)
+    if(this.invoiceItem.status == "Approved"){
+      console.log("If approved")
+      Swal.fire({
+        // title: 'question',
+        text: 'Do you want to Preview Invoice ?',
+        icon: 'question',
+        showCancelButton: true,
+        showConfirmButton: true,
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.invoiceItem = invoice
+          console.log("this.invoiceItem",this.invoiceItem)
+          this.activeTab = 'Preview'
+        }else{
+          
+         
+        }
+      });
+    }else{
+      
+      if(this.invoiceItem.status == "Rejected"){
+        console.log("If rejected")
+        Swal.fire({
+          // title: 'question',
+          text: 'Invoice Rejected',
+          icon: 'info',
+          // showCancelButton: true,
+          showConfirmButton: true,
+        }).then((result) => {
+          if (result.isConfirmed) {
+            this.invoiceItem = invoice
+            console.log("this.invoiceItem",this.invoiceItem)
+          }else{
+            this.invoiceItem = invoice
+            console.log("this.invoiceItem",this.invoiceItem)
+          }
+        });
+      }else{
+        console.log("If pending")
+        Swal.fire({
           // title: 'question',
           text: 'Do you want Edit Invoice ?',
-          icon: 'question',
+          icon: 'info',
           showCancelButton: true,
           showConfirmButton: true,
         }).then((result) => {
@@ -251,6 +292,10 @@ export class InvoiceComponent implements OnInit {
             this.activeTab = 'Preview'
           }
         });
+      }
+     
+    }
+     
     
   }
   editRow(invoice){

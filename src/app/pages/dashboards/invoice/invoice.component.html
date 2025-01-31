@@ -45,7 +45,8 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let invoice of allInvoiceList" (click)="selectInvoice(invoice)">
+              <tr *ngFor="let invoice of allInvoiceList" (click)="selectInvoice(invoice)" 
+              [class.selected]="invoiceItem === invoice">
                 <td>{{ invoice.invoiceUniqueNumber }}</td>
                 <td>{{ invoice.header.ProformaInvoiceDate }}</td>
                 <td>{{ invoice.header.ProformaCustomerName }}</td>
