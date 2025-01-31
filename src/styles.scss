@@ -168,11 +168,11 @@ dropzone>.dropzone.dz-wrapper {
 }
 
 .newHexCode {
-  background: #042843;
+  // background: #042843;
   color: white;
 }
 .btn.newHexCode:hover {
-background: #103554; 
+// background: #103554; 
 color: white;
 }
 
@@ -232,7 +232,7 @@ button {
 }
 
 .new-invoice-btn {
-  background: #333;
+  // background: #333;
   color: white;
   padding: 8px 15px;
   border: none;
@@ -298,7 +298,7 @@ button {
 .back-btn {
   background: none;
   border: none;
-  color: #3f51b5;
+  // color: #3f51b5;
   font-size: 13px;
   cursor: pointer;
 }
@@ -350,7 +350,7 @@ button {
 label {
   display: block;
   margin-bottom: 5px;
-  color: #666;
+  color: #f6eaea;
 }
 
 input, select, textarea {
@@ -767,6 +767,7 @@ input:focus {
   font-size: 1.2rem;
   font-weight: bold;
   text-align: center;
+  height: 36px;
   padding: 15px;
 }
 .modal-header {
@@ -774,7 +775,7 @@ input:focus {
  /* background-color: #e79807 !important; */
  background-color: rgb(143 143 203) !important;;
  color: white !important;
- text-align: center !important;
+//  text-align: center !important;
 }
  
 
@@ -846,7 +847,7 @@ input:focus {
   background-color: #007bff;
   color: white;
   padding: 15px;
-  font-size: 18px;
+  font-size: 14px;
   font-weight: bold;
 }
 
@@ -937,3 +938,41 @@ input:focus {
       font-size: 12px;
   }
 }
+.input-group-text {
+  cursor: pointer;
+}
+
+.form-check-label {
+  margin-left: 10px;
+  font-weight: bold;
+}
+.custom-toggle {
+  width: 50px;
+  height: 25px;
+  background-color: #7A263A; /* Maroon color */
+  border: none;
+  outline: none;
+  transition: background-color 0.3s;
+}
+
+.custom-toggle:checked {
+  background-color: #ffffff; /* White when active */
+}
+
+.custom-toggle::before {
+  content: "";
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background-color: white;
+  border-radius: 50%;
+  top: 2px;
+  left: 3px;
+  transition: 0.3s;
+}
+
+.custom-toggle:checked::before {
+  transform: translateX(25px);
+}
+
+
