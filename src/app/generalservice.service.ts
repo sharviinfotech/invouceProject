@@ -5,6 +5,9 @@ import { HttpClient } from '@angular/common/http';
 })
 export class GeneralserviceService {
   setLoginDataList: any;
+  userList: any;
+  
+ 
   
   constructor(private http: HttpClient) { }
 
@@ -27,4 +30,13 @@ export class GeneralserviceService {
     return this.http.post('http://localhost:3000/api/invoice/invoiceTemplate',obj);
 
   }
+  userNewCreation(obj){
+    return this.http.post('http://localhost:3000/api/invoice/userNewCreation',obj);
+
+  }
+  getAllUserList(){
+    return this.http.get('http://localhost:3000/api/invoice/getAllUserList');
+  }
+
+
 }
