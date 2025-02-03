@@ -698,6 +698,10 @@ input:focus {
   cursor: pointer;
   color: white;
 }
+.btnSave:hover {
+  background-color: #218838;
+  color: white !important;
+}
 .btnBack{
   padding: 10px 10px;
   background: #433eb1 ;
@@ -740,6 +744,10 @@ input:focus {
   cursor: pointer;
   color: white;
 }
+.btnClose:hover {
+  background-color:rgb(201, 9, 54);
+  color: white !important;
+}
 
 .card-header{
   padding: 8px !important;
@@ -748,6 +756,7 @@ input:focus {
   border-radius: 0px !important;
   /* background: radial-gradient(circle, rgba(63,94,251,1) 0%, rgba(225,70,252,1) 100%); */
   background: #6ba3cd !important;
+  
 }
 .card-body{
   padding: 10px !important;
@@ -773,7 +782,8 @@ input:focus {
  /* background-color: #e79807 !important; */
  background-color: rgb(143 143 203) !important;;
  color: white !important;
-//  text-align: center !important;
+ text-align: center !important; 
+ justify-content: center;
 }
  
 
@@ -867,7 +877,7 @@ input:focus {
 }
 
 .btn-primary {
-  background-color: #007bff;
+  background-color: green;
   color: white;
   transition: background-color 0.3s;
 }
@@ -877,7 +887,7 @@ input:focus {
 }
 
 .btn-secondary {
-  background-color: #6c757d;
+  background-color: red;
   color: white;
   transition: background-color 0.3s;
 }
@@ -892,12 +902,13 @@ input:focus {
 
 .btnSubmitApproval {
   background-color: #28a745;
-  color: white;
+  color: white !important;
   transition: background-color 0.3s;
 }
 
 .btnSubmitApproval:hover {
   background-color: #218838;
+  color: white !important;
 }
 
 /* Table Styling */
