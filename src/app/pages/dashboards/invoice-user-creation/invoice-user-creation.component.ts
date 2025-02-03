@@ -221,34 +221,34 @@ confirmFieldTextType: boolean = false;
       
       console.log("updateObj", updateObj);
       
-      // this.service. updateExitUser(updateObj,this.userUniqueId).subscribe((res: any) => {
-      //   console.log("updateUserCreation", res);
+      this.service. updateExitUser(updateObj,this.userUniqueId).subscribe((res: any) => {
+        console.log("updateUserCreation", res);
   
-      //   if (res.status == 400) {
-      //     this.toastr.success(res.message);
-      //   } else {
-      //     // Display success toast
-      //     this.modalService.dismissAll(modal);
-      //     Swal.fire({
-      //       title: '',
-      //       text: res.message,
-      //       icon: 'success',
-      //       cancelButtonText: 'Ok'
-      //     }).then((result) => {
-      //       if (result) {
-      //         // Handle confirmation if needed
-      //       } else {
-      //         // Handle cancel if needed
-      //       }
-      //     });
-      //   }
+        if (res.status == 400) {
+          this.toastr.success(res.message);
+        } else {
+          // Display success toast
+          this.modalService.dismissAll(modal);
+          Swal.fire({
+            title: '',
+            text: res.message,
+            icon: 'success',
+            cancelButtonText: 'Ok'
+          }).then((result) => {
+            if (result) {
+              // Handle confirmation if needed
+            } else {
+              // Handle cancel if needed
+            }
+          });
+        }
   
-      //   this.getAllUserList();
-      //   this.submitted = true;
-      // }, error => {
-      //   this.toastr.error(error);
-      //   console.log("error", error);
-      // });
+        this.getAllUserList();
+        this.submitted = true;
+      }, error => {
+        this.toastr.error(error);
+        console.log("error", error);
+      });
     } else {
       console.log('Form is invalid');// Ensure all fields are marked as touched
     }

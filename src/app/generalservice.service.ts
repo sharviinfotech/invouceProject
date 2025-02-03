@@ -48,5 +48,8 @@ getLoginResponse(){
   submitLogin(obj){
     return this.http.post(environment.baseUrl+'invoice/authenticationLogin',obj);
   }
+  updateExitUser(obj,userUniqueId){
+    return this.http.put(environment.baseUrl+'invoice/updateExitUser/'+userUniqueId,obj);
+  }
 
 }
