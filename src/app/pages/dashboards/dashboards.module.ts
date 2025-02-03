@@ -11,7 +11,7 @@ import { CommonModule } from '@angular/common';
 @NgModule({
   declarations: [
     SampleComponentComponent,
-    InvoiceUserCreationComponent,
+    // InvoiceUserCreationComponent,
     // InvoiceReportsComponent,
     // InvoiceComponent,
     // InvoiceLayoutComponent

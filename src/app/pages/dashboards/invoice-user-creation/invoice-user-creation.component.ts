@@ -1,13 +1,16 @@
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { GeneralserviceService } from 'src/app/generalservice.service'; // Adjust path if necessary
 import Swal from 'sweetalert2';
-
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { ToastrService } from 'ngx-toastr';
 @Component({
   selector: 'app-invoice-user-creation',
   templateUrl: './invoice-user-creation.component.html',
-  styleUrls: ['./invoice-user-creation.component.css']
+  styleUrls: ['./invoice-user-creation.component.css'], 
+  imports: [CommonModule, ReactiveFormsModule, FormsModule,],
+    standalone: true
 })
 export class InvoiceUserCreationComponent implements OnInit {
   @ViewChild('editUserTemplate') editUserTemplate!: TemplateRef<any>;
@@ -16,21 +19,25 @@ export class InvoiceUserCreationComponent implements OnInit {
   userCreationForm!: FormGroup;
   userEditForm!: FormGroup;
   CreateUser: any[] = [];
-  selectedUser: any;
+  selectedUser: any = null;
   modalRef: any;
+  userEditModal: any;
+  
+
   fieldTextType: boolean = false;
   submitted = false;
 confirmFieldTextType: boolean = false;
   userNewCreation: any[];
   userList: any[];
+  submit: boolean=false;
+  userUniqueId: any;
   
  
-
 
   constructor(
     private modalService: NgbModal,
     private fb: FormBuilder,
-    private service: GeneralserviceService
+    private service: GeneralserviceService,private toastr: ToastrService
   ) {}
 
   ngOnInit(): void {
@@ -50,22 +57,72 @@ confirmFieldTextType: boolean = false;
 
 
     this.userEditForm = this.fb.group({
+
       userName: ['', Validators.required],
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
-      contact: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
-      activity: ['', Validators.required],
+      contact: ['', Validators.required],
       password: ['', Validators.required],
       confirmPassword: ['', Validators.required],
-      status: ['']
+      activity: ['', Validators.required],
+      status: [false]
     }, {
-      // validator: this.mustMatch('password', 'confirmPassword')
+      validator: this.mustMatch('password', 'confirmPassword')
     });
     // this.loadDummyUsers();
     this.getInvoiceUserDetails(); // Fetch users from API
     this.getAllUserList()
   }
+  editUser(selectedUser: any, content: any) {
+    console.log('Selected User:', selectedUser); // Debugging
+
+    if (!selectedUser) {
+      console.error('No user data found');
+      return;
+    }
+  }
+
+  openEditModal(user: any, editUserTemplate: TemplateRef<any>): void {
+    console.log('user',user);
+    this.userUniqueId =null
+    const selectedUser = user;
+    this.userUniqueId = user.userUniqueId
+    this.userEditForm.patchValue({
+      userName: selectedUser.userName,
+      firstName: selectedUser.userFirstName,
+      lastName: selectedUser.userLastName,
+      email: selectedUser.userEmail,
+      contact: selectedUser.userContact,
+      password: selectedUser.userPassword,
+      confirmPassword: selectedUser.userConfirmPassword,
+      activity: selectedUser.userActivity,
+      status: selectedUser.userStatus 
+    });
+    this.modalService.open(this.editUserTemplate, {
+      backdrop: 'static', 
+      keyboard: false 
+    });  }
+
+
+  mustMatch(password: string, confirmPassword: string) {
+    return (formGroup: FormGroup) => {
+      const passControl = formGroup.controls[password];
+      const confirmPassControl = formGroup.controls[confirmPassword];
+  
+      if (confirmPassControl.errors && !confirmPassControl.errors['mustMatch']) {
+        return;
+      }
+  
+      if (passControl.value !== confirmPassControl.value) {
+        confirmPassControl.setErrors({ mustMatch: true });
+      } else {
+        confirmPassControl.setErrors(null);
+      }
+    };
+  }
+  
+  
   
 
   // private loadDummyUsers(): void {
@@ -128,29 +185,75 @@ confirmFieldTextType: boolean = false;
   }
 
   // Open Edit Modal
-  openEditModal(user: any, editUserTemplate: TemplateRef<any>): void {
-    this.selectedUser = user;
-    this.userEditForm.patchValue(user);
-    this.modalService.open(editUserTemplate, { size: 'lg'});
-  }
+ 
   newUserCreation(newUserTemplate: any): void {
     
-    this.modalService.open(newUserTemplate,{ size: 'lg'});
-    
+    this.modalService.open(newUserTemplate,{  backdrop: 'static', 
+      keyboard: false });
+  
   }
   get f() {
      return this.userCreationForm.controls;
      }
+     
 
   // Update User Information
   updateUserCreation(modal: any): void {
     if (this.userEditForm.valid) {
-      console.log('Updated User:', this.userEditForm.value);
-      modal.close();
+      console.log('Updated Data:', this.userEditForm.value);
+      // Here, you would typically send the updated data to the backend
+    
+  
+      
+      let updateObj = {
+        "userUniqueId": this.userUniqueId, // Assuming the unique ID is part of the form
+        "userName": this.userEditForm.value.userName,
+        "userFirstName": this.userEditForm.value.firstName,
+        "userLastName": this.userEditForm.value.lastName,
+        "userEmail": this.userEditForm.value.email,
+        "userContact": this.userEditForm.value.contact,
+        "userPassword": this.userEditForm.value.password,
+        "userConfirmPassword": this.userEditForm.value.confirmPassword,
+        "userStatus": this.userEditForm.value.status,
+        "userActivity": this.userEditForm.value.activity,
+
+      };
+      
+      console.log("updateObj", updateObj);
+      
+      // this.service. updateExitUser(updateObj,this.userUniqueId).subscribe((res: any) => {
+      //   console.log("updateUserCreation", res);
+  
+      //   if (res.status == 400) {
+      //     this.toastr.success(res.message);
+      //   } else {
+      //     // Display success toast
+      //     this.modalService.dismissAll(modal);
+      //     Swal.fire({
+      //       title: '',
+      //       text: res.message,
+      //       icon: 'success',
+      //       cancelButtonText: 'Ok'
+      //     }).then((result) => {
+      //       if (result) {
+      //         // Handle confirmation if needed
+      //       } else {
+      //         // Handle cancel if needed
+      //       }
+      //     });
+      //   }
+  
+      //   this.getAllUserList();
+      //   this.submitted = true;
+      // }, error => {
+      //   this.toastr.error(error);
+      //   console.log("error", error);
+      // });
     } else {
-      this.userEditForm.markAllAsTouched();
+      console.log('Form is invalid');// Ensure all fields are marked as touched
     }
   }
+  
   // submitNewUser() {
   //   this.submitted = true;
   //   if (this.userCreationForm.invalid) {
@@ -160,55 +263,64 @@ confirmFieldTextType: boolean = false;
   // }
 
   submitUserForm(modal: any) {
-
-    if (this.userCreationForm.valid) {
-      console.log('Create User:', this.userCreationForm.value);
-      modal.close();
+    console.log('Create User:', this.userCreationForm.value);
+  
+    if (this.userCreationForm.invalid == true) {
+      this.submit = true;
+      return;
     } else {
-      this.userCreationForm.markAllAsTouched();
+      this.submit = true;
     }
   
-    this.submitted = true;
-    let creatObj ={
-      "userName":this.userCreationForm.value.userName,
-      "userFirstName":this.userCreationForm.value.userfirstName,
-      "userlastName":this.userCreationForm.value.userlastName,
-      "useremail":this.userCreationForm.value.email,
-      "usercontact":this.userCreationForm.value.contact,
-      "userpassword":this.userCreationForm.value.password,
-      "userconfirmPassword":this.userCreationForm.value.confirmPassword,
-      "function":this.userCreationForm.value.function,
+    let creatObj = {
+      "userName": this.userCreationForm.value.userName,
+      "userFirstName": this.userCreationForm.value.firstName,
+      "userLastName": this.userCreationForm.value.lastName,
+      "userEmail": this.userCreationForm.value.email,
+      "userContact": this.userCreationForm.value.contact,
+      "userPassword": this.userCreationForm.value.password,
+      "userConfirmPassword": this.userCreationForm.value.confirmPassword,
       "userStatus": this.userCreationForm.value.status,
-      "userActivity": this.userCreationForm.value.admin
-      }
-      console.log("creatObj",creatObj)
-    this.service.userNewCreation(creatObj).subscribe((res:any)=>{
-      console.log("submitUserForm",res)
-      console.log('apiErr',res,res.responseData) ;
-      Swal.fire({
-              title: '',
-              text: res.message,
-              icon: 'success',
-              // showCancelButton: true,
-              // confirmButtonText: 'Yes, Logout!',
-              cancelButtonText: 'Ok'
-            }).then((result) => {
-              if (result) {
-                
-              } else {
-                
-              }
-            });
-            this.getAllUserList()
-            this.modalService.dismissAll(modal);
-           
-    },error =>{
-      this.modalService.dismissAll(modal);
-      console.log("error",error)
+      "userActivity": this.userCreationForm.value.activity
+    };
+  
+    console.log("creatObj", creatObj);
+  
+    this.service.userNewCreation(creatObj).subscribe((res: any) => {
+      console.log("submitUserForm", res);
+      console.log('apiErr', res, res.responseData);
 
-    })
-    
+      if(res.status == 400){
+        this.toastr.success(res.message);
+      }else{
+         // Display success toast
+      this.modalService.dismissAll(modal);
+      Swal.fire({
+        title: '',
+        text: res.message,
+        icon: 'success',
+        cancelButtonText: 'Ok'
+      }).then((result) => {
+        if (result) {
+  
+        } else {
+  
+        }
+      });
+      }
+  
+     
+  
+      this.getAllUserList();
+      // this.modalService.dismissAll(modal);
+      this.submitted = true;
+    }, error => {
+        this.toastr.error(error)
+      // this.modalService.dismissAll(modal);
+      console.log("error", error);
+    });
   }
+  
   getAllUserList(){
     this.userList = [];
     this.service.getAllUserList().subscribe((res:any)=>{
