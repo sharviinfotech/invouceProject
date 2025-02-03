@@ -23,7 +23,7 @@ export class InvoiceUserCreationComponent implements OnInit {
 confirmFieldTextType: boolean = false;
   userNewCreation: any[];
   userList: any[];
-  // userList: any[];
+  
  
 
 
