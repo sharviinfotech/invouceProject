@@ -7,6 +7,7 @@ import { DatePipe } from '@angular/common';
 import Swal from 'sweetalert2';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { NgxSpinnerService } from "ngx-spinner";
+import { ImageService } from 'src/app/image.service';
 
 interface TaxItem {
   description: string;
@@ -35,6 +36,7 @@ export class InvoiceComponent implements OnInit {
 
   activeTab: string = 'AllInvoice'; // Change this based on tab logic
   logoUrl: string | null = null;
+  InvoiceLogo:string | null = null;
   isHoveringLogo: boolean = false;
   isHoveringRemove: boolean = false;
   StateName: string = '';
@@ -102,7 +104,7 @@ export class InvoiceComponent implements OnInit {
     containerClass: 'theme-blue', // Optional: Use a predefined theme
   };
   invoiceItem: any;
-  constructor(private fb: FormBuilder, private numberToWordsService: NumberToWordsService, private service: GeneralserviceService, private datePipe: DatePipe, private spinner: NgxSpinnerService) {
+  constructor(private fb: FormBuilder, private numberToWordsService: NumberToWordsService, private service: GeneralserviceService, private datePipe: DatePipe, private spinner: NgxSpinnerService,private imageService: ImageService) {
     this.newInvoiceCreation = this.fb.group({
       invoiceHeader: [''],
       ProformaCustomerName: ['', Validators.required],
@@ -110,9 +112,9 @@ export class InvoiceComponent implements OnInit {
       ProformaCity: ['', Validators.required],
       ProformaState: ['', Validators.required],
       ProformaPincode: [
-        '', 
+        '',
         [
-          Validators.required, 
+          Validators.required,
           Validators.pattern(/^[0-9]{6}$/)
         ]
       ],
@@ -157,6 +159,8 @@ export class InvoiceComponent implements OnInit {
 
     this.getAllInvoice()
     this.getStates();
+    this.logoUrl = this.imageService.getBase64FlightLogo(); 
+    this.InvoiceLogo = this.imageService.getBase64WorldLogo(); 
 
   }
   getStates() {
@@ -229,76 +233,106 @@ export class InvoiceComponent implements OnInit {
     { label: 'City', controlName: 'city', placeholder: 'Enter city' },
     { label: 'invoiceReferenceNo', controlName: 'invoiceReferenceNo', placeholder: 'Enter invoiceReferenceNo' },
   ];
-
+spinnerHideMethod(){
+  this.spinner.show()
+  setTimeout(() => {
+    this.spinner.hide()
+  }, 1000); // Delay of 2 seconds
+}
 
   // Method to select and show an invoice
   selectInvoice(invoice: any) {
     this.invoiceItem = null
     this.invoiceItem = invoice
-    console.log("invoice",invoice)
-    console.log("this.invoiceItem",this.invoiceItem.invoiceReferenceNo);
-    console.log("this.invoiceItem.header.status",this.invoiceItem.header.status)
-    if(this.invoiceItem.status == "Approved"){
+    console.log("invoice", invoice)
+    console.log("this.invoiceItem", this.invoiceItem.invoiceReferenceNo);
+    console.log("this.invoiceItem.header.status", this.invoiceItem.header.status)
+    
+    if (this.invoiceItem.status == "Approved") {
       console.log("If approved")
       Swal.fire({
         // title: 'question',
-        text: 'Do you want to Preview Invoice ?',
+        text: 'The selected invoice has been approved,Do you want to Preview Invoice?',
         icon: 'question',
         showCancelButton: true,
         showConfirmButton: true,
       }).then((result) => {
         if (result.isConfirmed) {
           this.invoiceItem = invoice
-          console.log("this.invoiceItem",this.invoiceItem)
+          console.log("this.invoiceItem", this.invoiceItem)
           this.activeTab = 'Preview'
-        }else{
+          this.spinnerHideMethod()
           
-         
+        } else {
+          // this.spinnerHideMethod()
+          this.getAllInvoice()
+          this.invoiceItem = null
+
         }
       });
-    }else{
-      
-      if(this.invoiceItem.status == "Rejected"){
+    }
+    else {
+
+      if (this.invoiceItem.status == "Rejected") {
         console.log("If rejected")
         Swal.fire({
           // title: 'question',
-          text: 'Invoice Rejected',
-          icon: 'info',
-          // showCancelButton: true,
-          showConfirmButton: true,
-        }).then((result) => {
-          if (result.isConfirmed) {
-            this.invoiceItem = invoice
-            console.log("this.invoiceItem",this.invoiceItem)
-          }else{
-            this.invoiceItem = invoice
-            console.log("this.invoiceItem",this.invoiceItem)
-          }
-        });
-      }else{
-        console.log("If pending")
-        Swal.fire({
-          // title: 'question',
-          text: 'Do you want Edit Invoice ?',
+          text: 'The selected invoice has been rejected',
           icon: 'info',
           showCancelButton: true,
           showConfirmButton: true,
         }).then((result) => {
           if (result.isConfirmed) {
-           this.editRow(invoice); 
-          }else{
             this.invoiceItem = invoice
-            console.log("this.invoiceItem",this.invoiceItem)
+            console.log("this.invoiceItem", this.invoiceItem)
             this.activeTab = 'Preview'
+            this.spinnerHideMethod()
+          } else {
+            this.invoiceItem = invoice
+            console.log("this.invoiceItem", this.invoiceItem)
+            // this.spinnerHideMethod()
+            this.getAllInvoice()
+            this.invoiceItem = null
           }
         });
+      } else {
+        console.log("If pending");
+        Swal.fire({
+          text: 'Do you want to Edit or Preview the Invoice?',
+          icon: 'info',
+          showCancelButton: true,  // Cancel Button
+          cancelButtonText: 'Cancel',
+          showDenyButton: true,  // Preview Button
+          denyButtonText: 'Preview',
+          showConfirmButton: true,  // Edit Button
+          confirmButtonText: 'Edit',
+        }).then((result) => {
+          if (result.isConfirmed) {
+            // Edit action
+            this.editRow(invoice);
+          } else if (result.isDenied) {
+            // Preview action
+            this.invoiceItem = invoice;
+            console.log("this.invoiceItem", this.invoiceItem);
+            this.activeTab = 'Preview';
+            this.spinnerHideMethod()
+          } else {
+            // Cancel action (Optional: You can add any logic if needed)
+            console.log("Action Cancelled");
+            this.getAllInvoice()
+            this.invoiceItem = null
+            // this.spinnerHideMethod()
+          }
+        });
+
       }
-     
+
     }
-     
-    
+
+
   }
-  editRow(invoice){
+  editRow(invoice) {
+    this.spinnerHideMethod()
     this.chargeItems = [];
     this.taxItems = [];
     this.subtotal = 0;
@@ -308,12 +342,12 @@ export class InvoiceComponent implements OnInit {
     console.log("this.selectedInvoice", this.selectedInvoice)
     this.invoiceRefNo = null
     this.invoiceRefNo = this.selectedInvoice.invoiceReferenceNo
-    console.log("this.invoiceRefNo", this.invoiceRefNo)
+    console.log("this.invoiceRefNo", this.invoiceRefNo,this.selectedInvoice.invoiceUniqueNumber)
     this.isEditing = false;
     this.activeTab = "Edit"
     this.show = false;
     this.newInvoiceCreation.patchValue({
-      invoiceHeader: this.selectedInvoice.header.invoiceHeader,
+      // invoiceHeader: this.selectedInvoice.header.invoiceHeader,
       ProformaCustomerName: this.selectedInvoice.header.ProformaCustomerName,
       ProformaAddress: this.selectedInvoice.header.ProformaAddress,
       ProformaCity: this.selectedInvoice.header.ProformaCity,
@@ -344,11 +378,12 @@ export class InvoiceComponent implements OnInit {
     this.grandTotal = this.selectedInvoice.grandTotal
     this.amountInWords = this.selectedInvoice.amountInWords
     this.logoUrl = this.selectedInvoice.header.invoiceImage
-    console.log("this.selectedInvoice.header.invoiceUniqueNumber", this.selectedInvoice.header.invoiceUniqueNumber)
+    this.InvoiceLogo = this.selectedInvoice.header.invoiceHeader
+    console.log("this.selectedInvoice.header.invoiceUniqueNumber", this.selectedInvoice.invoiceUniqueNumber)
     console.log("this.newInvoiceCreation", this.newInvoiceCreation.value.ProformaInvoiceNumber)
   }
   resetAll() {
-    this.logoUrl = ""
+    // this.logoUrl = ""
     this.amountInWords = ""
     this.chargeItems = [];
     this.taxItems = [];
@@ -383,6 +418,10 @@ export class InvoiceComponent implements OnInit {
       // branch:"",
       // ifscCode:"" 
     })
+    setTimeout(() => {
+      this.spinner.hide()
+      console.log("enter into new or all spinner")
+    }, 1000); // Delay of 2 seconds
   }
 
   backButton() {
@@ -402,9 +441,27 @@ export class InvoiceComponent implements OnInit {
     this.isEditing = true;
   }
   setTab(tabName: string) {
-    this.activeTab = tabName;
-    console.log("this.activeTab", this.activeTab);
-    this.resetAll()
+    this.spinner.show()
+    
+    if(tabName == 'AllInvoice' || tabName == 'NewInvoice'){
+      this.activeTab = tabName;
+      this.invoiceItem = null
+      console.log("this.activeTab", this.activeTab);
+      this.resetAll()
+      this.show=true
+      
+    }else{
+      this.activeTab = tabName;
+      setTimeout(() => {
+        this.spinner.hide()
+        console.log('setTab else this.invoiceItem',this.invoiceItem)
+        console.log('newInvoiceCreation',this.newInvoiceCreation.value)
+      }, 1000); // Delay of 2 seconds
+     
+     
+    }
+   
+    
   }
 
 
@@ -425,7 +482,7 @@ export class InvoiceComponent implements OnInit {
 
   removeLogo(event: Event): void {
     event.preventDefault();
-    this.logoUrl = null;
+    this.logoUrl = 'assets/images/AircraftFlight.png';
   }
 
   addChargeItem() {
@@ -514,8 +571,7 @@ export class InvoiceComponent implements OnInit {
   }
 
   CreateInvoice(): void {
-    const invoiceDateSplit = this.formatDate(this.newInvoiceCreation.value.ProformaInvoiceDate);
-    const bokingDateSplit = this.formatDate(this.newInvoiceCreation.value.bookingdateOfjourny);
+    
 
     console.log('this.newInvoiceCreation', this.newInvoiceCreation.invalid);
     if (this.newInvoiceCreation.invalid == true) {
@@ -524,10 +580,23 @@ export class InvoiceComponent implements OnInit {
 
     } else {
       console.log('Invoice Saved', this.newInvoiceCreation.value);
-
+      let invoiceDate = this.newInvoiceCreation.value.ProformaInvoiceDate;
+      let bookingDate = this.newInvoiceCreation.value.bookingdateOfjourny;
+  
+      // ✅ Check if the date is already in 'DD-MM-YYYY' format
+      const dateRegex = /^\d{2}-\d{2}-\d{4}$/;
+  
+      if (!dateRegex.test(invoiceDate)) {
+        invoiceDate = this.formatDate(invoiceDate);
+      }
+  
+      if (!dateRegex.test(bookingDate)) {
+        bookingDate = this.formatDate(bookingDate);
+      }
+      console.log("invoiceDateSplit",invoiceDate,"bokingDateSplit",bookingDate)
       let createobj = {
         "header": {
-          "invoiceHeader": this.newInvoiceCreation.value.invoiceHeader,
+          "invoiceHeader": this.InvoiceLogo,
           "invoiceImage": this.logoUrl,
           "ProformaCustomerName": this.newInvoiceCreation.value.ProformaCustomerName,
           "ProformaAddress": this.newInvoiceCreation.value.ProformaAddress,
@@ -537,13 +606,13 @@ export class InvoiceComponent implements OnInit {
           "ProformaGstNo": this.newInvoiceCreation.value.ProformaGstNo,
           "ProformaPanNO": this.newInvoiceCreation.value.ProformaPanNO,
           "ProformaInvoiceNumber": this.newInvoiceCreation.value.ProformaInvoiceNumber,
-          "ProformaInvoiceDate": invoiceDateSplit,
+          "ProformaInvoiceDate": invoiceDate,
           "ProformaPan": this.newInvoiceCreation.value.ProformaPan,
           "ProformaGstNumber": this.newInvoiceCreation.value.ProformaGstNumber,
           "ProformaTypeOfAircraft": this.newInvoiceCreation.value.proformatypeOfAircraft,
           "ProformaSeatingCapasity": this.newInvoiceCreation.value.proformaseatingcapasity,
           "notes": this.newInvoiceCreation.value.notes,
-          "BookingDateOfJourny": bokingDateSplit,
+          "BookingDateOfJourny": bookingDate,
           "BookingSector": this.newInvoiceCreation.value.bookingsector,
           "BookingBillingFlyingTime": this.newInvoiceCreation.value.bookingbillingflyingtime
         },
@@ -568,11 +637,11 @@ export class InvoiceComponent implements OnInit {
         const resp = response.data;
         if (resp) {
           this.getAllInvoice()
-          
+
           this.activeTab = 'AllInvoice'
           // Reset form and related data
           this.newInvoiceCreation.reset();
-          this.logoUrl = '';
+          // this.logoUrl = '';
           this.chargeItems = [];
           this.taxItems = [];
           this.subtotal = 0;
@@ -584,7 +653,7 @@ export class InvoiceComponent implements OnInit {
             icon: 'success',
             showConfirmButton: true
           });
-          
+
         } else {
           this.spinner.hide()
           Swal.fire({
@@ -614,18 +683,30 @@ export class InvoiceComponent implements OnInit {
   }
 
   UpdateInvoice(): void {
-    var invoiceDateSplit = this.formatDate(this.newInvoiceCreation.value.ProformaInvoiceDate);
-    var bokingDateSplit = this.formatDate(this.newInvoiceCreation.value.bookingdateOfjourny);
+    
+
     if (this.newInvoiceCreation.valid) {
       console.log('Invoice Updated', this.newInvoiceCreation.value);
 
+      let invoiceDate = this.newInvoiceCreation.value.ProformaInvoiceDate;
+    let bookingDate = this.newInvoiceCreation.value.bookingdateOfjourny;
 
+    // ✅ Check if the date is already in 'DD-MM-YYYY' format
+    const dateRegex = /^\d{2}-\d{2}-\d{4}$/;
+
+    if (!dateRegex.test(invoiceDate)) {
+      invoiceDate = this.formatDate(invoiceDate);
+    }
+
+    if (!dateRegex.test(bookingDate)) {
+      bookingDate = this.formatDate(bookingDate);
+    }
       // Implement update logic here
       let updateobj = {
 
         "invoiceReferenceNo": this.invoiceRefNo,
         "header": {
-          "invoiceHeader": this.newInvoiceCreation.value.invoiceHeader,
+          "invoiceHeader": this.InvoiceLogo,
           "invoiceImage": this.logoUrl,
           "ProformaCustomerName": this.newInvoiceCreation.value.ProformaCustomerName,
           "ProformaAddress": this.newInvoiceCreation.value.ProformaAddress,
@@ -635,13 +716,13 @@ export class InvoiceComponent implements OnInit {
           "ProformaGstNo": this.newInvoiceCreation.value.ProformaGstNo,
           "ProformaPanNO": this.newInvoiceCreation.value.ProformaPanNO,
           "ProformaInvoiceNumber": this.newInvoiceCreation.value.ProformaInvoiceNumber,
-          "ProformaInvoiceDate": invoiceDateSplit,
+          "ProformaInvoiceDate": invoiceDate,
           "ProformaPan": this.newInvoiceCreation.value.ProformaPan,
           "ProformaGstNumber": this.newInvoiceCreation.value.ProformaGstNumber,
           "ProformaTypeOfAircraft": this.newInvoiceCreation.value.proformatypeOfAircraft,
           "ProformaSeatingCapasity": this.newInvoiceCreation.value.proformaseatingcapasity,
           "notes": this.newInvoiceCreation.value.notes,
-          "BookingDateOfJourny": bokingDateSplit,
+          "BookingDateOfJourny": bookingDate,
           "BookingSector": this.newInvoiceCreation.value.bookingsector,
           "BookingBillingFlyingTime": this.newInvoiceCreation.value.bookingbillingflyingtime
         },
@@ -649,6 +730,7 @@ export class InvoiceComponent implements OnInit {
         "taxList": this.taxItems,
         "subtotal": this.subtotal,
         "grandTotal": this.grandTotal,
+        "amountInWords": this.amountInWords,
         // "bankDetails":{
         //     "accountName":this.newInvoiceCreation.value.accountName,
         //     "bank":this.newInvoiceCreation.value.bank,
@@ -666,20 +748,21 @@ export class InvoiceComponent implements OnInit {
           this.getAllInvoice()
           // Reset form and related data
           this.newInvoiceCreation.reset();
-          this.logoUrl = '';
+          // this.logoUrl = '';
           this.chargeItems = [];
           this.taxItems = [];
           this.subtotal = 0;
           this.grandTotal = 0;
           this.amountInWords = '';
-          this.activeTab="AllInvoice"
+          this.activeTab = "AllInvoice"
           this.resetAll()
-         
+          this.show=true
           Swal.fire({
             text: response.message,
             icon: 'success',
             showConfirmButton: true
           });
+          this.invoiceItem = null
 
         } else {
           this.spinner.hide()

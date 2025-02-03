@@ -39,14 +39,18 @@
   }
   
   ::ng-deep .text-orange-600 {
-    color: #ea580c !important;
+    color: orange !important;
   }
   
   ::ng-deep .text-red-600 {
     color: #dc2626 !important;
   }
   
-  .cursor-pointer {
-    cursor: pointer;
+  ::ng-deep .cursor-pointer {
+    cursor: pointer !important;
   }
+  ::ng-deep .underline {
+    text-decoration: underline !important;
+  }
+ 
   

@@ -625,3 +625,22 @@ input:focus {
 .selected {
   border: 2px solid blue;  /* Change color as needed */
 }
+::ng-deep .text-blue-600 {
+  color: #2563eb !important;
+}
+
+::ng-deep .text-green-600 {
+  color: #16a34a !important;
+}
+
+::ng-deep .text-orange-600 {
+  color: orange !important;
+}
+
+::ng-deep .text-red-600 {
+  color: #dc2626 !important;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}

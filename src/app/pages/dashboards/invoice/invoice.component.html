@@ -30,7 +30,7 @@
         All Invoices
       </div>
       <div class="card-body">
-        <div class="table-responsive">
+        <div class="tableFixHead">
           <table class="table table-bordered table-stripped">
             <thead class="thead-light">
               <tr>
@@ -46,8 +46,13 @@
             </thead>
             <tbody>
               <tr *ngFor="let invoice of allInvoiceList" (click)="selectInvoice(invoice)" 
+             
               [class.selected]="invoiceItem === invoice">
-                <td>{{ invoice.invoiceUniqueNumber }}</td>
+                <td  [ngClass]="{
+                  'text-green-600 underline cursor-pointer': invoice.status === 'Approved',
+                  'text-orange-600': invoice.status === 'Pending',
+                  'text-red-600': invoice.status === 'Rejected'
+                }">{{ invoice.invoiceUniqueNumber }}</td>
                 <td>{{ invoice.header.ProformaInvoiceDate }}</td>
                 <td>{{ invoice.header.ProformaCustomerName }}</td>
                 <td>{{ invoice.header.ProformaTypeOfAircraft }}</td>
@@ -79,46 +84,12 @@
 
         </div>
       </div>
-      <div class="invoice-container">
-        <div class="invoice-header">
-          <!-- <div class="logo-upload" (click)="logoInput.click()" (mouseenter)="isHoveringLogo = true" (mouseleave)="isHoveringLogo = false">
-      <input
-        #logoInput
-        type="file"
-        (change)="onLogoSelected($event)"
-        accept="image/*"
-        style="display: none"
-      >
-      <div *ngIf="!logoUrl" class="logo-placeholder">
-        <i>+ Logo</i>
-        <div>Add your logo</div>
-      </div>
-      <ng-container *ngIf="logoUrl">
-        <button class="remove-logo" 
-                (click)="removeLogo($event)"
-                (mouseenter)="isHoveringRemove = true"
-                (mouseleave)="isHoveringRemove = false">×</button>
-        <div class="hover-text">{{ isHoveringRemove ? 'Remove your logo' : 'Update your logo' }}</div>
-        <img [src]="logoUrl" alt="Company Logo">
-      </ng-container>
-    </div> -->
-
-          <input type="text" formControlName="invoiceHeader" placeholder="Invoice" class="w-50">
-
-          <div class="logo-upload" (click)="logoInput.click()" (mouseenter)="isHoveringLogo = true"
-            (mouseleave)="isHoveringLogo = false">
-            <input #logoInput type="file" (change)="onLogoSelected($event)" accept="image/*" style="display: none">
-            <div *ngIf="!logoUrl" class="logo-placeholder">
-              <i>+ Logo</i>
-              <div>Add your logo</div>
-            </div>
-            <ng-container *ngIf="logoUrl">
-              <button class="remove-logo" (click)="removeLogo($event)" (mouseenter)="isHoveringRemove = true"
-                (mouseleave)="isHoveringRemove = false">×</button>
-              <div class="hover-text">{{ isHoveringRemove ? 'Remove your logo' : 'Update your logo' }}</div>
-              <img [src]="logoUrl" alt="Company Logo">
-            </ng-container>
-          </div>
+      <div class="container">
+        <div class="header-row">
+        
+          <img [src]="logoUrl" alt="Company Logo" class="logo">
+          <img [src]="InvoiceLogo" alt="Company Logo" class="logo">
+          <img [src]="logoUrl" alt="Company Logo" class="logo">
         </div>
         <div class="card mb-4">
           <div class="card-header " style="text-align: center;">
@@ -475,9 +446,10 @@
     </div>
     <div class="container">
       <div class="header-row">
-        <img [src]="invoiceItem?.header?.invoiceImage" alt="Company Logo" class="logo">
-        <h3>RITHWIK GREEN POWER & AVIATION PRIVATE LIMITED</h3>
-        <img [src]="invoiceItem?.header?.invoiceImage" alt="Company Logo" class="logo">
+        
+        <img [src]="logoUrl" alt="Company Logo" class="logo">
+        <img [src]="InvoiceLogo" alt="Company Logo" class="logo">
+        <img [src]="logoUrl" alt="Company Logo" class="logo">
       </div>
 
       <div class="card mb-4">
@@ -656,27 +628,13 @@
 
         </div>
       </div>
-      <div class="invoice-container">
+      <div class="container">
 
-        <div class="invoice-header">
-
-
-          <input type="text" formControlName="invoiceHeader" placeholder="Invoice" class="w-50">
-
-          <div class="logo-upload" (click)="logoInput.click()" (mouseenter)="isHoveringLogo = true"
-            (mouseleave)="isHoveringLogo = false">
-            <input #logoInput type="file" (change)="onLogoSelected($event)" accept="image/*" style="display: none">
-            <div *ngIf="!logoUrl" class="logo-placeholder">
-              <i>+ Logo</i>
-              <div>Add your logo</div>
-            </div>
-            <ng-container *ngIf="logoUrl">
-              <button class="remove-logo" (click)="removeLogo($event)" (mouseenter)="isHoveringRemove = true"
-                (mouseleave)="isHoveringRemove = false">×</button>
-              <div class="hover-text">{{ isHoveringRemove ? 'Remove your logo' : 'Update your logo' }}</div>
-              <img [src]="logoUrl" alt="Company Logo">
-            </ng-container>
-          </div>
+        <div class="header-row">
+        
+          <img [src]="logoUrl" alt="Company Logo" class="logo">
+          <img [src]="InvoiceLogo" alt="Company Logo" class="logo">
+          <img [src]="logoUrl" alt="Company Logo" class="logo">
         </div>
         <div class="card mb-4">
           <div class="card-header " style="text-align: center;">

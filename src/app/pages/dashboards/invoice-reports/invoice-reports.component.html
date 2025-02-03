@@ -12,7 +12,7 @@
       </div>
 
     </div> -->
-    <div class="table-responsive">
+    <div class="tableFixHeadR">
       <table class="table table-bordered table-stripped">
         <thead class="thead-light">
           <tr>
@@ -28,10 +28,17 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let invoice of allInvoiceList" (click)="selectInvoice(invoice)">
+          <!-- (click)="invoice.status === 'Approved' ? openInvoicePopup(invoice) : null" -->
+          <tr *ngFor="let invoice of allInvoiceList" (click)="selectInvoice(invoice)"
+          [class.selected]="invoiceItem === invoice">
             <td>
-              <span [ngClass]="{'text-blue-600 underline cursor-pointer': invoice.status === 'Approved'}"
-                (click)="invoice.status === 'Approved' ? openInvoicePopup(invoice) : null">
+              <span
+              [ngClass]="{
+                'text-green-600 underline cursor-pointer': invoice.status === 'Approved',
+                'text-orange-600': invoice.status === 'Pending',
+                'text-red-600': invoice.status === 'Rejected'
+              }"
+                >
                 {{ invoice.invoiceUniqueNumber }}
               </span>
             </td>

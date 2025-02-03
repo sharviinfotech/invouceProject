@@ -66,6 +66,7 @@ interface InvoiceItem {
 })
 export class InvoiceReportsComponent {
   // @ViewChild('invoiceContent', { static: false }) invoiceContent!: ElementRef;
+  invoiceItem: any;
   allInvoiceList: any;
   invoice = {
     invoiceNumber: 'INV-5678',
@@ -94,27 +95,68 @@ export class InvoiceReportsComponent {
       this.spinner.hide()
     })
   }
-  selectInvoice(data) {
-    console.log("data", data)
-
-  }
-  openInvoicePopup(invoice) {
-    console.log('item', invoice)
-    const invoiceItem = invoice;
-    // this.isPopupOpen = true;
-    Swal.fire({
-      // title: 'question',
-      text: 'Do you want Print Invoice ?',
-      icon: 'question',
-      showCancelButton: true,
-      showConfirmButton: true,
-    }).then((result) => {
-      if (result.isConfirmed) {
-        this.generateInvoiceHTML(invoiceItem)
-        // this.InvoicePrint(); 
-      }
-    });
-  }
+  
+   // Method to select and show an invoice
+    selectInvoice(invoice: any) {
+      this.invoiceItem = null
+      this.invoiceItem = invoice
+      const invoiceItem = invoice;
+      console.log("invoice",invoice)
+      console.log("this.invoiceItem",this.invoiceItem.invoiceReferenceNo);
+      console.log("this.invoiceItem.header.status",this.invoiceItem.header.status)
+      
+        
+        if(this.invoiceItem.status == "Rejected"){
+          console.log("If rejected")
+          Swal.fire({
+            // title: 'question',
+            text: 'The selected invoice has been rejected, so printing is not possible.',
+            icon: 'info',
+            // showCancelButton: true,
+            showConfirmButton: true,
+          }).then((result) => {
+            if (result.isConfirmed) {
+              this.invoiceItem = invoice
+              console.log("this.invoiceItem",this.invoiceItem)
+            }else{
+              this.invoiceItem = invoice
+              console.log("this.invoiceItem",this.invoiceItem)
+            }
+          });
+        }else if(this.invoiceItem.status == "Pending"){
+          console.log("If pending")
+          Swal.fire({
+            // title: 'question',
+            text: 'The invoice is pending, so please proceed with the process.',
+            icon: 'info',
+            showCancelButton: false,
+            showConfirmButton: true,
+          }).then((result) => {
+            if (result.isConfirmed) {
+            }else{
+              this.invoiceItem = invoice
+              console.log("this.invoiceItem",this.invoiceItem)
+            }
+          });
+        }else{
+          Swal.fire({
+            text: 'The selected invoice has been approved. Do you want to print the invoice?',
+            icon: 'question',
+            showCancelButton: true,
+            showConfirmButton: true,
+            confirmButtonText: 'Print',
+          }).then((result) => {
+            if (result.isConfirmed) {
+              this.generateInvoiceHTML(invoiceItem)
+            }
+          });
+        }
+    }
+  // openInvoicePopup(invoice) {
+  //   console.log('item', invoice)
+  //   const invoiceItem = invoice;
+    
+  // }
   // InvoicePrint(){
   //   const printContents = this.invoiceContent.nativeElement.innerHTML;
   //   const originalContents = document.body.innerHTML;
@@ -642,7 +684,7 @@ export class InvoiceReportsComponent {
               margin-bottom: 10px;
             }
             .logo {
-              height: 40px;
+              height: 90px;
             }
             .notes {
               margin: 5px 0;
@@ -692,9 +734,10 @@ export class InvoiceReportsComponent {
         <body>
           <div class="border">
             <div class="header-row">
+            
               <div><img src="${invoiceItem.header.invoiceImage}" alt="Company Logo" class="logo"></div>
               <div>
-                <h3 class="company-name">RITHWIK GREEN POWER & AVIATION PRIVATE LIMITED</h3>
+                <img src="${invoiceItem.header.invoiceHeader}" alt="Company Logo" class="logo">
               </div>
               <div><img src="${invoiceItem.header.invoiceImage}" alt="Company Logo" class="logo"></div>
             </div>

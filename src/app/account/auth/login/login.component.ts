@@ -62,6 +62,40 @@ export class LoginComponent implements OnInit {
     this.store.dispatch(login({ email: email, password: password }));
   }
 
+  // onSubmit() {
+  //   this.submitted = true;
+
+  //   const email = this.f['email'].value; 
+  //   const password = this.f['password'].value; 
+  //   if (email && password) {
+  //     let obj ={
+  //       userName:email,
+  //       userPassword:password
+  //     }
+  //     this.authenticationService.login(obj).subscribe(
+  //       (response:any) => {
+  //         // handle successful login (e.g., store token, redirect)
+  //         console.log('Login successful', response);
+  //         if(response.status == 200 && response.isValid == true){
+  //           this.router.navigate(['default']);
+  //           this.store.dispatch(login({ email: email, password: password }));
+  //         }else{
+  //          console.log("response else",response)
+  //         }
+
+         
+  //       },
+  //       (error) => {
+  //         // handle login failure (e.g., show error message)
+  //         console.error('Login failed', error);
+  //       }
+  //     );
+  //   }
+
+  //   // Login Api
+  //   // this.store.dispatch(login({ email: email, password: password }));
+  // }
+
   /**
  * Password Hide/Show
  */
