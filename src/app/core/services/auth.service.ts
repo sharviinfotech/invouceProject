@@ -72,3 +72,25 @@ export class AuthenticationService {
     }
 }
 
+// private apiUrl = 'http://localhost:3000/api/invoice/authenticationLogin'; // Your API URL
+
+// constructor(private http: HttpClient) {}
+
+// login(email: string, password: string): Observable<any> {
+//   const loginPayload = {
+//     userName: email,
+//     userPassword: password
+//   };
+
+//   return this.http.post<any>(this.apiUrl, loginPayload).pipe(
+//     map((response) => {
+//       if (response.status === 200 && response.isValid) {
+//         localStorage.setItem('token', response.token); // Store token in localStorage
+//         return response;
+//       } else {
+//         throw new Error('Invalid credentials');
+//       }
+//     }),
+//     catchError((error) => throwError(() => new Error(error.error?.message || 'Login failed')))
+//   );
+// }

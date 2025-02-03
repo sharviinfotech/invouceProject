@@ -14,7 +14,9 @@ export const environment = {
     messagingSenderId: "",
     appId: "",
     measurementId: ""
-  }
+  },
+  // private apiUrl = 'http://localhost:3000/api/invoice/authenticationLogin';
+  baseUrl:'http://localhost:3000/api/',
 };
 
 /*

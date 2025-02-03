@@ -19,7 +19,7 @@ export class AuthenticationEffects {
         if (environment.defaultauth === 'fakebackend') {
           return this.userService.register({ email, username, password }).pipe(
             map((user) => {
-              this.router.navigate(['/auth/login']);
+              // this.router.navigate(['/auth/login']);
               return RegisterSuccess({ user })
             }),
             catchError((error) => of(RegisterFailure({ error })))
@@ -82,3 +82,37 @@ export class AuthenticationEffects {
     private router: Router) { }
 
 }
+
+
+
+
+// new code 
+
+// login$ = createEffect(() =>
+//   this.actions$.pipe(
+//     ofType(login),
+//     switchMap(({ email, password }) =>
+//       this.AuthenticationService.login(email, password).pipe(
+//         map((response) => {
+//           if (response.status === 200 && response.isValid) {
+//             localStorage.setItem('token', response.token); // Store token
+//             return loginSuccess(response); // Dispatch success action
+//           } else {
+//             return loginFailure({ error: 'Invalid credentials' });
+//           }
+//         }),
+//         catchError((error) => of(loginFailure({ error: error.message })))
+//       )
+//     )
+//   )
+// );
+// loginSuccess$ = createEffect(
+//   () =>
+//     this.actions$.pipe(
+//       ofType(loginSuccess),
+//       tap(() => {
+//         this.router.navigate(['/dashboard']); // Redirect on successful login
+//       })
+//     ),
+//   { dispatch: false }
+// );
