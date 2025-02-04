@@ -1,10 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { GeneralserviceService } from 'src/app/generalservice.service';
 import { NgxPrintModule } from 'ngx-print';
 import Swal from 'sweetalert2';
-import { Component, ElementRef, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, ElementRef, TemplateRef, ViewChild, ViewEncapsulation } from '@angular/core';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 interface ChargeItem {
   description: string;
@@ -60,12 +61,20 @@ interface InvoiceItem {
   selector: 'app-invoice-decision',
   templateUrl: './invoice-decision.component.html',
   styleUrl: './invoice-decision.component.css',
-  imports: [CommonModule, FormsModule, NgxPrintModule],
+  imports: [CommonModule, FormsModule,ReactiveFormsModule, NgxPrintModule],
   standalone: true,
 })
 export class InvoiceDecisionComponent {
+  @ViewChild('approveModal') approveModal: TemplateRef<any>;
+  loginData = { data: { userActivity: 'admin' } }; // Example login data
+  approveForm: FormGroup;
+  submit = false;
   invoiceItem: any;
+ 
+
     allInvoiceList: any;
+    selectedInvoice: any;
+  remark: string = '';
     invoice = {
       invoiceNumber: 'INV-5678',
       invoiceDate: '2025-01-25',
@@ -74,12 +83,23 @@ export class InvoiceDecisionComponent {
       },
       amount: '$500'
     };
-    constructor(private service: GeneralserviceService, private spinner: NgxSpinnerService) {
-  
-  
+  decisionTaking: any;
+ 
+ 
+    constructor(private fb: FormBuilder,private service: GeneralserviceService, private spinner: NgxSpinnerService,private modalService: NgbModal) {
+      this.approveForm = this.fb.group({
+        remark: ['', Validators.required] // Ensure remark is part of the form group
+      });
+    
     }
+    get f() {
+      return this.approveForm.controls;
+    }
+   
     ngOnInit(): void {
       this.getAllInvoice()
+      this.loginData = this.service.getLoginResponse()
+      console.log("this.loginData ",this.loginData)
     }
   
     getAllInvoice() {
@@ -93,8 +113,36 @@ export class InvoiceDecisionComponent {
         this.spinner.hide()
       })
     }
+    ApproveOrReject(invoice: any,decision) {
+      this.decisionTaking = null
+      this.decisionTaking = decision
+      if(decision == 'Approved'){
+        this.invoice = invoice;
+        this.modalService.open(this.approveModal,{size:'sm'});
+      }else if(decision == 'Rejected'){
+        this.invoice = invoice;
+        this.modalService.open(this.approveModal,{size:'sm'});
+      }
+      
+    }
+  
+    approveButton() {
+      this.submit = true;
+      if (this.approveForm.invalid) {
+        return;
+      }
+  
+      const remark = this.f['remark'].value;
+      console.log('Approval Remark:', remark);
+  
+      // Perform your approval logic here (e.g., call API, update data, etc.)
+      
+      this.modalService.dismissAll(); // Close modal after submission
+    }
+  
+   
     
-     // Method to select and show an invoice
+     // in this screen below is not required
       selectInvoice(invoice: any) {
         this.invoiceItem = null
         this.invoiceItem = invoice
