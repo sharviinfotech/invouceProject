@@ -11,6 +11,8 @@ import { InvoiceComponent } from './invoice/invoice.component';
 import { InvoiceLayoutComponent } from './invoice-layout/invoice-layout.component';
 import { InvoiceReportsComponent } from './invoice-reports/invoice-reports.component';
 import { InvoiceUserCreationComponent } from './invoice-user-creation/invoice-user-creation.component';
+import { InvoiceDecisionComponent } from './invoice-decision/invoice-decision.component';
+import { CustomerCreationComponent } from './customer-creation/customer-creation.component';
 
 const routes: Routes = [
     {
@@ -36,6 +38,14 @@ const routes: Routes = [
     {
         path: 'InvoiceUserCreation',
         component: InvoiceUserCreationComponent
+    },
+    {
+        path: 'InvoiceDecision',
+        component: InvoiceDecisionComponent
+    },
+    {
+        path: 'CustomerCreation',
+        component: CustomerCreationComponent
     },
     // {
     //     path: 'saas',

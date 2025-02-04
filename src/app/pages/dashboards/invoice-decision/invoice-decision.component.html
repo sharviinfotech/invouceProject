@@ -1,0 +1,66 @@
+<div class="card">
+    <div class="card-header" style="text-align: center;">
+      All Invoices
+    </div>
+    <div class="card-body">
+      <div class="tableFixHeadR">
+        <table class="table table-bordered table-stripped">
+          <thead class="thead-light">
+            <tr>
+              <th class="text-nowrap">Invoice Number</th>
+              <th class="text-nowrap">Invoice Date</th>
+              <th class="text-nowrap">Customer Name</th>
+              <th class="text-nowrap">Type Of Aircraft</th>
+              <th class="text-nowrap">City</th>
+              <th class="text-nowrap">Destination</th>
+              <th class="text-nowrap">Date Of Journey</th>
+              <th class="text-nowrap">Total Amount</th>
+              <th class="text-nowrap">Status</th>
+              <th class="text-nowrap">Actions</th> <!-- New column for buttons -->
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let invoice of allInvoiceList" (click)="selectInvoice(invoice)"
+            [class.selected]="invoiceItem === invoice">
+              <td>
+                <span
+                [ngClass]="{
+                  'text-green-600 underline cursor-pointer': invoice.status === 'Approved',
+                  'text-orange-600': invoice.status === 'Pending',
+                  'text-red-600': invoice.status === 'Rejected'
+                }"
+                  >
+                  {{ invoice.invoiceUniqueNumber }}
+                </span>
+              </td>
+              <td>{{ invoice.header.ProformaInvoiceDate }}</td>
+              <td>{{ invoice.header.ProformaCustomerName }}</td>
+              <td>{{ invoice.header.ProformaTypeOfAircraft }}</td>
+              <td>{{ invoice.header.ProformaCity }}</td>
+              <td>{{ invoice.header.BookingSector }}</td>
+              <td>{{ invoice.header.BookingDateOfJourny }}</td>
+              <td>{{ invoice.grandTotal | number: '1.2-2'}}</td>
+              <td [ngClass]="{
+                  'text-green-600': invoice.status === 'Approved',
+                  'text-orange-600': invoice.status === 'Pending',
+                  'text-red-600': invoice.status === 'Rejected'
+                }">
+                {{ invoice.status }}
+              </td>
+              <!-- New Actions Column -->
+              <td>
+                <button *ngIf="invoice.status === 'Pending'" class="btn btn-success btn-sm" 
+                        (click)="updateStatus(invoice, 'Approved')">
+                  Approve
+                </button>
+                <button *ngIf="invoice.status === 'Pending'" class="btn btn-danger btn-sm" 
+                        (click)="updateStatus(invoice, 'Rejected')">
+                  Reject
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>

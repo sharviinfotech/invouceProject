@@ -14,32 +14,49 @@ export const MENU: MenuItem[] = [
             // },
             {
                 id: 3,
-                label: 'Invoice',
-                link: '/Invoice',
+                label: 'Customer Creation',
+                link: '/CustomerCreation',
                 parentId: 1,
-                icon: 'bx bx-layout',
+                icon: 'bx bx-task', // Represents invoice approval/decision
             },
             {
-                id: 4,
+                id:4 ,
                 label: 'Invoice Layout',
                 link: '/InvoiceLayout',
                 parentId: 1,
                 icon: 'bx bx-plus',
             },
             {
-                id: 5,
+                id:5,
+                label: 'Invoice',
+                link: '/Invoice',
+                parentId: 1,
+                icon: 'bx bx-layout',
+            },
+            
+            {
+                id: 6,
+                label: 'Invoice Decision',
+                link: '/InvoiceDecision',
+                parentId: 1,
+                icon: 'bx bx-task', // Represents invoice approval/decision
+            },
+            {
+                id:7 ,
                 label: 'Invoice Reports',
                 link: '/InvoiceReports',
                 parentId: 1,
                 icon: 'bx bx-spreadsheet',
             },
             {
-                id: 5,
+                id: 8,
                 label: 'User Creation',
                 link: '/InvoiceUserCreation',
                 parentId: 1,
                 icon: 'bx bx-user-check',
             },
+            
+           
         ]
     },
     // {
