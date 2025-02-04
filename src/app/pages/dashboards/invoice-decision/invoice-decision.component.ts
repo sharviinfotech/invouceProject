@@ -66,14 +66,17 @@ interface InvoiceItem {
 })
 export class InvoiceDecisionComponent {
   @ViewChild('approveModal') approveModal: TemplateRef<any>;
-  loginData = { data: { userActivity: 'admin' } }; // Example login data
-  approveForm: FormGroup;
-  submit = false;
+  loginData :any; // Example login data
+  approveForm!: FormGroup;
+  submit: boolean = false;
   invoiceItem: any;
+  selectedAction: string = '';
+
+  selectedInvoice: any;
  
 
     allInvoiceList: any;
-    selectedInvoice: any;
+   
   remark: string = '';
     invoice = {
       invoiceNumber: 'INV-5678',
@@ -87,10 +90,13 @@ export class InvoiceDecisionComponent {
  
  
     constructor(private fb: FormBuilder,private service: GeneralserviceService, private spinner: NgxSpinnerService,private modalService: NgbModal) {
-      this.approveForm = this.fb.group({
-        remark: ['', Validators.required] // Ensure remark is part of the form group
-      });
+      this.createForm();
     
+    }
+    createForm() {
+      this.approveForm = this.fb.group({
+        remark: [''] // Default empty, validation added dynamically
+      });
     }
     get f() {
       return this.approveForm.controls;
@@ -113,32 +119,105 @@ export class InvoiceDecisionComponent {
         this.spinner.hide()
       })
     }
-    ApproveOrReject(invoice: any,decision) {
-      this.decisionTaking = null
-      this.decisionTaking = decision
-      if(decision == 'Approved'){
-        this.invoice = invoice;
-        this.modalService.open(this.approveModal,{size:'sm'});
-      }else if(decision == 'Rejected'){
-        this.invoice = invoice;
-        this.modalService.open(this.approveModal,{size:'sm'});
-      }
+    // ApproveOrReject(invoice: any,decision) {
+    //   this.decisionTaking = null
+    //   this.decisionTaking = decision
+    //   if(decision == 'Approved'){
+    //     this.invoice = invoice;
+    //     this.modalService.open(this.approveModal,{size:'sm'});
+    //   }else if(decision == 'Rejected'){
+    //     this.invoice = invoice;
+    //     this.modalService.open(this.approveModal,{size:'sm'});
+    //   }
       
+    // }
+  
+    openModal(action: string, invoice: any) {
+      this.selectedAction = action;
+      this.selectedInvoice = invoice;
+  
+      // Reset form and validation
+      this.approveForm.reset();
+      this.submit = false;
+  
+      if (action === 'Rejected') {
+        this.approveForm.get('remark')?.setValidators([Validators.required]);
+      } else {
+        this.approveForm.get('remark')?.clearValidators();
+      }
+      this.approveForm.get('remark')?.updateValueAndValidity();
+  
+      this.modalService.open(this.approveModal,{size:'sm'})
     }
   
     approveButton() {
+      if (this.selectedAction === 'Approved') {
+        this.ApproveOrReject(this.selectedInvoice, 'Approved');
+        this.modalService.dismissAll();
+      }
+    }
+  
+    rejectButton() {
       this.submit = true;
+  
       if (this.approveForm.invalid) {
         return;
       }
   
-      const remark = this.f['remark'].value;
-      console.log('Approval Remark:', remark);
-  
-      // Perform your approval logic here (e.g., call API, update data, etc.)
-      
-      this.modalService.dismissAll(); // Close modal after submission
+      this.ApproveOrReject(this.selectedInvoice, 'Rejected', this.approveForm.value.remark);
+      this.modalService.dismissAll();
     }
+  
+    ApproveOrReject(invoice: any, status: string, remark?: string): void {
+      console.log(`Invoice: ${invoice}, Status: ${status}, Remark: ${''}`);
+    
+      const reqBody = {
+        invoiceReferenceNo: invoice.invoiceReferenceNo, // Access invoice ID
+        status: status, // Set status dynamically
+        reason: this.approveForm.value.remark, // Default to 'N/A' if no remark is provided
+        invoiceApprovedOrRejectedByUser:this.loginData?.data.userName
+
+      };
+    
+      console.log('Payload sent to backend:', reqBody);
+        this.service.invoiceApprovedOrRejected(reqBody).subscribe(
+        (response: any) => {
+            console.log('Response:', response); // Log the backend response
+
+            // Ensure response structure is valid
+            if (response && response.data && response.data.length > 0) {
+                const resp = response.data[0]; // Extract first item in response data
+                console.log('Message:', resp);
+
+                if (resp.STATUS === 'TRUE') {
+                    // Show success modal
+                    Swal.fire({
+                        text: resp.message || `${status} successfully!`,
+                        icon: 'success',
+                        confirmButtonText: 'OK',
+                    });
+                } else {
+                    // Show error modal
+                    Swal.fire('Error!', resp.message || 'The backend did not confirm the approval.', 'error');
+                }
+            } else {
+                // Handle cases where response structure is unexpected
+                Swal.fire('Error!', 'Unexpected response format. Please check logs.', 'error');
+                console.error('Unexpected API response:', response);
+            }
+        },
+        (error) => {
+            // Handle API errors
+            Swal.fire('Error!', 'Failed to update status. Please try again.', 'error');
+            console.error('Approval error:', error);
+        }
+    );
+
+    
+      
+    };
+    
+    
   
    
     
