@@ -35,15 +35,17 @@
                             <td>{{data.userLastName}}</td>
                             <td>{{data.userEmail}}</td>
                             <td>{{data.userContact}}</td>
-                                <td>
-        {{ data.userStatus ? 'Active' : 'Inactive' }}
-    </td>
-
                             <td>
-                              <button class="btn btn-sm btn-warning" (click)="openEditModal(data,editUserTemplate)">
-                                <i class="fa fa-edit"></i>
-                              </button>
+                              {{ data.userStatus ? 'Active' : 'Inactive' }}
                             </td>
+
+                           <td class="text-center">
+                            <button class="btn btnEdit btn-raised" 
+                            (click)="openEditModal(data, editUserTemplate)" 
+                            [disabled]='loginData?.data.userActivity == "user"'>
+                            <i class="fa fa-edit"></i>
+                            </button>
+                           </td>
                             
                         </tr>
                        

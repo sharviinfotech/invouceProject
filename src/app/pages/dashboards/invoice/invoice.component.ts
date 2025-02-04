@@ -191,7 +191,7 @@ export class InvoiceComponent implements OnInit {
           amount: 0
         },
         {
-          description: 'SGST/UDST @ 9%',
+          description: 'SGST @ 9%',
           percentage: 9,
           amount: 0
         },
@@ -207,6 +207,14 @@ export class InvoiceComponent implements OnInit {
         }
       ];
     }
+
+    console.log("this.activeTab ",this.activeTab ,this.subtotal)
+   if( this.activeTab == 'Edit' && this.subtotal){
+    console.log("if state")
+    this.calculateTotals()
+   } else{
+    console.log("else state")
+   }
   }
 
 

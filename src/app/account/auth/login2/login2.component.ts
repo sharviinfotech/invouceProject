@@ -25,9 +25,14 @@ import { ToastrService } from 'ngx-toastr';
 export class Login2Component implements OnInit {
   fieldTextType !: boolean;
   images = [
-    'assets/images/worldMapImage.png',
-    'assets/images/AircraftFlight.png',
+    // 'assets/images/worldMapImage.png',
+    // 'assets/images/AircraftFlight.png',
+    'assets/images/boardingpass.jpg',
+    'assets/images/flightparking.jpg',
+    'assets/images/flightHalf.jpg',
+    // 'assets/images/airportfromflightstepdown.png',
     'assets/images/aircraftinsky.png',
+
 
   ];
   currentIndex = 0;
@@ -44,8 +49,8 @@ export class Login2Component implements OnInit {
   ngOnInit(): void {
     document.body.classList.add("auth-body-bg");
     this.loginForm = this.formBuilder.group({
-      email: ['admin@themesbrand.com', [Validators.required]],
-      password: ['123456', [Validators.required]],
+      userName: ['', [Validators.required]],
+      password: ['', [Validators.required]],
     });
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
     setInterval(() => {
@@ -68,29 +73,35 @@ export class Login2Component implements OnInit {
    * Form submit
    */
   onSubmit() {
-    this.submitted = true;
 
-    const email = this.f['email'].value; // Get the username from the form
-    const password = this.f['password'].value; // Get the password from the form
+    if(this.loginForm.invalid == true){
+      this.submitted = true;
+    }else{
+      const userName = this.f['userName'].value; // Get the username from the form
+      const password = this.f['password'].value; // Get the password from the form
+  
+      // Login Api
+      // this.store.dispatch(login({ userName: userName, password: password }));
+  
+      this.login(userName, password)
+    }
+    
 
-    // Login Api
-    // this.store.dispatch(login({ email: email, password: password }));
-
-    this.login(email, password)
+   
   }
   toggleFieldTextType() {
     this.fieldTextType = !this.fieldTextType;
   }
-  //  login(email: string, password: string){
+  //  login(userName: string, password: string){
   //       const loginPayload = {
-  //         userName: email,
+  //         userName: userName,
   //         userPassword: password
   //       };
   //     this.service.submitLogin(loginPayload).subscribe((response:any)=>{
   //       if (response.status === 200 && response.isValid) {
   //         localStorage.setItem('token', response.token); // Store token in localStorage
   //         // Login Api
-  //         this.store.dispatch(login({ email: email, password: password }));
+  //         this.store.dispatch(login({ userName: userName, password: password }));
   //         Swal.fire({
   //           // title: 'question',
   //           text: response.message,
@@ -100,7 +111,7 @@ export class Login2Component implements OnInit {
   //         }).then((result) => {
 
   //         });
-  //         this.store.dispatch(login({ email: email, password: password }));
+  //         this.store.dispatch(login({ userName: userName, password: password }));
   //         // return response;
   //       } else {
   //         console.log("response",response)
@@ -125,7 +136,7 @@ export class Login2Component implements OnInit {
   //       //     if (response.status === 200 && response.isValid) {
   //       //       localStorage.setItem('token', response.token); // Store token in localStorage
   //       //       // Login Api
-  //       //       this.store.dispatch(login({ email: email, password: password }));
+  //       //       this.store.dispatch(login({ userName: userName, password: password }));
   //       //       // return response;
   //       //     } else {
   //       //       console.log("response",response)
@@ -137,24 +148,24 @@ export class Login2Component implements OnInit {
   //     }
 
 
-  login(email, password) {
+  login(userName, password) {
     this.submitted = true;
 
     if (this.loginForm.invalid) {
       return;
     }
     const loginPayload = {
-      userName: email,
+      userName: userName,
       userPassword: password
     };
 
-    // this.store.dispatch(login({ email: userID, password: password }));
+    // this.store.dispatch(login({ userName: userID, password: password }));
 
     this.service.submitLogin(loginPayload).subscribe((res: any) => {
         const response = res
         console.log("this.response", response)
         // if (this.response.MSGTXT) {
-        if (response.status === 200 && response.isValid) {
+        if (response.status === 200 && response.data.isValid) {
           const dummy = "Welcome to GRN"
           // localStorage.setItem('currentUser', JSON.stringify(this.response.MSGTXT || { token: this.response.token }));
           localStorage.setItem('currentUser', JSON.stringify(response || { token: response.token }));
@@ -162,14 +173,23 @@ export class Login2Component implements OnInit {
           this.router.navigate([returnUrl], { skipLocationChange: true });
           this.service.setLoginResponse(response);
           // Swal.fire("",this.response.MSGTXT, "success")
-          Swal.fire('', `Welcome ${response.message} `, 'success');
+          Swal.fire(response.message, `Welcome ${response.data.userName} `, 'success');
           // Swal.fire("",dummy, "success")
-        } else {
+          this.submitted = false;
+        } 
+        else if (response.status === 200 && response.data.isValid == false){
+          Swal.fire('Login Failed', `${response.message} `, 'error');
+          // Swal.fire("",dummy, "success")
+          this.submitted = false;
+        }
+        else {
           Swal.fire("", "Invalid login credentials!", "error")
           // this.error = 'Invalid login credentials!';
         }
     },error=>{
-     console.log("error",error)
+      console.log("error",error)
+      this.toaster.error(error)
+     
     });
   }
 

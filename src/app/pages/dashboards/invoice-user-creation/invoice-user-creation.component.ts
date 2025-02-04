@@ -31,6 +31,7 @@ confirmFieldTextType: boolean = false;
   userList: any[];
   submit: boolean=false;
   userUniqueId: any;
+  loginData: any;
   
  
 
@@ -73,6 +74,7 @@ confirmFieldTextType: boolean = false;
     // this.loadDummyUsers();
     this.getInvoiceUserDetails(); // Fetch users from API
     this.getAllUserList()
+    this.loginData = this.service.getLoginResponse()
   }
   editUser(selectedUser: any, content: any) {
     console.log('Selected User:', selectedUser); // Debugging

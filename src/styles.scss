@@ -702,6 +702,19 @@ input:focus {
   background-color: #218838;
   color: white !important;
 }
+.btnEdit{
+  padding: 10px 10px;
+  background: #057e1b ;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  cursor: pointer;
+  color: white;
+}
+
+.btnEdit:hover {
+  background-color: #218838;
+  color: white !important;
+}
 .btnBack{
   padding: 10px 10px;
   background: #433eb1 ;

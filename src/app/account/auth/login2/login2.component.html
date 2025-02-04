@@ -1,24 +1,28 @@
 <div class="container-fluid p-0">
-    <div class="row p-1">
-        <div class="col-xl-9 imageBorder">
-            
+    <div class="row m-0 vh-100">
+        <!-- Image Section -->
+        <div class="col-md-8 col-lg-9 p-0 ">
+            <div class="auth-full-bg">
                 <img [src]="images[currentIndex]" alt="Image Slide" class="background-img">
-
-          
+            </div>
         </div>
+
         <!-- Login Form Section -->
-        <div class="col-xl-3 imageBorder">
-            <div class="auth-full-page-content p-md-5 p-4">
+        <div class="col-md-4 col-lg-3 d-flex align-items-center justify-content-center ">
+            <div class="auth-full-page-content  p-4">
                 <div class="w-100">
                     <div class="d-flex flex-column h-100">
                         <div class="my-auto">
                             <div class="mt-4">
                                 <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
                                     <div class="mb-3">
-                                        <label for="email">User Name</label>
-                                        <input type="text" class="form-control"  formControlName="email"
-                                            placeholder="Enter User Name">
+                                        <label for="userName">User Name</label>
+                                        <input type="text" class="form-control" formControlName="userName" placeholder="Enter User Name">
+                                        <div class="text-danger" *ngIf="submitted && f['userName'].errors">
+                                            User Name is required.
+                                        </div>
                                     </div>
+
                                     <div class="mb-3">
                                         <label for="password">Password</label>
                                         <div class="input-group auth-pass-inputgroup">
@@ -30,6 +34,9 @@
                                                     [ngClass]="{'mdi-eye-off-outline': !fieldTextType, 'mdi-eye-outline': fieldTextType}">
                                                 </i>
                                             </button>
+                                        </div>
+                                        <div class="text-danger" *ngIf="submitted && f['password'].errors">
+                                            Password is required.
                                         </div>
                                     </div>
                                     <div class="mt-3 d-grid">
@@ -44,3 +51,6 @@
                     </div>
                 </div>
             </div>
+        </div>
+    </div>  
+</div>

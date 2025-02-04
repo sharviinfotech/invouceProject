@@ -14,6 +14,7 @@ import { getLayoutMode } from 'src/app/store/layouts/layout.selector';
 import { RootReducerState } from 'src/app/store';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { SimplebarAngularModule } from 'simplebar-angular';
+import { GeneralserviceService } from 'src/app/generalservice.service';
 
 @Component({
   selector: 'app-topbar',
@@ -36,13 +37,14 @@ export class TopbarComponent implements OnInit {
   theme: any;
   layout: string;
   dataLayout$: Observable<string>;
+  loginData: any;
   // Define layoutMode as a property
 
   constructor(@Inject(DOCUMENT) private document: any, private router: Router, private authService: AuthenticationService,
     private authFackservice: AuthfakeauthenticationService,
     public languageService: LanguageService,
     public translate: TranslateService,
-    public _cookiesService: CookieService, public store: Store<RootReducerState>) {
+    public _cookiesService: CookieService, public store: Store<RootReducerState>,private service:GeneralserviceService) {
 
   }
 
@@ -75,6 +77,13 @@ export class TopbarComponent implements OnInit {
     } else {
       this.flagvalue = val.map(element => element.flag);
     }
+
+   this.loginData= this.service.getLoginResponse()
+   console.log("this.loginData",this.loginData);
+
+   if(this.loginData == undefined){
+    this.router.navigate(['/auth/login-2'],);
+   }
   }
 
   setLanguage(text: string, lang: string, flag: string) {
@@ -108,7 +117,9 @@ export class TopbarComponent implements OnInit {
     } else {
       this.authFackservice.logout();
     }
-    this.router.navigate(['/auth/login']);
+    // this.router.navigate(['/auth/login']);
+    this.router.navigate(['/auth/login-2'],);
+
   }
 
   /**
