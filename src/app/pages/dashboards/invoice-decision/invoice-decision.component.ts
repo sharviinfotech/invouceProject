@@ -185,25 +185,20 @@ export class InvoiceDecisionComponent {
             console.log('Response:', response); // Log the backend response
 
             // Ensure response structure is valid
-            if (response && response.data && response.data.length > 0) {
-                const resp = response.data[0]; // Extract first item in response data
-                console.log('Message:', resp);
+            if (response.status == 200) {
 
-                if (resp.STATUS === 'TRUE') {
-                    // Show success modal
-                    Swal.fire({
-                        text: resp.message || `${status} successfully!`,
-                        icon: 'success',
-                        confirmButtonText: 'OK',
-                    });
-                } else {
-                    // Show error modal
-                    Swal.fire('Error!', resp.message || 'The backend did not confirm the approval.', 'error');
-                }
+              Swal.fire({
+                text: response.message,
+                icon: 'success',
+                confirmButtonText: 'OK',
+            });
+            this.getAllInvoice()
             } else {
-                // Handle cases where response structure is unexpected
-                Swal.fire('Error!', 'Unexpected response format. Please check logs.', 'error');
-                console.error('Unexpected API response:', response);
+              Swal.fire({
+                text: response.message,
+                icon: 'error',
+                confirmButtonText: 'OK',
+            });
             }
         },
         (error) => {

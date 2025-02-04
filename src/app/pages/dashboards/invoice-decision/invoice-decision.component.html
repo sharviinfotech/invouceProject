@@ -1,94 +1,101 @@
 <div class="card">
     <div class="card-header" style="text-align: center;">
-      Invoice Decision
+        Invoice Decision
     </div>
     <div class="card-body">
-      <div class="tableFixHeadR">
-        <table class="table table-bordered table-stripped">
-          <thead class="thead-light">
-            <tr>
-              <th class="text-nowrap">Invoice Number</th>
-              <th class="text-nowrap">Invoice Date</th>
-              <th class="text-nowrap">Customer Name</th>
-              <th class="text-nowrap">Type Of Aircraft</th>
-              <th class="text-nowrap">City</th>
-              <th class="text-nowrap">Destination</th>
-              <th class="text-nowrap">Date Of Journey</th>
-              <th class="text-nowrap">Total Amount</th>
-              <th clas="text-nowrap" *ngIf="loginData?.data.userActivity == 'user'">Status</th>
-              <th class="text-nowrap" *ngIf="loginData?.data.userActivity != 'user'">Actions</th> <!-- New column for buttons -->
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let invoice of allInvoiceList" 
-            >
-              <td>
-                <span
-                [ngClass]=
-                  >
-                  {{ invoice.invoiceUniqueNumber }}
-                </span>
-              </td>
-              <td>{{ invoice.header.ProformaInvoiceDate }}</td>
-              <td>{{ invoice.header.ProformaCustomerName }}</td>
-              <td>{{ invoice.header.ProformaTypeOfAircraft }}</td>
-              <td>{{ invoice.header.ProformaCity }}</td>
-              <td>{{ invoice.header.BookingSector }}</td>
-              <td>{{ invoice.header.BookingDateOfJourny }}</td>
-              <td>{{ invoice.grandTotal | number: '1.2-2'}}</td>
-              <td  *ngIf="loginData?.data.userActivity == 'user'"
-              [ngClass]="{
+        <div class="tableFixHeadR">
+            <table class="table table-bordered table-stripped">
+                <thead class="thead-light">
+                    <tr>
+                        <th class="text-nowrap">Invoice Number</th>
+                        <th class="text-nowrap">Invoice Date</th>
+                        <th class="text-nowrap">Customer Name</th>
+                        <th class="text-nowrap">Type Of Aircraft</th>
+                        <th class="text-nowrap">City</th>
+                        <th class="text-nowrap">Destination</th>
+                        <th class="text-nowrap">Date Of Journey</th>
+                        <th class="text-nowrap">Total Amount</th>
+                        <th clas="text-nowrap" *ngIf="loginData?.data.userActivity == 'user'">Status</th>
+                        <th class="text-nowrap" *ngIf="loginData?.data.userActivity != 'user'">Actions</th>
+                        <!-- New column for buttons -->
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let invoice of allInvoiceList">
+                        <td>
+                            <span [ngClass]=>
+                                {{ invoice.invoiceUniqueNumber }}
+                            </span>
+                        </td>
+                        <td>{{ invoice.header.ProformaInvoiceDate }}</td>
+                        <td>{{ invoice.header.ProformaCustomerName }}</td>
+                        <td>{{ invoice.header.ProformaTypeOfAircraft }}</td>
+                        <td>{{ invoice.header.ProformaCity }}</td>
+                        <td>{{ invoice.header.BookingSector }}</td>
+                        <td>{{ invoice.header.BookingDateOfJourny }}</td>
+                        <td>{{ invoice.grandTotal | number: '1.2-2'}}</td>
+                        <td *ngIf="loginData?.data.userActivity == 'user'" [ngClass]="{
                   'text-green-600': invoice.status === 'Approved',
                   'text-orange-600': invoice.status === 'Pending',
                   'text-red-600': invoice.status === 'Rejected'
                 }">
-                {{ invoice.status }}
-              </td>
-              <!-- New Actions Column -->
-              <td [class.selected]="invoiceItem === invoice" *ngIf="loginData?.data.userActivity != 'user'">
-                <div class="d-flex gap-2">
-                  <button class="btn btn-success btn-sm" (click)="openModal('Approved', invoice)">
-                    Approve
-                  </button>
-                  <button class="btn btn-danger btn-sm" (click)="openModal('Rejected', invoice)">
-                    Reject
-                  </button>
-                </div>
-              </td>
-              
-              <!-- Modal Template -->
-              <ng-template #approveModal let-c="close">
-                <div class="modal-header">
-                  <h5 class="modal-title">Reason</h5>
-                </div>
-                <div class="modal-body">
-                  <form [formGroup]="approveForm">
-                    <div class="form-group">
-                      <label for="remark">Remark <span class="text-danger" *ngIf="selectedAction === 'Rejected'">*</span></label>
-                      <input 
-                        id="remark" 
-                        class="form-control form-control-sm" 
-                        formControlName="remark" 
-                        type="text" 
-                        placeholder="Enter your reason here" 
-                      />
-                      <div class="text-danger" *ngIf="submit && f['remark'].errors && selectedAction === 'Rejected'">
-                        Remark is required.
-                      </div>
-                    </div>
-                  </form>
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-primary" *ngIf="selectedAction === 'Approved'" (click)="approveButton()">Approve</button>
-                  <button type="button" class="btn btn-danger" *ngIf="selectedAction === 'Rejected'" (click)="rejectButton()">Reject</button>
-                  <button type="button" class="btn btn-secondary" (click)="c('Close click')">Close</button>
-                </div>
-              </ng-template>
-              
-               
-            </tr>
-          </tbody>
-        </table>
-      </div>
+                            {{ invoice.status }}
+                        </td>
+                        <!-- New Actions Column -->
+                        <td [class.selected]="invoiceItem === invoice" [ngClass]="{
+      'text-green-600': invoice.status === 'Approved',
+      'text-orange-600': invoice.status === 'Pending',
+      'text-red-600': invoice.status === 'Rejected'
+    }" *ngIf="loginData?.data.userActivity != 'user'">
+
+                            <div *ngIf="invoice.status === 'Pending'" class="d-flex gap-2">
+                                <button class="btn btn-success btn-sm" (click)="openModal('Approved', invoice)">
+                                    Approve
+                                </button>
+                                <button class="btn btn-danger btn-sm" (click)="openModal('Rejected', invoice)">
+                                    Reject
+                                </button>
+                            </div>
+
+                            <span *ngIf="invoice.status !== 'Pending'">
+                                {{ invoice.status }}
+                            </span>
+
+                        </td>
+
+
+                        <!-- Modal Template -->
+
+
+
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
-  </div>
+</div>
+<ng-template #approveModal let-c="close">
+    <div class="modal-header">
+        <h5 class="modal-title">Reason</h5>
+    </div>
+    <div class="modal-body">
+        <form [formGroup]="approveForm">
+            <div class="form-group">
+                <label for="remark">Remark <span class="text-danger"
+                        *ngIf="selectedAction === 'Rejected'">*</span></label>
+                <input id="remark" class="form-control form-control-sm" formControlName="remark" type="text"
+                    placeholder="Enter your reason here" />
+                <div class="text-danger" *ngIf="submit && f['remark'].errors && selectedAction === 'Rejected'">
+                    Remark is required.
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-primary" *ngIf="selectedAction === 'Approved'"
+            (click)="approveButton()">Approve</button>
+        <button type="button" class="btn btn-danger" *ngIf="selectedAction === 'Rejected'"
+            (click)="rejectButton()">Reject</button>
+        <button type="button" class="btn btn-secondary" (click)="c('Close click')">Close</button>
+    </div>
+</ng-template>
