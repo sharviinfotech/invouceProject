@@ -387,6 +387,13 @@ spinnerHideMethod(){
     this.amountInWords = this.selectedInvoice.amountInWords
     this.logoUrl = this.selectedInvoice.header.invoiceImage
     this.InvoiceLogo = this.selectedInvoice.header.invoiceHeader
+if(this.logoUrl == ''|| this.logoUrl == null){
+  this.logoUrl = this.imageService.getBase64FlightLogo(); 
+}
+if(this.InvoiceLogo== ''|| this.InvoiceLogo == null){
+  this.InvoiceLogo = this.imageService.getBase64WorldLogo(); 
+
+}
     console.log("this.selectedInvoice.header.invoiceUniqueNumber", this.selectedInvoice.invoiceUniqueNumber)
     console.log("this.newInvoiceCreation", this.newInvoiceCreation.value.ProformaInvoiceNumber)
   }
@@ -629,7 +636,8 @@ spinnerHideMethod(){
         "subtotal": this.subtotal,
         "grandTotal": this.grandTotal,
         "amountInWords": this.amountInWords,
-        "reason":''
+        "reason":'',
+        "invoiceApprovedOrRejectedByUser":""
         // "bankDetails":{
         //     "accountName":this.newInvoiceCreation.value.accountName,
         //     "bank":this.newInvoiceCreation.value.bank,
@@ -740,7 +748,8 @@ spinnerHideMethod(){
         "subtotal": this.subtotal,
         "grandTotal": this.grandTotal,
         "amountInWords": this.amountInWords,
-        "reason":''
+        "reason":'',
+        "invoiceApprovedOrRejectedByUser":""
         // "bankDetails":{
         //     "accountName":this.newInvoiceCreation.value.accountName,
         //     "bank":this.newInvoiceCreation.value.bank,
