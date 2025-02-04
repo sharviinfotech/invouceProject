@@ -629,6 +629,7 @@ spinnerHideMethod(){
         "subtotal": this.subtotal,
         "grandTotal": this.grandTotal,
         "amountInWords": this.amountInWords,
+        "reason":''
         // "bankDetails":{
         //     "accountName":this.newInvoiceCreation.value.accountName,
         //     "bank":this.newInvoiceCreation.value.bank,
@@ -739,6 +740,7 @@ spinnerHideMethod(){
         "subtotal": this.subtotal,
         "grandTotal": this.grandTotal,
         "amountInWords": this.amountInWords,
+        "reason":''
         // "bankDetails":{
         //     "accountName":this.newInvoiceCreation.value.accountName,
         //     "bank":this.newInvoiceCreation.value.bank,
