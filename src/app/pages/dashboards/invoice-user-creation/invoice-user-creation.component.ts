@@ -86,6 +86,7 @@ confirmFieldTextType: boolean = false;
   }
 
   openEditModal(user: any, editUserTemplate: TemplateRef<any>): void {
+    this.submit = false
     console.log('user',user);
     this.userUniqueId =null
     const selectedUser = user;
@@ -244,9 +245,10 @@ confirmFieldTextType: boolean = false;
             }
           });
         }
-  
+        this.userEditForm.reset()
         this.getAllUserList();
-        this.submitted = true;
+        
+        this.submitted = false;
       }, error => {
         this.toastr.error(error);
         console.log("error", error);
@@ -296,6 +298,7 @@ confirmFieldTextType: boolean = false;
         this.toastr.success(res.message);
       }else{
          // Display success toast
+         this.userCreationForm.reset()
       this.modalService.dismissAll(modal);
       Swal.fire({
         title: '',

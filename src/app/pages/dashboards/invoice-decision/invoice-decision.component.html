@@ -57,7 +57,7 @@
                                 </button>
                             </div>
 
-                            <span *ngIf="invoice.status !== 'Pending'">
+                            <span *ngIf="invoice.status !== 'Pending'" style="text-decoration: none; cursor: pointer;" (click)="afterDecisionOpen(invoice)">
                                 {{ invoice.status }}
                             </span>
 
@@ -98,4 +98,33 @@
             (click)="rejectButton()">Reject</button>
         <button type="button" class="btn btn-secondary" (click)="c('Close click')">Close</button>
     </div>
+</ng-template>
+
+<ng-template #afterDecision let-c="close">
+    <div class="modal-header">
+        <h5 class="modal-title">Reason Details</h5>
+    </div>
+    <div class="modal-body">
+        
+        <form [formGroup]="approveForm">
+            <div class="row">  <!-- Add a row to align fields in one line -->
+                <div class="col-lg-6">
+                  <div class="form-group">
+                    <label for="remark">Remark </label>
+                    <input id="remark" class="form-control form-control-sm" formControlName="remark" type="text"
+                    placeholder="Enter your reason here" readonly />
+                  </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="form-group">
+                      <label for="remark">Remark </label>
+                      <input id="remark" class="form-control form-control-sm" formControlName="invoiceApprovedOrRejectedByUser" type="text"
+                            placeholder="Enter your reason here" readonly />
+                    </div>
+                  </div>
+            </div>
+            
+        </form>
+    </div>
+    
 </ng-template>

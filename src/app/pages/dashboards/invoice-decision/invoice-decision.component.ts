@@ -66,6 +66,7 @@ interface InvoiceItem {
 })
 export class InvoiceDecisionComponent {
   @ViewChild('approveModal') approveModal: TemplateRef<any>;
+  @ViewChild('afterDecision') afterDecision: TemplateRef<any>;
   loginData :any; // Example login data
   approveForm!: FormGroup;
   submit: boolean = false;
@@ -95,7 +96,8 @@ export class InvoiceDecisionComponent {
     }
     createForm() {
       this.approveForm = this.fb.group({
-        remark: [''] // Default empty, validation added dynamically
+        remark: [''], // Default empty, validation added dynamically
+        invoiceApprovedOrRejectedByUser:['']
       });
     }
     get f() {
@@ -131,7 +133,7 @@ export class InvoiceDecisionComponent {
     //   }
       
     // }
-  
+    
     openModal(action: string, invoice: any) {
       this.selectedAction = action;
       this.selectedInvoice = invoice;
@@ -149,14 +151,22 @@ export class InvoiceDecisionComponent {
   
       this.modalService.open(this.approveModal,{size:'sm'})
     }
-  
+    afterDecisionOpen(invoice){
+      this.approveForm.reset()
+      console.log("invoice",invoice);
+      this.approveForm.patchValue({
+        remark:invoice.reason,
+        invoiceApprovedOrRejectedByUser:invoice.invoiceApprovedOrRejectedByUser
+      })
+      this.modalService.open(this.afterDecision,{size:'md'})
+    }
     approveButton() {
       if (this.selectedAction === 'Approved') {
         this.ApproveOrReject(this.selectedInvoice, 'Approved');
         this.modalService.dismissAll();
       }
     }
-  
+    
     rejectButton() {
       this.submit = true;
   
