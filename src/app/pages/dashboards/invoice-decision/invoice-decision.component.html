@@ -1,6 +1,6 @@
 <div class="card">
     <div class="card-header" style="text-align: center;">
-      All Invoices
+      Invoice Decision
     </div>
     <div class="card-body">
       <div class="tableFixHeadR">
@@ -15,20 +15,16 @@
               <th class="text-nowrap">Destination</th>
               <th class="text-nowrap">Date Of Journey</th>
               <th class="text-nowrap">Total Amount</th>
-              <th class="text-nowrap">Status</th>
-              <th class="text-nowrap">Actions</th> <!-- New column for buttons -->
+              <th clas="text-nowrap" *ngIf="loginData?.data.userActivity == 'user'">Status</th>
+              <th class="text-nowrap" *ngIf="loginData?.data.userActivity != 'user'">Actions</th> <!-- New column for buttons -->
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let invoice of allInvoiceList" (click)="selectInvoice(invoice)"
-            [class.selected]="invoiceItem === invoice">
+            <tr *ngFor="let invoice of allInvoiceList" 
+            >
               <td>
                 <span
-                [ngClass]="{
-                  'text-green-600 underline cursor-pointer': invoice.status === 'Approved',
-                  'text-orange-600': invoice.status === 'Pending',
-                  'text-red-600': invoice.status === 'Rejected'
-                }"
+                [ngClass]=
                   >
                   {{ invoice.invoiceUniqueNumber }}
                 </span>
@@ -40,7 +36,8 @@
               <td>{{ invoice.header.BookingSector }}</td>
               <td>{{ invoice.header.BookingDateOfJourny }}</td>
               <td>{{ invoice.grandTotal | number: '1.2-2'}}</td>
-              <td [ngClass]="{
+              <td  *ngIf="loginData?.data.userActivity == 'user'"
+              [ngClass]="{
                   'text-green-600': invoice.status === 'Approved',
                   'text-orange-600': invoice.status === 'Pending',
                   'text-red-600': invoice.status === 'Rejected'
@@ -48,16 +45,46 @@
                 {{ invoice.status }}
               </td>
               <!-- New Actions Column -->
-              <td>
-                <button *ngIf="invoice.status === 'Pending'" class="btn btn-success btn-sm" 
-                        (click)="updateStatus(invoice, 'Approved')">
-                  Approve
-                </button>
-                <button *ngIf="invoice.status === 'Pending'" class="btn btn-danger btn-sm" 
-                        (click)="updateStatus(invoice, 'Rejected')">
-                  Reject
-                </button>
+              <td [class.selected]="invoiceItem === invoice" *ngIf="loginData?.data.userActivity != 'user'">
+                <div class="d-flex gap-2">
+                  <button class="btn btn-success btn-sm" (click)="ApproveOrReject(invoice,'Approved')">
+                    Approve
+                  </button>
+                  <button class="btn btn-danger btn-sm" (click)="ApproveOrReject(invoice,'Rejected')">
+                    Reject
+                  </button>
+                </div>
               </td>
+              
+              <ng-template #approveModal let-c="close">
+                <div class="modal-header">
+                  <h5 class="modal-title">Reason</h5>
+                </div>
+                <div class="modal-body">
+                    <form [formGroup]="approveForm">
+                        <div class="form-group">
+                          <label for="remark">Remark <span class="text-danger">*</span></label>
+                          <input 
+                            id="remark" 
+                            class="form-control form-control-sm" 
+                            formControlName="remark" 
+                            type="text" 
+                            placeholder="Enter your reason here" 
+                          />
+                          <div class="text-danger" *ngIf="submit && f['remark'].errors">
+                            Remark is required.
+                          </div>
+                        </div>
+                      </form>
+                      
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-primary" (click)="approveButton()">Approve</button>
+                  <button type="button" class="btn btn-primary" (click)="rejectButton()">Reject</button>
+                  <button type="button" class="btn btn-secondary" (click)="c('Close click')">Close</button>
+                </div>
+              </ng-template>
+               
             </tr>
           </tbody>
         </table>

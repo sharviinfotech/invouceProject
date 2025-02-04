@@ -23,7 +23,7 @@
                             <th>Email</th>
                             <th>Contact</th>
                             <th>Status</th>
-                            <th>Action</th>
+                            <th *ngIf='loginData?.data.userActivity != "user"'>Action</th>
                             
                         </tr>
                     </thead>
@@ -39,10 +39,10 @@
                               {{ data.userStatus ? 'Active' : 'Inactive' }}
                             </td>
 
-                           <td class="text-center">
+                           <td class="text-center" *ngIf='loginData?.data.userActivity != "user"'>
                             <button class="btn btnEdit btn-raised" 
                             (click)="openEditModal(data, editUserTemplate)" 
-                            [disabled]='loginData?.data.userActivity == "user"'>
+                            >
                             <i class="fa fa-edit"></i>
                             </button>
                            </td>
