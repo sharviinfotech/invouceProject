@@ -8,6 +8,7 @@ import { InvoiceReportsComponent } from './invoice-reports/invoice-reports.compo
 import { InvoiceUserCreationComponent } from './invoice-user-creation/invoice-user-creation.component';
 import { CommonModule } from '@angular/common'; 
 import { ReactiveFormsModule } from '@angular/forms';
+import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,9 @@ import { ReactiveFormsModule } from '@angular/forms';
   imports: [
     DashboardsRoutingModule,
     CommonModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    BsDatepickerModule.forRoot(),  // Ensure it's in the imports array
+
   ],
   providers: [BsDropdownConfig],
 })
