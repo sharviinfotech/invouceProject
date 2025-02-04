@@ -1,8 +1,48 @@
 <div class="card">
-  <div class="card-header" style="text-align: center;">
-    All Invoices
+  <div class="card-header text-center">
+    <h5>All Invoices</h5>
   </div>
   <div class="card-body">
+    <div class="row">  <!-- Add a row to align fields in one line -->
+      <div class="col-lg-4">
+        <div class="form-group">
+          <label>From Date</label>
+          <input
+            type="text"
+            class="form-control form-control-sm"
+            [bsConfig]="bsConfig"
+            bsDatepicker
+          />
+        </div>
+      </div>
+
+      <div class="col-lg-4">
+        <div class="form-group">
+          <label>To Date</label>
+          <input
+            type="text"
+            class="form-control form-control-sm"
+            [bsConfig]="bsConfig"
+            bsDatepicker
+          />
+        </div>
+      </div>
+      <div class="col-lg-4">
+        <div class="form-group">
+          <label>Status</label>
+          <select class="form-control form-control-sm">
+            <option value="approved">Select</option>
+            <option value="approved">Approved</option>
+            <option value="rejected">Rejected</option>
+            <option value="pending">Pending</option>
+          </select>
+        </div>
+      </div>
+    </div>
+ 
+
+
+    
     <!-- <div class="row">
       <div class="col-lg-4">
         <div class="form-group">

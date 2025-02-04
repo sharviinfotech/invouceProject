@@ -4,6 +4,8 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { GeneralserviceService } from 'src/app/generalservice.service';
 import { NgxPrintModule } from 'ngx-print';
 import Swal from 'sweetalert2';
+import { BsDatepickerConfig, BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+
 import { Component, ElementRef, ViewChild, ViewEncapsulation } from '@angular/core';
 
 interface ChargeItem {
@@ -59,13 +61,14 @@ interface InvoiceItem {
   selector: 'app-invoice-reports',
   templateUrl: './invoice-reports.component.html',
   styleUrl: './invoice-reports.component.css',
-  imports: [CommonModule, FormsModule, NgxPrintModule],
+  imports: [CommonModule, FormsModule, NgxPrintModule, BsDatepickerModule],
   standalone: true,
   // encapsulation: ViewEncapsulation.None
 
 })
 export class InvoiceReportsComponent {
   // @ViewChild('invoiceContent', { static: false }) invoiceContent!: ElementRef;
+  bsConfig: Partial<BsDatepickerConfig>;
   invoiceItem: any;
   allInvoiceList: any;
   invoice = {
@@ -76,8 +79,13 @@ export class InvoiceReportsComponent {
     },
     amount: '$500'
   };
+  
   constructor(private service: GeneralserviceService, private spinner: NgxSpinnerService) {
-
+    this.bsConfig = {
+      dateInputFormat: 'YYYY-MM-DD',
+      containerClass: 'theme-blue', // Optional: Customize theme
+    };
+  
 
   }
   ngOnInit(): void {
