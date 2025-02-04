@@ -51,5 +51,8 @@ getLoginResponse(){
   updateExitUser(obj,userUniqueId){
     return this.http.put(environment.baseUrl+'invoice/updateExitUser/'+userUniqueId,obj);
   }
+  invoiceApprovedOrRejected(obj){
+    return this.http.post(environment.baseUrl+'invoice/invoiceApprovedOrRejected',obj);
+  }
 
 }

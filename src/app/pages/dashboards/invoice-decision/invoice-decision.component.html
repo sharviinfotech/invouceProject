@@ -47,43 +47,44 @@
               <!-- New Actions Column -->
               <td [class.selected]="invoiceItem === invoice" *ngIf="loginData?.data.userActivity != 'user'">
                 <div class="d-flex gap-2">
-                  <button class="btn btn-success btn-sm" (click)="ApproveOrReject(invoice,'Approved')">
+                  <button class="btn btn-success btn-sm" (click)="openModal('Approved', invoice)">
                     Approve
                   </button>
-                  <button class="btn btn-danger btn-sm" (click)="ApproveOrReject(invoice,'Rejected')">
+                  <button class="btn btn-danger btn-sm" (click)="openModal('Rejected', invoice)">
                     Reject
                   </button>
                 </div>
               </td>
               
+              <!-- Modal Template -->
               <ng-template #approveModal let-c="close">
                 <div class="modal-header">
                   <h5 class="modal-title">Reason</h5>
                 </div>
                 <div class="modal-body">
-                    <form [formGroup]="approveForm">
-                        <div class="form-group">
-                          <label for="remark">Remark <span class="text-danger">*</span></label>
-                          <input 
-                            id="remark" 
-                            class="form-control form-control-sm" 
-                            formControlName="remark" 
-                            type="text" 
-                            placeholder="Enter your reason here" 
-                          />
-                          <div class="text-danger" *ngIf="submit && f['remark'].errors">
-                            Remark is required.
-                          </div>
-                        </div>
-                      </form>
-                      
+                  <form [formGroup]="approveForm">
+                    <div class="form-group">
+                      <label for="remark">Remark <span class="text-danger" *ngIf="selectedAction === 'Rejected'">*</span></label>
+                      <input 
+                        id="remark" 
+                        class="form-control form-control-sm" 
+                        formControlName="remark" 
+                        type="text" 
+                        placeholder="Enter your reason here" 
+                      />
+                      <div class="text-danger" *ngIf="submit && f['remark'].errors && selectedAction === 'Rejected'">
+                        Remark is required.
+                      </div>
+                    </div>
+                  </form>
                 </div>
                 <div class="modal-footer">
-                  <button type="button" class="btn btn-primary" (click)="approveButton()">Approve</button>
-                  <button type="button" class="btn btn-primary" (click)="rejectButton()">Reject</button>
+                  <button type="button" class="btn btn-primary" *ngIf="selectedAction === 'Approved'" (click)="approveButton()">Approve</button>
+                  <button type="button" class="btn btn-danger" *ngIf="selectedAction === 'Rejected'" (click)="rejectButton()">Reject</button>
                   <button type="button" class="btn btn-secondary" (click)="c('Close click')">Close</button>
                 </div>
               </ng-template>
+              
                
             </tr>
           </tbody>
