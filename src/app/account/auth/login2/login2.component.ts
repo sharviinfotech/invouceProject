@@ -212,8 +212,11 @@ export class Login2Component implements OnInit {
           this.router.navigate([returnUrl], { skipLocationChange: true });
           this.service.setLoginResponse(response);
           // Swal.fire("",this.response.MSGTXT, "success")
-          Swal.fire(response.message, `Welcome ${response.data.userFirstName}  ${response.data.userLastName}`, 'success');
           // Swal.fire("",dummy, "success")
+          setTimeout(() => {
+            Swal.fire(response.message, `Welcome ${response.data.userFirstName}  ${response.data.userLastName}`, 'success');
+
+          }, 500);
           this.submitted = false;
         } 
         else if (response.status === 200 && response.data.isValid == false){
