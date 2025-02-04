@@ -204,6 +204,7 @@ export class Login2Component implements OnInit {
         const response = res
         console.log("this.response", response)
         // if (this.response.MSGTXT) {
+        
         if (response.status === 200 && response.data.isValid) {
           const dummy = "Welcome to GRN"
           // localStorage.setItem('currentUser', JSON.stringify(this.response.MSGTXT || { token: this.response.token }));
@@ -216,7 +217,7 @@ export class Login2Component implements OnInit {
           setTimeout(() => {
             Swal.fire(response.message, `Welcome ${response.data.userFirstName}  ${response.data.userLastName}`, 'success');
 
-          }, 500);
+          }, 200);
           this.submitted = false;
         } 
         else if (response.status === 200 && response.data.isValid == false){

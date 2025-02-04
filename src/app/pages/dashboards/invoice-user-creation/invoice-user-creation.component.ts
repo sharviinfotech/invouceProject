@@ -51,7 +51,7 @@ confirmFieldTextType: boolean = false;
       activity: ['', Validators.required],
       password: ['', [Validators.required, Validators.minLength(6)]],
       confirmPassword: ['', [Validators.required]] ,
-      status: ['']
+      status: [true]
     });
   
     
@@ -104,7 +104,7 @@ confirmFieldTextType: boolean = false;
     });
     this.modalService.open(this.editUserTemplate, {
       backdrop: 'static', 
-      keyboard: false 
+      keyboard: false ,size:'lg'
     });  }
 
 
@@ -192,7 +192,7 @@ confirmFieldTextType: boolean = false;
   newUserCreation(newUserTemplate: any): void {
     
     this.modalService.open(newUserTemplate,{  backdrop: 'static', 
-      keyboard: false });
+      keyboard: false,size:'lg' });
   
   }
   get f() {

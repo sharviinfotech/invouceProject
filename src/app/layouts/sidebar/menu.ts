@@ -6,32 +6,33 @@ export const MENU: MenuItem[] = [
     //     label: 'MENUITEMS.DASHBOARDS.TEXT',
     //     icon: 'bx-home-circle',
     //     subItems: [
-            // {
-            //     id: 3,
-            //     label: 'MENUITEMS.DASHBOARDS.LIST.DEFAULT',
-            //     link: '/dashboard',
-            //     parentId: 2
-            // },
+            {
+                id: 2,
+                label: 'Dashboard',
+                link: '/dashboard',
+                parentId: 2,
+                icon: 'bx-home-circle',
+            },
             {
                 id: 3,
                 label: 'Customer Creation',
                 link: '/CustomerCreation',
                 parentId: 1,
-                icon: 'bx bx-task', // Represents invoice approval/decision
+                icon: 'bx-user-check', // Represents invoice approval/decision
             },
             {
                 id:4 ,
                 label: 'Invoice Layout',
                 link: '/InvoiceLayout',
                 parentId: 1,
-                icon: 'bx bx-plus',
+                icon: 'bx bx-layout',
             },
             {
                 id:5,
                 label: 'Invoice',
                 link: '/Invoice',
                 parentId: 1,
-                icon: 'bx bx-layout',
+                icon: 'bx bx-plus',
             },
             
             {
@@ -39,7 +40,7 @@ export const MENU: MenuItem[] = [
                 label: 'Invoice Decision',
                 link: '/InvoiceDecision',
                 parentId: 1,
-                icon: 'bx bx-task', // Represents invoice approval/decision
+                icon: 'bx-sync', // Represents invoice approval/decision
             },
             {
                 id:7 ,

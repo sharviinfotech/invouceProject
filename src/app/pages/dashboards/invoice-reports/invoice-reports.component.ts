@@ -7,6 +7,7 @@ import Swal from 'sweetalert2';
 import { BsDatepickerConfig, BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 
 import { Component, ElementRef, ViewChild, ViewEncapsulation } from '@angular/core';
+import { ImageService } from 'src/app/image.service';
 
 interface ChargeItem {
   description: string;
@@ -79,8 +80,10 @@ export class InvoiceReportsComponent {
     },
     amount: '$500'
   };
+  logoUrl: string;
+  InvoiceLogo: string;
   
-  constructor(private service: GeneralserviceService, private spinner: NgxSpinnerService) {
+  constructor(private service: GeneralserviceService, private spinner: NgxSpinnerService,private imageService: ImageService ) {
     this.bsConfig = {
       dateInputFormat: 'YYYY-MM-DD',
       containerClass: 'theme-blue', // Optional: Customize theme
@@ -603,6 +606,9 @@ export class InvoiceReportsComponent {
 
 
   generateInvoiceHTML (invoiceItem: InvoiceItem) {
+
+    this.logoUrl = this.imageService.getBase64FlightLogo(); 
+    this.InvoiceLogo = this.imageService.getBase64WorldLogo(); 
     const invoiceHTML = `
       <html>
         <head>
@@ -743,11 +749,11 @@ export class InvoiceReportsComponent {
           <div class="border">
             <div class="header-row">
             
-              <div><img src="${invoiceItem.header.invoiceImage}" alt="Company Logo" class="logo"></div>
+              <div><img src="${this.logoUrl}" alt="Company Logo" class="logo"></div>
               <div>
-                <img src="${invoiceItem.header.invoiceHeader}" alt="Company Logo" class="logo">
+                <img src="${ this.InvoiceLogo}" alt="Company Logo" class="logo">
               </div>
-              <div><img src="${invoiceItem.header.invoiceImage}" alt="Company Logo" class="logo"></div>
+              <div><img src="${this.logoUrl}" alt="Company Logo" class="logo"></div>
             </div>
             
             <div class="orange-background">
