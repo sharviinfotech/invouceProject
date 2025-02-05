@@ -3,42 +3,66 @@
     <h5>All Invoice Reports </h5>
   </div>
   <div class="card-body">
-    <div class="row">  <!-- Add a row to align fields in one line -->
-      <div class="col-lg-4">
-        <div class="form-group">
-          <label>From Date</label>
-          <input
-            type="text"
-            class="form-control form-control-sm"
-            [bsConfig]="bsConfig"
-            bsDatepicker
-          />
+    
+    <form [formGroup]="reportsForm">
+      <div class="row">  <!-- Add a row to align fields in one line -->
+        <div class="col-lg-4">
+          <div class="form-group">
+            <label>From Invoice Date</label>
+            <input  
+              type="text" formControlName="fromDate"  
+              class="form-control form-control-sm"
+              [bsConfig]="bsConfig"
+              bsDatepicker
+            />
+            <div class="text-danger"  *ngIf="submit && f['fromDate'].errors">
+              From Invoice Date is required.
+          </div>
+          </div>
         </div>
-      </div>
+        <div class="col-lg-4">
+          <div class="form-group">
+            <label>To Invoice Date</label>
+            <input 
+              type="text" formControlName="toDate"  
+              class="form-control form-control-sm"
+              [bsConfig]="bsConfig" 
+              bsDatepicker
+            />
+            <div class="text-danger"  *ngIf="submit && f['toDate'].errors">
+              To Invoice Date is required.
+          </div>
+          </div>
+        </div>
+        <div class="col-lg-2">
+          <div class="form-group">
+            <label>Status</label>
+            <select class="form-control form-control-sm" 
+            formControlName="status">
+              <option value="">Select</option>
+              <option value="approved">Approved</option>
+              <option value="rejected">Rejected</option>
+              <option value="pending">Pending</option>
+            </select>
+            <div class="text-danger"  *ngIf="submit && f['status'].errors">
+              Status is required.
+          </div>
+          </div>
+        </div>
+        <div class="col-lg-2 mt-4">
+          <div  class="d-flex gap-2">
+            <button class="btn btn-success btn-sm" (click)="onChangeForm()" >
+                Get
+            </button>
+            <button class="btn btn-danger btn-sm" (click)="reset()" >
+                Reset
+            </button>
+        </div>
+        </div>
 
-      <div class="col-lg-4">
-        <div class="form-group">
-          <label>To Date</label>
-          <input
-            type="text"
-            class="form-control form-control-sm"
-            [bsConfig]="bsConfig"
-            bsDatepicker
-          />
-        </div>
       </div>
-      <div class="col-lg-4">
-        <div class="form-group">
-          <label>Status</label>
-          <select class="form-control form-control-sm">
-            <option value="approved">Select</option>
-            <option value="approved">Approved</option>
-            <option value="rejected">Rejected</option>
-            <option value="pending">Pending</option>
-          </select>
-        </div>
-      </div>
-    </div>
+    </form>
+ 
  
 
 
@@ -96,6 +120,11 @@
               }">
               {{ invoice.status }}
             </td>
+
+          </tr>
+          <tr *ngIf="allInvoiceList.length === 0">
+            <td colspan="8" style="text-align: center;"> <label cols> No Data </label></td>
+          
 
           </tr>
         </tbody>
