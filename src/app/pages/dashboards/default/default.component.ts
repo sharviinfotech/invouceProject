@@ -5,17 +5,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NgApexchartsModule,ChartComponent } from 'ng-apexcharts';
 import {
-  ApexAxisChartSeries,
   ApexChart,
-  ApexXAxis,
-  ApexYAxis,
-  ApexDataLabels,
-  ApexStroke,
-  ApexGrid,
-  ApexPlotOptions,
-  ApexLegend,
-  ApexFill,
-  ApexTooltip,
   ApexResponsive
 } from "ng-apexcharts";
 import { BsDatepickerConfig, BsDatepickerModule } from 'ngx-bootstrap/datepicker';
@@ -23,17 +13,18 @@ import { BsDatepickerConfig, BsDatepickerModule } from 'ngx-bootstrap/datepicker
 // ... (Other imports and interfaces remain the same)
 
 export type ChartOptions = {
-  series: ApexAxisChartSeries;
+  series: any;
   chart: ApexChart;
-  xaxis: ApexXAxis;
-  yaxis: ApexYAxis;
-  dataLabels: ApexDataLabels;
-  stroke: ApexStroke;
-  grid: ApexGrid;
-  plotOptions: ApexPlotOptions;
-  legend: ApexLegend;
-  fill: ApexFill;
-  tooltip: ApexTooltip;
+  xaxis: any;
+  yaxis: any;
+  dataLabels: any;
+  stroke: any;
+  grid: any;
+  plotOptions: any;
+  legend: any;
+  labels: any;
+  fill: any;
+  tooltip: any;
   responsive: ApexResponsive[];
   colors: any;
 };
@@ -45,14 +36,14 @@ export type ChartOptions = {
   standalone:true,
   imports: [CommonModule, FormsModule, NgApexchartsModule, BsDatepickerModule], 
 })
-export class DefaultComponent implements OnInit, AfterViewInit {  // ... (other properties)
-  showSubBarChart: boolean = false; // Initially hidden
-  subbarChartOptions: any = {}; // Ensure this exists
+export class DefaultComponent {  // ... (other properties)
+  public barChartOptions: Partial<ChartOptions> = {};// Initially hidden
+  public pieChartOptions: Partial<ChartOptions> = {};
   
-  @ViewChild('chartContainer') chartContainer!: ElementRef;
-  emailSentBarChart: Partial<ChartOptions> = {};
-  allInvoiceList: any[];
+  @ViewChild('barChart') barChart: ChartComponent;
+  allInvoiceList: any[] = [];
   bsConfig: { dateInputFormat: string; containerClass: string; };
+  close: any;
 
   constructor(
     private service: GeneralserviceService,
@@ -63,11 +54,7 @@ export class DefaultComponent implements OnInit, AfterViewInit {  // ... (other 
       containerClass: 'theme-blue',
     };
   }
-  ngAfterViewInit() { // Use ngAfterViewInit
-    if (this.allInvoiceList && this.allInvoiceList.length > 0 && this.chartContainer) { // Check if data and container are available
-      this.updateBarChart(this.allInvoiceList);
-    }
-  }
+ 
 
   ngOnInit(): void {
     this.getAllInvoice();
@@ -78,47 +65,46 @@ export class DefaultComponent implements OnInit, AfterViewInit {  // ... (other 
     this.service.getAllInvoice().subscribe(
       (res: any) => {
         this.spinner.hide();
-        this.allInvoiceList = res.invoices;
-        if (this.chartContainer) {  // Check if chartContainer is defined
-          this.updateBarChart(this.allInvoiceList);
-        }
+        this.allInvoiceList = res.data;
+        console.log("Fetched Invoice Data:", this.allInvoiceList); // Debugging
+        this.updateBarChart(this.allInvoiceList);
       },
-      (error) => {
+      error => {
         this.spinner.hide();
-        console.error("Error fetching invoices:", error);
+        console.error("Error fetching invoices", error); // Debugging
       }
     );
   }
-
-
-  updateBarChart(invoices: any[]) {
-    const yearlyStatusCounts = this.calculateYearlyStatusCounts(invoices);
-    const years = Object.keys(yearlyStatusCounts);
-    const seriesData = [];
-
-    // Prepare series data for each status
-    const allStatuses = new Set<string>(); // Use a Set to store unique statuses
-    for (const year in yearlyStatusCounts) {
-      for (const status in yearlyStatusCounts[year]) {
-        allStatuses.add(status);
-      }
+  
+  updateBarChart(data: any[]) {
+    const yearlyStatusCounts = this.calculateYearlyStatusCounts(data);
+  
+    if (Object.keys(yearlyStatusCounts).length === 0) {
+      console.warn("No valid data for chart.");
+      return;
     }
-    const statusesArray = Array.from(allStatuses); // Convert Set to Array
-
-    for (const status of statusesArray) {
-      const dataPoints = years.map(year => yearlyStatusCounts[year][status] || 0); // Handle missing years/statuses
-      seriesData.push({ name: status, data: dataPoints });
-    }
-
-
-    this.emailSentBarChart = {
-      series: seriesData,
+  
+    const years = Object.keys(yearlyStatusCounts).sort();
+    const seriesData = years.map(year => yearlyStatusCounts[year]);
+  
+    console.log("Chart Data:", seriesData);
+  
+    this.barChartOptions = {
+      series: [{
+        name: "Invoices",
+        data: seriesData
+      }],
       chart: {
         type: "bar",
         height: 350,
-        stacked: true, // Stacked bar chart
-        toolbar: {
-          show: true
+        stacked: false,
+        toolbar: { show: true },
+        events: {
+          dataPointSelection: (event, chartContext, config) => {
+            const selectedYear = years[config.dataPointIndex];
+            console.log("Year selected:", selectedYear);
+            this.updatePieChart(selectedYear);
+          }
         }
       },
       plotOptions: {
@@ -128,82 +114,129 @@ export class DefaultComponent implements OnInit, AfterViewInit {  // ... (other 
           borderRadius: 10,
         }
       },
-      dataLabels: {
-        enabled: false
-      },
-      stroke: {
-        show: true,
-        width: 2,
-        colors: ["transparent"]
-      },
       xaxis: {
-        categories: years, // Years as categories
-        title: {
-          text: "Year"
-        }
+        categories: years,
+        title: { text: "Year" }
       },
       yaxis: {
-        title: {
-          text: "Count"
-        }
-      },
-      fill: {
-        opacity: 1
+        title: { text: "Invoice Count" }
       },
       tooltip: {
-        y: {
-          formatter: function (val) {
-            return val + " invoices";
-          }
-        }
+        y: { formatter: (val) => `${val} invoices` }
       },
-      // Assign colors dynamically based on the number of statuses
-      colors: this.generateColors(statusesArray.length),
-      legend: {
-        position: 'bottom'
-      },
-      responsive: [{
-        breakpoint: 480,
-        options: {
-          chart: {
-            height: 300
-          },
-          legend: {
-            position: "bottom"
-          }
-        }
-      }]
+      legend: { position: 'bottom' }
     };
   }
+  
 
-
-  calculateYearlyStatusCounts(invoices: any[]): { [year: string]: { [status: string]: number } } {
-    const yearlyStatusCounts: { [year: string]: { [status: string]: number } } = {};
-
+  calculateYearlyStatusCounts(invoices: any[]): { [year: string]: number } {
+    const yearlyStatusCounts: { [year: string]: number } = {};
+  
     invoices.forEach(invoice => {
-      const date = new Date(invoice.header.ProformaInvoiceDate); // Assuming date format is YYYY-MM-DD
-      const year = date.getFullYear().toString();
-      const status = invoice.header.status;
-
-      if (!yearlyStatusCounts[year]) {
-        yearlyStatusCounts[year] = {};
+      // Check if the necessary fields exist before proceeding
+      if (!invoice.header || !invoice.header.ProformaInvoiceDate) {
+        console.warn("Missing ProformaInvoiceDate in invoice:", invoice); // Debugging
+        return;
       }
-      yearlyStatusCounts[year][status] = (yearlyStatusCounts[year][status] || 0) + 1;
+  
+      // Parse the date in DD-MM-YYYY format
+      const dateStr = invoice.header.ProformaInvoiceDate;
+      const [day, month, year] = dateStr.split('-'); // Split the date into day, month, and year
+      const date = new Date(`${year}-${month}-${day}`); // Create a new Date object in YYYY-MM-DD format
+      
+      // Check if the date is valid
+      if (isNaN(date.getTime())) {
+        console.warn("Invalid ProformaInvoiceDate:", dateStr); // Debugging
+        return;
+      }
+  
+      const yearStr = date.getFullYear().toString();
+  
+      // Initialize year if not present in the object
+      if (!yearlyStatusCounts[yearStr]) {
+        yearlyStatusCounts[yearStr] = 0;
+      }
+  
+      // Count the invoices per year
+      yearlyStatusCounts[yearStr] += 1;
     });
-
+  
+    console.log("Yearly Status Counts:", yearlyStatusCounts); // Debugging
     return yearlyStatusCounts;
   }
+  
 
-  generateColors(numColors: number): string[] {
-    const colors = [];
-    for (let i = 0; i < numColors; i++) {
-      // Simple color generation (you can improve this for better variety)
-      colors.push(`#${Math.floor(Math.random() * 16777215).toString(16)}`);
+  updatePieChart(selectedYear: string) {
+    console.log("Selected Year:", selectedYear);
+  
+    const filteredInvoices = this.allInvoiceList.filter(invoice => {
+      const dateStr = invoice.header?.ProformaInvoiceDate;
+      if (!dateStr) {
+        console.warn("Skipping invoice due to missing date:", invoice);
+        return false;
+      }
+  
+      console.log("Raw Date String:", dateStr);
+  
+      // Extract year from DD-MM-YYYY format
+      const [day, month, year] = dateStr.split('-');
+      console.log(`Extracted Year: ${year} from ${dateStr}`);
+  
+      return year === selectedYear; // Compare with selected year
+    });
+  
+    console.log("Filtered Invoices for Year", selectedYear, ":", filteredInvoices);
+  
+    if (filteredInvoices.length === 0) {
+      console.warn("No invoices found for the selected year.");
+      return;
     }
-    return colors;
+  
+    // Pass filtered invoices to calculateStatusCounts
+    const statusCounts = this.calculateStatusCounts(filteredInvoices);
+  
+    this.pieChartOptions = {
+      series: Object.values(statusCounts),
+      chart: {
+        type: "pie",
+        height: 350
+      },
+      labels: Object.keys(statusCounts),
+      tooltip: {
+        y: { formatter: (val) => `${val} invoices` }
+      },
+      legend: { position: 'bottom' }
+    };
   }
-
-
-
-  // ... (rest of your component code)
+  
+  
+  calculateStatusCounts(invoices: any[]): { [status: string]: number } {
+    const statusCounts: { [status: string]: number } = {
+      "Approved": 0,
+      "Rejected": 0,
+      "Pending": 0
+    };
+  
+    invoices.forEach(invoice => {
+      if (!invoice.header || !invoice.header.status) {
+        console.warn("Skipping invoice due to missing status:", invoice);
+        return;
+      }
+  
+      const status = invoice.header.status.trim(); // Ensure no extra spaces
+      console.log("Processing status:", status);
+  
+      if (statusCounts.hasOwnProperty(status)) {
+        statusCounts[status] += 1;
+      } else {
+        console.warn("Unexpected status found:", status);
+      }
+    });
+  
+    console.log("Final Status Counts:", statusCounts);
+    return statusCounts;
+  }
+  
+  
+  
 }
