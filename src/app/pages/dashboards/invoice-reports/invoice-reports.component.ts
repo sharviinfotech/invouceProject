@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { GeneralserviceService } from 'src/app/generalservice.service';
 import { NgxPrintModule } from 'ngx-print';
@@ -62,7 +62,7 @@ interface InvoiceItem {
   selector: 'app-invoice-reports',
   templateUrl: './invoice-reports.component.html',
   styleUrl: './invoice-reports.component.css',
-  imports: [CommonModule, FormsModule, NgxPrintModule, BsDatepickerModule],
+  imports: [CommonModule, FormsModule,ReactiveFormsModule, NgxPrintModule, BsDatepickerModule],
   standalone: true,
   // encapsulation: ViewEncapsulation.None
 
@@ -82,10 +82,14 @@ export class InvoiceReportsComponent {
   };
   logoUrl: string;
   InvoiceLogo: string;
-  
-  constructor(private service: GeneralserviceService, private spinner: NgxSpinnerService,private imageService: ImageService ) {
+  reportsForm!: FormGroup;
+  filteredInvoices: any;
+  uniqueInvoices:any;
+  submit: boolean=false;
+  minToDate: Date | undefined;
+  constructor(private service: GeneralserviceService, private spinner: NgxSpinnerService,private imageService: ImageService,private fb: FormBuilder ) {
     this.bsConfig = {
-      dateInputFormat: 'YYYY-MM-DD',
+      dateInputFormat: 'DD-MM-YYYY',
       containerClass: 'theme-blue', // Optional: Customize theme
     };
   
@@ -93,8 +97,99 @@ export class InvoiceReportsComponent {
   }
   ngOnInit(): void {
     this.getAllInvoice()
+     this.reportsForm = this.fb.group({
+          fromDate: ['', Validators.required],
+          toDate: ['', Validators.required],
+          status: ['', Validators.required]
+        });
   }
+  formatDate(proformaInvoiceDate: string): string {
+    const date = new Date(proformaInvoiceDate);
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-based
+    const year = date.getFullYear();
 
+    return `${day}-${month}-${year}`;
+  }
+  get f() {
+    return this.reportsForm.controls;
+    }
+  onChangeForm() {
+
+    if(this.reportsForm.value.fromDate && this.reportsForm.value.toDate &&  this.reportsForm.value.status){
+      this.filteredInvoices = [];  // Store or use the filtered data as needed
+      const fromD = this.reportsForm.value.fromDate;
+      const toD = this.reportsForm.value.toDate;
+      const selectedStatus = this.reportsForm.value.status;
+    
+      // Convert fromDate and toDate to Date objects
+      const fromDateObj = this.convertToDate(fromD);
+      const toDateObj = this.convertToDate(toD);
+    
+      console.log('From Date:', fromDateObj);
+      console.log('To Date:', toDateObj);
+    console.log("this.uniqueInvoices",this.uniqueInvoices)
+      // Filter invoices based on both date range and status
+      const filteredInvoices = this.uniqueInvoices.filter(invoice => {
+        // Convert invoice date string to Date object
+        const invoiceDate = this.convertToDate(invoice.header.ProformaInvoiceDate);
+    
+        // Check if invoice date is within the specified range
+        const isWithinDateRange = invoiceDate >= fromDateObj && invoiceDate <= toDateObj;
+    
+        // Check if the status matches (case insensitive)
+        const isStatusMatch = selectedStatus === '' || invoice.status.toLowerCase() === selectedStatus.toLowerCase();
+    
+        // Return only invoices that match both date range and status
+        return isWithinDateRange && isStatusMatch;
+      });
+    
+      console.log('Filtered Invoices:', filteredInvoices);
+      this.filteredInvoices = filteredInvoices;  // Store or use the filtered data as needed
+      console.log('Filtered Invoices:', this.filteredInvoices);
+      this.allInvoiceList =  this.filteredInvoices
+      console.log('this.allInvoiceList change', this.allInvoiceList);
+      this.submit = false
+    }else{
+      console.log('this.uniqueInvoices', this.uniqueInvoices);
+      this.submit = true
+    }
+    console.log('this.uniqueInvoices', this.uniqueInvoices);
+    
+  }
+  reset(){
+    this.reportsForm.reset()
+    this.getAllInvoice()
+  }
+  
+// Helper method to convert date string to Date object
+convertToDate(dateString: any): Date {
+  if (typeof dateString === 'string' && dateString.includes('-')) {
+    const [day, month, year] = dateString.split('-').map(val => parseInt(val, 10));
+    return new Date(year, month - 1, day); // JS Date months are 0-indexed
+  } else if (dateString instanceof Date) {
+    return dateString;  // If the input is already a Date object, return it directly
+  } else {
+    console.error('Invalid date format:', dateString);
+    return new Date(); // Return current date as fallback or handle accordingly
+  }
+}
+
+  
+  
+  
+  isDateInRange(invoiceDate: string, fromDate: string, toDate: string): boolean {
+    // Convert dates to comparable format (e.g., DD-MM-YYYY)
+    const invoiceDateParts = invoiceDate.split('-');
+    const fromDateParts = fromDate.split('-');
+    const toDateParts = toDate.split('-');
+  
+    const invoiceDateObj = new Date(Number(invoiceDateParts[2]), Number(invoiceDateParts[1]) - 1, Number(invoiceDateParts[0]));
+    const fromDateObj = new Date(Number(fromDateParts[2]), Number(fromDateParts[1]) - 1, Number(fromDateParts[0]));
+    const toDateObj = new Date(Number(toDateParts[2]), Number(toDateParts[1]) - 1, Number(toDateParts[0]));
+  
+    return invoiceDateObj >= fromDateObj && invoiceDateObj <= toDateObj;
+  }
   getAllInvoice() {
     this.allInvoiceList = []
     this.spinner.show()
@@ -102,6 +197,9 @@ export class InvoiceReportsComponent {
       console.log("getAllInvoice", res);
       this.spinner.hide()
       this.allInvoiceList = res.data;
+      this.uniqueInvoices = [...this.allInvoiceList];
+      
+console.log("this.uniqueInvoices",this.uniqueInvoices)
     }, error => {
       this.spinner.hide()
     })
