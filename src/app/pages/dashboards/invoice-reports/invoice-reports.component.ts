@@ -101,7 +101,7 @@ export class InvoiceReportsComponent {
     this.service.getAllInvoice().subscribe((res: any) => {
       console.log("getAllInvoice", res);
       this.spinner.hide()
-      this.allInvoiceList = res.invoices;
+      this.allInvoiceList = res.data;
     }, error => {
       this.spinner.hide()
     })
