@@ -5,9 +5,11 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root'
 })
 export class GeneralserviceService {
+ 
   setLoginDataList: any;
   userList: any;
   loginResponse: any;
+  setTableData: any;
   
 
   

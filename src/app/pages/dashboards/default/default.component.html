@@ -1,20 +1,123 @@
 <div class="container-fluid">
-  <!-- start page title -->
-  <div class="row">
-      <div class="col-12">
-          <div class="page-title-box d-flex align-items-center justify-content-between">
-              <h4 class="mb-0 font-size-18">Dashboard</h4>
-              <div class="page-title-right">
-                  <ol class="breadcrumb m-0">
-                      <ng-container>
-                          <li class="breadcrumb-item"><a href="javascript: void(0);">Dashboards</a>
-                          </li>
-                          <li class="breadcrumb-item active">Dashboard
-                          </li>
-                      </ng-container>
-                  </ol>
+    <!-- start page title -->
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box d-flex align-items-center justify-content-between">
+                <h4 class="mb-0 font-size-18">Dashboard</h4>
+                <div class="page-title-right">
+                    <ol class="breadcrumb m-0">
+                        <ng-container>
+                            <li class="breadcrumb-item"><a href="javascript: void(0);">Dashboards</a></li>
+                            <li class="breadcrumb-item active">Dashboard</li>
+                        </ng-container>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- start charts and data section -->
+    <div class="row">
+        <!-- Bar Chart -->
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title">Invoice Status (Bar Chart)</h5>
+                </div>
+                <div #chartContainer>  <apx-chart
+                    [series]="emailSentBarChart.series"
+                    [chart]="emailSentBarChart.chart"
+                    [xaxis]="emailSentBarChart.xaxis"
+                    [yaxis]="emailSentBarChart.yaxis"
+                    [plotOptions]="emailSentBarChart.plotOptions"
+                    [dataLabels]="emailSentBarChart.dataLabels"
+                    [stroke]="emailSentBarChart.stroke"
+                    [grid]="emailSentBarChart.grid"
+                    [legend]="emailSentBarChart.legend"
+                    [fill]="emailSentBarChart.fill"
+                    [tooltip]="emailSentBarChart.tooltip"
+                    [responsive]="emailSentBarChart.responsive"
+                    [colors]="emailSentBarChart.colors"
+                ></apx-chart>
+            </div>
+            
+            </div>
+        </div>
+
+  
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title">Monthly Breakdown (Sub Bar Chart)</h5>
+            </div>
+            <div #subChartContainer *ngIf="showSubBarChart">
+                <apx-chart
+                  [series]="subbarChartOptions.series"
+                  [chart]="subbarChartOptions.chart"
+                  [xaxis]="subbarChartOptions.xaxis"
+                  [yaxis]="subbarChartOptions.yaxis"
+                  [plotOptions]="subbarChartOptions.plotOptions"
+                  [dataLabels]="subbarChartOptions.dataLabels"
+                  [stroke]="subbarChartOptions.stroke"
+                  [grid]="subbarChartOptions.grid"
+                  [legend]="subbarChartOptions.legend"
+                  [fill]="subbarChartOptions.fill"
+                  [tooltip]="subbarChartOptions.tooltip"
+                  [responsive]="subbarChartOptions.responsive"
+                  [colors]="subbarChartOptions.colors">
+                </apx-chart>
               </div>
-          </div>
-      </div>
-  </div>
+              
+        </div>
+    </div>
+    
+
+    <!-- Invoice List Table -->
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title">All Invoices</h5>
+                </div>
+                <div class="card-body">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Invoice #</th>
+                                <th>Customer Name</th>
+                                <th>Status</th>
+                                <th>Total</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let invoice of allInvoiceList">
+                                <td>{{ invoice.invoiceUniqueNumber }}</td>
+                                <td>{{ invoice.header.ProformaCustomerName }}</td>
+                                <td>
+                                    <span class="badge" 
+                                        [ngClass]="{
+                                            'bg-success': invoice.header.status === 'Paid',
+                                            'bg-warning': invoice.header.status === 'Pending',
+                                            'bg-danger': invoice.header.status === 'Overdue'
+                                        }">
+                                        {{ invoice.header.status }}
+                                    </span>
+                                </td>
+                                <td>{{ invoice.grandTotal | currency }}</td>
+                                <td>
+                                    <button class="btn btn-sm btn-primary" (click)="selectInvoice(invoice)">View</button>
+                                </td>
+                            </tr>
+                            <tr >
+                                <td colspan="5" class="text-center text-muted">No invoices found</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>
