@@ -329,7 +329,7 @@ confirmFieldTextType: boolean = false;
   getAllUserList(){
     this.userList = [];
     this.service.getAllUserList().subscribe((res:any)=>{
-      this.userList = res.usersList
+      this.userList = res.data
       console.log("this.userList",this.userList)
     },error =>{
     console.log("error",error)

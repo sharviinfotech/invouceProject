@@ -325,14 +325,14 @@
                 <td></td>
               </tr>
 
-              <tr *ngFor="let item of chargeItems; let i = index">
-                <td>{{i + 2}}</td> <!-- Sequential numbering -->
+              <!-- <tr *ngFor="let item of chargeItems; let i = index">
+                <td>{{i + 2}}</td> 
                 <td class="indent">
                   <input type="text" [(ngModel)]="item.description" [ngModelOptions]="{standalone: true}"
                     class="description-input" (input)="calculateTotals()">
                 </td>
                 <td class="text-right">
-                  <!-- Show input for Units only for the first item -->
+                  
                   <input *ngIf="i === 0" type="text" [(ngModel)]="item.units" [ngModelOptions]="{standalone: true}"
                     class="units-input" (input)="calculateTotals()">
                 </td>
@@ -341,12 +341,38 @@
                     (input)="calculateTotals()" (keyup)="numbersOnly($event)">
                 </td>
                 <td class="text-right">
-                  <!-- Amount is now calculated automatically, no input needed -->
+                 
                   {{item.amount | number:'1.0-0'}}
                 </td>
-              </tr>
+              </tr> -->
 
+              <tr *ngFor="let item of chargeItems; let i = index" 
+              class="hover-row"
+              (mouseenter)="hoveredIndex = i" 
+              (mouseleave)="hoveredIndex = -1">
+            <td>{{ i + 2 }}
+              
+                <i *ngIf="hoveredIndex === i && i !== 0" (click)="deleteChargeItem(i)" class="delete-btn bx bx-trash" title="Do you want to Delete"></i>
+              
+            </td> <!-- Sequential numbering -->
 
+            <td class="indent">
+              <input type="text" [(ngModel)]="item.description" [ngModelOptions]="{standalone: true}" class="description-input" (input)="calculateTotals()">
+            </td>
+            <td class="text-right">
+              <!-- Show input for Units only for the first item -->
+              <input *ngIf="i === 0" type="text" [(ngModel)]="item.units" [ngModelOptions]="{standalone: true}" class="units-input" (input)="calculateTotals()">
+            </td>
+            <td class="text-right">
+              <input type="text" [(ngModel)]="item.rate" [ngModelOptions]="{standalone: true}" class="rate-input" (input)="calculateTotals()" (keyup)="numbersOnly($event)">
+            </td>
+            <td class="text-right">
+              {{ item.amount | number:'1.0-0' }}
+            </td>
+            <!-- Delete button appears over row when hovering -->
+          </tr>
+          
+              
 
 
 

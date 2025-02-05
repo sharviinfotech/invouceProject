@@ -644,3 +644,31 @@ input:focus {
 .cursor-pointer {
   cursor: pointer;
 }
+
+
+/* delete button over row css*/
+.hover-row {
+  position: relative; /* Needed to position the button */
+}
+
+.delete-btn {
+  position: relative;
+
+  left: 15px; /* Adjust as needed */
+  top:10px;
+  transform: translateY(-50%);
+  background: red;
+  color: white;
+  border: none;
+  cursor: pointer;
+  padding: 3px 6px;
+  border-radius: 3px;
+  display: none; /* Hide by default */
+}
+
+.hover-row:hover .delete-btn {
+  display: inline-block; /* Show on hover */
+}
+/* Change the background color of "info" toast to orange */
+
+

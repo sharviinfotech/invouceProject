@@ -8,6 +8,7 @@ import Swal from 'sweetalert2';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { NgxSpinnerService } from "ngx-spinner";
 import { ImageService } from 'src/app/image.service';
+import { ToastrService } from 'ngx-toastr';
 
 interface TaxItem {
   description: string;
@@ -42,7 +43,7 @@ export class InvoiceComponent implements OnInit {
   StateName: string = '';
   showCGST_SGST = false;
   showIGST = false;
-
+  hoveredIndex: number = -1; 
   // chargeItems: ChargeItem[] = [
   //   {
   //     description: 'HYDERABAD-CHENNAI-HYDERABAD',
@@ -104,7 +105,7 @@ export class InvoiceComponent implements OnInit {
     containerClass: 'theme-blue', // Optional: Use a predefined theme
   };
   invoiceItem: any;
-  constructor(private fb: FormBuilder, private numberToWordsService: NumberToWordsService, private service: GeneralserviceService, private datePipe: DatePipe, private spinner: NgxSpinnerService,private imageService: ImageService) {
+  constructor(private fb: FormBuilder, private numberToWordsService: NumberToWordsService, private service: GeneralserviceService, private datePipe: DatePipe, private spinner: NgxSpinnerService,private imageService: ImageService,private toaster: ToastrService) {
     this.newInvoiceCreation = this.fb.group({
       invoiceHeader: [''],
       ProformaCustomerName: ['', Validators.required],
@@ -224,7 +225,7 @@ export class InvoiceComponent implements OnInit {
     this.service.getAllInvoice().subscribe((res: any) => {
       console.log("getAllInvoice", res);
       this.spinner.hide()
-      this.allInvoiceList = res.invoices;
+      this.allInvoiceList = res.data;
     })
   }
 
@@ -501,12 +502,26 @@ if(this.InvoiceLogo== ''|| this.InvoiceLogo == null){
   }
 
   addChargeItem() {
-    this.chargeItems.push({
-      description: '',
-      rate: 0,
-      amount: 0
-    });
+
+    if(this.newInvoiceCreation.value.ProformaState){
+      this.chargeItems.push({
+        description: '',
+        rate: 0,
+        amount: 0
+      });
+      console.log("this.chargeItems addChargeItem",this.chargeItems)
+    }else{
+      // this.toaster.warning("Please select State and Add Charges")
+      Swal.fire( `Please select State and Add Charges`);
+    }
+    
   }
+  deleteChargeItem(index: number) {
+    this.chargeItems.splice(index, 1); // Remove the selected item
+    this.calculateTotals(); // Recalculate totals
+    console.log("this.chargeItems",this.chargeItems)
+  }
+  
 
   addTaxItem(): void {
     this.taxItems.push({ description: '', percentage: 0, amount: 0 });
