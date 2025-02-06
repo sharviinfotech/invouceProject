@@ -868,7 +868,7 @@ console.log("this.uniqueInvoices",this.uniqueInvoices)
             </table>
 
             <div class="card-header">
-              Charges DETAILS
+              Booking Details
             </div>
             
             <table class="table-bordered">
@@ -938,7 +938,7 @@ console.log("this.uniqueInvoices",this.uniqueInvoices)
             <div class="border">
             
             <div class="card-header">
-              Bank DETAILS
+              Bank Details
             </div>
               <div style="padding: 5px;">
                 <div class="notes">
@@ -975,7 +975,9 @@ console.log("this.uniqueInvoices",this.uniqueInvoices)
                 
               </div>
             </div>
+            
           </div>
+          <div>Plot No: 1308-A,   Road No; 65,   Jubilee Hills,  Hyderabad,  Telangana -5000333 </div>
         </body>
       </html>
     `;

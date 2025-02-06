@@ -27,7 +27,13 @@ export class Login2Component implements OnInit {
   images = [
     // 'assets/images/worldMapImage.png',
     // 'assets/images/AircraftFlight.png',
-    'assets/images/boardingpass.jpg',
+
+     'assets/images/flightAndSky.jpg',
+     'assets/images/flight_ground.jpg',
+    //  'assets/images/fightinground.jpg',
+    'assets/images/flightair.jpg',
+    //  'assets/images/boardingatflight.jpg',
+    // 'assets/images/boardingpass.jpg',
     'assets/images/flightparking.jpg',
     'assets/images/flightHalf.jpg',
     // 'assets/images/airportfromflightstepdown.png',
@@ -55,7 +61,7 @@ export class Login2Component implements OnInit {
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
     setInterval(() => {
       this.currentIndex = (this.currentIndex + 1) % this.images.length;
-    }, 5000); // Change image every 5 seconds
+    }, 4000); // Change image every 5 seconds
   }
 
   // swiper config
