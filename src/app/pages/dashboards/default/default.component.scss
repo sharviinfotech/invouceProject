@@ -1,0 +1,12 @@
+::ng-deep .approved {
+    background-color: #d1fae5 !important; /* Light Green */
+  }
+  
+  ::ng-deep .pending {
+    background-color: #fde68a !important; /* Light Orange */
+  }
+  
+  ::ng-deep .rejected {
+    background-color: #fecaca !important; /* Light Red */
+  }
+  
