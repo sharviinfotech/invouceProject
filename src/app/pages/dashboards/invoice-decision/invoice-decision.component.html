@@ -125,13 +125,16 @@
                   <div class="col-lg-4">
                     <div class="form-group">
                       <label for="remark">Authorised Date And Time</label>
-                      <input id="remark" class="form-control form-control-sm" formControlName="invoiceApprovedOrRejectedByUser" type="text"
+                      <input id="remark" class="form-control form-control-sm" formControlName="invoiceApprovedOrRejectedDateAndTime" type="text"
                             placeholder="Enter your reason here" readonly />
                     </div>
                   </div>
             </div>
             
         </form>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btnClose btn-raised" (click)="c('Close click')">Close</button>
     </div>
     
 </ng-template>

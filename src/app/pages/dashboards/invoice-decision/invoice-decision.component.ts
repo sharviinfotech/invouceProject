@@ -160,7 +160,7 @@ export class InvoiceDecisionComponent {
       invoiceApprovedOrRejectedByUser: invoice.invoiceApprovedOrRejectedByUser,
       invoiceApprovedOrRejectedDateAndTime:invoice.invoiceApprovedOrRejectedDateAndTime
     })
-    this.modalService.open(this.afterDecision, { size: 'md' })
+    this.modalService.open(this.afterDecision, { size: 'lg' })
   }
   approveButton() {
     if (this.selectedAction === 'Approved') {
