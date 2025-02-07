@@ -53,4 +53,10 @@
     text-decoration: underline !important;
   }
  
+  ::ng-deep  .rejected_Reversed{
+    /* color: linear-gradient(135deg, #FFA500, #FF4500) !important; */
+    color: #FF4500;
+    
+   
+  }
   

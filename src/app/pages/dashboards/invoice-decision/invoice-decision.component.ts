@@ -138,20 +138,27 @@ export class InvoiceDecisionComponent {
   openModal(action: string, invoice: any) {
     this.selectedAction = action;
     this.selectedInvoice = invoice;
-
+  
     // Reset form and validation
     this.approveForm.reset();
     this.submit = false;
-
+  
     if (action === 'Rejected') {
       this.approveForm.get('remark')?.setValidators([Validators.required]);
     } else {
       this.approveForm.get('remark')?.clearValidators();
     }
     this.approveForm.get('remark')?.updateValueAndValidity();
-
-    this.modalService.open(this.approveModal, { size: 'sm' })
+  
+    // Open the modal
+    this.modalService.open(this.approveModal, { size: 'sm' });
+  
+    // Ensure parent is not hidden
+    setTimeout(() => {
+      document.body.removeAttribute('aria-hidden');
+    }, 100);
   }
+  
   afterDecisionOpen(invoice) {
     this.approveForm.reset()
     console.log("invoice", invoice);

@@ -100,7 +100,8 @@
               [ngClass]="{
                 'text-green-600 underline cursor-pointer': invoice.status === 'Approved',
                 'text-orange-600': invoice.status === 'Pending',
-                'text-red-600': invoice.status === 'Rejected'
+                'text-red-600': invoice.status === 'Rejected',
+                'rejected_Reversed':invoice.status === 'Rejected_Reversed'
               }"
                 >
                 {{ invoice.invoiceUniqueNumber }}
@@ -116,7 +117,8 @@
             <td [ngClass]="{
                 'text-green-600': invoice.status === 'Approved',
                 'text-orange-600': invoice.status === 'Pending',
-                'text-red-600': invoice.status === 'Rejected'
+                'text-red-600': invoice.status === 'Rejected',
+                'rejected_Reversed':invoice.status === 'Rejected_Reversed'
               }">
               {{ invoice.status }}
             </td>

@@ -13,3 +13,6 @@
   background-color: #dc2626 !important;
   color: white !important;
 }
+::ng-deep .rejected_Reversed{
+  background: linear-gradient(135deg, #FFA500, #FF4500);
+}

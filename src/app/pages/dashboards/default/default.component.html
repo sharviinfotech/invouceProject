@@ -56,7 +56,8 @@
       <td [ngClass]="{
         'approved': invoice.status === 'Approved',
         'pending': invoice.status === 'Pending',
-        'rejected': invoice.status === 'Rejected'
+        'rejected': invoice.status === 'Rejected',
+        'rejected_Reversed': invoice.status === 'Rejected_Reversed'
       }">{{ invoice.status }}</td>
     
     </tr>

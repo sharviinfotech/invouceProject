@@ -106,6 +106,8 @@ export class InvoiceComponent implements OnInit {
   };
   invoiceItem: any;
   loginData: any;
+  reSubmitInvoice: boolean;
+  reSubmitInvoiceStatus: any;
   constructor(private fb: FormBuilder, private numberToWordsService: NumberToWordsService, private service: GeneralserviceService, private datePipe: DatePipe, private spinner: NgxSpinnerService,private imageService: ImageService,private toaster: ToastrService) {
     this.newInvoiceCreation = this.fb.group({
       invoiceHeader: [''],
@@ -255,6 +257,7 @@ spinnerHideMethod(){
 
   // Method to select and show an invoice
   selectInvoice(invoice: any) {
+    this.reSubmitInvoice = false
     this.invoiceItem = null
     this.invoiceItem = invoice
     console.log("invoice", invoice)
@@ -280,7 +283,7 @@ spinnerHideMethod(){
           // this.spinnerHideMethod()
           this.getAllInvoice()
           this.invoiceItem = null
-
+          this.reSubmitInvoice = false
         }
       });
     }
@@ -289,25 +292,58 @@ spinnerHideMethod(){
       if (this.invoiceItem.status == "Rejected") {
         console.log("If rejected")
         Swal.fire({
-          // title: 'question',
-          text: 'The selected invoice has been rejected',
+          text: 'The selected invoice has been rejected.Do you still want to edit it to make changes and resubmit, or just preview the invoice?',
           icon: 'info',
-          showCancelButton: true,
-          showConfirmButton: true,
+          showCancelButton: true,  // Cancel Button
+          cancelButtonText: 'Cancel',
+          showDenyButton: true,  // Preview Button
+          denyButtonText: 'Preview',
+          showConfirmButton: true,  // Edit Button
+          confirmButtonText: 'Edit',
         }).then((result) => {
           if (result.isConfirmed) {
-            this.invoiceItem = invoice
-            console.log("this.invoiceItem", this.invoiceItem)
-            this.activeTab = 'Preview'
+            // Edit action
+            this.editRow(invoice);
+            this.reSubmitInvoice = true
+            this.reSubmitInvoiceStatus = "Rejected_Reversed"
+          } else if (result.isDenied) {
+            // Preview action
+            this.invoiceItem = invoice;
+            console.log("this.invoiceItem", this.invoiceItem);
+            this.activeTab = 'Preview';
             this.spinnerHideMethod()
+            this.reSubmitInvoice = false
           } else {
-            this.invoiceItem = invoice
-            console.log("this.invoiceItem", this.invoiceItem)
-            // this.spinnerHideMethod()
+            // Cancel action (Optional: You can add any logic if needed)
+            console.log("Action Cancelled");
             this.getAllInvoice()
             this.invoiceItem = null
+            this.reSubmitInvoice = null
+            // this.spinnerHideMethod()
           }
         });
+
+
+        // Swal.fire({
+        //   // title: 'question',
+        //   text: 'The selected invoice has been rejected',
+        //   icon: 'info',
+        //   showCancelButton: true,
+        //   showConfirmButton: true,
+        // }).then((result) => {
+        //   if (result.isConfirmed) {
+        //     this.invoiceItem = invoice
+        //     console.log("this.invoiceItem", this.invoiceItem)
+        //     this.activeTab = 'Preview'
+        //     this.spinnerHideMethod()
+        //   } else {
+        //     this.invoiceItem = invoice
+        //     console.log("this.invoiceItem", this.invoiceItem)
+        //     // this.spinnerHideMethod()
+        //     this.getAllInvoice()
+        //     this.invoiceItem = null
+        //   }
+        // });
       } else {
         console.log("If pending");
         Swal.fire({
@@ -323,17 +359,20 @@ spinnerHideMethod(){
           if (result.isConfirmed) {
             // Edit action
             this.editRow(invoice);
+            this.reSubmitInvoice = false
           } else if (result.isDenied) {
             // Preview action
             this.invoiceItem = invoice;
             console.log("this.invoiceItem", this.invoiceItem);
             this.activeTab = 'Preview';
             this.spinnerHideMethod()
+            this.reSubmitInvoice = false
           } else {
             // Cancel action (Optional: You can add any logic if needed)
             console.log("Action Cancelled");
             this.getAllInvoice()
             this.invoiceItem = null
+            this.reSubmitInvoice = false
             // this.spinnerHideMethod()
           }
         });
@@ -345,6 +384,7 @@ spinnerHideMethod(){
 
   }
   editRow(invoice) {
+    this.reSubmitInvoiceStatus = null
     this.spinnerHideMethod()
     this.chargeItems = [];
     this.taxItems = [];
@@ -392,6 +432,7 @@ spinnerHideMethod(){
     this.amountInWords = this.selectedInvoice.amountInWords
     this.logoUrl = this.selectedInvoice.header.invoiceImage
     this.InvoiceLogo = this.selectedInvoice.header.invoiceHeader
+    this.reSubmitInvoiceStatus =this.selectedInvoice.status 
 if(this.logoUrl == ''|| this.logoUrl == null){
   this.logoUrl = this.imageService.getBase64FlightLogo(); 
 }
@@ -658,7 +699,9 @@ if(this.InvoiceLogo== ''|| this.InvoiceLogo == null){
         "reason":'',
         "invoiceApprovedOrRejectedByUser":"",
         "invoiceApprovedOrRejectedDateAndTime":"",
-        "loggedInUser":this.loginData.userName
+        "loggedInUser":this.loginData.userName,
+        "status":"Pending"
+        
         // "bankDetails":{
         //     "accountName":this.newInvoiceCreation.value.accountName,
         //     "bank":this.newInvoiceCreation.value.bank,
@@ -687,7 +730,7 @@ if(this.InvoiceLogo== ''|| this.InvoiceLogo == null){
           this.amountInWords = '';
           this.resetAll()
           Swal.fire({
-            text: response.message + ' with Invoice Number    ' + resp.invoiceUniqueNumber,
+            text: response.message + ' with Invoice Number ' + resp.invoiceUniqueNumber,
             icon: 'success',
             showConfirmButton: true
           });
@@ -739,6 +782,8 @@ if(this.InvoiceLogo== ''|| this.InvoiceLogo == null){
     if (!dateRegex.test(bookingDate)) {
       bookingDate = this.formatDate(bookingDate);
     }
+    
+    
       // Implement update logic here
       let updateobj = {
 
@@ -772,7 +817,9 @@ if(this.InvoiceLogo== ''|| this.InvoiceLogo == null){
         "reason":'',
         "invoiceApprovedOrRejectedByUser":"",
         "invoiceApprovedOrRejectedDateAndTime":"",
-        "loggedInUser":this.loginData.userName
+        "loggedInUser":this.loginData.userName,
+        
+       "status":this.reSubmitInvoiceStatus
         // "bankDetails":{
         //     "accountName":this.newInvoiceCreation.value.accountName,
         //     "bank":this.newInvoiceCreation.value.bank,

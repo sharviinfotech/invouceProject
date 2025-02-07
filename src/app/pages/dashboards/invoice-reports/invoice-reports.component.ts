@@ -247,7 +247,24 @@ console.log("this.uniqueInvoices",this.uniqueInvoices)
               console.log("this.invoiceItem",this.invoiceItem)
             }
           });
-        }else{
+        }
+        else if(this.invoiceItem.status == "Rejected_Reversed"){
+          console.log("If pending")
+          Swal.fire({
+            // title: 'question',
+            text: 'The selected invoice is Rejected Reversed, so please proceed with the process.',
+            icon: 'info',
+            showCancelButton: false,
+            showConfirmButton: true,
+          }).then((result) => {
+            if (result.isConfirmed) {
+            }else{
+              this.invoiceItem = invoice
+              console.log("this.invoiceItem",this.invoiceItem)
+            }
+          });
+        }
+        else{
           Swal.fire({
             text: 'The selected invoice has been approved. Do you want to print the invoice?',
             icon: 'question',

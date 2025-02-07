@@ -10,6 +10,7 @@ import { MenuItem } from './menu.model';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { SimplebarAngularModule } from 'simplebar-angular';
 import { CommonModule } from '@angular/common';
+import { GeneralserviceService } from 'src/app/generalservice.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -31,8 +32,9 @@ export class SidebarComponent implements OnInit, AfterViewInit, OnChanges {
   menuItems: MenuItem[] = [];
 
   @ViewChild('sideMenu') sideMenu: ElementRef;
+  loginData: any;
 
-  constructor(private eventService: EventService, private router: Router, public translate: TranslateService, private http: HttpClient) {
+  constructor(private eventService: EventService, private router: Router, public translate: TranslateService, private http: HttpClient,private service:GeneralserviceService) {
     router.events.forEach((event) => {
       if (event instanceof NavigationEnd) {
         this._activateMenuDropdown();
@@ -42,6 +44,9 @@ export class SidebarComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   ngOnInit() {
+    this.loginData = null
+    this.loginData= this.service.getLoginResponse()
+    console.log("this.loginData",this.loginData);
     this.initialize();
     this._scrollElement();
   }
@@ -142,9 +147,23 @@ export class SidebarComponent implements OnInit, AfterViewInit, OnChanges {
   /**
    * Initialize
    */
+  // initialize(): void {
+  //   console.log("this.menuItems",MENU)
+  //   this.menuItems = MENU;
+  //   console.log("this.menuItems",this.menuItems)
+  // }
+
   initialize(): void {
-    this.menuItems = MENU;
-  }
+    console.log("Original MENU:", MENU);
+
+    this.menuItems = MENU.filter(item => {
+        // Remove "User Creation" if userActivity is "user"
+        return !(this.loginData?.data?.userActivity === 'user' && item.link === '/InvoiceUserCreation');
+    });
+
+    console.log("Filtered menuItems:", this.menuItems);
+}
+
 
   /**
    * Returns true or false if given menu item has child or not
