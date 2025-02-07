@@ -105,6 +105,7 @@ export class InvoiceComponent implements OnInit {
     containerClass: 'theme-blue', // Optional: Use a predefined theme
   };
   invoiceItem: any;
+  loginData: any;
   constructor(private fb: FormBuilder, private numberToWordsService: NumberToWordsService, private service: GeneralserviceService, private datePipe: DatePipe, private spinner: NgxSpinnerService,private imageService: ImageService,private toaster: ToastrService) {
     this.newInvoiceCreation = this.fb.group({
       invoiceHeader: [''],
@@ -160,8 +161,11 @@ export class InvoiceComponent implements OnInit {
 
     this.getAllInvoice()
     this.getStates();
+    this.loginData = null
     this.logoUrl = this.imageService.getBase64FlightLogo(); 
     this.InvoiceLogo = this.imageService.getBase64WorldLogo(); 
+    this.loginData= this.service.getLoginResponse()
+   console.log("this.loginData",this.loginData);
 
   }
   getStates() {
@@ -652,7 +656,9 @@ if(this.InvoiceLogo== ''|| this.InvoiceLogo == null){
         "grandTotal": this.grandTotal,
         "amountInWords": this.amountInWords,
         "reason":'',
-        "invoiceApprovedOrRejectedByUser":""
+        "invoiceApprovedOrRejectedByUser":"",
+        "invoiceApprovedOrRejectedDateAndTime":"",
+        "loggedInUser":this.loginData.userName
         // "bankDetails":{
         //     "accountName":this.newInvoiceCreation.value.accountName,
         //     "bank":this.newInvoiceCreation.value.bank,
@@ -764,7 +770,9 @@ if(this.InvoiceLogo== ''|| this.InvoiceLogo == null){
         "grandTotal": this.grandTotal,
         "amountInWords": this.amountInWords,
         "reason":'',
-        "invoiceApprovedOrRejectedByUser":""
+        "invoiceApprovedOrRejectedByUser":"",
+        "invoiceApprovedOrRejectedDateAndTime":"",
+        "loggedInUser":this.loginData.userName
         // "bankDetails":{
         //     "accountName":this.newInvoiceCreation.value.accountName,
         //     "bank":this.newInvoiceCreation.value.bank,

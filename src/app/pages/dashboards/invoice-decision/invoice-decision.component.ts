@@ -61,229 +61,241 @@ interface InvoiceItem {
   selector: 'app-invoice-decision',
   templateUrl: './invoice-decision.component.html',
   styleUrl: './invoice-decision.component.css',
-  imports: [CommonModule, FormsModule,ReactiveFormsModule, NgxPrintModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, NgxPrintModule],
   standalone: true,
 })
 export class InvoiceDecisionComponent {
   @ViewChild('approveModal') approveModal: TemplateRef<any>;
   @ViewChild('afterDecision') afterDecision: TemplateRef<any>;
-  loginData :any; // Example login data
+  loginData: any; // Example login data
   approveForm!: FormGroup;
   submit: boolean = false;
   invoiceItem: any;
   selectedAction: string = '';
 
   selectedInvoice: any;
- 
 
-    allInvoiceList: any;
-   
+
+  allInvoiceList: any;
+
   remark: string = '';
-    invoice = {
-      invoiceNumber: 'INV-5678',
-      invoiceDate: '2025-01-25',
-      header: {
-        toName: 'John Doe'
-      },
-      amount: '$500'
-    };
+  invoice = {
+    invoiceNumber: 'INV-5678',
+    invoiceDate: '2025-01-25',
+    header: {
+      toName: 'John Doe'
+    },
+    amount: '$500'
+  };
   decisionTaking: any;
- 
- 
-    constructor(private fb: FormBuilder,private service: GeneralserviceService, private spinner: NgxSpinnerService,private modalService: NgbModal) {
-      this.createForm();
-    
+
+
+  constructor(private fb: FormBuilder, private service: GeneralserviceService, private spinner: NgxSpinnerService, private modalService: NgbModal) {
+    this.createForm();
+
+  }
+  createForm() {
+    this.approveForm = this.fb.group({
+      remark: [''], // Default empty, validation added dynamically
+      invoiceApprovedOrRejectedByUser: [''],
+      invoiceApprovedOrRejectedDateAndTime:['']
+    });
+  }
+  get f() {
+    return this.approveForm.controls;
+  }
+
+  ngOnInit(): void {
+    this.getAllInvoice()
+    this.loginData = this.service.getLoginResponse()
+    console.log("this.loginData ", this.loginData)
+  }
+
+  getAllInvoice() {
+    this.allInvoiceList = []
+    this.spinner.show()
+    this.service.getAllInvoice().subscribe((res: any) => {
+      console.log("getAllInvoice", res);
+      this.spinner.hide()
+      this.allInvoiceList = res.data;
+    }, error => {
+      this.spinner.hide()
+    })
+  }
+  // ApproveOrReject(invoice: any,decision) {
+  //   this.decisionTaking = null
+  //   this.decisionTaking = decision
+  //   if(decision == 'Approved'){
+  //     this.invoice = invoice;
+  //     this.modalService.open(this.approveModal,{size:'sm'});
+  //   }else if(decision == 'Rejected'){
+  //     this.invoice = invoice;
+  //     this.modalService.open(this.approveModal,{size:'sm'});
+  //   }
+
+  // }
+
+  openModal(action: string, invoice: any) {
+    this.selectedAction = action;
+    this.selectedInvoice = invoice;
+
+    // Reset form and validation
+    this.approveForm.reset();
+    this.submit = false;
+
+    if (action === 'Rejected') {
+      this.approveForm.get('remark')?.setValidators([Validators.required]);
+    } else {
+      this.approveForm.get('remark')?.clearValidators();
     }
-    createForm() {
-      this.approveForm = this.fb.group({
-        remark: [''], // Default empty, validation added dynamically
-        invoiceApprovedOrRejectedByUser:['']
-      });
-    }
-    get f() {
-      return this.approveForm.controls;
-    }
-   
-    ngOnInit(): void {
-      this.getAllInvoice()
-      this.loginData = this.service.getLoginResponse()
-      console.log("this.loginData ",this.loginData)
-    }
-  
-    getAllInvoice() {
-      this.allInvoiceList = []
-      this.spinner.show()
-      this.service.getAllInvoice().subscribe((res: any) => {
-        console.log("getAllInvoice", res);
-        this.spinner.hide()
-        this.allInvoiceList = res.data;
-      }, error => {
-        this.spinner.hide()
-      })
-    }
-    // ApproveOrReject(invoice: any,decision) {
-    //   this.decisionTaking = null
-    //   this.decisionTaking = decision
-    //   if(decision == 'Approved'){
-    //     this.invoice = invoice;
-    //     this.modalService.open(this.approveModal,{size:'sm'});
-    //   }else if(decision == 'Rejected'){
-    //     this.invoice = invoice;
-    //     this.modalService.open(this.approveModal,{size:'sm'});
-    //   }
-      
-    // }
-    
-    openModal(action: string, invoice: any) {
-      this.selectedAction = action;
-      this.selectedInvoice = invoice;
-  
-      // Reset form and validation
-      this.approveForm.reset();
-      this.submit = false;
-  
-      if (action === 'Rejected') {
-        this.approveForm.get('remark')?.setValidators([Validators.required]);
-      } else {
-        this.approveForm.get('remark')?.clearValidators();
-      }
-      this.approveForm.get('remark')?.updateValueAndValidity();
-  
-      this.modalService.open(this.approveModal,{size:'sm'})
-    }
-    afterDecisionOpen(invoice){
-      this.approveForm.reset()
-      console.log("invoice",invoice);
-      this.approveForm.patchValue({
-        remark:invoice.reason,
-        invoiceApprovedOrRejectedByUser:invoice.invoiceApprovedOrRejectedByUser
-      })
-      this.modalService.open(this.afterDecision,{size:'md'})
-    }
-    approveButton() {
-      if (this.selectedAction === 'Approved') {
-        this.ApproveOrReject(this.selectedInvoice, 'Approved');
-        this.modalService.dismissAll();
-      }
-    }
-    
-    rejectButton() {
-      this.submit = true;
-  
-      if (this.approveForm.invalid) {
-        return;
-      }
-  
-      this.ApproveOrReject(this.selectedInvoice, 'Rejected', this.approveForm.value.remark);
+    this.approveForm.get('remark')?.updateValueAndValidity();
+
+    this.modalService.open(this.approveModal, { size: 'sm' })
+  }
+  afterDecisionOpen(invoice) {
+    this.approveForm.reset()
+    console.log("invoice", invoice);
+    this.approveForm.patchValue({
+      remark: invoice.reason,
+      invoiceApprovedOrRejectedByUser: invoice.invoiceApprovedOrRejectedByUser,
+      invoiceApprovedOrRejectedDateAndTime:invoice.invoiceApprovedOrRejectedDateAndTime
+    })
+    this.modalService.open(this.afterDecision, { size: 'md' })
+  }
+  approveButton() {
+    if (this.selectedAction === 'Approved') {
+      this.ApproveOrReject(this.selectedInvoice, 'Approved');
       this.modalService.dismissAll();
     }
-  
-    ApproveOrReject(invoice: any, status: string, remark?: string): void {
-      console.log(`Invoice: ${invoice}, Status: ${status}, Remark: ${''}`);
-    
-      const reqBody = {
-        invoiceReferenceNo: invoice.invoiceReferenceNo, // Access invoice ID
-        status: status, // Set status dynamically
-        reason: this.approveForm.value.remark, // Default to 'N/A' if no remark is provided
-        invoiceApprovedOrRejectedByUser:this.loginData?.data.userName
+  }
 
-      };
-    
-      console.log('Payload sent to backend:', reqBody);
-        this.service.invoiceApprovedOrRejected(reqBody).subscribe(
-        (response: any) => {
-            console.log('Response:', response); // Log the backend response
+  rejectButton() {
+    this.submit = true;
 
-            // Ensure response structure is valid
-            if (response.status == 200) {
+    if (this.approveForm.invalid) {
+      return;
+    }
 
-              Swal.fire({
-                text: response.message,
-                icon: 'success',
-                confirmButtonText: 'OK',
-            });
-            this.getAllInvoice()
-            } else {
-              Swal.fire({
-                text: response.message,
-                icon: 'error',
-                confirmButtonText: 'OK',
-            });
-            }
-        },
-        (error) => {
-            // Handle API errors
-            Swal.fire('Error!', 'Failed to update status. Please try again.', 'error');
-            console.error('Approval error:', error);
+    this.ApproveOrReject(this.selectedInvoice, 'Rejected', this.approveForm.value.remark);
+    this.modalService.dismissAll();
+  }
+
+  ApproveOrReject(invoice: any, status: string, remark?: string): void {
+    console.log(`Invoice: ${invoice}, Status: ${status}, Remark: ${''}`);
+    const now = new Date();
+    const formattedDateTime = now.toLocaleString('en-GB', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false // 24-hour format
+    }).replace(',', ''); // Remove the comma between date and time
+
+    const reqBody = {
+      invoiceReferenceNo: invoice.invoiceReferenceNo, // Access invoice ID
+      status: status, // Set status dynamically
+      reason: this.approveForm.value.remark, // Default to 'N/A' if no remark is provided
+      invoiceApprovedOrRejectedByUser: this.loginData?.data.userName,
+      invoiceApprovedOrRejectedDateAndTime: formattedDateTime 
+
+    };
+
+    console.log('Payload sent to backend:', reqBody);
+    this.service.invoiceApprovedOrRejected(reqBody).subscribe(
+      (response: any) => {
+        console.log('Response:', response); // Log the backend response
+
+        // Ensure response structure is valid
+        if (response.status == 200) {
+
+          Swal.fire({
+            text: response.message,
+            icon: 'success',
+            confirmButtonText: 'OK',
+          });
+          this.getAllInvoice()
+        } else {
+          Swal.fire({
+            text: response.message,
+            icon: 'error',
+            confirmButtonText: 'OK',
+          });
         }
+      },
+      (error) => {
+        // Handle API errors
+        Swal.fire('Error!', 'Failed to update status. Please try again.', 'error');
+        console.error('Approval error:', error);
+      }
     );
 
-    
-      
-    };
-    
-    
-  
-   
-    
-     // in this screen below is not required
-      selectInvoice(invoice: any) {
-        this.invoiceItem = null
-        this.invoiceItem = invoice
-        const invoiceItem = invoice;
-        console.log("invoice",invoice)
-        console.log("this.invoiceItem",this.invoiceItem.invoiceReferenceNo);
-        console.log("this.invoiceItem.header.status",this.invoiceItem.header.status)
-        
-          
-          if(this.invoiceItem.status == "Rejected"){
-            console.log("If rejected")
-            Swal.fire({
-              // title: 'question',
-              text: 'The selected invoice has been rejected, so printing is not possible.',
-              icon: 'info',
-              // showCancelButton: true,
-              showConfirmButton: true,
-            }).then((result) => {
-              if (result.isConfirmed) {
-                this.invoiceItem = invoice
-                console.log("this.invoiceItem",this.invoiceItem)
-              }else{
-                this.invoiceItem = invoice
-                console.log("this.invoiceItem",this.invoiceItem)
-              }
-            });
-          }else if(this.invoiceItem.status == "Pending"){
-            console.log("If pending")
-            Swal.fire({
-              // title: 'question',
-              text: 'The invoice is pending, so please proceed with the process.',
-              icon: 'info',
-              showCancelButton: false,
-              showConfirmButton: true,
-            }).then((result) => {
-              if (result.isConfirmed) {
-              }else{
-                this.invoiceItem = invoice
-                console.log("this.invoiceItem",this.invoiceItem)
-              }
-            });
-          }else{
-            Swal.fire({
-              text: 'The selected invoice has been approved. Do you want to print the invoice?',
-              icon: 'question',
-              showCancelButton: true,
-              showConfirmButton: true,
-              confirmButtonText: 'Print',
-            }).then((result) => {
-              if (result.isConfirmed) {
-                this.generateInvoiceHTML(invoiceItem)
-              }
-            });
-          }
-      }
-      generateInvoiceHTML (invoiceItem: InvoiceItem) {
-        const invoiceHTML = `
+
+
+  };
+
+
+
+
+
+  // in this screen below is not required
+  selectInvoice(invoice: any) {
+    this.invoiceItem = null
+    this.invoiceItem = invoice
+    const invoiceItem = invoice;
+    console.log("invoice", invoice)
+    console.log("this.invoiceItem", this.invoiceItem.invoiceReferenceNo);
+    console.log("this.invoiceItem.header.status", this.invoiceItem.header.status)
+
+
+    if (this.invoiceItem.status == "Rejected") {
+      console.log("If rejected")
+      Swal.fire({
+        // title: 'question',
+        text: 'The selected invoice has been rejected, so printing is not possible.',
+        icon: 'info',
+        // showCancelButton: true,
+        showConfirmButton: true,
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.invoiceItem = invoice
+          console.log("this.invoiceItem", this.invoiceItem)
+        } else {
+          this.invoiceItem = invoice
+          console.log("this.invoiceItem", this.invoiceItem)
+        }
+      });
+    } else if (this.invoiceItem.status == "Pending") {
+      console.log("If pending")
+      Swal.fire({
+        // title: 'question',
+        text: 'The invoice is pending, so please proceed with the process.',
+        icon: 'info',
+        showCancelButton: false,
+        showConfirmButton: true,
+      }).then((result) => {
+        if (result.isConfirmed) {
+        } else {
+          this.invoiceItem = invoice
+          console.log("this.invoiceItem", this.invoiceItem)
+        }
+      });
+    } else {
+      Swal.fire({
+        text: 'The selected invoice has been approved. Do you want to print the invoice?',
+        icon: 'question',
+        showCancelButton: true,
+        showConfirmButton: true,
+        confirmButtonText: 'Print',
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.generateInvoiceHTML(invoiceItem)
+        }
+      });
+    }
+  }
+  generateInvoiceHTML(invoiceItem: InvoiceItem) {
+    const invoiceHTML = `
           <html>
             <head>
               <title>Proforma Invoice</title>
@@ -555,37 +567,37 @@ export class InvoiceDecisionComponent {
             </body>
           </html>
         `;
-    
-        const newWindow = window.open('', '', 'height=600,width=800');
-        if (newWindow) {
-          newWindow.document.write(invoiceHTML);
-          newWindow.document.close();
-    
-          setTimeout(() => {
-            newWindow.print();
-          }, 500);
-        }
-      };
-      updateStatus(invoice: any, status: string) {
-        // Confirm before changing status
-        if (confirm(`Are you sure you want to ${status.toLowerCase()} this invoice?`)) {
-          invoice.status = status;
-          
-          // If you are updating status in the backend, call the API here
-          // Example:
-          // this.invoiceService.updateInvoiceStatus(invoice.id, status).subscribe(response => {
-          //   console.log("Status updated:", response);
-          // }, error => {
-          //   console.error("Error updating status:", error);
-          // });
-      
-          console.log(`Invoice ${invoice.invoiceUniqueNumber} status changed to ${status}`);
-        }
-      }
-      
-    
-    
+
+    const newWindow = window.open('', '', 'height=600,width=800');
+    if (newWindow) {
+      newWindow.document.write(invoiceHTML);
+      newWindow.document.close();
+
+      setTimeout(() => {
+        newWindow.print();
+      }, 500);
     }
-    
+  };
+  updateStatus(invoice: any, status: string) {
+    // Confirm before changing status
+    if (confirm(`Are you sure you want to ${status.toLowerCase()} this invoice?`)) {
+      invoice.status = status;
+
+      // If you are updating status in the backend, call the API here
+      // Example:
+      // this.invoiceService.updateInvoiceStatus(invoice.id, status).subscribe(response => {
+      //   console.log("Status updated:", response);
+      // }, error => {
+      //   console.error("Error updating status:", error);
+      // });
+
+      console.log(`Invoice ${invoice.invoiceUniqueNumber} status changed to ${status}`);
+    }
+  }
+
+
+
+}
+
 
 

@@ -108,16 +108,23 @@
         
         <form [formGroup]="approveForm">
             <div class="row">  <!-- Add a row to align fields in one line -->
-                <div class="col-lg-6">
+                <div class="col-lg-4">
                   <div class="form-group">
                     <label for="remark">Remark </label>
                     <input id="remark" class="form-control form-control-sm" formControlName="remark" type="text"
                     placeholder="Enter your reason here" readonly />
                   </div>
                 </div>
-                <div class="col-lg-6">
+                <div class="col-lg-4">
                     <div class="form-group">
                       <label for="remark">Authorised By</label>
+                      <input id="remark" class="form-control form-control-sm" formControlName="invoiceApprovedOrRejectedByUser" type="text"
+                            placeholder="Enter your reason here" readonly />
+                    </div>
+                  </div>
+                  <div class="col-lg-4">
+                    <div class="form-group">
+                      <label for="remark">Authorised Date And Time</label>
                       <input id="remark" class="form-control form-control-sm" formControlName="invoiceApprovedOrRejectedByUser" type="text"
                             placeholder="Enter your reason here" readonly />
                     </div>
