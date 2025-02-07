@@ -1,1 +1,320 @@
-<p>customer-creation works!</p>
+<div class="">
+    <form >
+ 
+    <div class="card">
+        <div class="card-header" style="text-align: center;">
+        Customer Creation
+        </div>
+        <div class="card-body">
+ 
+            <button type="button" class="btn btn-raised btn-md btnSubmitApproval" style="background-color: green;" (click)="newCustomerCreation(newCustomerTemplate)">
+                Create New Customer
+              </button>
+             
+            <div class="table-responsive tableFixHead">
+                <table class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                           
+                            <th>Customer Name</th>
+                            <th>Address</th>
+                            <th>City</th>
+                            <th>State</th>
+                            <th>Pincode</th>
+                            <th>Gst No</th>
+                            <th>Pan No</th>
+                            <th>Actions</th>
+                            <!-- <th *ngIf='loginData?.data.userActivity != "customer"'>Action</th> -->
+                           
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let data of customerList">
+                           
+                            <td>{{data.customerName}}</td>
+                            <td>{{data.customerAddress}}</td>
+                            <td>{{data.customerCity}}</td>
+                            <td>{{data.customerState}}</td>
+                            <td>{{data.customerPincode}}</td>
+                            <td>{{data.customerGstNo}}</td>
+                            <td>{{data.customerPanNo}}</td>
+                            <!-- <td>
+                              {{ data.userStatus ? 'Active' : 'Inactive' }}
+                            </td> -->
+ 
+                           <td class="text-center" *ngIf='loginData?.data.customer != "customer"'>
+                            <button class="btn btnEdit btn-raised"
+                            (click)="openEditModal(data, editCustomerTemplate)"
+                            >
+                            <i class="fa fa-edit"></i>
+                            </button>
+                           </td>
+                           
+                        </tr>
+                       
+                       
+                    </tbody>
+                </table>
+ 
+            </div>
+           
+        </div>
+ 
+    </div>
+   
+ 
+</form>
+ 
+</div>
+ 
+<ng-template #newCustomerTemplate let-c="close">
+    <div class="modal-header">
+        Create New Customer
+    </div>
+    <div class="modal-body">
+        <form [formGroup]="CustomerCreationForm">
+            <div class="row">
+                <!-- Customer Name -->
+                <div class="col-lg-4 col-md-4 col-sm-4">
+                    <div class="form-group">
+                        <label>Customer Name<span class="text-danger">*</span></label>
+                        <input class="form-control form-control-sm" formControlName="customerName" type="text" placeholder="">
+                        <div class="text-danger" *ngIf="submit && CustomerCreationForm.controls['customerName'].invalid">
+                            Customer Name is required.
+                        </div>
+                    </div>
+                </div>
+ 
+                <!-- Address -->
+                <div class="col-lg-4 col-md-4 col-sm-4">
+                    <div class="form-group">
+                        <label>Address<span class="text-danger">*</span></label>
+                        <input class="form-control form-control-sm" formControlName="customerAddress" type="text" placeholder="">
+                        <div class="text-danger" *ngIf="submit && CustomerCreationForm.controls['customerAddress'].invalid">
+                            Address is required.
+                        </div>
+                    </div>
+                </div>
+ 
+                <!-- City -->
+                <div class="col-lg-4 col-md-4 col-sm-4">
+                    <div class="form-group">
+                        <label>City<span class="text-danger">*</span></label>
+                        <input class="form-control form-control-sm" formControlName="customerCity" type="text" placeholder="">
+                        <div class="text-danger" *ngIf="submit && CustomerCreationForm.controls['customerCity'].invalid">
+                            City is required.
+                        </div>
+                    </div>
+                </div>
+ 
+                <!-- State -->
+               
+                 
+                    <!-- State Field -->
+                    <div class="col-lg-4">
+                      <div class="form-group">
+                        <label for="state">State <span class="text-danger">*</span></label>
+                        <select
+                          formControlName="customerState"
+                          class="form-control"
+                          [ngClass]="{'is-invalid': submit && customerEditForm.controls['customerState'].invalid}">
+                          <option value="">Select a state</option>
+                          <option *ngFor="let state of statesList" [value]="state.stateName">{{ state.stateName }}</option>
+                        </select>
+                      </div>
+                 
+                      <!-- State Error Message -->
+                      <div class="text-danger" *ngIf="submit && customerEditForm.controls['customerState'].invalid">
+                        Customer state is required.
+                      </div>
+                    </div>
+               
+                 
+                 
+ 
+                <!-- Pincode -->
+                <div class="col-lg-4 col-md-4 col-sm-4">
+                    <div class="form-group">
+                        <label>Pincode<span class="text-danger">*</span></label>
+                        <input class="form-control form-control-sm" formControlName="customerPincode" type="text" placeholder="Enter Pincode">
+                        <div class="text-danger" *ngIf="submit && CustomerCreationForm.controls['customerPincode'].invalid">
+                            Pincode is required.
+                        </div>
+                    </div>
+                </div>
+ 
+                <!-- GST No -->
+                <div class="col-lg-4 col-md-4 col-sm-4">
+                    <div class="form-group">
+                        <label>GST No</label>
+                        <input class="form-control form-control-sm" formControlName="customerGstNo" type="text" placeholder="Enter GST No">
+                        <div class="text-danger" *ngIf="submit && CustomerCreationForm.controls['customerGstNo'].invalid">
+                            Valid Gst No is required.
+                        </div>
+                    </div>
+                </div>
+ 
+                <!-- PAN No -->
+                <div class="col-lg-4 col-md-4 col-sm-4">
+                    <div class="form-group">
+                        <label>PAN No<span class="text-danger">*</span></label>
+                        <input class="form-control form-control-sm" formControlName="customerPanNo" type="text" placeholder="Enter PAN No (e.g., ABCD1234E)">
+                        <div class="text-danger" *ngIf="submit && CustomerCreationForm.controls['customerPanNo'].invalid">
+                            Valid PAN No is required.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+ 
+    <div class="modal-footer">
+        <button type="button" class="btn btnSave btn-raised"(click)="savecustomerCreation()">Submit</button>
+        <button type="button" class="btn btnClose btn-raised" (click)="c('Close click')">Close</button>
+    </div>
+</ng-template>
+ 
+ 
+  <ng-template #editCustomerTemplate let-c="close">
+   
+      <div class="modal-header">
+        Edit Customer
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="customerEditForm"> <!-- FIXED: Added formGroup -->
+            <div class="row">
+                <!-- Customer Name -->
+                <div class="col-lg-4 col-md-4 col-sm-4">
+                    <div class="form-group">
+                        <label>Customer Name<span class="text-danger">*</span></label>
+                        <input class="form-control form-control-sm" formControlName="customerName" type="text" placeholder="">
+                        <div class="text-danger" *ngIf="submit && customerEditForm.controls['customerName'].errors">
+                            Customer Name is required.
+                        </div>
+                    </div>
+                </div>
+                <!-- Address -->
+                <div class="col-lg-4 col-md-4 col-sm-4">
+                    <div class="form-group">
+                        <label>Address<span class="text-danger">*</span></label>
+                        <input class="form-control form-control-sm" formControlName="customerAddress" type="text" placeholder="">
+                        <div class="text-danger" *ngIf="submit && customerEditForm.controls['customerAddress'].errors">
+                            Address  is required.
+                        </div>
+                    </div>
+                </div>
+                <!-- La -->
+                 <!-- City -->
+                 <div class="col-lg-4 col-md-4 col-sm-4">
+                    <div class="form-group">
+                        <label>City<span class="text-danger">*</span></label>
+                        <input class="form-control form-control-sm" formControlName="customerCity" type="text" placeholder="Enter City">
+                        <div class="text-danger" *ngIf="submit && CustomerEditForm.controls['customerCity'].errors">
+                            City is required.
+                        </div>
+                    </div>
+                </div>
+ 
+                <!-- State -->
+                <div class="col-lg-4">
+                    <div class="form-group">
+                      <label for="state">State <span class="text-danger">*</span></label>
+                      <select
+                        formControlName="customerState"
+                        class="form-control"
+                        [ngClass]="{'is-invalid': submit && customerEditForm.controls['customerState'].invalid}">
+                        <option value="">Select a state</option>
+                        <option *ngFor="let state of statesList" [value]="state.stateName">{{ state.stateName }}</option>
+                      </select>
+                    </div>
+                 
+                    <!-- Error Message -->
+                    <div *ngIf="submit && customerEditForm.controls['customerState'].errors" class="text-danger">
+                      Customer state is required.
+                    </div>
+                  </div>
+                 
+               
+ 
+                <!-- Pincode -->
+                <div class="col-lg-4 col-md-4 col-sm-4">
+                    <div class="form-group">
+                        <label>Pincode<span class="text-danger">*</span></label>
+                        <input class="form-control form-control-sm" formControlName="customerPincode" type="text" placeholder="Enter Pincode">
+                        <div class="text-danger" *ngIf="submit && CustomerEditForm.controls['customerPincode'].errors">
+                            Pincode is required.
+                        </div>
+                    </div>
+                </div>
+ 
+                <!-- GST No -->
+                <div class="col-lg-4 col-md-4 col-sm-4">
+                    <div class="form-group">
+                        <label>GST No</label>
+                        <input class="form-control form-control-sm" formControlName="customerGstNo" type="text" placeholder="Enter GST No">
+                    </div>
+                </div>
+ 
+                <!-- PAN No -->
+                <div class="col-lg-4 col-md-4 col-sm-4">
+                    <div class="form-group">
+                        <label>PAN No<span class="text-danger">*</span></label>
+                        <input class="form-control form-control-sm" formControlName="customerPanNo" type="text" placeholder="Enter PAN No (e.g., ABCD1234E)">
+                        <div class="text-danger" *ngIf="submit && CustomerEditForm.controls['customerPanNo'].errors">
+                            Valid PAN No is required.
+                        </div>
+                    </div>
+                </div>
+ 
+                <!-- Confirm Password -->
+                 <!-- Confirm Password -->
+                 <!-- <div class="col-md-4">
+                  <label for="confirmPassword">Confirm Password<span class="text-danger">*</span></label>
+                  <div class="input-group auth-pass-inputgroup">
+                      <input
+                          [type]="confirmFieldTextType ? 'text' : 'password'"
+                          class="form-control"
+                          formControlName="confirmPassword"
+                          placeholder="Confirm password"
+                          [ngClass]="{ 'is-invalid': submitted && f.confirmPassword.errors }"
+                      />
+                      <button class="btn btn-light ms-0" type="button" (click)="toggleConfirmFieldTextType()">
+                          <i
+                              class="mdi mdi-eye-outline"
+                              [ngClass]="{ 'mdi-eye-off-outline': !confirmFieldTextType, 'mdi-eye-outline': confirmFieldTextType }"
+                          ></i>
+                      </button>
+                  </div>
+                  <div class="text-danger" *ngIf="submit && f['confirmPassword'].errors">
+                      Confirm password is required.
+                  </div>
+                  <div class="text-danger" *ngIf="f.confirmPassword?.hasError('mustMatch')">
+                      Password and Confirm Password do not match.
+                  </div>
+              </div> -->
+ 
+                <!-- Activity -->
+                <!-- <div class="col-md-4">
+                    <label>Activity<span class="text-danger">*</span></label>
+                    <select class="form-control" formControlName="activity">
+                        <option value="admin">Admin</option>
+                        <option value="superAdmin">Super Admin</option>
+                        <option value="user">User</option>
+                    </select>
+                </div>
+                <div class="col-md-4 d-flex align-items-center">
+                    <label class="me-2">Active</label>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" formControlName="status">
+                    </div>
+                    <label class="ms-2">Inactive</label>
+                </div> -->
+            </div>
+        </form>
+    </div>
+      <div class="card-footer" style="text-align: right;">
+        <button type="button" class="btn btn-primary" (click)="updateExitCustomer(c)">Update</button>
+        <button type="button" class="btn btn-secondary" (click)="c('Close click')">Close</button>
+      </div>
+   
+  </ng-template>

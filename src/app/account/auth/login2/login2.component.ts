@@ -5,6 +5,8 @@ import { AuthfakeauthenticationService } from '../../../core/services/authfake.s
 import { login } from 'src/app/store/Authentication/authentication.actions';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
+import { FormBuilder, FormGroup} from '@angular/forms';
+
 import { CommonModule } from '@angular/common';
 import { SlickCarouselModule } from 'ngx-slick-carousel';
 import { HttpClient } from '@angular/common/http';
@@ -23,7 +25,8 @@ import { ToastrService } from 'ngx-toastr';
  * Login-2 component
  */
 export class Login2Component implements OnInit {
-  fieldTextType !: boolean;
+  // fieldTextType !: boolean;
+  
   images = [
     // 'assets/images/worldMapImage.png',
     // 'assets/images/AircraftFlight.png',
@@ -42,15 +45,19 @@ export class Login2Component implements OnInit {
 
   ];
   currentIndex = 0;
+  successMessage: string;
+  errorMessage: string;
   constructor(private formBuilder: UntypedFormBuilder, private route: ActivatedRoute, private router: Router, private authenticationService: AuthenticationService,
     private authFackservice: AuthfakeauthenticationService, public store: Store, private service: GeneralserviceService, private toaster: ToastrService) { }
-  loginForm: UntypedFormGroup;
-  submitted: any = false;
-  error: any = '';
-  returnUrl: string;
-
-  // set the currenr year
-  year: number = new Date().getFullYear();
+    loginForm: FormGroup;
+    forgotPasswordForm: FormGroup;
+    submitted = false;
+    Forgotsubmitted = false;
+    isForgotPassword = false;
+    showForgotPassword = false;
+    
+    fieldTextType = false;
+    year = new Date().getFullYear();
 
   ngOnInit(): void {
     document.body.classList.add("auth-body-bg");
@@ -58,10 +65,10 @@ export class Login2Component implements OnInit {
       userName: ['', [Validators.required]],
       password: ['', [Validators.required]],
     });
-    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
-    setInterval(() => {
-      this.currentIndex = (this.currentIndex + 1) % this.images.length;
-    }, 4000); // Change image every 5 seconds
+    this.forgotPasswordForm = this.formBuilder.group({
+      email: ['', [Validators.required, Validators.email]]
+    });
+// Change image every 5 seconds
   }
 
   // swiper config
@@ -74,28 +81,80 @@ export class Login2Component implements OnInit {
 
   // convenience getter for easy access to form fields
   get f() { return this.loginForm.controls; }
-
+  get fForgot() { return this.forgotPasswordForm.controls; }
   /**
    * Form submit
    */
   // dynamic login below 
   onSubmit() {
-
+ 
     if(this.loginForm.invalid == true){
       this.submitted = true;
     }else{
       const userName = this.f['userName'].value; // Get the username from the form
       const password = this.f['password'].value; // Get the password from the form
-  
+ 
       // Login Api
       // this.store.dispatch(login({ userName: userName, password: password }));
-  
+ 
       this.login(userName, password)
     }
-    
-
+   
+ 
    
   }
+  showForgotPasswordScreen() {
+    this.showForgotPassword = true; 
+    this.successMessage = '';
+    this.errorMessage = '';
+  }
+
+  // Toggle forgot password form
+  toggleForgotPassword() {
+    this.isForgotPassword = !this.isForgotPassword;
+    this.Forgotsubmitted = false;
+    this.forgotPasswordForm.reset();
+  }
+
+  // Forgot password form submission
+  onForgotPasswordSubmit() {
+    this.Forgotsubmitted = true;
+    if (this.forgotPasswordForm.invalid) return;
+
+    const payload = { 
+      userEmail: this.forgotPasswordForm.value.email 
+    };
+
+    this.service.forgotPassword(payload).subscribe((res: any) => {
+      const response = res
+      console.log("this.response", response)
+      // if (this.response.MSGTXT) {
+      this.isForgotPassword = false
+      if (response.status === 200) {
+        Swal.fire({
+          icon: 'success',
+          title: 'Success',
+          text: res.message
+        }).then(() => {
+          
+        });
+      }
+      else{
+        Swal.fire('Login Failed', `${response.message} `, 'error');
+        // Swal.fire("",dummy, "success")
+        this.submitted = false;
+      }
+      
+  },error=>{
+    console.log("error",error)
+    this.toaster.error(error)
+   
+  });
+  }
+
+
+  // Toggle password visibility
+ 
 
   // local login without API
   // onSubmit() {
@@ -132,6 +191,11 @@ export class Login2Component implements OnInit {
    
  
    
+  // }
+  // goBackToLogin() {
+  //   this.showForgotPassword = false;
+  //   this.successMessage = '';
+  //   this.errorMessage = '';
   // }
  
   toggleFieldTextType() {

@@ -56,5 +56,19 @@ getLoginResponse(){
   invoiceApprovedOrRejected(obj){
     return this.http.post(environment.baseUrl+'invoice/invoiceApprovedOrRejected',obj);
   }
+  forgotPassword(obj){
+    return this.http.post(environment.baseUrl+'invoice/forgotPassword',obj);
+  }
+  getAllCustomerList(){
+    return this.http.get(environment.baseUrl+'invoice/getAllCustomerList');
+  }
+  savecustomerCreation(obj){
+    return this.http.post(environment.baseUrl+'invoice/SaveCustomerCreation',obj);
+ 
+  }
+  updateExitCustomer(obj,customerUniqueId){
+    return this.http.put(environment.baseUrl+'invoice/updateExitCustomer/'+customerUniqueId,obj);
+ 
+  }
 
 }
