@@ -42,11 +42,8 @@
         <!-- (click)="invoice.status === 'Approved' ? openInvoicePopup(invoice) : null" -->
         <tr *ngFor="let invoice of filteredInvoiceList" 
         
-        [ngClass]="{
-          'approved': invoice.status === 'Approved',
-          'pending': invoice.status === 'Pending',
-          'rejected': invoice.status === 'Rejected'
-        }">
+        
+        >
       
       <td>{{ invoice.invoiceUniqueNumber }}</td>
       <td>{{ invoice.header.ProformaInvoiceDate }}</td>
@@ -56,7 +53,11 @@
       <td>{{ invoice.header.BookingSector }}</td>
       <td>{{ invoice.header.BookingDateOfJourny }}</td>
       <td>{{ invoice.grandTotal | number: '1.2-2' }}</td>
-      <td>{{ invoice.status }}</td>
+      <td [ngClass]="{
+        'approved': invoice.status === 'Approved',
+        'pending': invoice.status === 'Pending',
+        'rejected': invoice.status === 'Rejected'
+      }">{{ invoice.status }}</td>
     
     </tr>
     

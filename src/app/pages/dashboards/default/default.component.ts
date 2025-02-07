@@ -62,20 +62,23 @@ export class DefaultComponent {  // ... (other properties)
   }
 
   getAllInvoice() {
-    this.spinner.show();
-    this.service.getAllInvoice().subscribe(
-      (res: any) => {
-        this.spinner.hide();
-        this.allInvoiceList = res.data;
-        this.filteredInvoiceList = res.data;
-        console.log("Fetched Invoice Data:", this.allInvoiceList);
-        this.updateBarChart(this.allInvoiceList);
-      },
-      error => {
-        this.spinner.hide();
-        console.error("Error fetching invoices", error);
-      }
-    );
+    setTimeout(() => {
+      this.spinner.show();
+      this.service.getAllInvoice().subscribe(
+        (res: any) => {
+          this.spinner.hide();
+          this.allInvoiceList = res.data;
+          this.filteredInvoiceList = res.data;
+          console.log("Fetched Invoice Data:", this.allInvoiceList);
+          this.updateBarChart(this.allInvoiceList);
+        },
+        error => {
+          this.spinner.hide();
+          console.error("Error fetching invoices", error);
+        }
+      );
+    }, 2000);
+   
   }
 
   updateBarChart(data: any[]) {

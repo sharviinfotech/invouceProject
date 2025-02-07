@@ -1,12 +1,15 @@
 ::ng-deep .approved {
-    background-color: #d1fae5 !important; /* Light Green */
-  }
+  background-color: #16a34a !important;
+  color: white !important;
+}
+
+::ng-deep .pending {
+  background-color: orange !important;
+  color: white !important;
   
-  ::ng-deep .pending {
-    background-color: #fde68a !important; /* Light Orange */
-  }
-  
-  ::ng-deep .rejected {
-    background-color: #fecaca !important; /* Light Red */
-  }
-  
+}
+
+::ng-deep .rejected {
+  background-color: #dc2626 !important;
+  color: white !important;
+}

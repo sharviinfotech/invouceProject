@@ -20,13 +20,13 @@ export const MENU: MenuItem[] = [
                 parentId: 1,
                 icon: 'bx-user-check', // Represents invoice approval/decision
             },
-            {
-                id:4 ,
-                label: 'Invoice Layout',
-                link: '/InvoiceLayout',
-                parentId: 1,
-                icon: 'bx bx-layout',
-            },
+            // {
+            //     id:4 ,
+            //     label: 'Invoice Layout',
+            //     link: '/InvoiceLayout',
+            //     parentId: 1,
+            //     icon: 'bx bx-layout',
+            // },
             {
                 id:5,
                 label: 'Invoice',
