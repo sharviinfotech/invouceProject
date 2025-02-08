@@ -14,12 +14,14 @@ import { Observable, throwError } from 'rxjs';
 import { GeneralserviceService } from 'src/app/generalservice.service';
 import Swal from 'sweetalert2';
 import { ToastrService } from 'ngx-toastr';
+import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
 @Component({
   selector: 'app-login2',
   templateUrl: './login2.component.html',
   styleUrls: ['./login2.component.scss'],
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, SlickCarouselModule]
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, SlickCarouselModule,NgxSpinnerModule],
+  providers: [NgxSpinnerService]
 })
 /**
  * Login-2 component
@@ -48,7 +50,7 @@ export class Login2Component implements OnInit {
   successMessage: string;
   errorMessage: string;
   constructor(private formBuilder: UntypedFormBuilder, private route: ActivatedRoute, private router: Router, private authenticationService: AuthenticationService,
-    private authFackservice: AuthfakeauthenticationService, public store: Store, private service: GeneralserviceService, private toaster: ToastrService) { }
+    private authFackservice: AuthfakeauthenticationService, public store: Store, private service: GeneralserviceService, private toaster: ToastrService,private spinner: NgxSpinnerService) { }
     loginForm: FormGroup;
     forgotPasswordForm: FormGroup;
     submitted = false;
@@ -69,6 +71,10 @@ export class Login2Component implements OnInit {
       email: ['', [Validators.required, Validators.email]]
     });
 // Change image every 5 seconds
+  }
+  showSpinner() {
+    this.spinner.show();
+    setTimeout(() => this.spinner.hide(), 3000); // Auto-hide after 3 sec
   }
 
   // swiper config

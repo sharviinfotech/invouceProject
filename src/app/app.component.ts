@@ -1,27 +1,29 @@
 import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { NgxSpinnerService } from 'ngx-spinner';
 import { CommonModule } from '@angular/common';
+import { NgxSpinnerService } from 'ngx-spinner';
 import { NgxSpinnerModule } from 'ngx-spinner';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
   standalone: true,
-  imports: [RouterOutlet,CommonModule, NgxSpinnerModule],
+  imports: [RouterOutlet,CommonModule,NgxSpinnerModule],
 })
 export class AppComponent implements OnInit {
-
   constructor(private spinner: NgxSpinnerService) {}
-
   ngOnInit() {
-    // this.showSpinner();
-  }
+    this.spinner.show(undefined, {
+      type: 'square-jelly-box',
+      size: 'medium',
+      bdColor: 'rgba(0, 0, 0, 0.8)',
+      color: '#fff',
+      fullScreen: true
+    });
 
-  // showSpinner() {
-  //   this.spinner.show(); // Show spinner
-  //   setTimeout(() => {
-  //     this.spinner.hide(); // Hide after 3 seconds
-  //   }, 3000);
-  // }
+    setTimeout(() => {
+      this.spinner.hide();
+    }, 3000);
+  }
+  
 }

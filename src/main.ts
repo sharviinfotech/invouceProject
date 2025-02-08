@@ -54,6 +54,7 @@ bootstrapApplication(AppComponent, {
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: FakeBackendInterceptor, multi: true },
     ...appConfig.providers,
+    importProvidersFrom(NgxSpinnerModule) // Add ngx-spinner globally
     
   ],
 })

@@ -6,10 +6,9 @@ import { NumberToWordsService } from 'src/app/number-to-words.service';
 import { DatePipe } from '@angular/common';
 import Swal from 'sweetalert2';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
-import { NgxSpinnerService } from "ngx-spinner";
 import { ImageService } from 'src/app/image.service';
 import { ToastrService } from 'ngx-toastr';
-
+import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
 interface TaxItem {
   description: string;
   percentage: number;
@@ -26,7 +25,7 @@ interface ChargeItem {
   selector: 'app-invoice',
   templateUrl: './invoice.component.html',
   styleUrls: ['./invoice.component.css'],
-  imports: [CommonModule, ReactiveFormsModule, FormsModule, BsDatepickerModule],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule, BsDatepickerModule,NgxSpinnerModule],
   standalone: true
 })
 export class InvoiceComponent implements OnInit {
@@ -108,6 +107,9 @@ export class InvoiceComponent implements OnInit {
   loginData: any;
   reSubmitInvoice: boolean;
   reSubmitInvoiceStatus: any;
+  reason: any;
+  invoiceApprovedOrRejectedByUser: any;
+  invoiceApprovedOrRejectedDateAndTime: any;
   constructor(private fb: FormBuilder, private numberToWordsService: NumberToWordsService, private service: GeneralserviceService, private datePipe: DatePipe, private spinner: NgxSpinnerService,private imageService: ImageService,private toaster: ToastrService) {
     this.newInvoiceCreation = this.fb.group({
       invoiceHeader: [''],
@@ -385,6 +387,9 @@ spinnerHideMethod(){
   }
   editRow(invoice) {
     this.reSubmitInvoiceStatus = null
+    this.reason =null ,
+    this.invoiceApprovedOrRejectedByUser =null ,
+    this.invoiceApprovedOrRejectedDateAndTime =null ,
     this.spinnerHideMethod()
     this.chargeItems = [];
     this.taxItems = [];
@@ -433,6 +438,10 @@ spinnerHideMethod(){
     this.logoUrl = this.selectedInvoice.header.invoiceImage
     this.InvoiceLogo = this.selectedInvoice.header.invoiceHeader
     this.reSubmitInvoiceStatus =this.selectedInvoice.status 
+    this.reason =this.selectedInvoice.reason ,
+    this.invoiceApprovedOrRejectedByUser =this.selectedInvoice.invoiceApprovedOrRejectedByUser ,
+    this.invoiceApprovedOrRejectedDateAndTime =this.selectedInvoice.invoiceApprovedOrRejectedDateAndTime 
+    
 if(this.logoUrl == ''|| this.logoUrl == null){
   this.logoUrl = this.imageService.getBase64FlightLogo(); 
 }
@@ -814,9 +823,9 @@ if(this.InvoiceLogo== ''|| this.InvoiceLogo == null){
         "subtotal": this.subtotal,
         "grandTotal": this.grandTotal,
         "amountInWords": this.amountInWords,
-        "reason":'',
-        "invoiceApprovedOrRejectedByUser":"",
-        "invoiceApprovedOrRejectedDateAndTime":"",
+        "reason":this.reason,
+        "invoiceApprovedOrRejectedByUser":this.invoiceApprovedOrRejectedByUser,
+        "invoiceApprovedOrRejectedDateAndTime":this.invoiceApprovedOrRejectedDateAndTime,
         "loggedInUser":this.loginData.userName,
         
        "status":this.reSubmitInvoiceStatus

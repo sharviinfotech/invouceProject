@@ -135,57 +135,57 @@ export class InvoiceDecisionComponent {
 
   // }
 
-  openModal(action: string, invoice: any) {
-    this.selectedAction = action;
-    this.selectedInvoice = invoice;
+  // openModal(action: string, invoice: any) {
+  //   this.selectedAction = action;
+  //   this.selectedInvoice = invoice;
   
-    // Reset form and validation
-    this.approveForm.reset();
-    this.submit = false;
+  //   // Reset form and validation
+  //   this.approveForm.reset();
+  //   this.submit = false;
   
-    if (action === 'Rejected') {
-      this.approveForm.get('remark')?.setValidators([Validators.required]);
-    } else {
-      this.approveForm.get('remark')?.clearValidators();
-    }
-    this.approveForm.get('remark')?.updateValueAndValidity();
+  //   if (action === 'Rejected') {
+  //     this.approveForm.get('remark')?.setValidators([Validators.required]);
+  //   } else {
+  //     this.approveForm.get('remark')?.clearValidators();
+  //   }
+  //   this.approveForm.get('remark')?.updateValueAndValidity();
   
-    // Open the modal
-    this.modalService.open(this.approveModal, { size: 'sm' });
+  //   // Open the modal
+  //   this.modalService.open(this.approveModal, { size: 'sm' });
   
-    // Ensure parent is not hidden
-    setTimeout(() => {
-      document.body.removeAttribute('aria-hidden');
-    }, 100);
-  }
+  //   // Ensure parent is not hidden
+  //   setTimeout(() => {
+  //     document.body.removeAttribute('aria-hidden');
+  //   }, 100);
+  // }
   
-  afterDecisionOpen(invoice) {
-    this.approveForm.reset()
-    console.log("invoice", invoice);
-    this.approveForm.patchValue({
-      remark: invoice.reason,
-      invoiceApprovedOrRejectedByUser: invoice.invoiceApprovedOrRejectedByUser,
-      invoiceApprovedOrRejectedDateAndTime:invoice.invoiceApprovedOrRejectedDateAndTime
-    })
-    this.modalService.open(this.afterDecision, { size: 'lg' })
-  }
-  approveButton() {
-    if (this.selectedAction === 'Approved') {
-      this.ApproveOrReject(this.selectedInvoice, 'Approved');
-      this.modalService.dismissAll();
-    }
-  }
+  // afterDecisionOpen(invoice) {
+  //   this.approveForm.reset()
+  //   console.log("invoice", invoice);
+  //   this.approveForm.patchValue({
+  //     remark: invoice.reason,
+  //     invoiceApprovedOrRejectedByUser: invoice.invoiceApprovedOrRejectedByUser,
+  //     invoiceApprovedOrRejectedDateAndTime:invoice.invoiceApprovedOrRejectedDateAndTime
+  //   })
+  //   this.modalService.open(this.afterDecision, { size: 'lg' })
+  // }
+  // approveButton() {
+  //   if (this.selectedAction === 'Approved') {
+  //     this.ApproveOrReject(this.selectedInvoice, 'Approved');
+  //     this.modalService.dismissAll();
+  //   }
+  // }
 
-  rejectButton() {
-    this.submit = true;
+  // rejectButton() {
+  //   this.submit = true;
 
-    if (this.approveForm.invalid) {
-      return;
-    }
+  //   if (this.approveForm.invalid) {
+  //     return;
+  //   }
 
-    this.ApproveOrReject(this.selectedInvoice, 'Rejected', this.approveForm.value.remark);
-    this.modalService.dismissAll();
-  }
+  //   this.ApproveOrReject(this.selectedInvoice, 'Rejected', this.approveForm.value.remark);
+  //   this.modalService.dismissAll();
+  // }
 
   ApproveOrReject(invoice: any, status: string, remark?: string): void {
     console.log(`Invoice: ${invoice}, Status: ${status}, Remark: ${''}`);
@@ -239,7 +239,54 @@ export class InvoiceDecisionComponent {
 
 
 
+
   };
+  openModal(action: string, invoice: any) {
+    this.selectedAction = action;
+    this.selectedInvoice = invoice;
+
+    // Reset form and validation
+    this.approveForm.reset();
+    this.submit = false;
+
+    if (action === 'Rejected') {
+      this.approveForm.get('remark')?.setValidators([Validators.required]);
+    } else {
+      this.approveForm.get('remark')?.clearValidators();
+    }
+    this.approveForm.get('remark')?.updateValueAndValidity();
+
+    this.modalService.open(this.approveModal, { size: 'sm' })
+  }
+  afterDecisionOpen(invoice) {
+    this.approveForm.reset()
+    console.log("invoice", invoice);
+    this.approveForm.patchValue({
+      remark: invoice.reason,
+      invoiceApprovedOrRejectedByUser: invoice.invoiceApprovedOrRejectedByUser,
+      invoiceApprovedOrRejectedDateAndTime:invoice.invoiceApprovedOrRejectedDateAndTime
+    })
+    this.modalService.open(this.afterDecision, { size: 'lg' })
+  }
+  approveButton() {
+    console.log("approveButton",this.selectedAction)
+    if (this.selectedAction === 'Approved') {
+      this.ApproveOrReject(this.selectedInvoice, 'Approved');
+      this.modalService.dismissAll();
+    }
+  }
+
+  rejectButton() {
+    console.log("approveButton",this.selectedAction,this.approveForm)
+    
+    if (this.approveForm.invalid) {
+      this.submit = true;
+      return;
+    }
+
+    this.ApproveOrReject(this.selectedInvoice, 'Rejected', this.approveForm.value.remark);
+    this.modalService.dismissAll();
+  }
 
 
 

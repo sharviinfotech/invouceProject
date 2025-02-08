@@ -9,6 +9,7 @@ import { InvoiceUserCreationComponent } from './invoice-user-creation/invoice-us
 import { CommonModule } from '@angular/common'; 
 import { ReactiveFormsModule } from '@angular/forms';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+import { NgxSpinnerModule } from 'ngx-spinner';
 
 @NgModule({
   declarations: [
@@ -23,6 +24,7 @@ import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
     CommonModule,
     ReactiveFormsModule,
     BsDatepickerModule.forRoot(),  // Ensure it's in the imports array
+    NgxSpinnerModule
 
   ],
   providers: [BsDropdownConfig],

@@ -5,6 +5,7 @@ import Swal from 'sweetalert2';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
+import { NgxSpinnerService } from 'ngx-spinner';
 @Component({
   selector: 'app-invoice-user-creation',
   templateUrl: './invoice-user-creation.component.html',
@@ -38,7 +39,7 @@ confirmFieldTextType: boolean = false;
   constructor(
     private modalService: NgbModal,
     private fb: FormBuilder,
-    private service: GeneralserviceService,private toastr: ToastrService
+    private service: GeneralserviceService,private toastr: ToastrService,private spinner:NgxSpinnerService
   ) {}
 
   ngOnInit(): void {
@@ -223,10 +224,10 @@ confirmFieldTextType: boolean = false;
       };
       
       console.log("updateObj", updateObj);
-      
+      this.spinner.show()
       this.service. updateExitUser(updateObj,this.userUniqueId).subscribe((res: any) => {
         console.log("updateUserCreation", res);
-  
+        this.spinner.hide()
         if (res.status == 400) {
           this.toastr.success(res.message);
         } else {
@@ -250,6 +251,7 @@ confirmFieldTextType: boolean = false;
         
         this.submitted = false;
       }, error => {
+        this.spinner.hide()
         this.toastr.error(error);
         console.log("error", error);
       });
@@ -289,13 +291,15 @@ confirmFieldTextType: boolean = false;
     };
   
     console.log("creatObj", creatObj);
-  
+  this.spinner.show()
     this.service.userNewCreation(creatObj).subscribe((res: any) => {
       console.log("submitUserForm", res);
       console.log('apiErr', res, res.responseData);
+      this.spinner.hide()
 
       if(res.status == 400){
         this.toastr.success(res.message);
+
       }else{
          // Display success toast
          this.userCreationForm.reset()
@@ -323,15 +327,20 @@ confirmFieldTextType: boolean = false;
         this.toastr.error(error)
       // this.modalService.dismissAll(modal);
       console.log("error", error);
+      this.spinner.hide()
+
     });
   }
   
   getAllUserList(){
     this.userList = [];
+    this.spinner.show()
     this.service.getAllUserList().subscribe((res:any)=>{
       this.userList = res.data
+      this.spinner.hide()
       console.log("this.userList",this.userList)
     },error =>{
+      this.spinner.hide()
     console.log("error",error)
     })
   }

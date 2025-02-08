@@ -1,9 +1,9 @@
-import { Component, OnInit,AfterViewInit, ViewChild, ElementRef } from '@angular/core';
-import { NgxSpinnerService } from 'ngx-spinner';
+import { Component, OnInit,AfterViewInit, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
 import { GeneralserviceService } from 'src/app/generalservice.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NgApexchartsModule,ChartComponent } from 'ng-apexcharts';
+import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
 import {
   ApexChart,
   ApexResponsive
@@ -34,7 +34,9 @@ export type ChartOptions = {
   templateUrl: './default.component.html',
   styleUrls: ['./default.component.scss'],
   standalone:true,
-  imports: [CommonModule, FormsModule, NgApexchartsModule, BsDatepickerModule], 
+  imports: [CommonModule, FormsModule, NgApexchartsModule, BsDatepickerModule,NgxSpinnerModule], 
+  // providers: [NgxSpinnerService] // ✅ Provide NgxSpinnerService
+
 })
 export class DefaultComponent {  // ... (other properties)
   public barChartOptions: Partial<ChartOptions> = {};// Initially hidden
@@ -49,14 +51,14 @@ export class DefaultComponent {  // ... (other properties)
 
   constructor(
     private service: GeneralserviceService,
-    private spinner: NgxSpinnerService,
+    private spinner: NgxSpinnerService,private cdr: ChangeDetectorRef
   ) {
     this.bsConfig = {
       dateInputFormat: 'YYYY-MM-DD',
       containerClass: 'theme-blue',
     };
   }
-
+ 
   ngOnInit(): void {
     this.getAllInvoice();
   }
@@ -77,11 +79,13 @@ export class DefaultComponent {  // ... (other properties)
           console.error("Error fetching invoices", error);
         }
       );
-    }, 2000);
+    }, 0);
    
   }
 
   updateBarChart(data: any[]) {
+    this.spinner.show()
+
     const yearlyStatusCounts = this.calculateYearlyStatusCounts(data);
     if (Object.keys(yearlyStatusCounts).length === 0) return;
 
@@ -123,6 +127,11 @@ export class DefaultComponent {  // ... (other properties)
       yaxis: { title: { text: "Invoice Count" } },
       legend: { position: 'bottom' }
     };    
+
+    setTimeout(() => {
+      this.spinner.hide()
+    }, 200);
+
   }
 
   filterByYear(selectedYear: string) {
@@ -135,17 +144,33 @@ export class DefaultComponent {  // ... (other properties)
     this.filteredInvoiceList = [...this.yearFilteredInvoices]; // Reset to year filter
     this.updatePieChart();
   }
-
   updatePieChart() {
-    const statusCounts: { [status: string]: number } = {};
-
+    this.spinner.show()
+    
+    setTimeout(() => {
+      const statusCounts: { [status: string]: number } = {};
+  
+    if (!this.yearFilteredInvoices || this.yearFilteredInvoices.length === 0) {
+      console.warn("No invoices available for the selected year.");
+      this.pieChartOptions.series = [];
+      this.cdr.detectChanges(); // 🔥 Force UI update
+      return;
+    }
+  
     this.yearFilteredInvoices.forEach(invoice => {
       const status = invoice.status || "Unknown";
       statusCounts[status] = (statusCounts[status] || 0) + 1;
     });
-
+  
     console.log("Pie Chart Data:", statusCounts);
-
+  
+    if (Object.keys(statusCounts).length === 0) {
+      console.warn("No status data found for pie chart.");
+      this.pieChartOptions.series = [];
+      this.cdr.detectChanges(); // 🔥 Force UI update
+      return;
+    }
+  
     this.pieChartOptions = {
       series: Object.values(statusCounts),
       chart: {
@@ -159,18 +184,24 @@ export class DefaultComponent {  // ... (other properties)
           }
         }
       },
-      // labels: Object.keys(statusCounts),
-      labels: ['Approved','Rejected','Pending'],
-      colors: ['#66ff66', '#ff6666', '#ffcc66'], 
+      labels: Object.keys(statusCounts),
+      colors: ['#66ff66', '#ff6666', '#ffcc66'],
       legend: { position: "bottom" },
       tooltip: { y: { formatter: (val) => `${val} invoices` } }
     };
+  
+    this.cdr.detectChanges(); // 🔥 Force UI update after chart changes
+      this.spinner.hide()
+    }, 500);
   }
+  
+  
 
   filterTableByStatus(selectedStatus: string) {
     this.filteredInvoiceList = this.yearFilteredInvoices.filter(invoice => invoice.status === selectedStatus);
     console.log("Filtered Table Data by Status:", this.filteredInvoiceList);
   }
+  
 
   calculateYearlyStatusCounts(invoices: any[]): { [year: string]: number } {
     const yearlyStatusCounts: { [year: string]: number } = {};

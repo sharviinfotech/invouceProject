@@ -5,12 +5,12 @@ import Swal from 'sweetalert2';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
-import { NgxSpinnerService } from 'ngx-spinner';
+import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
 @Component({
   selector: 'app-customer-creation',
   templateUrl: './customer-creation.component.html',
   styleUrl: './customer-creation.component.css',
-  imports: [CommonModule, ReactiveFormsModule, FormsModule,],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule,NgxSpinnerModule],
   standalone: true
 })
 export class CustomerCreationComponent {

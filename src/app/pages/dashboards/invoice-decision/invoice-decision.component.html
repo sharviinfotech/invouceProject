@@ -48,8 +48,8 @@
       'text-orange-600': invoice.status === 'Pending',
       'text-red-600': invoice.status === 'Rejected',
       'rejected_Reversed':invoice.status === 'Rejected_Reversed'}" *ngIf="loginData?.data.userActivity != 'user'">
-                         
-                            <div *ngIf='invoice.status == "Rejected_Reversed" || invoice.status == "Pending"'
+
+                            <div *ngIf='invoice.status == "Pending" || invoice.status == "Rejected_Reversed"'
                                 class="d-flex gap-2">
                                 <button class="btn btn-success btn-sm" (click)="openModal('Approved', invoice)">
                                     Approve
@@ -61,8 +61,8 @@
 
 
 
-                            <span *ngIf="invoice.status !== 'Pending'"
-                                style="text-decoration: none; cursor: pointer;" (click)="afterDecisionOpen(invoice)">
+                            <span *ngIf="invoice.status !== 'Pending'" style="text-decoration: none; cursor: pointer;"
+                                (click)="afterDecisionOpen(invoice)">
                                 {{ invoice.status }}
                             </span>
 
@@ -82,9 +82,9 @@
 <ng-template #approveModal let-modal>
     <div class="modal-header">
         <h5 class="modal-title">Approval</h5>
-        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
+        <!-- <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
             <span aria-hidden="true">&times;</span>
-        </button>
+        </button> -->
     </div>
     <div class="modal-body">
         <form [formGroup]="approveForm">
@@ -93,8 +93,9 @@
         </form>
     </div>
     <div class="modal-footer">
+        <button type="button"  *ngIf="selectedAction == 'Approved'" class="btn btn-primary" (click)="approveButton()">Approve</button>
+        <button type="button"  *ngIf="selectedAction == 'Rejected'" class="btn btn-primary" (click)="rejectButton()">Reject</button>
         <button type="button" class="btn btn-secondary" (click)="modal.dismiss()">Cancel</button>
-        <button type="button" class="btn btn-primary" (click)="approveButton()">Approve</button>
     </div>
 </ng-template>
 
