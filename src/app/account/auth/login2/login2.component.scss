@@ -71,7 +71,7 @@
 }
 
 .aircraft-logo {
-  width: 200px; /* Increase width */
+  width: 100%; /* Increase width */
   height: 200px; /* Increase height */
   display: block;
   margin: 0 auto; /* Center the image */
@@ -86,7 +86,15 @@
   padding: 15px !important;
   background: radial-gradient(circle, #bdc3c7, #2c3e50);
   height: 100%;
+  font-size: 16px !important;
+  font-weight: 600 !important;
 }
-// .heightAdjuest{
-//   height: 80% !important;
-// }
+.heightAdjuest{
+  margin-top: 50% !important;
+}
+
+.pointer_Underline{
+  cursor: pointer !important;
+  text-decoration: underline !important;
+  color: white !important;
+}

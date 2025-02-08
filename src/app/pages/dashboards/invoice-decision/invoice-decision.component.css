@@ -36,14 +36,17 @@
   
   ::ng-deep .text-green-600 {
     color: #16a34a !important;
+    text-decoration: underline !important;
   }
   
   ::ng-deep .text-orange-600 {
     color: orange !important;
+    text-decoration: underline !important;
   }
   
   ::ng-deep .text-red-600 {
     color: #dc2626 !important;
+    text-decoration: underline !important;
   }
   
   ::ng-deep .cursor-pointer {

@@ -35,7 +35,7 @@
                         <td>{{ invoice.header.BookingDateOfJourny }}</td>
                         <td>{{ invoice.grandTotal | number: '1.2-2'}}</td>
                         <td *ngIf="loginData?.data.userActivity == 'user'" [ngClass]="{
-                  'text-green-600': invoice.status === 'Approved',
+                  'text-green-600 ': invoice.status === 'Approved',
                   'text-orange-600': invoice.status === 'Pending',
                   'text-red-600': invoice.status === 'Rejected',
                   'rejected_Reversed':invoice.status === 'Rejected_Reversed'

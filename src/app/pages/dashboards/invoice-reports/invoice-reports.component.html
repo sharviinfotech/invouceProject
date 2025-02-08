@@ -12,7 +12,7 @@
             <input  
               type="text" formControlName="fromDate"  
               class="form-control form-control-sm"
-              [bsConfig]="bsConfig"
+              [bsConfig]="bsConfig" placeholder="Enter From Invoice Date"
               bsDatepicker
             />
             <div class="text-danger"  *ngIf="submit && f['fromDate'].errors">
@@ -24,7 +24,7 @@
           <div class="form-group">
             <label>To Invoice Date</label>
             <input 
-              type="text" formControlName="toDate"  
+              type="text" formControlName="toDate"   placeholder="Enter To Invoice Date"
               class="form-control form-control-sm"
               [bsConfig]="bsConfig" 
               bsDatepicker

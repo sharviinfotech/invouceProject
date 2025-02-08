@@ -60,7 +60,7 @@ export class Login2Component implements OnInit {
     
     fieldTextType = false;
     year = new Date().getFullYear();
-
+    interval: any;
   ngOnInit(): void {
     document.body.classList.add("auth-body-bg");
     this.loginForm = this.formBuilder.group({
@@ -70,12 +70,13 @@ export class Login2Component implements OnInit {
     this.forgotPasswordForm = this.formBuilder.group({
       email: ['', [Validators.required, Validators.email]]
     });
+    this.startSlideshow();
 // Change image every 5 seconds
   }
-  showSpinner() {
-    this.spinner.show();
-    setTimeout(() => this.spinner.hide(), 3000); // Auto-hide after 3 sec
-  }
+  // showSpinner() {
+  //   this.spinner.show();
+  //   setTimeout(() => this.spinner.hide(), 3000); // Auto-hide after 3 sec
+  // }
 
   // swiper config
   slideConfig = {
@@ -84,7 +85,16 @@ export class Login2Component implements OnInit {
     arrows: false,
     dots: true
   };
-
+  startSlideshow() {
+    this.interval = setInterval(() => {
+      this.currentIndex = (this.currentIndex + 1) % this.images.length;
+    }, 3000); // Change image every 3 seconds
+  }
+  ngOnDestroy() {
+    if (this.interval) {
+      clearInterval(this.interval);
+    }
+  }
   // convenience getter for easy access to form fields
   get f() { return this.loginForm.controls; }
   get fForgot() { return this.forgotPasswordForm.controls; }
@@ -102,7 +112,7 @@ export class Login2Component implements OnInit {
  
       // Login Api
       // this.store.dispatch(login({ userName: userName, password: password }));
- 
+   
       this.login(userName, password)
     }
    
@@ -140,7 +150,8 @@ export class Login2Component implements OnInit {
         Swal.fire({
           icon: 'success',
           title: 'Success',
-          text: res.message
+          text: res.message,
+          timer:5000
         }).then(() => {
           
         });
@@ -264,52 +275,65 @@ export class Login2Component implements OnInit {
 
 
   login(userName, password) {
+    this.spinner.show();
     this.submitted = true;
-
+  
     if (this.loginForm.invalid) {
+      this.spinner.hide();
       return;
     }
+  
     const loginPayload = {
       userName: userName,
       userPassword: password
     };
-
-    // this.store.dispatch(login({ userName: userID, password: password }));
-
-    this.service.submitLogin(loginPayload).subscribe((res: any) => {
-        const response = res
-        console.log("this.response", response)
-        // if (this.response.MSGTXT) {
-        
-        if (response.status === 200 && response.data.isValid) {
-          const dummy = "Welcome to GRN"
-          // localStorage.setItem('currentUser', JSON.stringify(this.response.MSGTXT || { token: this.response.token }));
-          localStorage.setItem('currentUser', JSON.stringify(response || { token: response.token }));
-          const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
-          this.router.navigate([returnUrl], { skipLocationChange: true });
-          this.service.setLoginResponse(response);
-          // Swal.fire("",this.response.MSGTXT, "success")
-          // Swal.fire("",dummy, "success")
-          setTimeout(() => {
-            Swal.fire(response.message, `Welcome ${response.data.userFirstName}  ${response.data.userLastName}`, 'success');
-
-          }, 200);
+  
+    this.service.submitLogin(loginPayload).subscribe(
+      (res: any) => {
+        const response = res;
+  
+        // First, stop the spinner
+        this.spinner.hide();
+  
+        // Ensure UI update completes before showing Swal
+        setTimeout(() => {
+          if (response.status === 200 && response.data.isValid) {
+            localStorage.setItem('currentUser', JSON.stringify(response || { token: response.token }));
+            const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+            this.router.navigate([returnUrl], { skipLocationChange: true });
+            this.service.setLoginResponse(response);
+  
+            // Swal.fire(response.message, `Welcome ${response.data.userFirstName} ${response.data.userLastName}`, 'success');
+            Swal.fire({
+              title: response.message,
+              text: `Welcome ${response.data.userFirstName} ${response.data.userLastName}`,
+              icon: 'success',
+              timer: 5000, // 10 seconds
+              timerProgressBar: true, // Shows a progress bar
+            });
+          } 
+          else if (response.status === 200 && response.data.isValid === false) {
+            Swal.fire('Login Failed', `${response.message}`, 'error');
+          } 
+          else {
+            Swal.fire('', 'Invalid login credentials!', 'error');
+          }
+  
           this.submitted = false;
-        } 
-        else if (response.status === 200 && response.data.isValid == false){
-          Swal.fire('Login Failed', `${response.message} `, 'error');
-          // Swal.fire("",dummy, "success")
-          this.submitted = false;
-        }
-        else {
-          Swal.fire("", "Invalid login credentials!", "error")
-          // this.error = 'Invalid login credentials!';
-        }
-    },error=>{
-      console.log("error",error)
-      this.toaster.error(error)
-     
-    });
+        }, 0); // Delay ensures UI updates before modal appears
+      },
+      (error) => {
+        this.spinner.hide();
+  
+        setTimeout(() => {
+          console.log('error', error);
+          this.toaster.error(error);
+        }, 0);
+      }
+    );
   }
+  
+  
+  
 
 }

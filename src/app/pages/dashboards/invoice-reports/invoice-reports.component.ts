@@ -159,6 +159,9 @@ export class InvoiceReportsComponent {
   }
   reset(){
     this.reportsForm.reset()
+    this.reportsForm.patchValue({
+      "status":''
+    })
     this.getAllInvoice()
   }
   
