@@ -23,7 +23,12 @@
                             <th>Pincode</th>
                             <th>Gst No</th>
                             <th>Pan No</th>
+                            <th>Email</th>
+                            <th>Contact</th>
+                            <th>AlernativeContact</th>
+                             <th>Credit Period</th> 
                             <th>Actions</th>
+                            
                             <!-- <th *ngIf='loginData?.data.userActivity != "customer"'>Action</th> -->
                            
                         </tr>
@@ -38,6 +43,11 @@
                             <td>{{data.customerPincode}}</td>
                             <td>{{data.customerGstNo}}</td>
                             <td>{{data.customerPanNo}}</td>
+                            <td>{{data.customerEmail}}</td>
+                            <td>{{data.customerContact}}</td>
+                            <td>{{data.customerAlernativecontact}}</td>
+                            <td>{{data.customerCreditperiod}}</td>
+                        
                             <!-- <td>
                               {{ data.userStatus ? 'Active' : 'Inactive' }}
                             </td> -->
@@ -78,7 +88,7 @@
                 <div class="col-lg-4 col-md-4 col-sm-4">
                     <div class="form-group">
                         <label>Customer Name<span class="text-danger">*</span></label>
-                        <input class="form-control form-control-sm" formControlName="customerName" type="text" placeholder="">
+                        <input class="form-control form-control-sm" formControlName="customerName" type="text" placeholder="Enter Customer Name">
                         <div class="text-danger" *ngIf="submit && CustomerCreationForm.controls['customerName'].invalid">
                             Customer Name is required.
                         </div>
@@ -89,7 +99,7 @@
                 <div class="col-lg-4 col-md-4 col-sm-4">
                     <div class="form-group">
                         <label>Address<span class="text-danger">*</span></label>
-                        <input class="form-control form-control-sm" formControlName="customerAddress" type="text" placeholder="">
+                        <input class="form-control form-control-sm" formControlName="customerAddress" type="text" placeholder="Enter Address">
                         <div class="text-danger" *ngIf="submit && CustomerCreationForm.controls['customerAddress'].invalid">
                             Address is required.
                         </div>
@@ -100,7 +110,7 @@
                 <div class="col-lg-4 col-md-4 col-sm-4">
                     <div class="form-group">
                         <label>City<span class="text-danger">*</span></label>
-                        <input class="form-control form-control-sm" formControlName="customerCity" type="text" placeholder="">
+                        <input class="form-control form-control-sm" formControlName="customerCity" type="text" placeholder="Enter City">
                         <div class="text-danger" *ngIf="submit && CustomerCreationForm.controls['customerCity'].invalid">
                             City is required.
                         </div>
@@ -158,12 +168,63 @@
                 <div class="col-lg-4 col-md-4 col-sm-4">
                     <div class="form-group">
                         <label>PAN No<span class="text-danger">*</span></label>
-                        <input class="form-control form-control-sm" formControlName="customerPanNo" type="text" placeholder="Enter PAN No (e.g., ABCD1234E)">
+                        <input class="form-control form-control-sm" formControlName="customerPanNo" type="text" placeholder="Enter PAN No"maxlength="10" pattern="(/^[A-Z]{5}[0-9]{4}[A-Z]$/)">
                         <div class="text-danger" *ngIf="submit && CustomerCreationForm.controls['customerPanNo'].invalid">
-                            Valid PAN No is required.
+                            PAN No is required.
                         </div>
                     </div>
                 </div>
+                <!-- email Id -->
+                <div class="col-lg-4 col-md-4 col-sm-4">
+                    <div class="form-group">
+                        <label>Email<span class="text-danger">*</span></label>
+                        <input class="form-control form-control-sm" formControlName="customerEmail" type="email" placeholder="Enter email">
+                        <div class="text-danger" *ngIf="submit && CustomerCreationForm.controls['customerEmail'].invalid">
+                            Email is required.
+                        </div>
+                    </div>
+                </div>
+                <!-- contact -->
+                <div class="col-lg-4 col-md-4 col-sm-4">
+                    <div class="form-group">
+                        <label>Customer Contact<span class="text-danger">*</span></label>
+                        <input class="form-control form-control-sm" formControlName="customerContact" type="text" placeholder="Enter Contact Number"maxlength="10" pattern="[0-9]{10}">
+                        <div class="text-danger" *ngIf="submit && CustomerCreationForm.controls['customerContact'].errors">
+                            Customer Contact is required.
+                        </div>
+                    </div>
+                </div>
+                <!-- alt contact -->
+                <div class="col-lg-4 col-md-4 col-sm-4">
+                    <div class="form-group">
+                        <label>Alternative Contact<span class="text-danger">*</span></label>
+                        <input class="form-control form-control-sm" formControlName="customerAlernativecontact" type="text" placeholder="Enter Alternative Contact" maxlength="10" pattern="[0-9]{10}">
+                        <div class="text-danger" *ngIf="submit && CustomerCreationForm.controls['customerAlernativecontact'].errors">
+                            Alernative contact is required.
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4">
+                    <div class="form-group">
+                      <label for="creditPeriod">Credit Period <span class="text-danger">*</span></label>
+                      <select
+                        formControlName="customerCreditPeriod"
+                        class="form-control"
+                        [ngClass]="{'is-invalid': submit && customerEditForm.controls['customerCreditPeriod'].invalid}">
+                        <option value="">Select a credit period</option>
+                        <option *ngFor="let period of creditPeriodList" [value]="period">{{ period }}</option>
+                      </select>
+                    </div>
+                  
+                    <!-- Credit Period Error Message -->
+                    <div class="text-danger" *ngIf="submit && customerEditForm.controls['customerCreditPeriod'].invalid">
+                      Customer credit period is required.
+                    </div>
+                  </div>
+                  
+                
+                
             </div>
         </form>
     </div>
@@ -187,7 +248,7 @@
                 <div class="col-lg-4 col-md-4 col-sm-4">
                     <div class="form-group">
                         <label>Customer Name<span class="text-danger">*</span></label>
-                        <input class="form-control form-control-sm" formControlName="customerName" type="text" placeholder="">
+                        <input class="form-control form-control-sm" formControlName="customerName" type="text" placeholder="Enter Customer Name">
                         <div class="text-danger" *ngIf="submit && customerEditForm.controls['customerName'].errors">
                             Customer Name is required.
                         </div>
@@ -197,7 +258,7 @@
                 <div class="col-lg-4 col-md-4 col-sm-4">
                     <div class="form-group">
                         <label>Address<span class="text-danger">*</span></label>
-                        <input class="form-control form-control-sm" formControlName="customerAddress" type="text" placeholder="">
+                        <input class="form-control form-control-sm" formControlName="customerAddress" type="text" placeholder="Enter Address">
                         <div class="text-danger" *ngIf="submit && customerEditForm.controls['customerAddress'].errors">
                             Address  is required.
                         </div>
@@ -259,9 +320,9 @@
                 <div class="col-lg-4 col-md-4 col-sm-4">
                     <div class="form-group">
                         <label>PAN No<span class="text-danger">*</span></label>
-                        <input class="form-control form-control-sm" formControlName="customerPanNo" type="text" placeholder="Enter PAN No (e.g., ABCD1234E)">
-                        <div class="text-danger" *ngIf="submit && CustomerEditForm.controls['customerPanNo'].errors">
-                            Valid PAN No is required.
+                        <input class="form-control form-control-sm" formControlName="customerPanNo" type="text" placeholder="Enter PAN No"maxlength="10" pattern="(/^[A-Z]{5}[0-9]{4}[A-Z]$/)">
+                        <div class="text-danger" *ngIf="submit && CustomerCreationForm.controls['customerPanNo'].invalid">
+                            PAN No is required.
                         </div>
                     </div>
                 </div>
@@ -309,6 +370,60 @@
                     </div>
                     <label class="ms-2">Inactive</label>
                 </div> -->
+
+                <!-- email Id -->
+                <div class="col-lg-4 col-md-4 col-sm-4">
+                    <div class="form-group">
+                        <label>Email<span class="text-danger">*</span></label>
+                        <input class="form-control form-control-sm" formControlName="customerEmail" type="email" placeholder="Enter the email">
+                        <div class="text-danger" *ngIf="submit && customerEditForm.controls['customerEmail'].errors">
+                            Email is required.
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-4">
+                    <div class="form-group">
+                        <label>Customer Contact<span class="text-danger">*</span></label>
+                        <input class="form-control form-control-sm" formControlName="customerContact" type="text" placeholder="Enter Contact Number"maxlength="10" pattern="[0-9]{10}">
+                        <div class="text-danger" *ngIf="submit && customerEditForm.controls['customerContact'].errors">
+                            Customer Contact is required.
+                        </div>
+                    </div>
+                </div>
+                <!-- alt contact -->
+                <div class="col-lg-4 col-md-4 col-sm-4">
+                    <div class="form-group">
+                        <label>Alternative Contact<span class="text-danger">*</span></label>
+                        <input class="form-control form-control-sm" formControlName="customerAlernativecontact" type="text" placeholder="Enter Alternative Contact" maxlength="10" pattern="[0-9]{10}">
+                        <div class="text-danger" *ngIf="submit && customerEditForm.controls['customerAlernativecontact'].errors">
+                            Alernative contact is required.
+                        </div>
+                    </div>
+                </div>
+                <!-- credit period -->
+                
+                <div class="col-lg-4">
+                    <div class="form-group">
+                      <label for="creditPeriod">Credit Period <span class="text-danger">*</span></label>
+                      <select
+                        formControlName="customerCreditPeriod"
+                        class="form-control"
+                        [ngClass]="{'is-invalid': submit && customerEditForm.controls['customerCreditPeriod'].invalid}">
+                        <option value="">Select a credit period</option>
+                        <option *ngFor="let period of creditPeriodList" [value]="period">{{ period }}</option>
+                      </select>
+                    </div>
+                  
+                    <!-- Credit Period Error Message -->
+                    <div class="text-danger" *ngIf="submit && customerEditForm.controls['customerCreditPeriod'].invalid">
+                      Customer credit period is required.
+                    </div>
+                  </div>
+                  
+                  
+                
+                
+                
             </div>
         </form>
     </div>

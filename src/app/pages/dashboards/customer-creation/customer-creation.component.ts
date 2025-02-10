@@ -15,7 +15,7 @@ import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
 })
 export class CustomerCreationComponent {
   @ViewChild('editCustomerTemplate') editCustomerTemplate!: TemplateRef<any>;
- 
+  creditPeriodList: string[] = ['15 days', '30 days', '45 days'];
    
   statesList: any[] = [];
   
@@ -24,7 +24,7 @@ export class CustomerCreationComponent {
    modalRef: any;
    customerEditModal: any;
   
-
+  
    fieldTextType: boolean = false;
    submitted = false;
  confirmFieldTextType: boolean = false;
@@ -48,7 +48,7 @@ newCustomerTemplate: any;
      private fb: FormBuilder,
      private service: GeneralserviceService,private toastr: ToastrService,private spinner:NgxSpinnerService
    ) {}
-
+  
    ngOnInit(): void {
      this.getStates();
      this.CustomerCreationForm = this.fb.group({
@@ -58,7 +58,17 @@ newCustomerTemplate: any;
        customerState: ['', Validators.required],
        customerPincode: ['', [Validators.required, Validators.pattern('^[0-9]{6}$')]],
        customerGstNo: ['', Validators.required],
-       customerPanNo: ['', Validators.required]
+       customerPanNo:  ['',
+        Validators.required,
+        Validators.pattern(/^[A-Z]{5}[0-9]{4}[A-Z]$/)  // Correct PAN format
+      ],
+    
+       customerEmail: ['', [Validators.required, Validators.pattern('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$')]],
+       customerContact: ['', [Validators.required,  Validators.pattern('^[0-9]{10}$')]],
+       customerAlernativecontact: ['',[Validators.pattern('^[0-9]{10}$')]],
+       customerCreditPeriod: ['', Validators.required]
+
+
      });
   
     
@@ -72,7 +82,16 @@ newCustomerTemplate: any;
        customerState: ['', Validators.required],
        customerPincode: ['', [Validators.required, Validators.pattern('^[0-9]{6}$')]], // Assuming 6-digit pincode
        customerGstNo: ['', Validators.required],
-       customerPanNo: ['', Validators.required],
+       customerPanNo:  ['',
+        Validators.required,
+        Validators.pattern(/^[A-Z]{5}[0-9]{4}[A-Z]$/)  // Correct PAN format
+      ],
+       customerEmail: ['', [Validators.required, Validators.pattern('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$')]],
+       customerContact: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
+       customerAlernativecontact: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
+       customerCreditPeriod: ['', Validators.required]
+
+
      }, {
        // validator: this.mustMatch('password', 'confirmPassword')
      });
@@ -87,11 +106,13 @@ newCustomerTemplate: any;
      console.log('selectedCustomer:', selectedCustomer); // Debugging
 
      if (!selectedCustomer) {
-       console.error('No user data found');
+       console.error('No customer data found');
        return;
      }
    }
-   openEditModal(customer: any, editUserTemplate: TemplateRef<any>): void {
+   
+   
+   openEditModal(customer: any, editCustomerTemplate: TemplateRef<any>): void {
      this.submit = false
      console.log('customer',customer);
      this.customerUniqueId =null
@@ -104,7 +125,12 @@ newCustomerTemplate: any;
        customerState: selectedCustomer.customerState,
        customerPincode: selectedCustomer.customerPincode,
        customerGstNo: selectedCustomer.customerGstNo,
-       customerPanNo:selectedCustomer.customerPanNo
+       customerPanNo:selectedCustomer.customerPanNo,
+       customerEmail:selectedCustomer.customerEmail,
+       customerContact: selectedCustomer.customerContact,
+       customerAlernativecontact: selectedCustomer.customerAlernativecontact,
+       customerCreditPeriod:selectedCustomer.customerCreditPeriod
+
      });
      this.modalService.open(this.editCustomerTemplate, {
        backdrop: 'static',
@@ -182,7 +208,13 @@ newCustomerTemplate: any;
             "customerState": this.CustomerCreationForm.value.customerState,
             "customerPincode": this.CustomerCreationForm.value.customerPincode,
             "customerGstNo": this.CustomerCreationForm.value.customerGstNo,
-            "customerPanNo": this.CustomerCreationForm.value.customerPanNo
+            "customerPanNo": this.CustomerCreationForm.value.customerPanNo,
+            "customerEmail":this.CustomerCreationForm.value.customerEmail,
+            "customerContact":this.CustomerCreationForm.value.customerContact,
+            "customerAlernativecontact":this.CustomerCreationForm.value.customerAlernativecontact,
+            "customerCreditPeriod":this.CustomerCreationForm.value.customerCreditPeriod
+
+
           
           };
         
@@ -243,7 +275,13 @@ newCustomerTemplate: any;
            "customerState": this.customerEditForm.value.customerState,
            "customerPincode": this.customerEditForm.value.customerPincode,
            "customerGstNo": this.customerEditForm.value.customerGstNo,
-           "customerPanNo": this.customerEditForm.value.customerPanNo
+           "customerPanNo": this.customerEditForm.value.customerPanNo,
+           "customerEmail": this.customerEditForm.value.customerEmail,
+           "customerContact":this.customerEditForm.value.customerContact,
+           "customerAlernativecontact":this.customerEditForm.value.customerAlernativecontact,
+           "customerCreditPeriod":this.customerEditForm.value.customerCreditPeriod
+
+           
         
   
          };
