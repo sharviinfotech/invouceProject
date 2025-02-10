@@ -18,13 +18,13 @@ export class CustomerCreationComponent {
   creditPeriodList: string[] = ['15 days', '30 days', '45 days'];
    
   statesList: any[] = [];
-  
+   customerEditForm!: FormGroup;
    CreateCustomer: any[] = [];
    selectedCustomer: any = null;
    modalRef: any;
    customerEditModal: any;
-  
-  
+ 
+ 
    fieldTextType: boolean = false;
    submitted = false;
  confirmFieldTextType: boolean = false;
@@ -34,21 +34,21 @@ export class CustomerCreationComponent {
    customerUniqueId: any;
    loginData: any;
    StateName: string;
-
+ 
  CustomerCreationForm: any;
 newCustomerTemplate: any;
- customerEditForm: any;
+
  // spinner: any;
-
-  
-  
-
+ 
+ 
+ 
+ 
    constructor(
      private modalService: NgbModal,
      private fb: FormBuilder,
      private service: GeneralserviceService,private toastr: ToastrService,private spinner:NgxSpinnerService
    ) {}
-  
+ 
    ngOnInit(): void {
      this.getStates();
      this.CustomerCreationForm = this.fb.group({
@@ -62,49 +62,47 @@ newCustomerTemplate: any;
         Validators.required,
         Validators.pattern(/^[A-Z]{5}[0-9]{4}[A-Z]$/)  // Correct PAN format
       ],
-    
+   
        customerEmail: ['', [Validators.required, Validators.pattern('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$')]],
        customerContact: ['', [Validators.required,  Validators.pattern('^[0-9]{10}$')]],
        customerAlernativecontact: ['',[Validators.pattern('^[0-9]{10}$')]],
        customerCreditPeriod: ['', Validators.required]
-
-
+ 
+ 
      });
-  
-    
-
-
+ 
+   
+ 
+ 
      this.customerEditForm = this.fb.group({
-
+ 
        customerName: ['', Validators.required],
        customerAddress: ['', Validators.required],
        customerCity: ['', Validators.required],
        customerState: ['', Validators.required],
        customerPincode: ['', [Validators.required, Validators.pattern('^[0-9]{6}$')]], // Assuming 6-digit pincode
        customerGstNo: ['', Validators.required],
-       customerPanNo:  ['',
-        Validators.required,
-        Validators.pattern(/^[A-Z]{5}[0-9]{4}[A-Z]$/)  // Correct PAN format
-      ],
+       customerPanNo: ['', [Validators.required, Validators.pattern(/^[A-Z]{5}[0-9]{4}[A-Z]$/)]],
+
        customerEmail: ['', [Validators.required, Validators.pattern('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$')]],
        customerContact: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
        customerAlernativecontact: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
        customerCreditPeriod: ['', Validators.required]
-
-
+ 
+ 
      }, {
        // validator: this.mustMatch('password', 'confirmPassword')
      });
-    
+   
      this.getInvoiceCustomerDetails();
      this.getAllCustomerList();
-    
-    
+   
+   
      this.loginData = this.service.getLoginResponse()
    }
    editCustomer(selectedCustomer: any, content: any) {
-     console.log('selectedCustomer:', selectedCustomer); // Debugging
-
+     console.log('selected Customer:', selectedCustomer); // Debugging
+ 
      if (!selectedCustomer) {
        console.error('No customer data found');
        return;
@@ -130,7 +128,7 @@ newCustomerTemplate: any;
        customerContact: selectedCustomer.customerContact,
        customerAlernativecontact: selectedCustomer.customerAlernativecontact,
        customerCreditPeriod:selectedCustomer.customerCreditPeriod
-
+ 
      });
      this.modalService.open(this.editCustomerTemplate, {
        backdrop: 'static',
@@ -147,19 +145,19 @@ newCustomerTemplate: any;
          }
        },
        (error) => {
-
+ 
          console.error('Error fetching statesList:', error);
        }
      );
    }
-  
-
-
-  
-  
-  
-
-  
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
    toggleFieldTextType() {
      this.fieldTextType = !this.fieldTextType;
    }
@@ -169,38 +167,38 @@ newCustomerTemplate: any;
    toggleStatus(): void {
      this.customerEditForm.patchValue({ status: !this.customerEditForm.value.status });
    }
-
-
-  
+ 
+ 
+ 
    getInvoiceCustomerDetails(): void {
-    
+   
    }
-  
+ 
    newCustomerCreation(newCustomerTemplate: any): void {
-    
+   
      this.modalService.open(newCustomerTemplate,{  backdrop: 'static',
        keyboard: false,size:'lg' });
-
-  
+ 
+ 
    }
    get f() {
       return this.CustomerCreationForm.controls;
       }
-      
-
-  
-  
-
+     
+ 
+ 
+ 
+ 
       savecustomerCreation(model:any) {
       console.log('Create Customer:', this.CustomerCreationForm.value);
-        
+       
           if (this.CustomerCreationForm.invalid == true) {
             this.submit = true;
             return;
           } else {
             this.submit = true;
           }
-        
+       
           let creatObj = {
             "customerName": this.CustomerCreationForm.value.customerName,
             "customerAddress": this.CustomerCreationForm.value.customerAddress,
@@ -213,17 +211,17 @@ newCustomerTemplate: any;
             "customerContact":this.CustomerCreationForm.value.customerContact,
             "customerAlernativecontact":this.CustomerCreationForm.value.customerAlernativecontact,
             "customerCreditPeriod":this.CustomerCreationForm.value.customerCreditPeriod
-
-
-          
+ 
+ 
+         
           };
-        
+       
           console.log("creatObj", creatObj);
-        
+       
           this.service.savecustomerCreation(creatObj).subscribe((res: any) => {
             console.log("submitCustomerForm", res);
             console.log('apiErr', res, res.responseData);
-      
+     
             if(res.status == 400){
               this.toastr.success(res.message);
             }else{
@@ -237,15 +235,15 @@ newCustomerTemplate: any;
               cancelButtonText: 'Ok'
             }).then((result) => {
               if (result) {
-        
+       
               } else {
-        
+       
               }
             });
             }
-        
-          
-        
+       
+         
+       
             this. getAllCustomerList();
             // this.modalService.dismissAll(modal);
             this.submitted = true;
@@ -264,9 +262,9 @@ newCustomerTemplate: any;
        if (this.customerEditForm.valid) {
          console.log('Updated Data:', this.customerEditForm.value);
          // Here, you would typically send the updated data to the backend
-      
-    
-        
+     
+   
+       
          let updateObj = {
            "customerUniqueId": this.customerUniqueId, // Assuming the unique ID is part of the form
            "customerName": this.customerEditForm.value.customerName,
@@ -280,17 +278,17 @@ newCustomerTemplate: any;
            "customerContact":this.customerEditForm.value.customerContact,
            "customerAlernativecontact":this.customerEditForm.value.customerAlernativecontact,
            "customerCreditPeriod":this.customerEditForm.value.customerCreditPeriod
-
+ 
            
-        
-  
+       
+ 
          };
-        
+       
          console.log("updateObj", updateObj);
-        
+       
          this.service. updateExitCustomer(updateObj,this.customerUniqueId).subscribe((res: any) => {
            console.log("updateCustomerCreation", res);
-    
+   
            if (res.status == 400) {
              this.toastr.success(res.message);
            } else {
@@ -311,7 +309,7 @@ newCustomerTemplate: any;
            }
            this.customerEditForm.reset()
            this.getAllCustomerList();
-          
+         
            this.submitted = false;
          }, error => {
            this.toastr.error(error);
@@ -330,5 +328,6 @@ newCustomerTemplate: any;
      console.log("error",error)
      })
    }
-
+ 
 }
+ 
