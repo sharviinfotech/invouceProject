@@ -72,29 +72,56 @@
 
 .aircraft-logo {
   width: 100%; /* Increase width */
-  height: 200px; /* Increase height */
+  height: 160px; /* Increase height */
   display: block;
   margin: 0 auto; /* Center the image */
-}
-
-.auth-full-page-content {
-  padding-top: 50px; /* Push the form down */
-}
-.rightCard{
-  border: 3px solid cyan !important;
-  box-shadow: 0px 0px 15px cyan, 0px 0px 15px cyan inset;
-  padding: 15px !important;
-  background: radial-gradient(circle, #bdc3c7, #2c3e50);
-  height: 100%;
-  font-size: 16px !important;
-  font-weight: 600 !important;
-}
-.heightAdjuest{
-  margin-top: 50% !important;
 }
 
 .pointer_Underline{
   cursor: pointer !important;
   text-decoration: underline !important;
   color: white !important;
+}
+
+.rightCard {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  border: 3px solid cyan !important;
+  box-shadow: 0px 0px 15px cyan, 0px 0px 15px cyan inset;
+  padding: 30px !important;
+  background: radial-gradient(circle, #bdc3c7, #2c3e50);
+  height: 100vh; /* Ensure full height */
+  font-size: 13px !important;
+  font-weight: 600 !important;
+}
+
+
+
+.container-fluid {
+  height: 100vh; /* Full height of viewport */
+  // display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.heightAdjuest {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+@media (max-width: 768px) {
+  .row.m-0 {
+    flex-direction: column;
+  }
+
+  .rightCard {
+    width: 100%;
+    height: auto; /* Auto height for mobile */
+    padding: 20px;
+  }
 }
