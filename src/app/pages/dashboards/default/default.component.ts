@@ -145,55 +145,67 @@ export class DefaultComponent {  // ... (other properties)
     this.updatePieChart();
   }
   updatePieChart() {
-    this.spinner.show()
-    
+    this.spinner.show();
+  
     setTimeout(() => {
       const statusCounts: { [status: string]: number } = {};
   
-    if (!this.yearFilteredInvoices || this.yearFilteredInvoices.length === 0) {
-      console.warn("No invoices available for the selected year.");
-      this.pieChartOptions.series = [];
-      this.cdr.detectChanges(); // 🔥 Force UI update
-      return;
-    }
+      if (!this.yearFilteredInvoices || this.yearFilteredInvoices.length === 0) {
+        console.warn("No invoices available for the selected year.");
+        this.pieChartOptions.series = [];
+        this.cdr.detectChanges();
+        return;
+      }
   
-    this.yearFilteredInvoices.forEach(invoice => {
-      const status = invoice.status || "Unknown";
-      statusCounts[status] = (statusCounts[status] || 0) + 1;
-    });
+      this.yearFilteredInvoices.forEach(invoice => {
+        const status = invoice.status || "Unknown";
+        statusCounts[status] = (statusCounts[status] || 0) + 1;
+      });
   
-    console.log("Pie Chart Data:", statusCounts);
+      console.log("Pie Chart Data:", statusCounts);
   
-    if (Object.keys(statusCounts).length === 0) {
-      console.warn("No status data found for pie chart.");
-      this.pieChartOptions.series = [];
-      this.cdr.detectChanges(); // 🔥 Force UI update
-      return;
-    }
+      if (Object.keys(statusCounts).length === 0) {
+        console.warn("No status data found for pie chart.");
+        this.pieChartOptions.series = [];
+        this.cdr.detectChanges();
+        return;
+      }
+     
+      // Define color mapping for statuses
+      const statusColors: { [key: string]: string } = {
+        "Approved": "#16a34a",  // Green
+        "Rejected": "#dc2626",  // Red
+        "Pending": "#ffcc66",   // Orange
+        "Rejected_Reverse": "#FF7518",       
+      };
   
-    this.pieChartOptions = {
-      series: Object.values(statusCounts),
-      chart: {
-        type: "pie",
-        height: 350,
-        events: {
-          dataPointSelection: (event, chartContext, config) => {
-            const selectedStatus = Object.keys(statusCounts)[config.dataPointIndex];
-            console.log("Selected Status:", selectedStatus);
-            this.filterTableByStatus(selectedStatus);
+      const chartLabels = Object.keys(statusCounts);
+      const chartColors = chartLabels.map(label => statusColors[label] || "#FF7518"); // Default grey if not found
+  
+      this.pieChartOptions = {
+        series: Object.values(statusCounts),
+        chart: {
+          type: "pie",
+          height: 350,
+          events: {
+            dataPointSelection: (event, chartContext, config) => {
+              const selectedStatus = chartLabels[config.dataPointIndex];
+              console.log("Selected Status:", selectedStatus);
+              this.filterTableByStatus(selectedStatus);
+            }
           }
-        }
-      },
-      labels: Object.keys(statusCounts),
-      colors: ['#66ff66', '#ff6666', '#ffcc66'],
-      legend: { position: "bottom" },
-      tooltip: { y: { formatter: (val) => `${val} invoices` } }
-    };
+        },
+        labels: chartLabels,
+        colors: chartColors,
+        legend: { position: "bottom" },
+        tooltip: { y: { formatter: (val) => `${val} invoices` } }
+      };
   
-    this.cdr.detectChanges(); // 🔥 Force UI update after chart changes
-      this.spinner.hide()
+      this.cdr.detectChanges();
+      this.spinner.hide();
     }, 500);
   }
+  
   
   
 
