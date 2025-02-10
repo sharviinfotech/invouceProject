@@ -54,7 +54,7 @@ export class Login2Component implements OnInit {
     loginForm: FormGroup;
     forgotPasswordForm: FormGroup;
     submitted = false;
-    Forgotsubmitted = false;
+    submittedForgot = false;
     isForgotPassword = false;
     showForgotPassword = false;
     
@@ -97,7 +97,7 @@ export class Login2Component implements OnInit {
   }
   // convenience getter for easy access to form fields
   get f() { return this.loginForm.controls; }
-  get fForgot() { return this.forgotPasswordForm.controls; }
+  get gForgot() { return this.forgotPasswordForm.controls; }
   /**
    * Form submit
    */
@@ -128,13 +128,13 @@ export class Login2Component implements OnInit {
   // Toggle forgot password form
   toggleForgotPassword() {
     this.isForgotPassword = !this.isForgotPassword;
-    this.Forgotsubmitted = false;
+    this.submittedForgot = false;
     this.forgotPasswordForm.reset();
   }
 
   // Forgot password form submission
   onForgotPasswordSubmit() {
-    this.Forgotsubmitted = true;
+    this.submittedForgot = true;
     if (this.forgotPasswordForm.invalid) return;
 
     const payload = { 

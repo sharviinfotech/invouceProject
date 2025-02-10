@@ -126,10 +126,16 @@ export class DefaultComponent {  // ... (other properties)
           }
         }
       },
+      plotOptions: {
+        bar: {
+          columnWidth: "20%", // Decrease this value to make bars thinner
+        }
+      },
+      colors: ["#007BFF"], 
       xaxis: { categories: years, title: { text: "Year" } },
       yaxis: { title: { text: "Invoice Count" } },
       legend: { position: 'bottom' }
-    };    
+    }; 
 
     setTimeout(() => {
       this.spinner.hide()

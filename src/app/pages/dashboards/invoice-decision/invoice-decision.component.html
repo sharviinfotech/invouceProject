@@ -15,8 +15,8 @@
                         <th class="text-nowrap">Destination</th>
                         <th class="text-nowrap">Date Of Journey</th>
                         <th class="text-nowrap">Total Amount</th>
-                        <th clas="text-nowrap" *ngIf="loginData?.data.userActivity == 'user'">Status</th>
-                        <th class="text-nowrap" *ngIf="loginData?.data.userActivity != 'user'">Actions</th>
+                        <th clas="text-nowrap" *ngIf="loginData?.data.userActivity != 'superAdmin'">Status</th>
+                        <th class="text-nowrap" *ngIf="loginData?.data.userActivity == 'superAdmin'">Actions</th>
                         <!-- New column for buttons -->
                     </tr>
                 </thead>
@@ -34,7 +34,7 @@
                         <td>{{ invoice.header.BookingSector }}</td>
                         <td>{{ invoice.header.BookingDateOfJourny }}</td>
                         <td>{{ invoice.grandTotal | number: '1.2-2'}}</td>
-                        <td *ngIf="loginData?.data.userActivity == 'user'" [ngClass]="{
+                        <td *ngIf="loginData?.data.userActivity != 'superAdmin'" [ngClass]="{
                   'text-green-600 ': invoice.status === 'Approved',
                   'text-orange-600': invoice.status === 'Pending',
                   'text-red-600': invoice.status === 'Rejected',
@@ -47,7 +47,7 @@
       'text-green-600': invoice.status === 'Approved',
       'text-orange-600': invoice.status === 'Pending',
       'text-red-600': invoice.status === 'Rejected',
-      'rejected_Reversed':invoice.status === 'Rejected_Reversed'}" *ngIf="loginData?.data.userActivity != 'user'">
+      'rejected_Reversed':invoice.status === 'Rejected_Reversed'}" *ngIf="loginData?.data.userActivity == 'superAdmin'">
 
                             <div *ngIf='invoice.status == "Pending" || invoice.status == "Rejected_Reversed"'
                                 class="d-flex gap-2">
