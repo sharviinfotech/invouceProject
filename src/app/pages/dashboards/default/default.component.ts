@@ -72,7 +72,10 @@ export class DefaultComponent {  // ... (other properties)
           this.allInvoiceList = res.data;
           this.filteredInvoiceList = res.data;
           console.log("Fetched Invoice Data:", this.allInvoiceList);
-          this.updateBarChart(this.allInvoiceList);
+          if(this.allInvoiceList.length>0){
+            this.updateBarChart(this.allInvoiceList);
+
+          }
         },
         error => {
           this.spinner.hide();
@@ -210,9 +213,11 @@ export class DefaultComponent {  // ... (other properties)
   
 
   filterTableByStatus(selectedStatus: string) {
-    this.filteredInvoiceList = this.yearFilteredInvoices.filter(invoice => invoice.status === selectedStatus);
+    this.filteredInvoiceList = this.yearFilteredInvoices.filter(invoice => invoice.status?.trim().toLowerCase() === selectedStatus.trim().toLowerCase());
     console.log("Filtered Table Data by Status:", this.filteredInvoiceList);
+    this.cdr.detectChanges(); // Ensure Angular detects the changes
   }
+  
   
 
   calculateYearlyStatusCounts(invoices: any[]): { [year: string]: number } {
