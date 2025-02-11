@@ -115,15 +115,20 @@
                   </div>
                   <!-- Contact -->
                   <div class="col-lg-4 col-md-4 col-sm-4">
-                      <div class="form-group">
-                          <label>Contact<span class="text-danger">*</span></label>
-                          <input class="form-control form-control-sm" formControlName="contact" 
-                          type="text" placeholder="" maxlength="10" pattern="[0-9]{10}">
-                                             <div class="text-danger"  *ngIf="submit && f['contact'].errors">
-                              Contact is required.
-                          </div>
-                      </div>
-                  </div>
+                    <div class="form-group">
+                        <label>Contact<span class="text-danger">*</span></label>
+                        <input class="form-control form-control-sm"
+                               formControlName="contact"
+                               type="text"
+                               placeholder="Enter Contact Number"
+                               maxlength="10"
+                               pattern="[0-9]{10}"
+                               oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                        <div class="text-danger" *ngIf="submit && f['contact'].errors">
+                             Contact is required.
+                        </div>
+                    </div>
+                </div>
                   <!-- Password -->
                   <div class="col-md-4">
                     <label for="password">Password<span class="text-danger">*</span></label>
@@ -249,7 +254,7 @@
                     </div>
                 </div>
                 <!-- Contact -->
-                <div class="col-lg-4 col-md-4 col-sm-4">
+                <!-- <div class="col-lg-4 col-md-4 col-sm-4">
                   <div class="form-group">
                       <label>Contact<span class="text-danger">*</span></label>
                       <input class="form-control form-control-sm" formControlName="contact" 
@@ -258,7 +263,24 @@
                           Contact is required.
                       </div>
                   </div>
-              </div>
+              </div> -->
+
+              
+              <div class="col-lg-4 col-md-4 col-sm-4">
+                <div class="form-group">
+                    <label>Contact<span class="text-danger">*</span></label>
+                    <input class="form-control form-control-sm"
+                           formControlName="contact"
+                           type="text"
+                           placeholder="Enter Contact Number"
+                           maxlength="10"
+                           pattern="[0-9]{10}"
+                           oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                    <div class="text-danger" *ngIf="submit && f['contact'].errors">
+                         Contact is required.
+                    </div>
+                </div>
+            </div>
                 <!-- Password -->
                 <div class="col-md-4">
                   <label for="password">Password<span class="text-danger">*</span></label>
