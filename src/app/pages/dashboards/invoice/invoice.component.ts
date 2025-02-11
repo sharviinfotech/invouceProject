@@ -33,8 +33,11 @@ export class InvoiceComponent implements OnInit {
   newInvoiceCreation!: FormGroup;
   showNewInvoice = false;
   panForm: FormGroup;
-
+  isDropdownOpen = false;
+  selectedInvoiceType: string | null = null;
+  // selectedInvoiceType: string = '';
   activeTab: string = 'AllInvoice'; // Change this based on tab logic
+  
   logoUrl: string | null = null;
   InvoiceLogo:string | null = null;
   isHoveringLogo: boolean = false;
@@ -42,6 +45,36 @@ export class InvoiceComponent implements OnInit {
   StateName: string = '';
   showCGST_SGST = false;
   showIGST = false;
+  proformaCardHeaderName: any;
+  proformaCardHeaderId: null;
+  toggleDropdown() {
+    this.isDropdownOpen = !this.isDropdownOpen;
+   
+  }
+  selectInvoiceType(type){
+    this.proformaCardHeaderId = null
+    this.proformaCardHeaderName = null
+    this.proformaCardHeaderId = type
+
+    if(this.proformaCardHeaderId == "PQ"){
+     this.proformaCardHeaderName = "Proforma Invoice"
+    }else{
+      this.proformaCardHeaderName = "Tax Invoice"
+
+    }
+    this.activeTab = "NewInvoice";
+    this.isDropdownOpen = false
+    console.log("this.proformaCardHeaderId",this.proformaCardHeaderId,this.proformaCardHeaderName)
+
+  }
+ 
+ 
+  
+  
+  
+  
+  
+
   hoveredIndex: number = -1; 
   // chargeItems: ChargeItem[] = [
   //   {
@@ -709,7 +742,9 @@ if(this.InvoiceLogo== ''|| this.InvoiceLogo == null){
         "invoiceApprovedOrRejectedByUser":"",
         "invoiceApprovedOrRejectedDateAndTime":"",
         "loggedInUser":this.loginData.userName,
-        "status":"Pending"
+        "status":"Pending",
+        "proformaCardHeaderId":this.proformaCardHeaderId,
+        "proformaCardHeaderName":this.proformaCardHeaderName
         
         // "bankDetails":{
         //     "accountName":this.newInvoiceCreation.value.accountName,
@@ -890,6 +925,19 @@ if(this.InvoiceLogo== ''|| this.InvoiceLogo == null){
       });
     }
   }
+  convertToUppercase(event: any) {
+    event.target.value = event.target.value.toUpperCase();
+  }
+  
+  restrictToNumbers(event: KeyboardEvent) {
+    const pattern = /[0-9]/;
+    const inputChar = event.key;
+  
+    if (!pattern.test(inputChar)) {
+      event.preventDefault(); // Prevent non-numeric input
+    }
+  }
+  
 
 
 
