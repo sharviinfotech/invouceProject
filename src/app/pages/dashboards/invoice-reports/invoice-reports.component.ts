@@ -920,7 +920,7 @@ console.log("this.uniqueInvoices",this.uniqueInvoices)
                    
                      <td class="text-center"></td>
                     <td>${charge.description}</td>
-                    <td class="text-center">${charge.units}</td>
+                    <td class="text-center">${charge.units ? charge.units : ''}</td>
                     <td class="text-right">${charge.rate}</td>
                     <td class="text-right">${charge.amount}</td>
                   </tr>
