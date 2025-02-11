@@ -13,6 +13,7 @@ import { InvoiceReportsComponent } from './invoice-reports/invoice-reports.compo
 import { InvoiceUserCreationComponent } from './invoice-user-creation/invoice-user-creation.component';
 import { InvoiceDecisionComponent } from './invoice-decision/invoice-decision.component';
 import { CustomerCreationComponent } from './customer-creation/customer-creation.component';
+import { ServiceChargesComponent } from './service-charges/service-charges.component';
 
 const routes: Routes = [
     {
@@ -46,6 +47,10 @@ const routes: Routes = [
     {
         path: 'CustomerCreation',
         component: CustomerCreationComponent
+    },
+    {
+        path: 'ServiceCharges',
+        component: ServiceChargesComponent
     },
     // {
     //     path: 'saas',

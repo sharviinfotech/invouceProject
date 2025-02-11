@@ -111,6 +111,10 @@ newCustomerTemplate: any;
    
      this.loginData = this.service.getLoginResponse()
    }
+   convertToUpperCase(event: any) {
+    event.target.value = event.target.value.toUpperCase();
+  }
+  
    editCustomer(selectedCustomer: any, content: any) {
      console.log('selected Customer:', selectedCustomer); // Debugging
  
@@ -214,17 +218,17 @@ newCustomerTemplate: any;
           }
        
           let creatObj = {
-            "customerName": this.CustomerCreationForm.value.customerName,
-            "customerAddress": this.CustomerCreationForm.value.customerAddress,
-            "customerCity": this.CustomerCreationForm.value.customerCity,
-            "customerState": this.CustomerCreationForm.value.customerState,
+            "customerName": this.CustomerCreationForm.value.customerName.toUpperCase(),
+            "customerAddress": this.CustomerCreationForm.value.customerAddress.toUpperCase(),
+            "customerCity": this.CustomerCreationForm.value.customerCity.toUpperCase(),
+            "customerState": this.CustomerCreationForm.value.customerState.toUpperCase(),
             "customerPincode": this.CustomerCreationForm.value.customerPincode,
-            "customerGstNo": this.CustomerCreationForm.value.customerGstNo,
-            "customerPanNo": this.CustomerCreationForm.value.customerPanNo,
+            "customerGstNo": this.CustomerCreationForm.value.customerGstNo.toUpperCase(),
+            "customerPanNo": this.CustomerCreationForm.value.customerPanNo.toUpperCase(),
             "customerEmail":this.CustomerCreationForm.value.customerEmail,
             "customerContact":this.CustomerCreationForm.value.customerContact,
             "customerAlernativecontact":this.CustomerCreationForm.value.customerAlernativecontact,
-            "customerCreditPeriod":this.CustomerCreationForm.value.customerCreditPeriod
+            "customerCreditPeriod":this.CustomerCreationForm.value.customerCreditPeriod.toUpperCase()
  
  
          
@@ -283,17 +287,17 @@ newCustomerTemplate: any;
   
     let updateObj = {
       customerUniqueId: this.customerUniqueId,
-      customerName: this.customerEditForm.value.customerName,
-      customerAddress: this.customerEditForm.value.customerAddress,
-      customerCity: this.customerEditForm.value.customerCity,
-      customerState: this.customerEditForm.value.customerState,
+      customerName: this.customerEditForm.value.customerName.toUpperCase(),
+      customerAddress: this.customerEditForm.value.customerAddress.toUpperCase(),
+      customerCity: this.customerEditForm.value.customerCity.toUpperCase(),
+      customerState: this.customerEditForm.value.customerState.toUpperCase(),
       customerPincode: this.customerEditForm.value.customerPincode,
-      customerGstNo: this.customerEditForm.value.customerGstNo,
-      customerPanNo: this.customerEditForm.value.customerPanNo,
+      customerGstNo: this.customerEditForm.value.customerGstNo.toUpperCase(),
+      customerPanNo: this.customerEditForm.value.customerPanNo.toUpperCase(),
       customerEmail: this.customerEditForm.value.customerEmail,
       customerContact: this.customerEditForm.value.customerContact,
       customerAlernativecontact: this.customerEditForm.value.customerAlernativecontact,
-      customerCreditPeriod: this.customerEditForm.value.customerCreditPeriod
+      customerCreditPeriod: this.customerEditForm.value.customerCreditPeriod.toUpperCase()
     };
   
     console.log("Updating customer with data:", updateObj);
