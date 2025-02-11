@@ -18,7 +18,7 @@ export class CustomerCreationComponent {
   creditPeriodList: string[] = ['15 days', '30 days', '45 days'];
    
   statesList: any[] = [];
-   customerEditForm!: FormGroup;
+   customerEditForm: FormGroup;
    CreateCustomer: any[] = [];
    selectedCustomer: any = null;
    modalRef: any;
@@ -26,12 +26,12 @@ export class CustomerCreationComponent {
  
  
    fieldTextType: boolean = false;
-   submitted = false;
+   submitted: boolean = false;
  confirmFieldTextType: boolean = false;
    customerNewCreation: any[];
    customerList: any[];
    submit: boolean=false;
-   customerUniqueId: any;
+   customerUniqueId: string;
    loginData: any;
    StateName: string;
  
@@ -56,7 +56,13 @@ newCustomerTemplate: any;
        customerAddress: ['', Validators.required],
        customerCity: ['', Validators.required],
        customerState: ['', Validators.required],
-       customerPincode: ['', [Validators.required, Validators.pattern('^[0-9]{6}$')]],
+       customerPincode: [
+        '',
+        [
+          Validators.required,
+          Validators.pattern(/^[0-9]{6}$/)
+        ]
+      ],
        customerGstNo: ['', Validators.required],
        customerPanNo:  ['',
         Validators.required,
@@ -80,8 +86,13 @@ newCustomerTemplate: any;
        customerAddress: ['', Validators.required],
        customerCity: ['', Validators.required],
        customerState: ['', Validators.required],
-       customerPincode: ['', [Validators.required, Validators.pattern('^[0-9]{6}$')]], // Assuming 6-digit pincode
-       customerGstNo: ['', Validators.required],
+       customerPincode: [
+        '',
+        [
+          Validators.required,
+          Validators.pattern(/^[0-9]{6}$/)
+        ]
+      ],       customerGstNo: ['', Validators.required],
        customerPanNo: ['', [Validators.required, Validators.pattern(/^[A-Z]{5}[0-9]{4}[A-Z]$/)]],
 
        customerEmail: ['', [Validators.required, Validators.pattern('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$')]],
@@ -109,6 +120,8 @@ newCustomerTemplate: any;
      }
    }
    
+     
+
    
    openEditModal(customer: any, editCustomerTemplate: TemplateRef<any>): void {
      this.submit = false
@@ -183,9 +196,10 @@ newCustomerTemplate: any;
    }
    get f() {
       return this.CustomerCreationForm.controls;
+      return this.customerEditForm.controls;
       }
      
- 
+    
  
  
  
@@ -259,66 +273,60 @@ newCustomerTemplate: any;
      // You might want to close the modal or clear form fields, etc.
    }
    updateExitCustomer(modal: any): void {
-       if (this.customerEditForm.valid) {
-         console.log('Updated Data:', this.customerEditForm.value);
-         // Here, you would typically send the updated data to the backend
-     
-   
-       
-         let updateObj = {
-           "customerUniqueId": this.customerUniqueId, // Assuming the unique ID is part of the form
-           "customerName": this.customerEditForm.value.customerName,
-           "customerAddress": this.customerEditForm.value.customerAddress,
-           "customerCity": this.customerEditForm.value.customerCity,
-           "customerState": this.customerEditForm.value.customerState,
-           "customerPincode": this.customerEditForm.value.customerPincode,
-           "customerGstNo": this.customerEditForm.value.customerGstNo,
-           "customerPanNo": this.customerEditForm.value.customerPanNo,
-           "customerEmail": this.customerEditForm.value.customerEmail,
-           "customerContact":this.customerEditForm.value.customerContact,
-           "customerAlernativecontact":this.customerEditForm.value.customerAlernativecontact,
-           "customerCreditPeriod":this.customerEditForm.value.customerCreditPeriod
- 
-           
-       
- 
-         };
-       
-         console.log("updateObj", updateObj);
-       
-         this.service. updateExitCustomer(updateObj,this.customerUniqueId).subscribe((res: any) => {
-           console.log("updateCustomerCreation", res);
-   
-           if (res.status == 400) {
-             this.toastr.success(res.message);
-           } else {
-             // Display success toast
-             this.modalService.dismissAll(modal);
-             Swal.fire({
-               title: '',
-               text: res.message,
-               icon: 'success',
-               cancelButtonText: 'Ok'
-             }).then((result) => {
-               if (result) {
-                 // Handle confirmation if needed
-               } else {
-                 // Handle cancel if needed
-               }
-             });
-           }
-           this.customerEditForm.reset()
-           this.getAllCustomerList();
-         
-           this.submitted = false;
-         }, error => {
-           this.toastr.error(error);
-           console.log("error", error);
-         });
-       } else {
-         console.log('Form is invalid');// Ensure all fields are marked as touched
-       }
-     }
+    console.log('Edit Customer:', this.customerEditForm.value);
+    this.submitted = true;
+  
+    // if (this.customerEditForm.errors) {
+    //   console.log('Form is errors');
+    //   return;
+    // }
+  
+    let updateObj = {
+      customerUniqueId: this.customerUniqueId,
+      customerName: this.customerEditForm.value.customerName,
+      customerAddress: this.customerEditForm.value.customerAddress,
+      customerCity: this.customerEditForm.value.customerCity,
+      customerState: this.customerEditForm.value.customerState,
+      customerPincode: this.customerEditForm.value.customerPincode,
+      customerGstNo: this.customerEditForm.value.customerGstNo,
+      customerPanNo: this.customerEditForm.value.customerPanNo,
+      customerEmail: this.customerEditForm.value.customerEmail,
+      customerContact: this.customerEditForm.value.customerContact,
+      customerAlernativecontact: this.customerEditForm.value.customerAlernativecontact,
+      customerCreditPeriod: this.customerEditForm.value.customerCreditPeriod
+    };
+  
+    console.log("Updating customer with data:", updateObj);
+  
+    this.service.updateExitCustomer(updateObj, this.customerUniqueId).subscribe(
+      (res: any) => {
+        console.log("updateCustomerCreation response:", res);
+  
+        if (res.status === 400) {
+          this.toastr.error(res.message);
+        } else {
+          this.toastr.success("Customer updated successfully");
+          this.modalService.dismissAll(modal);
+          Swal.fire({
+            title: '',
+            text: res.message,
+            icon: 'success',
+            confirmButtonText: 'OK'
+          }).then(() => {
+            this.getAllCustomerList();
+          });
+        }
+  
+        this.customerEditForm.reset();
+        this.submitted = false;
+      },
+      (error) => {
+        console.error("Error updating customer:", error);
+        this.toastr.error("Failed to update customer");
+      }
+    );
+  }
+  
    getAllCustomerList(){
      this.customerList = [];
      this.service.getAllCustomerList().subscribe((res:any)=>{
@@ -328,6 +336,6 @@ newCustomerTemplate: any;
      console.log("error",error)
      })
    }
- 
+   
 }
  

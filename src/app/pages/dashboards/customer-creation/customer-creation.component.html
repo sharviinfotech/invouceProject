@@ -145,13 +145,22 @@
                 <!-- Pincode -->
                 <div class="col-lg-4 col-md-4 col-sm-4">
                     <div class="form-group">
-                        <label>Pincode<span class="text-danger">*</span></label>
-                        <input class="form-control form-control-sm" formControlName="customerPincode" type="text" placeholder="Enter Pincode">
-                        <div class="text-danger" *ngIf="submit && f['customerPincode'].errors">
-                            Pincode is required.
-                        </div>
+                    <label>Pincode<span class="text-danger">*</span></label>
+                    <input class="form-control form-control-sm" 
+                                   formControlName="customerPincode" 
+                                   type="text" 
+                                   placeholder="Enter Pincode" 
+                                   maxlength="6"
+                                   pattern="[0-9]{6}"
+                                   oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                    <div class="text-danger" *ngIf="submit && f['customerPincode'].errors?.required">
+                                Pincode is required.
                     </div>
-                </div>
+                    <div class="text-danger" *ngIf="submit && f['customerPincode'].errors?.pattern">
+                                Pincode must be exactly 6 digits.
+                    </div>
+                    </div>
+                    </div>
  
                 <!-- GST No -->
                 <div class="col-lg-4 col-md-4 col-sm-4">
@@ -188,7 +197,13 @@
                 <div class="col-lg-4 col-md-4 col-sm-4">
                     <div class="form-group">
                         <label>Customer Contact<span class="text-danger">*</span></label>
-                        <input class="form-control form-control-sm" formControlName="customerContact" type="text" placeholder="Enter Contact Number"maxlength="10" pattern="[0-9]{10}">
+                        <input class="form-control form-control-sm"
+                               formControlName="customerContact"
+                               type="text"
+                               placeholder="Enter Contact Number"
+                               maxlength="10"
+                               pattern="[0-9]{10}"
+                               oninput="this.value = this.value.replace(/[^0-9]/g, '')">
                         <div class="text-danger" *ngIf="submit && f['customerContact'].errors">
                             Customer Contact is required.
                         </div>
@@ -197,13 +212,19 @@
                 <!-- alt contact -->
                 <div class="col-lg-4 col-md-4 col-sm-4">
                     <div class="form-group">
-                        <label>Alternative Contact</label>
-                        <input class="form-control form-control-sm" formControlName="customerAlernativecontact" type="text" placeholder="Enter Alternative Contact" maxlength="10" pattern="[0-9]{10}">
-                        <div class="text-danger" *ngIf="submit && f['customerAlernativecontact'].errors">
-                            Alernative contact is required.
-                        </div>
+                    <label>Alternative Contact</label>
+                    <input class="form-control form-control-sm" 
+                                   formControlName="customerAlernativecontact" 
+                                   type="text" 
+                                   placeholder="Enter Alternative Contact" 
+                                   maxlength="10" 
+                                   pattern="[0-9]{10}"
+                                   oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                    <div class="text-danger" *ngIf="submit && f['customerAlernativecontact'].errors">
+                                Alternative contact is required.
                     </div>
-                </div>
+                    </div>
+                    </div>
                
                 <div class="col-lg-4">
                     <div class="form-group">
@@ -300,13 +321,22 @@
                 <!-- Pincode -->
                 <div class="col-lg-4 col-md-4 col-sm-4">
                     <div class="form-group">
-                        <label>Pincode<span class="text-danger">*</span></label>
-                        <input class="form-control form-control-sm" formControlName="customerPincode" type="text" placeholder="Enter Pincode">
-                        <div class="text-danger" *ngIf="submit && f['customerPincode'].errors">
-                            Pincode is required.
-                        </div>
+                    <label>Pincode<span class="text-danger">*</span></label>
+                    <input class="form-control form-control-sm" 
+                                   formControlName="customerPincode" 
+                                   type="text" 
+                                   placeholder="Enter Pincode" 
+                                   maxlength="6"
+                                   pattern="[0-9]{6}"
+                                   oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                    <div class="text-danger" *ngIf="submit && f['customerPincode'].errors?.required">
+                                Pincode is required.
                     </div>
-                </div>
+                    <div class="text-danger" *ngIf="submit && f['customerPincode'].errors?.pattern">
+                                Pincode must be exactly 6 digits.
+                    </div>
+                    </div>
+                    </div>
  
                 <!-- GST No -->
                 <div class="col-lg-4 col-md-4 col-sm-4">
@@ -321,7 +351,7 @@
                     <div class="form-group">
                         <label>PAN No<span class="text-danger">*</span></label>
                         <input class="form-control form-control-sm" formControlName="customerPanNo" type="text" placeholder="Enter PAN No"maxlength="10" pattern="(/^[A-Z]{5}[0-9]{4}[A-Z]$/)">
-                        <div class="text-danger" *ngIf="submit && ['customerPanNo'].errors">
+                        <div class="text-danger" *ngIf="submit && f['customerPanNo'].errors">
                             PAN No is required.
                         </div>
                     </div>
@@ -339,10 +369,17 @@
                         </div>
                     </div>
                 </div>
+                <!-- contact-number -->
                 <div class="col-lg-4 col-md-4 col-sm-4">
                     <div class="form-group">
                         <label>Customer Contact<span class="text-danger">*</span></label>
-                        <input class="form-control form-control-sm" formControlName="customerContact" type="text" placeholder="Enter Contact Number"maxlength="10" pattern="[0-9]{10}">
+                        <input class="form-control form-control-sm"
+                               formControlName="customerContact"
+                               type="text"
+                               placeholder="Enter Contact Number"
+                               maxlength="10"
+                               pattern="[0-9]{10}"
+                               oninput="this.value = this.value.replace(/[^0-9]/g, '')">
                         <div class="text-danger" *ngIf="submit && f['customerContact'].errors">
                             Customer Contact is required.
                         </div>
@@ -351,13 +388,19 @@
                 <!-- alt contact -->
                 <div class="col-lg-4 col-md-4 col-sm-4">
                     <div class="form-group">
-                        <label>Alternative Contact<span class="text-danger">*</span></label>
-                        <input class="form-control form-control-sm" formControlName="customerAlernativecontact" type="text" placeholder="Enter Alternative Contact" maxlength="10" pattern="[0-9]{10}">
-                        <div class="text-danger" *ngIf="submit && f['customerAlernativecontact'].errors">
-                            Alernative contact is required.
-                        </div>
+                    <label>Alternative Contact</label>
+                    <input class="form-control form-control-sm" 
+                                   formControlName="customerAlernativecontact" 
+                                   type="text" 
+                                   placeholder="Enter Alternative Contact" 
+                                   maxlength="10" 
+                                   pattern="[0-9]{10}"
+                                   oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                    <!-- <div class="text-danger" *ngIf="submit && f['customerAlernativecontact'].errors">
+                                Alternative contact is required.
+                    </div> -->
                     </div>
-                </div>
+                    </div>
                 <!-- credit period -->
                
                 <div class="col-lg-4">
@@ -386,7 +429,7 @@
         </form>
     </div>
       <div class="card-footer" style="text-align: right;">
-        <button type="button" class="btn btn-primary" (click)="updateExitCustomer(c)">Update</button>
+        <button type="button" class="btn btn-primary" (click)="updateExitCustomer()">Update</button>
         <button type="button" class="btn btn-secondary" (click)="c('Close click')">Close</button>
       </div>
    
