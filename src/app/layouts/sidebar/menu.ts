@@ -61,7 +61,7 @@ export const MENU: MenuItem[] = [
                 label: 'Service Charges',
                 link: '/ServiceCharges',
                 parentId: 1,
-                icon: 'bx bx-user-check',
+                icon: 'bx bx-receipt',
             },
             
 
