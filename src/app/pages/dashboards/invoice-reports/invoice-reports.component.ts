@@ -1044,6 +1044,7 @@ export class InvoiceReportsComponent {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
+  border-bottom:2px solid #FFD700
 }
 
 .company-details {
@@ -1082,7 +1083,8 @@ export class InvoiceReportsComponent {
   text-align: center;
   font-size: 20px;
   font-weight: bold;
-  margin-top:10px
+  margin-top:10px;
+   
 }
   .invoice-number{
    font-weight: 600;
@@ -1164,6 +1166,8 @@ export class InvoiceReportsComponent {
   font-weight: bold;
   -webkit-print-color-adjust: exact !important;
   print-color-adjust: exact !important;
+    margin-right: 2px !important;
+
 }
 
 
@@ -1396,12 +1400,7 @@ export class InvoiceReportsComponent {
 }
 
 
-.invoice-title {
-  text-align: center;
-  font-size: 20px;
-  font-weight: bold;
-  margin-top:10px
-}
+
   .invoice-number{
    font-weight: 600;
    font-size:20px
@@ -1474,7 +1473,9 @@ export class InvoiceReportsComponent {
               }
                  .headerBackground, 
 .bill-to div, 
-.invoice-dates div,.bank-booking-details-container .bank-booking-details .bank div,.bank-booking-details-container .bank-booking-details .booking div, .invoice-cardHeader {
+.invoice-dates div,.bank-booking-details-container .bank-booking-details .bank div,
+.bank-booking-details-container .bank-booking-details .booking div,
+ .invoice-cardHeader {
   text-align: center !important;
   background-color: green !important;
   color: white !important;
@@ -1495,15 +1496,34 @@ export class InvoiceReportsComponent {
 .bank-booking-details-container {
   page-break-before: always; /* Moves to next page if needed */
 }
+  .invoice-title {
+  text-align: center;
+  font-size: 20px;
+  font-weight: bold;
+  margin-top:10px;
+  
+}
+  @media print {
+  .invoice-title div {
+    background-color: #FFD700 !important;
+    color: black !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+}
  
 
           </style>
         </head>
-        <body>
-          <div id="invoice" class="invoice-container">
-    <div class="invoice-title ">
-    <h3>${invoiceItem.proformaCardHeaderName}</span></h3>
+  <body>
+  <div id="invoice" class="invoice-container">
+ 
+ <div class="invoice-title" >
+  <div >
+    ${invoiceItem.proformaCardHeaderName}
   </div>
+</div>
+
   <div class="header">
     <div class="invoice-logo">
       <h4>RITHWIK GREEN POWER & AVIATION PRIVATE LIMITED</h4>
