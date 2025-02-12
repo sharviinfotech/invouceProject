@@ -832,7 +832,7 @@
               <div class="col-lg-4">
                 <div class="form-group">
                   <label>Type of Aircraft<span class="text-danger">*</span></label>
-                  <input type="text" formControlName="proformatypeOfAircraft" class="form-control" placeholder="">
+                  <input type="text" formControlName="proformatypeOfAircraft" class="form-control" placeholder=""  (input)="convertToUppercase($event)">
                 </div>
                 <div class="text-danger" style="color: red;"
                   *ngIf="newInvoiceCreation.get('proformatypeOfAircraft')?.hasError('required') && newInvoiceCreation.get('proformatypeOfAircraft')?.touched">
@@ -843,7 +843,7 @@
               <div class="col-lg-4">
                 <div class="form-group">
                   <label>Seating Capasity<span class="text-danger">*</span></label>
-                  <input type="text" formControlName="proformaseatingcapasity" class="form-control" placeholder="">
+                  <input type="text" formControlName="proformaseatingcapasity" class="form-control" placeholder=""  (input)="convertToUppercase($event)">
                 </div>
                 <div class="text-danger" style="color: red;"
                   *ngIf="newInvoiceCreation.get('proformaseatingcapasity')?.hasError('required') && newInvoiceCreation.get('proformaseatingcapasity')?.touched">
@@ -930,7 +930,7 @@
                 <td>{{i + 2}}</td> <!-- Sequential numbering -->
                 <td class="indent">
                   <input type="text" [(ngModel)]="item.description" [ngModelOptions]="{standalone: true}"
-                    class="description-input" (input)="calculateTotals()">
+                    class="description-input" (input)="calculateTotals()"  (input)="convertToUppercase($event)">
                 </td>
                 <td class="text-right">
                   <!-- Show input for Units only for the first item -->
