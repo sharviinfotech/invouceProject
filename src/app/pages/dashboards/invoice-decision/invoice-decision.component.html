@@ -34,7 +34,7 @@
                         <td>{{ invoice.header.BookingSector }}</td>
                         <td>{{ invoice.header.BookingDateOfJourny }}</td>
                         <td>{{ invoice.grandTotal | number: '1.2-2'}}</td>
-                        <td *ngIf="loginData?.data.userActivity != 'superAdmin'" [ngClass]="{
+                        <td *ngIf="loginData?.data.userActivity != 'MD'" [ngClass]="{
                   'text-green-600 ': invoice.status === 'Approved',
                   'text-orange-600': invoice.status === 'Pending',
                   'text-red-600': invoice.status === 'Rejected',
@@ -47,7 +47,7 @@
       'text-green-600': invoice.status === 'Approved',
       'text-orange-600': invoice.status === 'Pending',
       'text-red-600': invoice.status === 'Rejected',
-      'rejected_Reversed':invoice.status === 'Rejected_Reversed'}" *ngIf="loginData?.data.userActivity == 'superAdmin'">
+      'rejected_Reversed':invoice.status === 'Rejected_Reversed'}" *ngIf="loginData?.data.userActivity == 'MD'">
 
                             <div *ngIf='invoice.status == "Pending" || invoice.status == "Rejected_Reversed"'
                                 class="d-flex gap-2">
