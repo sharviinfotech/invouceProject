@@ -3,70 +3,61 @@
     <h5>All Invoice Reports </h5>
   </div>
   <div class="card-body">
-    
+
     <form [formGroup]="reportsForm">
-      <div class="row">  <!-- Add a row to align fields in one line -->
+      <div class="row"> <!-- Add a row to align fields in one line -->
         <div class="col-lg-4">
           <div class="form-group">
             <label>From Invoice Date</label>
-            <input  
-              type="text" formControlName="fromDate"  
-              class="form-control form-control-sm"
-              [bsConfig]="bsConfig" placeholder="Enter From Invoice Date"
-              bsDatepicker
-            />
-            <div class="text-danger"  *ngIf="submit && f['fromDate'].errors">
+            <input type="text" formControlName="fromDate" class="form-control form-control-sm" [bsConfig]="bsConfig"
+              placeholder="Enter From Invoice Date" bsDatepicker />
+            <div class="text-danger" *ngIf="submit && f['fromDate'].errors">
               From Invoice Date is required.
-          </div>
+            </div>
           </div>
         </div>
         <div class="col-lg-4">
           <div class="form-group">
             <label>To Invoice Date</label>
-            <input 
-              type="text" formControlName="toDate"   placeholder="Enter To Invoice Date"
-              class="form-control form-control-sm"
-              [bsConfig]="bsConfig" 
-              bsDatepicker
-            />
-            <div class="text-danger"  *ngIf="submit && f['toDate'].errors">
+            <input type="text" formControlName="toDate" placeholder="Enter To Invoice Date"
+              class="form-control form-control-sm" [bsConfig]="bsConfig" bsDatepicker />
+            <div class="text-danger" *ngIf="submit && f['toDate'].errors">
               To Invoice Date is required.
-          </div>
+            </div>
           </div>
         </div>
         <div class="col-lg-2">
           <div class="form-group">
             <label>Status</label>
-            <select class="form-control form-control-sm" 
-            formControlName="status">
+            <select class="form-control form-control-sm" formControlName="status">
               <option value="">Select</option>
               <option value="approved">Approved</option>
               <option value="rejected">Rejected</option>
               <option value="pending">Pending</option>
             </select>
-            <div class="text-danger"  *ngIf="submit && f['status'].errors">
+            <div class="text-danger" *ngIf="submit && f['status'].errors">
               Status is required.
-          </div>
+            </div>
           </div>
         </div>
         <div class="col-lg-2 mt-4">
-          <div  class="d-flex gap-2">
-            <button class="btn btn-success btn-sm" (click)="onChangeForm()" >
-                Get
+          <div class="d-flex gap-2">
+            <button class="btn btn-success btn-sm" (click)="onChangeForm()">
+              Get
             </button>
-            <button class="btn btn-danger btn-sm" (click)="reset()" >
-                Reset
+            <button class="btn btn-danger btn-sm" (click)="reset()">
+              Reset
             </button>
-        </div>
+          </div>
         </div>
 
       </div>
     </form>
- 
- 
 
 
-    
+
+
+
     <!-- <div class="row">
       <div class="col-lg-4">
         <div class="form-group">
@@ -94,16 +85,14 @@
         <tbody>
           <!-- (click)="invoice.status === 'Approved' ? openInvoicePopup(invoice) : null" -->
           <tr *ngFor="let invoice of allInvoiceList" (click)="selectInvoice(invoice)"
-          [class.selected]="invoiceItem === invoice">
+            [class.selected]="invoiceItem === invoice">
             <td>
-              <span
-              [ngClass]="{
+              <span [ngClass]="{
                 'text-green-600 underline cursor-pointer': invoice.status === 'Approved',
                 'text-orange-600': invoice.status === 'Pending',
                 'text-red-600': invoice.status === 'Rejected',
                 'rejected_Reversed':invoice.status === 'Rejected_Reversed'
-              }"
-                >
+              }">
                 {{ invoice.invoiceUniqueNumber }}
               </span>
             </td>
@@ -126,7 +115,7 @@
           </tr>
           <tr *ngIf="allInvoiceList.length === 0">
             <td colspan="8" style="text-align: center;"> <label cols> No Data </label></td>
-          
+
 
           </tr>
         </tbody>
@@ -145,7 +134,7 @@
   </div> -->
 
 
-  <!-- <div class="container my-5 p-4 border" #invoiceContent id="invoiceContent" style="max-width: 800px; background-color: white;">
+<!-- <div class="container my-5 p-4 border" #invoiceContent id="invoiceContent" style="max-width: 800px; background-color: white;">
 
     <div class="text-center mb-4">
       <h3 class="company-name">RITHWIK GREEN POWER & AVIATION PRIVATE LIMITED</h3>
@@ -292,3 +281,6 @@
       </div>
     </div>
   </div> -->
+
+
+
