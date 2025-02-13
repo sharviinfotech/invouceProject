@@ -2132,7 +2132,7 @@ generateInvoiceHTML4(invoiceItem: InvoiceItem) {
       background-color: white;
       -webkit-print-color-adjust: exact !important;
       print-color-adjust: exact !important;
-      font-size: 12px;
+      font-size: 10px;
     }
 
            container {
@@ -2148,12 +2148,12 @@ generateInvoiceHTML4(invoiceItem: InvoiceItem) {
  .invoice-header {
  text-align: center;
       justify-content: space-between;
-      margin-bottom: 20px;
+      margin-bottom: 10px;
       background: #AFEEEE;
       color: white;
       padding: 10px;
-      font-size: 17px;
-      height: 132px;
+      font-size: 15px;
+      height: 130px;
 
 }
         .invoice-sections {
@@ -2165,9 +2165,9 @@ generateInvoiceHTML4(invoiceItem: InvoiceItem) {
     }
 
     .invoice-section {
-      width: 30%;
+      width: 45%;
       /* Adjust width as needed */
-      padding: 10px;
+      padding: 5px;
       border: 1px solid #ccc;
     }
 
@@ -2200,7 +2200,7 @@ generateInvoiceHTML4(invoiceItem: InvoiceItem) {
 }
 
 .signature-logo .logo {
-  width: 300px;
+  
   height: 150px;
   background: gray;
   border-radius: 50%;
@@ -2223,6 +2223,7 @@ generateInvoiceHTML4(invoiceItem: InvoiceItem) {
       width: 100%;
       border-collapse: collapse;
       margin-top: 15px;
+      font-size:9px !important
     }
 
     .invoice-table th,
@@ -2235,6 +2236,9 @@ generateInvoiceHTML4(invoiceItem: InvoiceItem) {
     .invoice-summary {
       margin-top: 15px;
     }
+        .notes {
+            font-size: 9px; /* Reduce font size for notes */
+        }
 
     .balance {
       background: lightslategrey;
@@ -2292,18 +2296,8 @@ generateInvoiceHTML4(invoiceItem: InvoiceItem) {
     display: block; /* Make spans block-level for better control */
 }
 
-  .invoice-table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 20px;
-    }
 
- .invoice-table th,
-    .invoice-table td {
-      border: 1px solid #ccc;
-      padding: 8px;
-      text-align: left;
-    }
+
 
 .invoice-summary {
   text-align: right;
@@ -2324,7 +2318,7 @@ generateInvoiceHTML4(invoiceItem: InvoiceItem) {
   @media print {
    body {
         margin: 0;
-        padding: 5px;
+        padding: 8px;
       }
         .table-bordered {
               border-collapse: collapse;
@@ -2399,6 +2393,9 @@ generateInvoiceHTML4(invoiceItem: InvoiceItem) {
       .booking-details {
         display: inline-block;
       }
+            .invoice-table {
+                font-size: 7px; /* Further reduce font size for table content */
+            }
         
 
 }
@@ -2476,7 +2473,14 @@ generateInvoiceHTML4(invoiceItem: InvoiceItem) {
               </tr>
             `).join('')}
 
-           
+            <tr>
+                    
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <th>TOTAL:</th>
+                     <td class="text-right"> ${invoiceItem.subtotal}</td>
+                </tr>
             <tr>
               <td>2</td>
               <td class="bold">Taxes:</td>
@@ -2493,50 +2497,42 @@ generateInvoiceHTML4(invoiceItem: InvoiceItem) {
                 <td></td>
                 <td class="text-right">${tax.amount}</td>
               </tr>
+              <tr>
+              <td></td>
+              <td></td>
+              <td></td>
+              <th>GRAND TOTAL:</th>
+              <td class="text-right"> ${invoiceItem.grandTotal}</td>
+                </tr>
             `).join('')}
              </tbody>
         </table>
     </div>
-      
-    <div class="invoice-section bank-details" style="width: 50%;">
-    <div style="font-weight: bold; font-size: 16px; background:teal; color: white;">BANK DETAILS</div>
-    <p><span style="font-weight: bold; font-size: 12px;">ACCOUNT NAME:</span> RITHWIK GREEN POWER & AVIATION PRIVATE LIMITED</p>
-    <p><span style="font-weight: bold; font-size: 12px;">BANK:</span> KOTAK MAHINDRA BANK</p>
-    <p><span style="font-weight: bold; font-size: 12px;">ACCOUNT NO:</span> 0745211990</p>
-    <p><span style="font-weight: bold; font-size: 12px;">BRANCH:</span> BANJARAHILLS</p>
-    <p><span style="font-weight: bold; font-size: 12px;">IFSC CODE:</span> KKBK00007461(NEFT/RTGS)</p>
-  </div>
-  <div style="display: flex; width: 50%; justify-content: end;">
-        <table>
-            <tbody>
-                <tr>
-                    <p><span style="font-weight: bold; font-size: 12px;">TOTAL:</span> ${invoiceItem.subtotal}</p>
-                    <p><span style="font-weight: bold; font-size: 12px;">GRAND TOTAL:</span> ${invoiceItem.grandTotal}</p>
-                </tr>
-                
-            </tbody>
-        </table>
-    </div>
   </div>  
-
-
-   
-
       
-    <div class="header">
-    <div class="signature-logo">
-      <div class="logo"><img src="${this.InvoiceLogo}" alt="Company Logo" class="logo"></div>
-    </div>
-    <div class="signature-logo">
-      <div class="logo"><img src="${this.signature}" alt="Company Logo" class="logo"></div>
-        Authorised Signatory
-    </div>
+   
+  <div class="notes">
+        <div><p><strong>NOTES:</strong>${invoiceItem.header.notes}</p></div>    
+           
   </div>
-
-
-</div>
-</div>
-
+  
+  
+    <div class="header">
+      <div class="invoice-section bank-details" style="width: 50%;">
+        <div style="font-weight: bold; font-size: 16px; background:teal; color: white;">BANK DETAILS</div>
+        <p><span style="font-weight: bold; font-size: 12px;">ACCOUNT NAME:</span> RITHWIK GREEN POWER & AVIATION PRIVATE LIMITED</p>
+        <p><span style="font-weight: bold; font-size: 12px;">BANK:</span> KOTAK MAHINDRA BANK</p>
+        <p><span style="font-weight: bold; font-size: 12px;">ACCOUNT NO:</span> 0745211990</p>
+        <p><span style="font-weight: bold; font-size: 12px;">BRANCH:</span> BANJARAHILLS</p>
+        <p><span style="font-weight: bold; font-size: 12px;">IFSC CODE:</span> KKBK00007461(NEFT/RTGS)</p>
+      </div>
+      
+      <div class="signature-logo" style="width: 50%;text-align:center">
+        <div class="logo"><img src="${this.signature}" alt="Company Logo" class="logo"></div>
+          Authorised Signatory
+        </div>
+      </div>
+    </div>
       </html>
     `;
 
