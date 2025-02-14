@@ -423,6 +423,8 @@ spinnerHideMethod(){
     this.reason =null ,
     this.invoiceApprovedOrRejectedByUser =null ,
     this.invoiceApprovedOrRejectedDateAndTime =null ,
+    this.proformaCardHeaderId = null,
+    this.proformaCardHeaderName  =null
     this.spinnerHideMethod()
     this.chargeItems = [];
     this.taxItems = [];
@@ -473,7 +475,9 @@ spinnerHideMethod(){
     this.reSubmitInvoiceStatus =this.selectedInvoice.status 
     this.reason =this.selectedInvoice.reason ,
     this.invoiceApprovedOrRejectedByUser =this.selectedInvoice.invoiceApprovedOrRejectedByUser ,
-    this.invoiceApprovedOrRejectedDateAndTime =this.selectedInvoice.invoiceApprovedOrRejectedDateAndTime 
+    this.invoiceApprovedOrRejectedDateAndTime =this.selectedInvoice.invoiceApprovedOrRejectedDateAndTime,
+    this.proformaCardHeaderId = this.selectedInvoice.proformaCardHeaderId,
+    this.proformaCardHeaderName  =this.selectedInvoice.proformaCardHeaderName 
     
 if(this.logoUrl == ''|| this.logoUrl == null){
   this.logoUrl = this.imageService.getBase64FlightLogo(); 
@@ -713,8 +717,10 @@ if(this.InvoiceLogo== ''|| this.InvoiceLogo == null){
       console.log("invoiceDateSplit",invoiceDate,"bokingDateSplit",bookingDate)
       let createobj = {
         "header": {
-          "invoiceHeader": this.InvoiceLogo,
-          "invoiceImage": this.logoUrl,
+        //  "invoiceHeader": this.InvoiceLogo,
+        //   "invoiceImage": this.logoUrl,
+        "invoiceHeader": null,
+          "invoiceImage": null,
           "ProformaCustomerName": this.newInvoiceCreation.value.ProformaCustomerName,
           "ProformaAddress": this.newInvoiceCreation.value.ProformaAddress,
           "ProformaCity": this.newInvoiceCreation.value.ProformaCity,
@@ -833,8 +839,10 @@ if(this.InvoiceLogo== ''|| this.InvoiceLogo == null){
 
         "invoiceReferenceNo": this.invoiceRefNo,
         "header": {
-          "invoiceHeader": this.InvoiceLogo,
-          "invoiceImage": this.logoUrl,
+          // "invoiceHeader": this.InvoiceLogo,
+          // "invoiceImage": this.logoUrl,
+          "invoiceHeader": null,
+          "invoiceImage": null,
           "ProformaCustomerName": this.newInvoiceCreation.value.ProformaCustomerName,
           "ProformaAddress": this.newInvoiceCreation.value.ProformaAddress,
           "ProformaCity": this.newInvoiceCreation.value.ProformaCity,
@@ -862,8 +870,9 @@ if(this.InvoiceLogo== ''|| this.InvoiceLogo == null){
         "invoiceApprovedOrRejectedByUser":this.invoiceApprovedOrRejectedByUser,
         "invoiceApprovedOrRejectedDateAndTime":this.invoiceApprovedOrRejectedDateAndTime,
         "loggedInUser":this.loginData.userName,
-        
-       "status":this.reSubmitInvoiceStatus
+       "status":this.reSubmitInvoiceStatus,
+       "proformaCardHeaderId":this.proformaCardHeaderId,
+        "proformaCardHeaderName":this.proformaCardHeaderName
         // "bankDetails":{
         //     "accountName":this.newInvoiceCreation.value.accountName,
         //     "bank":this.newInvoiceCreation.value.bank,
