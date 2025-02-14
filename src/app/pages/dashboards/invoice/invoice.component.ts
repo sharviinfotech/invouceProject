@@ -128,7 +128,7 @@ export class InvoiceComponent implements OnInit {
 
   @ViewChild('logoInput') logoInput!: ElementRef;
   allInvoiceList: any;
-  invoiceRefNo: number;
+  originalUniqueId: number;
 
   // getstateList: any;
 
@@ -433,9 +433,9 @@ spinnerHideMethod(){
     this.selectedInvoice = null
     this.selectedInvoice = invoice;
     console.log("this.selectedInvoice", this.selectedInvoice)
-    this.invoiceRefNo = null
-    this.invoiceRefNo = this.selectedInvoice.invoiceReferenceNo
-    console.log("this.invoiceRefNo", this.invoiceRefNo,this.selectedInvoice.invoiceUniqueNumber)
+    this.originalUniqueId = null
+    this.originalUniqueId = this.selectedInvoice.originalUniqueId
+    console.log("this.originalUniqueId", this.originalUniqueId,this.selectedInvoice.invoiceUniqueNumber)
     this.isEditing = false;
     this.activeTab = "Edit"
     this.show = false;
@@ -837,7 +837,7 @@ if(this.InvoiceLogo== ''|| this.InvoiceLogo == null){
       // Implement update logic here
       let updateobj = {
 
-        "invoiceReferenceNo": this.invoiceRefNo,
+        "originalUniqueId": this.originalUniqueId,
         "header": {
           // "invoiceHeader": this.InvoiceLogo,
           // "invoiceImage": this.logoUrl,
@@ -882,7 +882,7 @@ if(this.InvoiceLogo== ''|| this.InvoiceLogo == null){
       };
       console.log('Payload sent to backend:', updateobj);
       this.spinner.show()
-      this.service.UpdateInvoice(updateobj, this.invoiceRefNo).subscribe((response: any) => {
+      this.service.UpdateInvoice(updateobj, this.originalUniqueId).subscribe((response: any) => {
         console.log("updateInvoice", response);
         this.spinner.hide()
         const resp = response.updatedInvoice;

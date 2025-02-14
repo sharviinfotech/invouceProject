@@ -47,7 +47,7 @@ interface InvoiceHeader {
 interface InvoiceItem {
   header: InvoiceHeader;
   _id: string;
-  invoiceReferenceNo: number;
+  originalUniqueId: number;
   chargesList: ChargeItem[];
   taxList: TaxItem[];
   subtotal: number;
@@ -200,7 +200,7 @@ export class InvoiceDecisionComponent {
     }).replace(',', ''); // Remove the comma between date and time
 
     const reqBody = {
-      invoiceReferenceNo: invoice.invoiceReferenceNo, // Access invoice ID
+      originalUniqueId: invoice.originalUniqueId, // Access invoice ID
       status: status, // Set status dynamically
       reason: this.approveForm.value.remark, // Default to 'N/A' if no remark is provided
       invoiceApprovedOrRejectedByUser: this.loginData?.data.userName,
@@ -298,7 +298,7 @@ export class InvoiceDecisionComponent {
     this.invoiceItem = invoice
     const invoiceItem = invoice;
     console.log("invoice", invoice)
-    console.log("this.invoiceItem", this.invoiceItem.invoiceReferenceNo);
+    console.log("this.invoiceItem", this.invoiceItem.originalUniqueId);
     console.log("this.invoiceItem.header.status", this.invoiceItem.header.status)
 
 
