@@ -128,7 +128,7 @@ export class InvoiceComponent implements OnInit {
 
   @ViewChild('logoInput') logoInput!: ElementRef;
   allInvoiceList: any;
-  invoiceRefNo: number;
+  originalUniqueId: number;
 
   // getstateList: any;
 
@@ -423,6 +423,8 @@ spinnerHideMethod(){
     this.reason =null ,
     this.invoiceApprovedOrRejectedByUser =null ,
     this.invoiceApprovedOrRejectedDateAndTime =null ,
+    this.proformaCardHeaderId = null,
+    this.proformaCardHeaderName  =null
     this.spinnerHideMethod()
     this.chargeItems = [];
     this.taxItems = [];
@@ -431,9 +433,9 @@ spinnerHideMethod(){
     this.selectedInvoice = null
     this.selectedInvoice = invoice;
     console.log("this.selectedInvoice", this.selectedInvoice)
-    this.invoiceRefNo = null
-    this.invoiceRefNo = this.selectedInvoice.invoiceReferenceNo
-    console.log("this.invoiceRefNo", this.invoiceRefNo,this.selectedInvoice.invoiceUniqueNumber)
+    this.originalUniqueId = null
+    this.originalUniqueId = this.selectedInvoice.originalUniqueId
+    console.log("this.originalUniqueId", this.originalUniqueId,this.selectedInvoice.invoiceUniqueNumber)
     this.isEditing = false;
     this.activeTab = "Edit"
     this.show = false;
@@ -473,7 +475,9 @@ spinnerHideMethod(){
     this.reSubmitInvoiceStatus =this.selectedInvoice.status 
     this.reason =this.selectedInvoice.reason ,
     this.invoiceApprovedOrRejectedByUser =this.selectedInvoice.invoiceApprovedOrRejectedByUser ,
-    this.invoiceApprovedOrRejectedDateAndTime =this.selectedInvoice.invoiceApprovedOrRejectedDateAndTime 
+    this.invoiceApprovedOrRejectedDateAndTime =this.selectedInvoice.invoiceApprovedOrRejectedDateAndTime,
+    this.proformaCardHeaderId = this.selectedInvoice.proformaCardHeaderId,
+    this.proformaCardHeaderName  =this.selectedInvoice.proformaCardHeaderName 
     
 if(this.logoUrl == ''|| this.logoUrl == null){
   this.logoUrl = this.imageService.getBase64FlightLogo(); 
@@ -713,8 +717,10 @@ if(this.InvoiceLogo== ''|| this.InvoiceLogo == null){
       console.log("invoiceDateSplit",invoiceDate,"bokingDateSplit",bookingDate)
       let createobj = {
         "header": {
-          "invoiceHeader": this.InvoiceLogo,
-          "invoiceImage": this.logoUrl,
+        //  "invoiceHeader": this.InvoiceLogo,
+        //   "invoiceImage": this.logoUrl,
+        "invoiceHeader": null,
+          "invoiceImage": null,
           "ProformaCustomerName": this.newInvoiceCreation.value.ProformaCustomerName,
           "ProformaAddress": this.newInvoiceCreation.value.ProformaAddress,
           "ProformaCity": this.newInvoiceCreation.value.ProformaCity,
@@ -831,10 +837,12 @@ if(this.InvoiceLogo== ''|| this.InvoiceLogo == null){
       // Implement update logic here
       let updateobj = {
 
-        "invoiceReferenceNo": this.invoiceRefNo,
+        "originalUniqueId": this.originalUniqueId,
         "header": {
-          "invoiceHeader": this.InvoiceLogo,
-          "invoiceImage": this.logoUrl,
+          // "invoiceHeader": this.InvoiceLogo,
+          // "invoiceImage": this.logoUrl,
+          "invoiceHeader": null,
+          "invoiceImage": null,
           "ProformaCustomerName": this.newInvoiceCreation.value.ProformaCustomerName,
           "ProformaAddress": this.newInvoiceCreation.value.ProformaAddress,
           "ProformaCity": this.newInvoiceCreation.value.ProformaCity,
@@ -862,8 +870,9 @@ if(this.InvoiceLogo== ''|| this.InvoiceLogo == null){
         "invoiceApprovedOrRejectedByUser":this.invoiceApprovedOrRejectedByUser,
         "invoiceApprovedOrRejectedDateAndTime":this.invoiceApprovedOrRejectedDateAndTime,
         "loggedInUser":this.loginData.userName,
-        
-       "status":this.reSubmitInvoiceStatus
+       "status":this.reSubmitInvoiceStatus,
+       "proformaCardHeaderId":this.proformaCardHeaderId,
+        "proformaCardHeaderName":this.proformaCardHeaderName
         // "bankDetails":{
         //     "accountName":this.newInvoiceCreation.value.accountName,
         //     "bank":this.newInvoiceCreation.value.bank,
@@ -873,7 +882,7 @@ if(this.InvoiceLogo== ''|| this.InvoiceLogo == null){
       };
       console.log('Payload sent to backend:', updateobj);
       this.spinner.show()
-      this.service.UpdateInvoice(updateobj, this.invoiceRefNo).subscribe((response: any) => {
+      this.service.UpdateInvoice(updateobj, this.originalUniqueId).subscribe((response: any) => {
         console.log("updateInvoice", response);
         this.spinner.hide()
         const resp = response.updatedInvoice;
