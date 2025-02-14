@@ -70,5 +70,9 @@ getLoginResponse(){
     return this.http.put(environment.baseUrl+'invoice/updateExitCustomer/'+customerUniqueId,obj);
  
   }
+  reviewedUpadte(obj){
+    return this.http.post(environment.baseUrl+'invoice/reviewedUpadte',obj);
+ 
+  }
 
 }

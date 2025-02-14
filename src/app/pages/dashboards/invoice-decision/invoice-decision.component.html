@@ -15,13 +15,13 @@
                         <th class="text-nowrap">Destination</th>
                         <th class="text-nowrap">Date Of Journey</th>
                         <th class="text-nowrap">Total Amount</th>
-                        <th clas="text-nowrap" *ngIf="loginData?.data.userActivity != 'superAdmin'">Status</th>
-                        <th class="text-nowrap" *ngIf="loginData?.data.userActivity == 'superAdmin'">Actions</th>
+                        <th clas="text-nowrap" *ngIf="loginData?.data.userActivity != 'MD'">Status</th>
+                        <th class="text-nowrap" *ngIf="loginData?.data.userActivity == 'MD'">Actions</th>
                         <!-- New column for buttons -->
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let invoice of allInvoiceList">
+                    <tr *ngFor="let invoice of allInvoiceList" (click)="rowData(invoice)">
                         <td>
                             <span [ngClass]=>
                                 {{ invoice.invoiceUniqueNumber }}
@@ -34,20 +34,29 @@
                         <td>{{ invoice.header.BookingSector }}</td>
                         <td>{{ invoice.header.BookingDateOfJourny }}</td>
                         <td>{{ invoice.grandTotal | number: '1.2-2'}}</td>
-                        <td *ngIf="loginData?.data.userActivity != 'MD'" [ngClass]="{
+                        <td *ngIf="loginData?.data.userActivity != 'MD'" class="d-flex align-items-center" 
+                        [ngClass]="{
                   'text-green-600 ': invoice.status === 'Approved',
                   'text-orange-600': invoice.status === 'Pending',
                   'text-red-600': invoice.status === 'Rejected',
                   'rejected_Reversed':invoice.status === 'Rejected_Reversed'
-                }">
-                            {{ invoice.status }}
+                }" >
+                <span [ngClass]="{'reasonOpen': invoice.invoiceApprovedOrRejectedByUser}"
+                       (click)="afterDecisionOpen(invoice)">
+                           {{ invoice.status }}
+                      </span>
+                            
+                            <span *ngIf="invoice.status === 'Pending' && invoice.reviewedDescription" class="share-icon" (click)="openSharePopup(invoice)">
+                                <i class="fas fa-eye"></i> 
+                                
+                                </span> 
                         </td>
                         <!-- New Actions Column -->
                         <td [class.selected]="invoiceItem === invoice" [ngClass]="{
-      'text-green-600': invoice.status === 'Approved',
-      'text-orange-600': invoice.status === 'Pending',
-      'text-red-600': invoice.status === 'Rejected',
-      'rejected_Reversed':invoice.status === 'Rejected_Reversed'}" *ngIf="loginData?.data.userActivity == 'MD'">
+                                                 'text-green-600': invoice.status === 'Approved',
+                                                 'text-orange-600': invoice.status === 'Pending',
+                                                 'text-red-600': invoice.status === 'Rejected',
+                                                  'rejected_Reversed':invoice.status === 'Rejected_Reversed'}" *ngIf="loginData?.data.userActivity == 'MD'">
 
                             <div *ngIf='invoice.status == "Pending" || invoice.status == "Rejected_Reversed"'
                                 class="d-flex gap-2">
@@ -57,14 +66,21 @@
                                 <button class="btn btn-danger btn-sm" (click)="openModal('Rejected', invoice)">
                                     Reject
                                 </button>
+                                <button class="btn btnReview btn-sm" (click)="reviewInvoice(invoice)">
+                                    Review
+                                </button>
                             </div>
 
 
 
-                            <span *ngIf="invoice.status !== 'Pending'" style="text-decoration: none; cursor: pointer;"
+                            <!-- <span *ngIf="invoice.status !== 'Pending'" style="text-decoration: none; cursor: pointer;"
                                 (click)="afterDecisionOpen(invoice)">
                                 {{ invoice.status }}
-                            </span>
+                            </span> -->
+                            <span *ngIf="invoice.status !== 'Pending'" style="text-decoration: none; cursor: pointer;"
+                            (click)="afterDecisionOpen(invoice)">
+                            {{ invoice.status }}
+                        </span>
 
                         </td>
 
@@ -140,3 +156,239 @@
     </div>
 
 </ng-template>
+
+<ng-template #reviewedInvoice let-c="close">
+    <div class="modal-header">
+        <h5 class="modal-title">Review Invoice</h5>
+    </div>
+    <div class="modal-body">
+        <div class="container">
+            <div class="header-row">
+              
+              <img [src]="logoUrl" alt="Company Logo" class="logo">
+              <img [src]="InvoiceLogo" alt="Company Logo" class="logo">
+              <img [src]="logoUrl" alt="Company Logo" class="logo">
+            </div>
+      
+            <div class="card mb-4">
+              <div class="orange-background" style="text-align: center;">
+                Proforma Invoice
+              </div>
+              <div class="card-body">
+                <table class="table table-bordered">
+                  <tr>
+                    <td width="50%">To:</td>
+                    <td>INVOICE NO : {{invoiceItem.invoiceUniqueNumber}}</td>
+                  </tr>
+                  <tr>
+                    <td>{{invoiceItem.header.ProformaCustomerName}}</td>
+                    <td>DATE :{{invoiceItem.header.ProformaInvoiceDate}}</td>
+                  </tr>
+                  <tr>
+                    <td>{{invoiceItem.header.ProformaAddress}}</td>
+                    <td>PAN :{{invoiceItem.header.ProformaPanNO}}</td>
+                  </tr>
+                  <tr>
+                    <td>{{invoiceItem.header.ProformaCity}}-{{invoiceItem.header.ProformaPincode}}</td>
+                    <td>GST NO  :{{invoiceItem.header.ProformaGstNumber}}</td>
+                  </tr>
+                  <tr>
+                    <td>GST NO : {{invoiceItem.header.ProformaGstNo}}</td>
+                    <td>TYPE OF Aircraft  : {{invoiceItem.header.ProformaTypeOfAircraft}}</td>
+                  </tr>
+                  <tr>
+                    <td>PAN NO  :{{invoiceItem.header.ProformaPan}}</td>
+                    <td>SEATING CAPACITY  : {{invoiceItem.header.ProformaSeatingCapasity}}</td>
+                  </tr>
+                </table>
+              </div>
+      
+            </div>
+      
+            <div class="card mb-4">
+              <div class="orange-background" style="text-align: center;">
+                Booking Details
+              </div>
+              <div class="card-body">
+                <table class="table table-bordered">
+                  <tr>
+                    <td class="bold">Date of Journey</td>
+                    <td>{{invoiceItem.header.BookingDateOfJourny}}</td>
+                  </tr>
+                  <tr>
+                    <td class="bold">Sector</td>
+                    <td>{{invoiceItem.header.BookingSector}}</td>
+                  </tr>
+                  <tr>
+                    <td class="bold">Billing Flying Time</td>
+                    <td>{{invoiceItem.header.BookingBillingFlyingTime}}</td>
+                  </tr>
+                </table>
+      
+              </div>
+            </div>
+            <div class="card mb-4">
+              <div class="orange-background" style="text-align: center;">
+                Charges
+              </div>
+              <div class="card-body">
+                <table class="table table-bordered">
+                  <thead style="background-color: rgb(255, 165, 0) !important">
+                    <tr >
+                      <th>S.No</th>
+                      <th>Description</th>
+                      <th>Units (Hrs.)</th>
+                      <th>Rate (INR)</th>
+                      <th>Amount (INR)</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>1</td>
+                      <td class="bold">Charges</td>
+                      <td class="text-right"></td>
+                      <td class="text-right"></td>
+                      <td></td>
+                    </tr>
+      
+                    <tr *ngFor="let charge of invoiceItem.chargesList">
+      
+                      <td class="text-center"></td>
+                      <td>{{charge.description}}</td>
+                      <td class="text-center">{{charge.units}}</td>
+                      <td class="text-right">{{charge.rate}}</td>
+                      <td class="text-right">{{charge.amount}}</td>
+                    </tr>
+                    <tr>
+                      <td colspan="4" class="text-right bold">Total</td>
+                      <td class="text-right bold">{{invoiceItem.subtotal}}</td>
+                    </tr>
+                    <tr>
+                      <td>2</td>
+                      <td class="bold">Taxes:</td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <tr *ngFor="let tax of invoiceItem.taxList">
+                      <td></td>
+                      <td>{{tax.description}}</td>
+                      <td></td>
+                      <td></td>
+                      <td class="text-right">{{tax.amount}}</td>
+                    </tr>
+      
+      
+                    <tr>
+                      <td colspan="4" class="text-right bold">Grand Total</td>
+                      <td class="text-right bold">{{invoiceItem.grandTotal}}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+      
+      
+            <div class="border">
+      
+              <div class="orange-background">
+                Bank DETAILS
+              </div>
+              <div style="padding: 5px;">
+                <div class="notes">
+                  <p><strong>Note:</strong></p>
+                  <p>{{invoiceItem.header.notes}}</p>
+                </div>
+                <div class="header-row">
+                  <div>
+                    <div style="display: flex; flex-wrap: wrap; margin-bottom: 5px;">
+                      <div style="width: 30%; font-weight: bold;">ACCOUNT NAME:</div>
+                      <div style="width: 70%;">RITHWIK GREEN POWER & AVIATION PRIVATE LIMITED</div>
+                    </div>
+                    <div style="display: flex; flex-wrap: wrap; margin-bottom: 5px;">
+                      <div style="width: 30%; font-weight: bold;">BANK:</div>
+                      <div style="width: 70%;">KOTAK MAHINDRA BANK</div>
+                    </div>
+                    <div style="display: flex; flex-wrap: wrap; margin-bottom: 5px;">
+                      <div style="width: 30%; font-weight: bold;">ACCOUNT NO:</div>
+                      <div style="width: 70%;">0745211990</div>
+                    </div>
+                    <div style="display: flex; flex-wrap: wrap; margin-bottom: 5px;">
+                      <div style="width: 30%; font-weight: bold;">BRANCH:</div>
+                      <div style="width: 70%;">BANJARAHILLS</div>
+                    </div>
+                    <div style="display: flex; flex-wrap: wrap; margin-bottom: 5px;">
+                      <div style="width: 30%; font-weight: bold;">IFSC CODE:</div>
+                      <div style="width: 70%;">KKBK00007461(NEFT/RTGS)</div>
+                    </div>
+                  </div>
+                  <div>
+                    <p class="footer-text">RITHWIK GREEN POWER & AVIATION PRIVATE LIMITED</p>
+                    <p>Authorised Signatory</p>
+                  </div>
+                </div>
+      
+              </div>
+            </div>
+          </div>
+          <div class="card-body"
+          style="background-color: #f9f9f9; box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); border-radius: 8px;">
+          <div class="row">
+            <div class="col-lg-12">
+              <div class="notes-section form-group">
+                <label>Description</label>
+                <textarea  class="form-control" (keyup)="descriptionAdd()" [(ngModel)]="reviewedDescription" [ngModelOptions]="{standalone: true}"
+                  placeholder=" Enter additional information"></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-success btn-raised" [disabled]="enableDescription" (click)="reviewSave()">Submit</button>
+        <button type="button" class="btn btnClose btn-raised" (click)="c('Close click')">Close</button>
+    </div>
+
+</ng-template>
+<ng-template #reviewedOpen let-c="close">
+    <div class="modal-header">
+        <h5 class="modal-title">Reviewed Description</h5>
+    </div>
+    <div class="modal-body">
+        <div><strong>Description</strong> :{{selectedInvoice.reviewedDescription}}</div>
+        <div><strong>Reviewed Date</strong> :{{selectedInvoice.reviewedDate}}</div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btnClose btn-raised" (click)="c('Close click')">Close</button>
+    </div>
+
+</ng-template>
+
+
+
+
+
+
+
+
+
+
+<!-- share related logic -->
+<!-- <i class="fas fa-share-alt"></i>  -->
+
+<!-- 
+  <div *ngIf="showSharePopup && selectedInvoice" class="share-popup">
+    <div class="card">
+      <div class="card-body d-flex flex-nowrap overflow-auto">  <a href="whatsapp://send?text=Invoice details: {{ selectedInvoice.invoiceUniqueNumber }} - {{ selectedInvoice.grandTotal }}" target="_blank" class="share-link whatsapp">
+          <i class="fab fa-whatsapp"></i> WhatsApp
+        </a>
+        <a href="mailto:?subject=Invoice Details&body=Invoice details: {{ selectedInvoice.invoiceUniqueNumber }} - {{ selectedInvoice.grandTotal }}" class="share-link email">
+          <i class="fas fa-envelope"></i> Email
+        </a>
+       
+      </div>
+    </div>
+    <div class="text-center">   
+         <button (click)="closeSharePopup()" class="close-button">Close</button>
+    </div>
+  </div> -->

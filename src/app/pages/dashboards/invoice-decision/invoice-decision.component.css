@@ -65,3 +65,81 @@
    
   }
   
+
+  /* CSS for the share icon and popup */
+.share-icon {
+  cursor: pointer;
+  color: red;
+  margin-left: 5px;
+}
+.reasonOpen{
+  text-decoration: none; 
+  cursor: pointer
+
+}
+
+.share-popup {
+  position: fixed; /* Or absolute, depending on your layout */
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  border: 1px solid #ccc;
+  padding: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+  z-index: 1000; /* Ensure it's on top */
+  width: auto; /* Adjust as needed */
+  width: 50%px; /* Set a maximum width if needed */
+  height: 50%px; /* Set a maximum width if needed */
+}
+
+.share-popup .card-body {
+    display: flex; /* Enable flexbox */
+    flex-wrap: nowrap; /* Prevent items from wrapping */
+    overflow-x: auto; /* Enable horizontal scrolling */
+    align-items: center; /* Vertically center items */
+    gap: 10px; /* Space between items */
+    padding: 10px;
+}
+
+.share-link {
+  display: flex;
+  align-items: center;
+  padding: 5px 10px;
+  margin: 0 5px; /* Add some margin around each link */
+  color: #333;
+  text-decoration: none;
+  border-radius: 5px; /* Rounded corners */
+  transition: background-color 0.3s ease; /* Smooth hover effect */
+  white-space: nowrap; /* Prevent text from wrapping */
+}
+
+.share-link:hover {
+  background-color: #f0f0f0; /* Light gray background on hover */
+}
+
+.whatsapp {
+    color: green; /* WhatsApp green */
+}
+
+.email{
+    color: #D44638; /* Gmail red */
+}
+
+.share-popup i {
+  margin-right: 5px;
+}
+
+.close-button{
+    margin-left: auto; /* Push the close button to the right */
+    padding: 5px 10px;
+    background-color: #dc2626;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    color: white;
+}
+.btnReview{
+  background-color: orange !important;
+  color: white !important;
+}

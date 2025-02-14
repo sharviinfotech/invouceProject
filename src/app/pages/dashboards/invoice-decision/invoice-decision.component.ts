@@ -6,6 +6,7 @@ import { NgxPrintModule } from 'ngx-print';
 import Swal from 'sweetalert2';
 import { Component, ElementRef, TemplateRef, ViewChild, ViewEncapsulation } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ImageService } from 'src/app/image.service';
 
 interface ChargeItem {
   description: string;
@@ -55,6 +56,7 @@ interface InvoiceItem {
   amountInWords: string;
   status: string;
   invoiceUniqueNumber: string;
+  proformaCardHeaderName:string
 }
 
 @Component({
@@ -67,7 +69,9 @@ interface InvoiceItem {
 export class InvoiceDecisionComponent {
   @ViewChild('approveModal') approveModal: TemplateRef<any>;
   @ViewChild('afterDecision') afterDecision: TemplateRef<any>;
-  loginData: any; // Example login data
+  @ViewChild('reviewedInvoice') reviewedInvoice: TemplateRef<any>;
+  @ViewChild('reviewedOpen') reviewedOpen: TemplateRef<any>;
+  loginData: any; // Example login data  reviewedOpen
   approveForm!: FormGroup;
   submit: boolean = false;
   invoiceItem: any;
@@ -88,9 +92,13 @@ export class InvoiceDecisionComponent {
     amount: '$500'
   };
   decisionTaking: any;
-
-
-  constructor(private fb: FormBuilder, private service: GeneralserviceService, private spinner: NgxSpinnerService, private modalService: NgbModal) {
+  showSharePopup: boolean = false;
+  logoUrl: string;
+  InvoiceLogo: string;
+  signature: string;
+  reviewedDescription:any
+  enableDescription: boolean=true;
+  constructor(private fb: FormBuilder, private service: GeneralserviceService, private spinner: NgxSpinnerService, private modalService: NgbModal,private imageService: ImageService,) {
     this.createForm();
 
   }
@@ -121,6 +129,18 @@ export class InvoiceDecisionComponent {
     }, error => {
       this.spinner.hide()
     })
+  }
+  openSharePopup(invoice: any) {
+    // this.showSharePopup = true;
+    this.selectedInvoice = null;
+    this.selectedInvoice = invoice;
+    this.modalService.open(this.reviewedOpen, { size: 'md' })
+
+  }
+
+  closeSharePopup() {
+    this.showSharePopup = false;
+    this.selectedInvoice = null;
   }
   // ApproveOrReject(invoice: any,decision) {
   //   this.decisionTaking = null
@@ -259,14 +279,20 @@ export class InvoiceDecisionComponent {
     this.modalService.open(this.approveModal, { size: 'sm' })
   }
   afterDecisionOpen(invoice) {
-    this.approveForm.reset()
-    console.log("invoice", invoice);
-    this.approveForm.patchValue({
-      remark: invoice.reason,
-      invoiceApprovedOrRejectedByUser: invoice.invoiceApprovedOrRejectedByUser,
-      invoiceApprovedOrRejectedDateAndTime:invoice.invoiceApprovedOrRejectedDateAndTime
-    })
-    this.modalService.open(this.afterDecision, { size: 'lg' })
+    console.log("invoice",invoice.invoiceApprovedOrRejectedByUser,invoice.invoiceApprovedOrRejectedDateAndTime)
+    if( invoice.invoiceApprovedOrRejectedByUser && invoice.invoiceApprovedOrRejectedDateAndTime){
+      this.approveForm.reset()
+      console.log("invoice", invoice);
+      this.approveForm.patchValue({
+        remark: invoice.reason?invoice.reason:'N/A',
+        invoiceApprovedOrRejectedByUser: invoice.invoiceApprovedOrRejectedByUser,
+        invoiceApprovedOrRejectedDateAndTime:invoice.invoiceApprovedOrRejectedDateAndTime
+      })
+      this.modalService.open(this.afterDecision, { size: 'lg' })
+    }else{
+
+    }
+    
   }
   approveButton() {
     console.log("approveButton",this.selectedAction)
@@ -649,9 +675,402 @@ export class InvoiceDecisionComponent {
     }
   }
 
+  rowData(invoice){
+    console.log("invoice",invoice)
+    this.invoiceItem = null
+    // this.generatePDFandSend(invoice)
+    this.invoiceItem = invoice
+  }
+  reviewInvoice(invoice){
+    console.log("invoice",invoice)
+    this.invoiceItem
+    // this.generatePDFandSend(invoice)
+    this.invoiceItem = invoice;
+    this.modalService.open(this.reviewedInvoice, { size: 'lg' })
+
+  }
+  descriptionAdd(){
+    if(this.reviewedDescription){
+      this.enableDescription = false
+    }else{
+      this.enableDescription = true
+    }
+  }
+  reviewSave(){
+    const now = new Date();
+    const formattedDateTime = now.toLocaleString('en-GB', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false // 24-hour format
+    }).replace(',', ''); // Remove the comma between date and time
+    let obj={
+      "reviewedDescription": this.reviewedDescription,
+    "reviewedDate": formattedDateTime,
+    "reviewedLoggedIn": this.loginData?.data.userName,
+    "originalUniqueId":this.invoiceItem.originalUniqueId
+    }
+    this.spinner.show()
+    this.service.reviewedUpadte(obj).subscribe((response:any)=>{
+      this.spinner.hide()
+      if(response.status == 200){
+        this.modalService.dismissAll();
+        console.log("if")
+        Swal.fire({
+          text: response.message,
+          icon: 'success',
+          confirmButtonText: 'OK',
+        });
+      }else{
+       console.log("else")
+      }
+      
+
+    },error=>{
+      this.spinner.hide()
+    })
+  }
+//   generatePDFandSend(invoiceItem: InvoiceItem) {
+//     console.log("invoiceItem",invoiceItem)
+//     this.logoUrl = this.imageService.getBase64FlightLogo();
+//     this.InvoiceLogo = this.imageService.getBase64WorldLogo();
+//     this.signature = this.imageService.getBase64Signature();
+//     const invoiceHTML = `
+//       <html>
+//         <head>
+         
+//           <style>
+//            .invoice-container {
+//   max-width: 800px;
+//   margin: auto;
+//   padding: 20px;
+//   border: 1px solid #ccc;
+//   background: #fff;
+//   font-family: Arial, sans-serif;
+// }
+//  .text-right {
+//               text-align: right;
+//             }
+// .header {
+//   display: flex;
+//   justify-content: space-between;
+//   align-items: center;
+//   margin-bottom: 20px;
+//   border-bottom:2px solid #FFD700
+// }
+
+// .company-details {
+//   text-align: left;
+// }
+
+// .company-name {
+//   color: blue;
+// }
+
+// .invoice-logo .logo {
+//   width: 200px;
+//   height: 150px;
+
+//   display: flex;
+//   align-items: center;
+//   justify-content: center;
+//   font-weight: bold;
+//   color: white;
+// }
+
+// .signature-logo .logo {
+//   width: 300px;
+//   height: 150px;
+//   background: gray;
+//   border-radius: 50%;
+//   display: flex;
+//   align-items: center;
+//   justify-content: center;
+//   font-weight: bold;
+//   color: white;
+// }
+
+
+// .invoice-title {
+//   text-align: center;
+//   font-size: 20px;
+//   font-weight: bold;
+//   margin-top:10px;
+   
+// }
+//   .invoice-number{
+//    font-weight: 600;
+//    font-size:20px
+//   }
+//  .bold {
+//     font-weight: bold;
+//    }
+// .billing-info {
+//       width: 100%;
+//     display: flex;
+// }
+//   .bank-booking-details {
+//   display: flex;
+//   width:100% !important
+// }
+//    .signature-details {
+//   display: flex;
+//   justify-content: space-between;
+//   margin-top: 20px;
+// }
+
+// .invoice-table {
+//   width: 100%;
+//   border-collapse: collapse;
+//   margin-top: 20px;
+// }
+
+// .invoice-table th, .invoice-table td {
+//   border: 1px solid #ccc;
+//   padding: 8px;
+//   text-align: center;
+// }
+
+// .invoice-summary {
+//   text-align: right;
+//   margin-top: 20px;
+// }
+
+// .balance-due {
+//   color: blue;
+//   font-weight: bold;
+// }
+
+// .terms {
+//   margin-top: 20px;
+// }
+//        .table-bordered {
+//               border-collapse: collapse;
+//               width: 100%;
+//               margin-bottom: 10px;
+//             }
+            
+//             .table-bordered th {
+//               padding: 5px;
+//             }
+//             .table-bordered td{
+//               padding: 5px;
+//             }
+
+//                thead th {
+//                 background-color: #6ba3cd !important;
+//                 color: white !important;
+//                 vertical-align: middle !important;
+//                 padding: 5px !important;
+//                 font-weight: bold;
+//                 text-align: center !important;
+//                 font-size: 12px !important;
+//                 -webkit-print-color-adjust: exact !important;
+//                 print-color-adjust: exact !important;
+//               }
+//                  .headerBackground, 
+// .bill-to div, 
+// .invoice-dates div,.bank-booking-details-container .bank-booking-details .bank div,.bank-booking-details-container .bank-booking-details .booking div, .invoice-cardHeader {
+//   text-align: center !important;
+//   background-color: #6ba3cd !important;
+//   color: white !important;
+//   padding: 5px;
+//   font-weight: bold;
+//   -webkit-print-color-adjust: exact !important;
+//   print-color-adjust: exact !important;
+//     margin-right: 2px !important;
+
+// }
+
+
+//                 .bank-booking-details {
+//   display: flex;
+//   width: 100%;
+//   page-break-inside: avoid; /* Prevents splitting */
+//   justify-content: space-between;
+// }
+
+// .bank-booking-details-container {
+//   page-break-before: always; /* Moves to next page if needed */
+// }
+ 
+
+//           </style>
+//         </head>
+//         <body>
+//           <div id="invoice" class="invoice-container">
+//   <div class="header">
+//     <div class="invoice-logo">
+//       <h4>RITHWIK GREEN POWER & AVIATION PRIVATE LIMITED</h3>
+//     </div>
+//     <div class="invoice-logo">
+//       <div class="logo"><img src="${this.logoUrl}" alt="Company Logo" class="logo"></div>
+//     </div>
+//   </div>
+
+//   <div class="invoice-cardHeader">
+//     <strong><span class="invoice-number">${invoiceItem.proformaCardHeaderName}</span></strong>
+//   </div>
+//    <div class="invoice-title">
+//     <strong>INVOICE NO : <span class="invoice-number">${invoiceItem.invoiceUniqueNumber}</span></strong>
+//   </div>
+
+//   <div class="billing-info">
+//     <div class="bill-to " style="width:50%">
+//       <div style="text-align: center !important;background-color: #6ba3cd !important;">BILL TO</div>
+//       <p>${invoiceItem.header.ProformaCustomerName}</p>
+//       <p>${invoiceItem.header.ProformaAddress}</p>
+//       <p>${invoiceItem.header.ProformaCity}-${invoiceItem.header.ProformaPincode}</p>
+//       <p><strong>GST NO:</strong> ${invoiceItem.header.ProformaGstNo}</p>
+//        <p><strong>PAN NO:</strong>${invoiceItem.header.ProformaPan}</p>
+//     </div>
+    
+//     <div class="invoice-dates" style="width:50%">
+//     <div style="text-align: center !important;background-color: #6ba3cd !important;">From</div>
+//       <p><strong>Invoice Date:</strong> ${invoiceItem.header.ProformaInvoiceDate}</p>
+//       <p><strong>PAN:</strong> ${invoiceItem.header.ProformaPanNO}</p>
+//       <p><strong>GST NO:</strong> ${invoiceItem.header.ProformaGstNumber}</p>
+//        <p><strong>TYPE OF AIRCRAFT:</strong> ${invoiceItem.header.ProformaTypeOfAircraft}</p>
+//        <p><strong>SEATING CAPACITY:</strong> ${invoiceItem.header.ProformaTypeOfAircraft}</p>
+//     </div>
+//   </div>
+
+//  <table class="table-bordered">
+//               <thead>
+//                 <tr>
+//                   <th>S.No</th>
+//                   <th>Description</th>
+//                   <th>Units (Hrs.)</th>
+//                   <th>Rate (INR)</th>
+//                   <th>Amount (INR)</th>
+//                 </tr>
+//               </thead>
+//               <tbody>
+//              <tr>
+//               <td>1</td>
+//               <td class="bold">Charges</td>
+//               <td class="text-right"></td>
+//               <td class="text-right"></td>
+//               <td></td>
+//             </tr>
+//                 ${invoiceItem.chargesList.map((charge, index) => `
+//                   <tr>
+                   
+//                      <td class="text-center"></td>
+//                     <td>${charge.description}</td>
+//                     <td class="text-center">${charge.units ? charge.units : ''}</td>
+//                     <td class="text-right">${charge.rate}</td>
+//                     <td class="text-right">${charge.amount}</td>
+//                   </tr>
+//                 `).join('')}
+                
+//                 <tr>
+//                   <td ></td>
+//                   <td ></td>
+//                   <td ></td>
+//                   <td class="text-right bold">Total</td>
+//                   <td class="text-right bold">${invoiceItem.subtotal}</td>
+//                 </tr>
+//                 <tr>
+//               <td>2</td>
+//                     <td class="bold">Taxes:</td>
+//                     <td></td>
+//                     <td></td>
+//                     <td></td>
+//               </tr>
+
+//                 ${invoiceItem.taxList.map(tax => `
+//                   <tr>
+//                     <td></td>
+//                     <td>${tax.description}</td>
+//                     <td></td>
+//                     <td></td>
+//                     <td class="text-right">${tax.amount}</td>
+//                   </tr>
+//                 `).join('')}
+
+//                 <tr>
+//                   <td></td>
+//                   <td></td>
+//                   <td></td>
+//                   <td class="text-right bold">Grand Total</td>
+//                   <td class="text-right bold">${invoiceItem.grandTotal}</td>
+//                 </tr>
+//               </tbody>
+//             </table>
+
+  
+
+//   <div class="bank-booking-details-container">
+//   <div class="bank-booking-details" >
+//   <div class="bank" style="width:50%">
+//     <div >BANK DETAILS</div>
+//       <p><strong>ACCOUNT NAME::</strong> RITHWIK GREEN POWER & AVIATION PRIVATE LIMITED</p>
+//       <p><strong>BANK:</strong> KOTAK MAHINDRA BANK</p>
+//       <p><strong>ACCOUNT NO:</strong> 0745211990</p>
+//        <p><strong>BRANCH:</strong> BANJARAHILLS</p>
+//        <p><strong>IFSC CODE:</strong> KKBK00007461(NEFT/RTGS)</p>
+//     </div>
+//    <div  class="booking" style="width:50%">
+//       <div >BOOKING DETAILS</div>
+//       <p><strong>Date Of Journey:</strong> ${invoiceItem.header.BookingDateOfJourny}</p>
+//       <p><strong>SECTOR:</strong> ${invoiceItem.header.BookingSector}</p>
+//       <p><strong>BILLING FLYING TIME:</strong> ${invoiceItem.header.BookingBillingFlyingTime} Hrs.</p>
+//     </div>
+//   </div>
+   
+//   </div>
+//    <div class="notes">
+//         <p><strong>NOTES:</strong>${invoiceItem.header.notes}</p>           
+//    </div>
+//   <div class="header">
+//     <div class="signature-logo">
+//       <div class="logo"><img src="${this.InvoiceLogo}" alt="Company Logo" class="logo"></div>
+//     </div>
+//     <div class="signature-logo">
+//       <div class="logo"><img src="${this.signature}" alt="Company Logo" class="logo"></div>
+//         Authorised Signatory
+//     </div>
+//   </div>
+
+// </div>
+
+// </div>
+
+//       </html>
+//     `;
+
+//     const newWindow = window.open('', '', 'height=600,width=800');
+//     if (newWindow) {
+//       newWindow.document.write(invoiceHTML);
+//       newWindow.document.close();
+
+//       setTimeout(() => {
+//         newWindow.print();
+//       }, 500);
+//     }
+//   };
+
 
 
 }
+
+
+
+
+
+// share related logic
+// openSharePopup(invoice: any) {
+//   this.showSharePopup = true;
+//   this.selectedInvoice = invoice;
+// }
+
+// closeSharePopup() {
+//   this.showSharePopup = false;
+//   this.selectedInvoice = null;
+// }
 
 
 
