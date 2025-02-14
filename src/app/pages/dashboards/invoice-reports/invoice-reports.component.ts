@@ -281,8 +281,8 @@ export class InvoiceReportsComponent {
           // this.generateInvoiceHTML(invoiceItem)
           // this.generateInvoiceHTML1(invoiceItem)
           // this.generateInvoiceHTML2(invoiceItem)
-          // this.generateInvoiceHTML3(invoiceItem)
-          this.generateInvoiceHTML4(invoiceItem)
+          this.generateInvoiceHTML3(invoiceItem)
+          // this.generateInvoiceHTML4(invoiceItem)
 
         }
       });
@@ -1733,7 +1733,7 @@ export class InvoiceReportsComponent {
 }
 
 .company-name {
-  color: blue;
+  color: white;
 }
    .header {
       display: flex;
@@ -1886,22 +1886,28 @@ export class InvoiceReportsComponent {
 
        
   @media print {
+    .container {
+    max-width: 800px; 
+    margin: 10px auto; /* Small margins for better fit */
+    padding: 10px;
+    page-break-after: always; 
+  }
    body {
         margin: 0;
-        padding: 5px;
+        padding: 0;
       }
+         .invoice-header {
+    height: auto; /* Remove fixed height */
+  }
         .table-bordered {
               border-collapse: collapse;
               width: 100%;
               margin-bottom: 10px;
             }
             
-            .table-bordered th {
-              padding: 5px;
-            }
-            .table-bordered td{
-              padding: 5px;
-            }
+             p, td, th {
+    font-size: 10px; 
+  }
                thead tr {
         background-color: skyblue !important;
         color: white !important;
@@ -1954,6 +1960,27 @@ export class InvoiceReportsComponent {
         display: inline-block;
         margin-right: 10px;
       }
+        .invoice-sections {
+    margin-top: 15px;
+  }
+
+  .invoice-section {
+    padding: 8px;
+  }
+
+  .invoice-table {
+    font-size: 9px; 
+  }
+
+  .invoice-summary {
+    margin-top: 10px;
+  }
+
+  /* Consider hiding or minimizing elements if space is critical */
+  .notes {
+    font-size: 8px; 
+  } 
+
 
       .to-section {
         display: inline-block;
@@ -1993,7 +2020,7 @@ export class InvoiceReportsComponent {
       <div class="invoice-section from" style="width: 50%;">
         <div style="font-weight: bold; font-size: 16px; background:skyblue; color: white;">FROM</div>
         <p><span style="font-weight: bold; font-size: 12px;">Invoice No:</span>
-          ${invoiceItem.header.ProformaInvoiceNumber}</p>
+          ${invoiceItem.invoiceUniqueNumber}</p>
         <p><span style="font-weight: bold; font-size: 12px;">Date:</span> ${invoiceItem.header.ProformaInvoiceDate}</p>
         <p><span style="font-weight: bold; font-size: 12px;">PAN NO:</span> ${invoiceItem.header.ProformaPanNO}</p>
         <p><span style="font-weight: bold; font-size: 12px;">GST NO:</span> ${invoiceItem.header.ProformaGstNumber}</p>
