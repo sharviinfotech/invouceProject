@@ -21,12 +21,14 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let invoice of allInvoiceList" (click)="rowData(invoice)">
-                        <td>
-                            <span [ngClass]=>
-                                {{ invoice.invoiceUniqueNumber }}
-                            </span>
-                        </td>
+                    <tr *ngFor="let invoice of allInvoiceList">
+                      <td>
+                        <span [ngClass]="{
+                          'text-green-600 underline cursor-pointer': invoice.status === 'Approved'
+                        }" (click)="selectInvoice(invoice)">
+                          {{ invoice.invoiceUniqueNumber }}
+                        </span>
+                      </td>
                         <td>{{ invoice.header.ProformaInvoiceDate }}</td>
                         <td>{{ invoice.header.ProformaCustomerName }}</td>
                         <td>{{ invoice.header.ProformaTypeOfAircraft }}</td>

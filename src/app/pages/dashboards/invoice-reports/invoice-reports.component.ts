@@ -294,9 +294,9 @@ export class InvoiceReportsComponent {
           // this.generateInvoiceHTML4(invoiceItem)
           // this.generateInvoiceHTML5(invoiceItem)
           // this.generateInvoiceHTML6(invoiceItem)
-          this.generateInvoiceHTML7(invoiceItem)
+          // this.generateInvoiceHTML7(invoiceItem)
           // this.generateInvoiceHTML8(invoiceItem)
-          // this.generateInvoiceHTML9(invoiceItem)
+          this.generateInvoiceHTML9(invoiceItem)
 
         }
       });
@@ -1272,8 +1272,8 @@ export class InvoiceReportsComponent {
                   <td ></td>
                   <td ></td>
                   <td ></td>
-                  <td class="text-right bold">Total</td>
-                  <td class="text-right bold">${invoiceItem.subtotal}</td>
+                  <td class="text-right bold" >Total</td>
+                  <td class="text-right bold" >${invoiceItem.subtotal}</td>
                 </tr>
                 <tr>
               <td>2</td>
@@ -1299,6 +1299,8 @@ export class InvoiceReportsComponent {
                   <td></td>
                   <td class="text-right bold">Grand Total</td>
                   <td class="text-right bold">${invoiceItem.grandTotal}</td>
+                </tr>
+                <td colspan="5" class="bold"> ${invoiceItem.amountInWords}</td>
                 </tr>
               </tbody>
             </table>
@@ -1365,9 +1367,9 @@ export class InvoiceReportsComponent {
         <head>
          
           <style>
+            body {
            .invoice-container {
-  max-width: 800px;
-  margin: auto;
+  margin: 10px;
   padding: 20px;
   border: 1px solid #ccc;
   background: #fff;
@@ -1486,7 +1488,11 @@ export class InvoiceReportsComponent {
                 font-size: 12px !important;
                 -webkit-print-color-adjust: exact !important;
                 print-color-adjust: exact !important;
+                border-right:2px solid white
               }
+               tbody td .total{
+  background-color: #6ba3cd !important
+  }
                  .headerBackground, 
 .bill-to div, 
 .invoice-dates div,.bank-booking-details-container .bank-booking-details .bank div,
@@ -1519,16 +1525,176 @@ export class InvoiceReportsComponent {
   margin-top:10px;
   
 }
-  @media print {
-  .invoice-title div {
-    background-color: #FFD700 !important;
-    color: black !important;
-    -webkit-print-color-adjust: exact !important;
-    print-color-adjust: exact !important;
+   .total{
+  background-color: #6ba3cd !important
   }
+  @media print {
+  .invoice-container {
+  margin: 10px;
+  padding: 20px;
+  border: 1px solid #ccc;
+  background: #fff;
+  font-family: Arial, sans-serif;
 }
- 
+ .text-right {
+              text-align: right;
+            }
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  border-bottom:2px solid  #6ba3cd !important;
+}
 
+.company-details {
+  text-align: left;
+}
+
+.company-name {
+  color: blue;
+}
+
+.invoice-logo .logo {
+  width: 200px;
+  height: 150px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  color: white;
+}
+
+.signature-logo .logo {
+  width: 300px;
+  height: 150px;
+  background: gray;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  color: white;
+}
+
+
+
+  .invoice-number{
+   font-weight: 600;
+   font-size:20px
+  }
+ .bold {
+    font-weight: bold;
+   }
+.billing-info {
+      width: 100%;
+    display: flex;
+}
+  .bank-booking-details {
+  display: flex;
+  width:100% !important
+}
+   .signature-details {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.invoice-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.invoice-table th, .invoice-table td {
+  border: 1px solid #ccc;
+  padding: 8px;
+  text-align: center;
+}
+
+.invoice-summary {
+  text-align: right;
+  margin-top: 20px;
+}
+
+.balance-due {
+  color: blue;
+  font-weight: bold;
+}
+
+.terms {
+  margin-top: 20px;
+}
+       .table-bordered {
+              border-collapse: collapse;
+              width: 100%;
+              margin-bottom: 10px;
+            }
+            
+            .table-bordered th {
+              padding: 5px;
+            }
+            .table-bordered td{
+              padding: 5px;
+            }
+
+               thead th {
+             background-color: green !important;
+                color: white !important;
+                vertical-align: middle !important;
+                padding: 5px !important;
+                font-weight: bold;
+                text-align: center !important;
+                font-size: 12px !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+                border-right:2px solid white
+              }
+               tbody td .total{
+  background-color: #6ba3cd !important
+  }
+                 .headerBackground, 
+.bill-to div, 
+.invoice-dates div,.bank-booking-details-container .bank-booking-details .bank div,
+.bank-booking-details-container .bank-booking-details .booking div,
+ .invoice-cardHeader {
+  text-align: center !important;
+  background-color: green !important;
+  color: white !important;
+  padding: 5px;
+  font-weight: bold;
+  -webkit-print-color-adjust: exact !important;
+  print-color-adjust: exact !important;
+  margin-right: 2px !important;
+}
+
+                .bank-booking-details {
+  display: flex;
+  width: 100%;
+  page-break-inside: avoid; /* Prevents splitting */
+  justify-content: space-between;
+}
+
+.bank-booking-details-container {
+  page-break-before: always; /* Moves to next page if needed */
+}
+  .invoice-title {
+  text-align: center;
+  font-size: 20px;
+  font-weight: bold;
+  margin-top:10px;
+  
+}
+   .total{
+  background-color: #6ba3cd !important
+  }
+ 
+  
+}
+
+
+  }
           </style>
         </head>
   <body>
@@ -1604,8 +1770,8 @@ export class InvoiceReportsComponent {
                   <td ></td>
                   <td ></td>
                   <td ></td>
-                  <td class="text-right bold">Total</td>
-                  <td class="text-right bold">${invoiceItem.subtotal}</td>
+                   <td  class="text-right bold" >Total</td>
+                  <td class="text-right bold"  >${invoiceItem.subtotal}</td>
                 </tr>
                 <tr>
               <td>2</td>
@@ -1625,18 +1791,20 @@ export class InvoiceReportsComponent {
                   </tr>
                 `).join('')}
 
-                <tr>
+                <tr >
                   <td></td>
                   <td></td>
                   <td></td>
-                  <td class="text-right bold">Grand Total</td>
-                  <td class="text-right bold">${invoiceItem.grandTotal}</td>
+                  <td class="text-right bold total"  >Grand Total</td>
+                  <td class="text-right bold total"  >${invoiceItem.grandTotal}</td>
+                </tr>
+                <td colspan="5" class="bold"> ${invoiceItem.amountInWords}</td>
                 </tr>
               </tbody>
+
             </table>
 
-  
-
+           
   <div class="bank-booking-details-container">
   <div class="bank-booking-details" >
   <div class="bank" style="width:50%">
@@ -1702,7 +1870,7 @@ export class InvoiceReportsComponent {
       background-color: white;
       -webkit-print-color-adjust: exact !important;
       print-color-adjust: exact !important;
-      font-size:12px
+      font-size:13px
     }
 
            container {
@@ -1830,8 +1998,7 @@ export class InvoiceReportsComponent {
       .invoice-details {
   display: flex;
   justify-content: space-between;
-  background: lightslategrey;
-    color: white;
+    color: black;
 }
 
 .detail-item {
@@ -1918,14 +2085,13 @@ export class InvoiceReportsComponent {
          .invoice-details {
   display: flex;
   justify-content: space-between;
-  background: lightslategrey;
-    color: white;
+    color: black;
         .invoice-header {
  text-align: center;
       justify-content: space-between;
       margin-bottom: 10px;
       background: lightslategrey;
-      color: white;
+      color: black;
       padding: 10px;
       font-size: 15px;
       height: 140px;
@@ -2036,7 +2202,7 @@ export class InvoiceReportsComponent {
     
     <div class="invoice-sections">
       <div class="invoice-section from" style="width: 50%;">
-        <div style="font-weight: bold; font-size: 16px; background: #6ba3cd !important; color: white;">FROM</div>
+        <div style="font-weight: bold; font-size: 16px; background: #6ba3cd !important; color: white;text-align: center;">FROM</div>
         <p><span style="font-weight: bold; font-size: 12px;">Invoice No:</span>
           ${invoiceItem.invoiceUniqueNumber}</p>
         <p><span style="font-weight: bold; font-size: 12px;">Date:</span> ${invoiceItem.header.ProformaInvoiceDate}</p>
@@ -2049,7 +2215,7 @@ export class InvoiceReportsComponent {
       </div>
 
       <div class="invoice-section to" style="width: 50%;">
-        <div style="font-weight: bold; font-size: 16px; background: #6ba3cd !important; color: white;">TO</div>
+        <div style="font-weight: bold; font-size: 16px; background: #6ba3cd !important; color: white;text-align: center;">TO</div>
         <p><span style="font-weight: bold; font-size: 12px;">Customer Name:</span>
           ${invoiceItem.header.ProformaCustomerName}</p>
         <p><span style="font-weight: bold; font-size: 12px;">Address:</span> ${invoiceItem.header.ProformaAddress}</p>
@@ -2061,7 +2227,7 @@ export class InvoiceReportsComponent {
       </div>
       <div class="invoice-section booking-details">
         
-          <div style="font-weight: bold; font-size: 16px;background: #6ba3cd !important; color: white;">BANK DETAILS</div>
+          <div style="font-weight: bold; font-size: 16px;background: #6ba3cd !important; color: white;text-align: center;">BANK DETAILS</div>
           <p><span style="font-weight: bold; font-size: 12px;">ACCOUNT NAME:</span> RITHWIK GREEN POWER & AVIATION
             PRIVATE LIMITED</p>
           <p><span style="font-weight: bold; font-size: 12px;">BANK:</span> KOTAK MAHINDRA BANK</p>
@@ -2128,7 +2294,11 @@ export class InvoiceReportsComponent {
             <td></td>
             <td class="text-right">${tax.amount}</td>
           </tr>
+            
           `).join('')}
+          <tr>
+           <td colspan="5" class="bold"> ${invoiceItem.amountInWords}</td>
+          </tr>
         </tbody>
       </table>
     </div>
@@ -2137,11 +2307,12 @@ export class InvoiceReportsComponent {
         <p><strong>NOTES:</strong>${invoiceItem.header.notes}</p>           
    </div>
     <div style="width:30%;justify-items: center;">
-    <p><strong>TOTAL:</strong> 10500</p>
-    <p><strong>GRAND TOTAL:</strong> 12390</p>
+    <p><strong>TOTAL:</strong> ${invoiceItem.subtotal}</p>
+    <p><strong>GRAND TOTAL:</strong> ${invoiceItem.grandTotal}</p>
     </div>
   </div>  
-
+ 
+            
 
   <div class="header">
     <div class="signature-logo">
@@ -2562,6 +2733,11 @@ generateInvoiceHTML4(invoiceItem: InvoiceItem) {
               <th>GRAND TOTAL:</th>
               <td class="text-right"> ${invoiceItem.grandTotal}</td>
                 </tr>
+                <tr>
+              
+              <td colspan="4"> ${invoiceItem.amountInWords}</td>
+                </tr>
+                
              </tbody>
         </table>
     </div>
@@ -2606,7 +2782,7 @@ generateInvoiceHTML4(invoiceItem: InvoiceItem) {
   generateInvoiceHTML5(invoiceItem: InvoiceItem) {
 
     this.logoUrl = this.imageService.getBase64FlightLogo();
-    this.InvoiceLogo = this.imageService.getBase64WorldLogo();
+    this.InvoiceLogo = this.imageService.getBase64WorldLogoTransparent();
     this.signature = this.imageService.getBase64Signature();
     const invoiceHTML = `
       <html>
@@ -2679,7 +2855,6 @@ generateInvoiceHTML4(invoiceItem: InvoiceItem) {
       
 
 .invoice-logo .logo {
-  width: 137px;
   height: 98px;
   display: flex;
   align-items: end;
@@ -2997,6 +3172,9 @@ generateInvoiceHTML4(invoiceItem: InvoiceItem) {
               <th>GRAND TOTAL:</th>
               <td class="text-right"> ${invoiceItem.grandTotal}</td>
                 </tr>
+          <tr>
+           <td colspan="5" class="bold"> ${invoiceItem.amountInWords}</td>
+          </tr>
              </tbody>
         </table>
     </div>
@@ -3047,12 +3225,10 @@ generateInvoiceHTML4(invoiceItem: InvoiceItem) {
     // <!DOCTYPE html>
 <html>
 <head>
-  <title>Tax Invoice</title>
  
   <style>
       .invoice-container {
-  max-width: 800px;
-  margin: auto;
+  margin: 10px;
   padding: 20px;
   border: 1px solid #ccc;
   background: #fff;
@@ -3248,6 +3424,9 @@ generateInvoiceHTML4(invoiceItem: InvoiceItem) {
                   <td class="text-right bold"  style="background-color: rgb(181, 179, 200);">Grand Total</td>
                   <td class="text-right bold"  style="background-color: rgb(181, 179, 200);">${invoiceItem.grandTotal}</td>
                 </tr>
+                 <tr>
+                    <td colspan="5" class="bold"> ${invoiceItem.amountInWords}</td>
+                 </tr>
               </tbody>
             </table>
    
@@ -3592,6 +3771,9 @@ generateInvoiceHTML4(invoiceItem: InvoiceItem) {
                     <td class="text-right bold">Grand Total</td>
                     <td class="text-right bold">${invoiceItem.grandTotal}</td>
                 </tr>
+                <tr>
+                  <td colspan="5" class="bold"> ${invoiceItem.amountInWords}</td>
+                </tr>
             </tbody>
         </table>
        
@@ -3649,7 +3831,6 @@ generateInvoiceHTML4(invoiceItem: InvoiceItem) {
     // <!DOCTYPE html>
 <html>
 <head>
-  <title>Tax Invoice</title>
  
   <style>
       .invoice-container {
@@ -3751,11 +3932,9 @@ generateInvoiceHTML4(invoiceItem: InvoiceItem) {
 <body>
   <div class="invoice-container">
     <div class="header-section">
-      <div class="logo"><h3>INVOICE NO: ${invoiceItem.invoiceUniqueNumber}</h3></div>
+      <div class="logo"><h3>${invoiceItem.proformaCardHeaderName}</h3></div>
       <div class="logo"><img src="${this.logoUrl}" alt="Invoice Logo"></div>
     </div>
-    <div class="orange-background">${invoiceItem.proformaCardHeaderName}</div>
-    <br>
    
     <table class="table-bordered">
       <tr>
@@ -3824,6 +4003,9 @@ generateInvoiceHTML4(invoiceItem: InvoiceItem) {
                   <td colspan="4" class="text-right bold">Grand Total</td>
                   <td class="text-right bold">${invoiceItem.grandTotal}</td>
                 </tr>
+                <tr>
+                  <td colspan="5" class="bold"> ${invoiceItem.amountInWords}</td>
+                </tr>
               </tbody>
             </table>
    
@@ -3875,7 +4057,6 @@ generateInvoiceHTML4(invoiceItem: InvoiceItem) {
     // <!DOCTYPE html>
 <html>
 <head>
-  <title>Tax Invoice</title>
  
   <style>
       .invoice-container {
@@ -3901,6 +4082,7 @@ generateInvoiceHTML4(invoiceItem: InvoiceItem) {
           display: flex;
           justify-content: space-between;
           align-items: center;
+          background-color:#d9e4ff 
       }
  
       .header-section .logo {
@@ -3935,7 +4117,7 @@ generateInvoiceHTML4(invoiceItem: InvoiceItem) {
  
       .table-bordered th {
           border: 1px solid black;
-          // background-color: #1E3A8A; /* Deep Navy Blue */
+          background-color: #d9e4ff ;
           color:black;
           padding: 6px;
           text-align: center;
@@ -3973,6 +4155,15 @@ generateInvoiceHTML4(invoiceItem: InvoiceItem) {
           width: 100%;
           height: auto;
       }
+          @media print{
+          .table-bordered th {
+          border: 1px solid black;
+          background-color: #d9e4ff; 
+          color:black;
+          padding: 6px;
+          text-align: center;
+          }
+          }
   </style>
 </head>
 <body>
@@ -3996,6 +4187,19 @@ generateInvoiceHTML4(invoiceItem: InvoiceItem) {
       </tr>
     </table>
    
+    
+   
+    <table class="table-bordered">
+      <tr>
+      <th class="bold">Bank Details</th>
+        <th class="bold">Booking Details</th>
+       
+      </tr>
+      <tr>
+              <td><strong>Account Name:</strong> RITHWIK GREEN POWER & AVIATION PRIVATE LIMITED<br><strong>Bank:</strong> KOTAK MAHINDRA BANK<br><strong>Account No:</strong> 0745211990<br><strong>Branch:</strong> BANJARAHILLS<br><strong>IFSC Code:</strong> KKBK00007461 (NEFT/RTGS)</td>
+        <td><strong>Date Of Journey:</strong> ${invoiceItem.header.BookingDateOfJourny}<br><strong>Sector</strong>: ${invoiceItem.header.BookingSector}<br><strong>Billing Flying Time:<strong> ${invoiceItem.header.BookingBillingFlyingTime} Hrs.</td>
+      </tr>
+    </table>
     <table class="table-bordered">
       <thead>
         <tr>
@@ -4050,19 +4254,10 @@ generateInvoiceHTML4(invoiceItem: InvoiceItem) {
           <td colspan="4" class="text-right bold">Grand Total</td>
           <td class="text-right bold">${invoiceItem.grandTotal}</td>
         </tr>
+        <tr>
+            <td colspan="5" class="bold"> ${invoiceItem.amountInWords}</td>
+        </tr>
       </tbody>
-    </table>
-   
-    <table class="table-bordered">
-      <tr>
-      <th class="bold">Bank Details</th>
-        <th class="bold">Booking Details</th>
-       
-      </tr>
-      <tr>
-              <td><strong>Account Name:</strong> RITHWIK GREEN POWER & AVIATION PRIVATE LIMITED<br><strong>Bank:</strong> KOTAK MAHINDRA BANK<br><strong>Account No:</strong> 0745211990<br><strong>Branch:</strong> BANJARAHILLS<br><strong>IFSC Code:</strong> KKBK00007461 (NEFT/RTGS)</td>
-        <td><strong>Date Of Journey:</strong> ${invoiceItem.header.BookingDateOfJourny}<br><strong>Sector</strong>: ${invoiceItem.header.BookingSector}<br><strong>Billing Flying Time:<strong> ${invoiceItem.header.BookingBillingFlyingTime} Hrs.</td>
-      </tr>
     </table>
     <p class="bold">Note:</p>
     <p>${invoiceItem.header.notes}</p>
