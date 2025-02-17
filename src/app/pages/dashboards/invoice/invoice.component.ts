@@ -57,7 +57,7 @@ export class InvoiceComponent implements OnInit {
     this.proformaCardHeaderId = type
 
     if(this.proformaCardHeaderId == "PQ"){
-     this.proformaCardHeaderName = "Proforma Invoice"
+     this.proformaCardHeaderName = "Proforma Flying Quotation"
     }else{
       this.proformaCardHeaderName = "Tax Invoice"
 
@@ -169,14 +169,14 @@ export class InvoiceComponent implements OnInit {
       ProformaInvoiceNumber: [''],
       ProformaInvoiceDate: ['', Validators.required],
       ProformaPan: [
-        '',
+        'AAICS9057Q',
         [
           Validators.required,
           Validators.pattern(/^[A-Z]{5}[0-9]{4}[A-Z]$/)  // PAN format validation: 4 capital letters, 4 digits, 1 capital letter
         ]
       ],
 
-      ProformaGstNumber: ['', Validators.required],
+      ProformaGstNumber: ['36AAICS9057Q1ZD', Validators.required],
       proformatypeOfAircraft: ['', Validators.required],
       proformaseatingcapasity: ['', Validators.required],
       notes: [''],
@@ -508,8 +508,8 @@ if(this.InvoiceLogo== ''|| this.InvoiceLogo == null){
       ProformaPanNO: "",
       ProformaInvoiceNumber: "",
       ProformaInvoiceDate: "",
-      ProformaPan: "",
-      ProformaGstNumber: "",
+      ProformaPan: "AAICS9057Q",
+      ProformaGstNumber: "36AAICS9057Q1ZD",
       proformatypeOfAircraft: "",
       proformaseatingcapasity: "",
       // bookingdetailsdateofjourney:"" ,
@@ -593,19 +593,25 @@ if(this.InvoiceLogo== ''|| this.InvoiceLogo == null){
   }
 
   addChargeItem() {
-
-    if(this.newInvoiceCreation.value.ProformaState){
-      this.chargeItems.push({
-        description: '',
+    if (this.newInvoiceCreation.value.ProformaState) {
+      const newChargeItem = {
+        description: this.chargeItems.length === 0 ? this.newInvoiceCreation.value.bookingsector : '', // Only add sector to the first row
+        units: this.chargeItems.length === 0 ? this.newInvoiceCreation.value.bookingbillingflyingtime : '', // Only add billing flying time to the first row
         rate: 0,
         amount: 0
-      });
-      console.log("this.chargeItems addChargeItem",this.chargeItems)
-    }else{
-      // this.toaster.warning("Please select State and Add Charges")
-      Swal.fire( `Please select State and Add Charges`);
+      };
+  
+      this.chargeItems.push(newChargeItem);
+      console.log("this.chargeItems addChargeItem", this.chargeItems);
+    } else {
+      Swal.fire(`Please select State and Add Charges`);
     }
-    
+  }
+  
+  updateChargeItem(index: number, field: string, value: string) {
+    if (this.chargeItems.length > index) {
+      this.chargeItems[index][field] = value.toUpperCase(); // Convert to uppercase
+    }
   }
   deleteChargeItem(index: number) {
     this.chargeItems.splice(index, 1); // Remove the selected item
