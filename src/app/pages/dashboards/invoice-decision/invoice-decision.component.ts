@@ -46,6 +46,7 @@ interface InvoiceHeader {
 }
 
 interface InvoiceItem {
+  invoiceUniqueNumber: string;
   header: InvoiceHeader;
   _id: string;
   originalUniqueId: number;
@@ -55,7 +56,6 @@ interface InvoiceItem {
   grandTotal: number;
   amountInWords: string;
   status: string;
-  invoiceUniqueNumber: string;
   proformaCardHeaderName:string
 }
 
@@ -98,6 +98,7 @@ export class InvoiceDecisionComponent {
   signature: string;
   reviewedDescription:any
   enableDescription: boolean=true;
+  invoices: any;
   constructor(private fb: FormBuilder, private service: GeneralserviceService, private spinner: NgxSpinnerService, private modalService: NgbModal,private imageService: ImageService,) {
     this.createForm();
 
@@ -319,16 +320,39 @@ export class InvoiceDecisionComponent {
 
 
   // in this screen below is not required
-  selectInvoice(invoice: any) {
+ selectInvoice(invoice: any) {
     this.invoiceItem = null
     this.invoiceItem = invoice
     const invoiceItem = invoice;
     console.log("invoice", invoice)
-    console.log("this.invoiceItem", this.invoiceItem.originalUniqueId);
+    console.log("this.invoiceItem", this.invoiceItem.invoiceReferenceNo);
     console.log("this.invoiceItem.header.status", this.invoiceItem.header.status)
 
+    if(this.invoiceItem.status == "Approved") {
+      Swal.fire({
+        text: 'The selected invoice has been approved. Do you want to print the invoice?',
+        icon: 'question',
+        showCancelButton: true,
+        showConfirmButton: true,
+        confirmButtonText: 'Print',
+      }).then((result) => {
+        if (result.isConfirmed) {
+          // this.generateInvoiceHTML(invoiceItem)
+          this.generateInvoiceHTML1(invoiceItem)
+          // this.generateInvoiceHTML2(invoiceItem)
+          // this.generateInvoiceHTML3(invoiceItem)
+          // this.generateInvoiceHTML4(invoiceItem)
+          // this.generateInvoiceHTML5(invoiceItem)
+          // this.generateInvoiceHTML6(invoiceItem)
+          // this.generateInvoiceHTML7(invoiceItem)
+          // this.generateInvoiceHTML8(invoiceItem)
+          // this.generateInvoiceHTML9(invoiceItem)
 
+        }
+      });
+    }
     if (this.invoiceItem.status == "Rejected") {
+      return
       console.log("If rejected")
       Swal.fire({
         // title: 'question',
@@ -346,6 +370,7 @@ export class InvoiceDecisionComponent {
         }
       });
     } else if (this.invoiceItem.status == "Pending") {
+      return
       console.log("If pending")
       Swal.fire({
         // title: 'question',
@@ -360,21 +385,30 @@ export class InvoiceDecisionComponent {
           console.log("this.invoiceItem", this.invoiceItem)
         }
       });
-    } else {
+    }
+    else if (this.invoiceItem.status == "Rejected_Reversed") {
+      return
+      console.log("If pending")
       Swal.fire({
-        text: 'The selected invoice has been approved. Do you want to print the invoice?',
-        icon: 'question',
-        showCancelButton: true,
+        // title: 'question',
+        text: 'The selected invoice is Rejected Reversed, so please proceed with the process.',
+        icon: 'info',
+        showCancelButton: false,
         showConfirmButton: true,
-        confirmButtonText: 'Print',
       }).then((result) => {
         if (result.isConfirmed) {
-          this.generateInvoiceHTML(invoiceItem)
+        } else {
+          this.invoiceItem = invoice
+          console.log("this.invoiceItem", this.invoiceItem)
         }
       });
     }
+   
   }
+ 
   generateInvoiceHTML(invoiceItem: InvoiceItem) {
+    this.logoUrl = this.imageService.getBase64FlightLogo();
+    this.InvoiceLogo = this.imageService.getBase64WorldLogo();
     const invoiceHTML = `
           <html>
             <head>
@@ -515,11 +549,11 @@ export class InvoiceDecisionComponent {
               <div class="border">
                 <div class="header-row">
                 
-                  <div><img src="${invoiceItem.header.invoiceImage}" alt="Company Logo" class="logo"></div>
+                  <div><img src="${this.logoUrl}" alt="Company Logo" class="logo"></div>
                   <div>
-                    <img src="${invoiceItem.header.invoiceHeader}" alt="Company Logo" class="logo">
+                    <img src="${this.InvoiceLogo}" alt="Company Logo" class="logo">
                   </div>
-                  <div><img src="${invoiceItem.header.invoiceImage}" alt="Company Logo" class="logo"></div>
+                  <div><img src="${this.logoUrl}" alt="Company Logo" class="logo"></div>
                 </div>
                 
                 <div class="orange-background">
@@ -647,6 +681,326 @@ export class InvoiceDecisionComponent {
             </body>
           </html>
         `;
+
+    const newWindow = window.open('', '', 'height=600,width=800');
+    if (newWindow) {
+      newWindow.document.write(invoiceHTML);
+      newWindow.document.close();
+
+      setTimeout(() => {
+        newWindow.print();
+      }, 500);
+    }
+  };
+  generateInvoiceHTML1(invoiceItem: InvoiceItem) {
+
+    this.logoUrl = this.imageService.getBase64FlightLogo();
+    this.InvoiceLogo = this.imageService.getBase64WorldLogo();
+    this.signature = this.imageService.getBase64Signature();
+    const invoiceHTML = `
+      <html>
+        <head>
+         
+          <style>
+           .invoice-container {
+  max-width: 800px;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  background: #fff;
+  font-family: Arial, sans-serif;
+}
+ .text-right {
+              text-align: right;
+            }
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  border-bottom:2px solid #FFD700
+}
+
+.company-details {
+  text-align: left;
+}
+
+.company-name {
+  color: blue;
+}
+
+.invoice-logo .logo {
+  width: 200px;
+  height: 150px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  color: white;
+}
+
+.signature-logo .logo {
+  width: 300px;
+  height: 150px;
+  background: gray;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  color: white;
+}
+
+
+.invoice-title {
+  text-align: center;
+  font-size: 20px;
+  font-weight: bold;
+  margin-top:10px;
+   
+}
+  .invoice-number{
+   font-weight: 600;
+   font-size:20px
+  }
+ .bold {
+    font-weight: bold;
+   }
+.billing-info {
+      width: 100%;
+    display: flex;
+}
+  .bank-booking-details {
+  display: flex;
+  width:100% !important
+}
+   .signature-details {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.invoice-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.invoice-table th, .invoice-table td {
+  border: 1px solid #ccc;
+  padding: 8px;
+  text-align: center;
+}
+
+.invoice-summary {
+  text-align: right;
+  margin-top: 20px;
+}
+
+.balance-due {
+  color: blue;
+  font-weight: bold;
+}
+
+.terms {
+  margin-top: 20px;
+}
+       .table-bordered {
+              border-collapse: collapse;
+              width: 100%;
+              margin-bottom: 10px;
+            }
+            
+            .table-bordered th {
+              padding: 5px;
+            }
+            .table-bordered td{
+              padding: 5px;
+            }
+
+               thead th {
+                background-color: #6ba3cd !important;
+                color: white !important;
+                vertical-align: middle !important;
+                padding: 5px !important;
+                font-weight: bold;
+                text-align: center !important;
+                font-size: 12px !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+              }
+                 .headerBackground, 
+.bill-to div, 
+.invoice-dates div,.bank-booking-details-container .bank-booking-details .bank div,.bank-booking-details-container .bank-booking-details .booking div, .invoice-cardHeader {
+  text-align: center !important;
+  background-color: #6ba3cd !important;
+  color: white !important;
+  padding: 5px;
+  font-weight: bold;
+  -webkit-print-color-adjust: exact !important;
+  print-color-adjust: exact !important;
+    margin-right: 2px !important;
+
+}
+
+
+                .bank-booking-details {
+  display: flex;
+  width: 100%;
+  page-break-inside: avoid; /* Prevents splitting */
+  justify-content: space-between;
+}
+
+.bank-booking-details-container {
+  page-break-before: always; /* Moves to next page if needed */
+}
+ 
+
+          </style>
+        </head>
+        <body>
+          <div id="invoice" class="invoice-container">
+  <div class="header">
+    <div class="invoice-logo">
+      <h4>RITHWIK GREEN POWER & AVIATION PRIVATE LIMITED</h3>
+    </div>
+    <div class="invoice-logo">
+      <div class="logo"><img src="${this.logoUrl}" alt="Company Logo" class="logo"></div>
+    </div>
+  </div>
+
+  <div class="invoice-cardHeader">
+    <strong><span class="invoice-number">${invoiceItem.proformaCardHeaderName}</span></strong>
+  </div>
+   <div class="invoice-title">
+    <strong>INVOICE NO : <span class="invoice-number">${invoiceItem.invoiceUniqueNumber}</span></strong>
+  </div>
+
+  <div class="billing-info">
+    <div class="bill-to " style="width:50%">
+      <div style="text-align: center !important;background-color: #6ba3cd !important;">BILL TO</div>
+      <p>${invoiceItem.header.ProformaCustomerName}</p>
+      <p>${invoiceItem.header.ProformaAddress}</p>
+      <p>${invoiceItem.header.ProformaCity}-${invoiceItem.header.ProformaPincode}</p>
+      <p><strong>GST NO:</strong> ${invoiceItem.header.ProformaGstNo}</p>
+       <p><strong>PAN NO:</strong>${invoiceItem.header.ProformaPan}</p>
+    </div>
+    
+    <div class="invoice-dates" style="width:50%">
+    <div style="text-align: center !important;background-color: #6ba3cd !important;">From</div>
+      <p><strong>Invoice Date:</strong> ${invoiceItem.header.ProformaInvoiceDate}</p>
+      <p><strong>PAN:</strong> ${invoiceItem.header.ProformaPanNO}</p>
+      <p><strong>GST NO:</strong> ${invoiceItem.header.ProformaGstNumber}</p>
+       <p><strong>TYPE OF AIRCRAFT:</strong> ${invoiceItem.header.ProformaTypeOfAircraft}</p>
+       <p><strong>SEATING CAPACITY:</strong> ${invoiceItem.header.ProformaTypeOfAircraft}</p>
+    </div>
+  </div>
+
+ <table class="table-bordered">
+              <thead>
+                <tr>
+                  <th>S.No</th>
+                  <th>Description</th>
+                  <th>Units (Hrs.)</th>
+                  <th>Rate (INR)</th>
+                  <th>Amount (INR)</th>
+                </tr>
+              </thead>
+              <tbody>
+             <tr>
+              <td>1</td>
+              <td class="bold">Charges</td>
+              <td class="text-right"></td>
+              <td class="text-right"></td>
+              <td></td>
+            </tr>
+                ${invoiceItem.chargesList.map((charge, index) => `
+                  <tr>
+                   
+                     <td class="text-center"></td>
+                    <td>${charge.description}</td>
+                    <td class="text-center">${charge.units ? charge.units : ''}</td>
+                    <td class="text-right">${charge.rate}</td>
+                    <td class="text-right">${charge.amount}</td>
+                  </tr>
+                `).join('')}
+                
+                <tr>
+                  <td ></td>
+                  <td ></td>
+                  <td ></td>
+                  <td class="text-right bold">Total</td>
+                  <td class="text-right bold">${invoiceItem.subtotal}</td>
+                </tr>
+                <tr>
+              <td>2</td>
+                    <td class="bold">Taxes:</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+              </tr>
+
+                ${invoiceItem.taxList.map(tax => `
+                  <tr>
+                    <td></td>
+                    <td>${tax.description}</td>
+                    <td></td>
+                    <td></td>
+                    <td class="text-right">${tax.amount}</td>
+                  </tr>
+                `).join('')}
+
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td class="text-right bold">Grand Total</td>
+                  <td class="text-right bold">${invoiceItem.grandTotal}</td>
+                </tr>
+              </tbody>
+            </table>
+
+  
+
+  <div class="bank-booking-details-container">
+  <div class="bank-booking-details" >
+  <div class="bank" style="width:50%">
+    <div >BANK DETAILS</div>
+      <p><strong>ACCOUNT NAME::</strong> RITHWIK GREEN POWER & AVIATION PRIVATE LIMITED</p>
+      <p><strong>BANK:</strong> KOTAK MAHINDRA BANK</p>
+      <p><strong>ACCOUNT NO:</strong> 0745211990</p>
+       <p><strong>BRANCH:</strong> BANJARAHILLS</p>
+       <p><strong>IFSC CODE:</strong> KKBK00007461(NEFT/RTGS)</p>
+    </div>
+   <div  class="booking" style="width:50%">
+      <div >BOOKING DETAILS</div>
+      <p><strong>Date Of Journey:</strong> ${invoiceItem.header.BookingDateOfJourny}</p>
+      <p><strong>SECTOR:</strong> ${invoiceItem.header.BookingSector}</p>
+      <p><strong>BILLING FLYING TIME:</strong> ${invoiceItem.header.BookingBillingFlyingTime} Hrs.</p>
+    </div>
+  </div>
+   
+  </div>
+   <div class="notes">
+        <p><strong>NOTES:</strong>${invoiceItem.header.notes}</p>           
+   </div>
+  <div class="header">
+    <div class="signature-logo">
+      <div class="logo"><img src="${this.InvoiceLogo}" alt="Company Logo" class="logo"></div>
+    </div>
+    <div class="signature-logo">
+      <div class="logo"><img src="${this.signature}" alt="Company Logo" class="logo"></div>
+        Authorised Signatory
+    </div>
+  </div>
+
+</div>
+
+</div>
+
+      </html>
+    `;
 
     const newWindow = window.open('', '', 'height=600,width=800');
     if (newWindow) {
