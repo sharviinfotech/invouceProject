@@ -52,6 +52,7 @@ export class InvoiceComponent implements OnInit {
    
   }
   selectInvoiceType(type){
+    this.resetAll()
     this.proformaCardHeaderId = null
     this.proformaCardHeaderName = null
     this.proformaCardHeaderId = type
@@ -612,6 +613,7 @@ if(this.InvoiceLogo== ''|| this.InvoiceLogo == null){
     if (this.chargeItems.length > index) {
       this.chargeItems[index][field] = value.toUpperCase(); // Convert to uppercase
     }
+    this.calculateTotals()
   }
   deleteChargeItem(index: number) {
     this.chargeItems.splice(index, 1); // Remove the selected item
