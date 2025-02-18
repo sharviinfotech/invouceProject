@@ -74,5 +74,14 @@ getLoginResponse(){
     return this.http.post(environment.baseUrl+'invoice/reviewedUpadte',obj);
  
   }
+  SaveCharges(data){
+    return this.http.post(environment.baseUrl+'invoice/SaveCharges',data)
+
+  }
+  getAllCharges(){
+    return this.http.get(environment.baseUrl+'invoice/getAllCharges');
+
+
+  }
 
 }

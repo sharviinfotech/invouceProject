@@ -167,14 +167,7 @@ newCustomerTemplate: any;
        }
      );
    }
- 
- 
- 
- 
- 
- 
- 
- 
+
    toggleFieldTextType() {
      this.fieldTextType = !this.fieldTextType;
    }
