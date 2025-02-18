@@ -16,7 +16,10 @@
   width: 100%;
   border-collapse: collapse;
 }
-
+.fa-edit:before {
+  content: "\f044";
+  color: blue;
+}
 
 
 .table th {
@@ -41,7 +44,7 @@
   
   ::ng-deep .text-orange-600 {
     color: orange !important;
-    text-decoration: underline !important;
+    /* text-decoration: underline !important; */
   }
   
   ::ng-deep .text-red-600 {
@@ -64,6 +67,11 @@
     
    
   }
+  .icon-container {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Adjust the gap as needed */
+}
   
 
   /* CSS for the share icon and popup */
@@ -142,4 +150,64 @@
 .btnReview{
   background-color: orange !important;
   color: white !important;
+}
+.header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+.container {
+  width: 124%;
+  /* max-width: 1000px; */
+  margin: 0 auto;
+}
+.logo{
+  width: 100px;
+  height: 100px;
+}
+.button-container {
+  display: flex;
+  justify-content: space-between; /* Aligns items to opposite ends */
+  align-items: center;
+  background-color: #999; /* Example background color */
+  padding: 10px;
+}
+
+.edit-text {
+  margin-left: 10px; /* Optional margin for spacing */
+}
+
+.close-button {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+.modal-header {
+  background-color: #f0f0f0; /* Example background color */
+  padding: 15px; 
+}
+
+.modal-header .row {
+  display: flex;
+  justify-content: space-between; /* Align items to opposite ends */
+  align-items: center;
+}
+
+.modal-header h3 {
+  margin: 0; /* Remove default margin */
+}
+
+.btnBack {
+  background-color: #f44336; /* Example: Red background */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 6px 1px;
+  cursor: pointer;
+}
+
+.btnBack svg {
+  width: 20px; /* Adjust size as needed */
+  height: 20px;
 }
