@@ -7,20 +7,18 @@ import Swal from 'sweetalert2';
 import { Component, ElementRef, TemplateRef, ViewChild, ViewEncapsulation } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ImageService } from 'src/app/image.service';
-
-interface ChargeItem {
-  description: string;
-  units: string;
-  rate: string;
-  amount: string;
-  _id: string;
-}
+import { NumberToWordsService } from 'src/app/number-to-words.service';
 
 interface TaxItem {
   description: string;
-  percentage: string;
-  amount: string;
-  _id: string;
+  percentage: number;
+  amount: number;
+}
+interface ChargeItem {
+  description: string;
+  units?: string | null;  // Adding 'units' property
+  rate: number;
+  amount: number;
 }
 
 interface InvoiceHeader {
@@ -45,6 +43,7 @@ interface InvoiceHeader {
   BookingBillingFlyingTime: string;
 }
 
+
 interface InvoiceItem {
   invoiceUniqueNumber: string;
   header: InvoiceHeader;
@@ -67,20 +66,37 @@ interface InvoiceItem {
   standalone: true,
 })
 export class InvoiceDecisionComponent {
+  activeTab: 'View' | 'Edit' = 'View';
   @ViewChild('approveModal') approveModal: TemplateRef<any>;
   @ViewChild('afterDecision') afterDecision: TemplateRef<any>;
   @ViewChild('reviewedInvoice') reviewedInvoice: TemplateRef<any>;
   @ViewChild('reviewedOpen') reviewedOpen: TemplateRef<any>;
+  @ViewChild('editForm') editForm: TemplateRef<any>;
   loginData: any; // Example login data  reviewedOpen
   approveForm!: FormGroup;
   submit: boolean = false;
+  statesList: any[] = [];
   invoiceItem: any;
+  show: boolean = true
   selectedAction: string = '';
-
-  selectedInvoice: any;
-
-
+  subtotal: number;
+  grandTotal: number;
+  amountInWords: string = '';
   allInvoiceList: any;
+  originalUniqueId: number;
+  reSubmitInvoice: boolean;
+  reSubmitInvoiceStatus: any;
+  reason: any;
+  proformaCardHeaderName: any;
+  proformaCardHeaderId: null;
+  invoiceApprovedOrRejectedByUser: any;
+  invoiceApprovedOrRejectedDateAndTime: any;
+  selectedInvoice: any;
+  chargeItems: ChargeItem[] = [];
+   taxItems: TaxItem[] = [];
+
+
+ 
 
   remark: string = '';
   invoice = {
@@ -96,10 +112,15 @@ export class InvoiceDecisionComponent {
   logoUrl: string;
   InvoiceLogo: string;
   signature: string;
-  reviewedDescription:any
+  // reviewedDescription:any
   enableDescription: boolean=true;
   invoices: any;
-  constructor(private fb: FormBuilder, private service: GeneralserviceService, private spinner: NgxSpinnerService, private modalService: NgbModal,private imageService: ImageService,) {
+  newInvoiceCreation: any;
+  invoiceService: any;
+  activeModal: any;
+  reviewedDescription: string;
+  
+  constructor(private fb: FormBuilder,  private numberToWordsService: NumberToWordsService,private service: GeneralserviceService, private spinner: NgxSpinnerService, private modalService: NgbModal,private imageService: ImageService,) {
     this.createForm();
 
   }
@@ -113,11 +134,43 @@ export class InvoiceDecisionComponent {
   get f() {
     return this.approveForm.controls;
   }
+  backButton() {
+    // Logic to handle the "Back" button click
+    // For example, close the modal or reset the form
+    this.activeTab = 'View'; // Assuming 'View' is the previous tab
+    this.modalService.dismissAll(); // Close the modal
+  }
 
   ngOnInit(): void {
+    this.newInvoiceCreation = this.fb.group({
+      ProformaCustomerName: ['', Validators.required],
+      notes: [''],
+      ProformaAddress: ['', Validators.required],
+      ProformaCity: ['', Validators.required],
+      ProformaState: ['', Validators.required],
+      ProformaPincode: ['', [Validators.required, Validators.pattern(/^\d{6}$/)]],
+      ProformaGstNo: [''], 
+      ProformaPanNO: ['', [Validators.required, Validators.pattern(/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/)]],
+      ProformaInvoiceNumber: ['', Validators.required],
+      ProformaInvoiceDate: ['', [Validators.required, this.customDateValidator]],      
+      ProformaPan: ['', [Validators.required, Validators.pattern(/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/)]],
+      ProformaGstNumber: ['', Validators.required],
+      proformatypeOfAircraft: ['', Validators.required],
+      proformaseatingcapasity: ['', Validators.required],
+      bookingdateOfjourny: [''], // Handle date input
+      bookingsector: ['', Validators.required],
+      bookingbillingflyingtime: ['', Validators.required], 
+      reviewedDescriptionEdit: ['', Validators.required]  
+      // ... other form controls with their validators
+    });
+    this.getStates();
     this.getAllInvoice()
     this.loginData = this.service.getLoginResponse()
     console.log("this.loginData ", this.loginData)
+  }
+  customDateValidator(control: any): { [key: string]: boolean } | null {
+    const dateRegex = /^\d{2}-\d{2}-\d{4}$/;
+    return dateRegex.test(control.value) ? null : { invalidDate: true };
   }
 
   getAllInvoice() {
@@ -135,9 +188,112 @@ export class InvoiceDecisionComponent {
     // this.showSharePopup = true;
     this.selectedInvoice = null;
     this.selectedInvoice = invoice;
-    this.modalService.open(this.reviewedOpen, { size: 'md' })
+    this.modalService.open(this.reviewedOpen, { size: 'XL' })
 
   }
+  closeInvoice() {
+    this.modalService.dismissAll(); 
+  }
+  openEditPopup(invoice: any) {
+    this.selectedInvoice = null
+    this.selectedInvoice = invoice; 
+    this.activeTab = 'Edit';
+    console.log('Invoice data:', invoice);
+    this.newInvoiceCreation.patchValue({
+      // invoiceHeader: this.selectedInvoice.header.invoiceHeader,
+      ProformaCustomerName: this.selectedInvoice.header.ProformaCustomerName,
+      ProformaAddress: this.selectedInvoice.header.ProformaAddress,
+      ProformaCity: this.selectedInvoice.header.ProformaCity,
+      ProformaState: this.selectedInvoice.header.ProformaState,
+      ProformaPincode: this.selectedInvoice.header.ProformaPincode,
+      ProformaGstNo: this.selectedInvoice.header.ProformaGstNo,
+      ProformaPanNO: this.selectedInvoice.header.ProformaPanNO,
+      ProformaInvoiceNumber: this.selectedInvoice.invoiceUniqueNumber,
+      ProformaInvoiceDate: this.selectedInvoice.header.ProformaInvoiceDate,
+      ProformaPan: this.selectedInvoice.header.ProformaPan,
+      ProformaGstNumber: this.selectedInvoice.header.ProformaGstNumber,
+      proformatypeOfAircraft: this.selectedInvoice.header.ProformaTypeOfAircraft,
+      proformaseatingcapasity: this.selectedInvoice.header.ProformaSeatingCapasity,
+      notes: this.selectedInvoice.header.notes,
+      bookingdateOfjourny: this.selectedInvoice.header.BookingDateOfJourny,
+      bookingsector: this.selectedInvoice.header.BookingSector,
+      bookingbillingflyingtime: this.selectedInvoice.header.BookingBillingFlyingTime,
+      reviewedDescriptionEdit:  this.selectedInvoice.reviewedDescription,
+      // accountName: this.selectedInvoice.bankDetails.accountName,
+      // bankname: this.selectedInvoice.bankDetails.bank,
+      // accountNumber: this.selectedInvoice.bankDetails.accountNumber,
+      // branch:this.selectedInvoice.bankDetails.branch,
+      // ifscCode:this.selectedInvoice.bankDetails.ifscCode 
+    })
+
+    this.chargeItems = this.selectedInvoice.chargesList;
+    this.taxItems = this.selectedInvoice.taxList;
+    this.subtotal = this.selectedInvoice.subtotal;
+    this.grandTotal = this.selectedInvoice.grandTotal
+    this.amountInWords = this.selectedInvoice.amountInWords
+    this.logoUrl = this.selectedInvoice.header.invoiceImage
+    this.InvoiceLogo = this.selectedInvoice.header.invoiceHeader
+    this.reSubmitInvoiceStatus =this.selectedInvoice.status 
+    this.reason =this.selectedInvoice.reason ,
+    this.invoiceApprovedOrRejectedByUser =this.selectedInvoice.invoiceApprovedOrRejectedByUser ,
+    this.invoiceApprovedOrRejectedDateAndTime =this.selectedInvoice.invoiceApprovedOrRejectedDateAndTime,
+    this.proformaCardHeaderId = this.selectedInvoice.proformaCardHeaderId,
+    this.proformaCardHeaderName  =this.selectedInvoice.proformaCardHeaderName 
+    
+if(this.logoUrl == ''|| this.logoUrl == null){
+  this.logoUrl = this.imageService.getBase64FlightLogo(); 
+}
+if(this.InvoiceLogo== ''|| this.InvoiceLogo == null){
+  this.InvoiceLogo = this.imageService.getBase64WorldLogo(); 
+
+}
+    console.log("this.selectedInvoice.header.invoiceUniqueNumber", this.selectedInvoice.invoiceUniqueNumber)
+    console.log("this.newInvoiceCreation", this.newInvoiceCreation.value.ProformaInvoiceNumber)
+    this.modalService.open(this.editForm, { size: 'lg' }); 
+}
+resetAll() {
+  // this.logoUrl = ""
+  this.amountInWords = ""
+  this.chargeItems = [];
+  this.taxItems = [];
+  this.subtotal = 0;
+  this.grandTotal = 0
+  this.selectedInvoice = null
+  this.newInvoiceCreation.patchValue({
+    invoiceHeader: "",
+    ProformaCustomerName: "",
+    ProformaAddress: "",
+    ProformaCity: "",
+    ProformaState: "",
+    ProformaPincode: "",
+    ProformaGstNo: "",
+    ProformaPanNO: "",
+    ProformaInvoiceNumber: "",
+    ProformaInvoiceDate: "",
+    ProformaPan: "AAICS9057Q",
+    ProformaGstNumber: "36AAICS9057Q1ZD",
+    proformatypeOfAircraft: "",
+    proformaseatingcapasity: "",
+    // bookingdetailsdateofjourney:"" ,
+    // bookingdetailssector: "",
+    // bookingdetailsbillingflyingtime: "",
+    notes: "",
+    bookingdateOfjourny: "",
+    bookingsector: "",
+    bookingbillingflyingtime: "",
+    reviewedDescriptionEdit:"",
+    // accountName: "",
+    // bankname: "",
+    // accountNumber:"",
+    // branch:"",
+    // ifscCode:"" 
+  })
+  setTimeout(() => {
+    this.spinner.hide()
+    console.log("enter into new or all spinner")
+  }, 1000); // Delay of 2 seconds
+}
+
 
   closeSharePopup() {
     this.showSharePopup = false;
@@ -1012,22 +1168,272 @@ export class InvoiceDecisionComponent {
       }, 500);
     }
   };
-  updateStatus(invoice: any, status: string) {
-    // Confirm before changing status
-    if (confirm(`Are you sure you want to ${status.toLowerCase()} this invoice?`)) {
-      invoice.status = status;
+  getStates() {
+    this.spinner.show();
+    this.service.getstateList().subscribe(
+      (response: any) => {
+        this.spinner.hide()
+        if (response && response.responseData) {
+          this.statesList = response.responseData.data;
+        }
+      },
+      (error) => {
 
-      // If you are updating status in the backend, call the API here
-      // Example:
-      // this.invoiceService.updateInvoiceStatus(invoice.id, status).subscribe(response => {
-      //   console.log("Status updated:", response);
-      // }, error => {
-      //   console.error("Error updating status:", error);
-      // });
+        console.error('Error fetching statesList:', error);
+      }
+    );
+  }
+  onChangeState() {
+    this.taxItems = []
+    const selectedState = this.newInvoiceCreation.value.ProformaState
+    const seletedObj = this.statesList.find(item => item.stateName == selectedState);
+    console.log("seletedObj", seletedObj)
+    if (seletedObj.stateName == 'Telangana') {
+      this.taxItems = [
+        {
+          description: 'CGST @ 9%',
+          percentage: 9,
+          amount: 0
+        },
+        {
+          description: 'SGST @ 9%',
+          percentage: 9,
+          amount: 0
+        },
 
-      console.log(`Invoice ${invoice.invoiceUniqueNumber} status changed to ${status}`);
+      ];
+    } else {
+      this.taxItems = [
+
+        {
+          description: 'IGST @ 18%',
+          percentage: 18,
+          amount: 0
+        }
+      ];
+    }
+
+    console.log("this.activeTab ",this.activeTab ,this.subtotal)
+   if( this.activeTab == 'Edit' && this.subtotal){
+    console.log("if state")
+    this.calculateTotals()
+   } else{
+    console.log("else state")
+   }
+  }
+  convertUnitsToHours(units: string | null): number {
+    if (!units || units.trim() === '') return 0;
+
+    // Clean up the 'Hrs.' part from the input
+    const cleanUnits = units.replace(' Hrs.', '').trim();
+
+    // Split the units by '.'
+    const parts = cleanUnits.split('.');
+    if (parts.length !== 2) return 0;  // Ensure there are exactly 2 parts (hours and minutes)
+
+    let hours = Number(parts[0]);  // Use 'let' instead of 'const' for reassignment
+    let minutes = Number(parts[1]); // Use 'let' instead of 'const' for reassignment
+
+    // Validate the parsed values to avoid NaN issues
+    if (isNaN(hours) || isNaN(minutes)) return 0; // Return 0 if any value is NaN
+
+    // Ensure hours and minutes are within valid ranges
+    if (hours > 24) hours = 24; // Max hours can be 24
+    if (minutes >= 60) minutes = 59; // Max minutes can be 59
+
+    return hours + minutes / 60; // Convert units to decimal hours
+  }
+  calculateTotals() {
+    this.subtotal = 0
+    this.grandTotal = 0
+    // Loop through each charge item and calculate the amount
+    this.chargeItems.forEach(item => {
+      // If there are units, convert to hours and calculate the amount
+      if (item.units) {
+        const unitsInHours = this.convertUnitsToHours(item.units);
+        item.amount = unitsInHours * item.rate; // Calculate amount based on rate and hours
+      } else if (item.rate) {
+        // If no units are provided, calculate amount based only on rate (assuming 1 unit)
+        item.amount = item.rate; // If no units, assume 1 unit for calculation
+      } else {
+        // If no rate or units, set amount to 0
+        item.amount = 0;
+      }
+    });
+
+    this.subtotal = this.chargeItems.reduce((sum, item) => sum + (Number(item.amount) || 0), 0);
+
+    // Calculate tax amounts based on subtotal
+    this.taxItems.forEach(tax => {
+      tax.amount = Math.round(this.subtotal * (Number(tax.percentage) / 100));
+    });
+
+    // Calculate grand total (subtotal + tax amounts)
+    this.grandTotal = this.subtotal + this.taxItems.reduce((sum, tax) => sum + (Number(tax.amount) || 0), 0);
+
+    // Convert amount to words
+    this.amountInWords = this.numberToWordsService.convert(this.grandTotal);
+
+    // Debugging logs
+    console.log("chargeItems", this.chargeItems);
+    console.log("taxItems", this.taxItems);
+    console.log("subtotal", this.subtotal);
+    console.log("grandTotal", this.grandTotal);
+    console.log("amountInWords", this.amountInWords);
+
+  }
+  formatDate(proformaInvoiceDate: string): string {
+    const date = new Date(proformaInvoiceDate);
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-based
+    const year = date.getFullYear();
+
+    return `${day}-${month}-${year}`;
+  }
+  numbersOnly(event: any) {
+    const charCode = event.charCode;
+    if (!(charCode >= 48 && charCode <= 57) && ![8, 9, 37, 39, 46].includes(charCode)) {
+      event.preventDefault();
     }
   }
+   UpdateInvoice(): void {
+    this.newInvoiceCreation.markAllAsTouched();
+ 
+     if (this.newInvoiceCreation.valid) {
+       console.log('Invoice Updated', this.newInvoiceCreation.value);
+ 
+       let invoiceDate = this.newInvoiceCreation.value.ProformaInvoiceDate;
+     let bookingDate = this.newInvoiceCreation.value.bookingdateOfjourny;
+ 
+     // ✅ Check if the date is already in 'DD-MM-YYYY' format
+     const dateRegex = /^\d{2}-\d{2}-\d{4}$/;
+ 
+     if (!dateRegex.test(invoiceDate)) {
+       invoiceDate = this.formatDate(invoiceDate);
+     }
+ 
+     if (!dateRegex.test(bookingDate)) {
+       bookingDate = this.formatDate(bookingDate);
+     }
+     
+     
+       // Implement update logic here
+       let updateobj = {
+ 
+         "originalUniqueId": this.selectedInvoice.originalUniqueId,
+         "header": {
+           // "invoiceHeader": this.InvoiceLogo,
+           // "invoiceImage": this.logoUrl,
+           "invoiceHeader": null,
+           "invoiceImage": null,
+           "ProformaCustomerName": this.newInvoiceCreation.value.ProformaCustomerName,
+           "ProformaAddress": this.newInvoiceCreation.value.ProformaAddress,
+           "ProformaCity": this.newInvoiceCreation.value.ProformaCity,
+           "ProformaState": this.newInvoiceCreation.value.ProformaState,
+           "ProformaPincode": this.newInvoiceCreation.value.ProformaPincode,
+           "ProformaGstNo": this.newInvoiceCreation.value.ProformaGstNo,
+           "ProformaPanNO": this.newInvoiceCreation.value.ProformaPanNO,
+           "ProformaInvoiceNumber": this.newInvoiceCreation.value.ProformaInvoiceNumber,
+           "ProformaInvoiceDate": invoiceDate,
+           "ProformaPan": this.newInvoiceCreation.value.ProformaPan,
+           "ProformaGstNumber": this.newInvoiceCreation.value.ProformaGstNumber,
+           "ProformaTypeOfAircraft": this.newInvoiceCreation.value.proformatypeOfAircraft,
+           "ProformaSeatingCapasity": this.newInvoiceCreation.value.proformaseatingcapasity,
+           "notes": this.newInvoiceCreation.value.notes,
+           "BookingDateOfJourny": bookingDate,
+           "BookingSector": this.newInvoiceCreation.value.bookingsector,
+           "BookingBillingFlyingTime": this.newInvoiceCreation.value.bookingbillingflyingtime,
+           "reviewedDescription": this.newInvoiceCreation.value.reviewedDescriptionEdit,
+         },
+         "chargesList": this.chargeItems,
+         "taxList": this.taxItems,
+         "subtotal": this.subtotal,
+         "grandTotal": this.grandTotal,
+         "amountInWords": this.amountInWords,
+         "reason":this.reason,
+         "invoiceApprovedOrRejectedByUser":this.invoiceApprovedOrRejectedByUser,
+         "invoiceApprovedOrRejectedDateAndTime":this.invoiceApprovedOrRejectedDateAndTime,
+         "loggedInUser":this.loginData.userName,
+        "status":this.reSubmitInvoiceStatus,
+        "proformaCardHeaderId":this.proformaCardHeaderId,
+         "proformaCardHeaderName":this.proformaCardHeaderName
+         // "bankDetails":{
+         //     "accountName":this.newInvoiceCreation.value.accountName,
+         //     "bank":this.newInvoiceCreation.value.bank,
+         //     "accountNumber":this.newInvoiceCreation.value.accountNumber,
+         //     "branch":this.newInvoiceCreation.value.branch,
+         //     "ifscCode":this.newInvoiceCreation.value.ifscCode
+       };
+       console.log('Payload sent to backend:', updateobj);
+       this.spinner.show()
+       this.service.UpdateInvoice(updateobj, this.selectedInvoice.originalUniqueId).subscribe((response: any) => {
+         console.log("updateInvoice", response);
+         this.spinner.hide()
+         const resp = response.updatedInvoice;
+         if (resp) {
+           this.getAllInvoice()
+           // Reset form and related data
+           this.newInvoiceCreation.reset();
+           // this.logoUrl = '';
+           this.chargeItems = [];
+           this.taxItems = [];
+           this.subtotal = 0;
+           this.grandTotal = 0;
+           this.amountInWords = '';
+          
+           this.resetAll()
+           this.show=true
+           Swal.fire({
+             text: response.message,
+             icon: 'success',
+             showConfirmButton: true
+           });
+           this.invoiceItem = null
+ 
+         } else {
+           this.spinner.hide()
+           Swal.fire({
+             text: 'Failed to Update data ',
+             icon: 'error',
+             showConfirmButton: true
+           });
+         }
+       }, (error) => {
+         // Handle error
+         this.spinner.hide()
+         console.log('Error updating invoice:', error);
+         Swal.fire({
+           text: 'An error occurred while updating the invoice',
+           icon: 'error',
+           showConfirmButton: true
+         });
+       });
+     } else {
+       this.spinner.hide()
+       console.log('Form is invalid');
+       Swal.fire({
+         text: 'Please fill out the form correctly.',
+         icon: 'warning',
+         showConfirmButton: true
+       });
+     }
+   }
+  // updateStatus(invoice: any, status: string) {
+  //   // Confirm before changing status
+  //   if (confirm(`Are you sure you want to ${status.toLowerCase()} this invoice?`)) {
+  //     invoice.status = status;
+
+  //     // If you are updating status in the backend, call the API here
+  //     // Example:
+  //     // this.invoiceService.updateInvoiceStatus(invoice.id, status).subscribe(response => {
+  //     //   console.log("Status updated:", response);
+  //     // }, error => {
+  //     //   console.error("Error updating status:", error);
+  //     // });
+
+  //     console.log(`Invoice ${invoice.invoiceUniqueNumber} status changed to ${status}`);
+  //   }
+  // }
 
   rowData(invoice){
     console.log("invoice",invoice)
