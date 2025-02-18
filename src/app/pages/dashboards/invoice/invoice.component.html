@@ -1,3 +1,10 @@
+<script>
+  document.getElementById("notes").addEventListener("input", function() {
+    this.value = this.value.toUpperCase();
+  });
+</script>
+
+
 <div class="tabCard">
   <!-- Tabs -->
   <div class="row selectedTab">
@@ -117,7 +124,18 @@
               <div class="col-lg-4">
                 <div class="form-group">
                   <label>Customer Name<span class="text-danger">*</span></label>
-                  <input type="text" formControlName="ProformaCustomerName" placeholder="" (input)="convertToUppercase($event)" >
+                  <!-- <input type="text" formControlName="ProformaCustomerName" placeholder="" (input)="convertToUppercase($event)" > -->
+                 <ng-select
+    [items]="customerList"
+    bindLabel="customerName"
+    placeholder="Select or Add Location"
+    [multiple]="false"
+    [addTag]="true"
+    [searchable]="true"
+    formControlName="ProformaCustomerName"
+    (change)="onCustomerSelectChange($event)"
+>
+</ng-select>
                 </div>
                 <div class="text-danger" style="color: red;"
                   *ngIf="newInvoiceCreation.get('ProformaCustomerName')?.hasError('required') && newInvoiceCreation.get('ProformaCustomerName')?.touched">
@@ -266,8 +284,14 @@
               <div class="col-lg-4">
                 <div class="form-group">
                   <label>Seating Capasity<span class="text-danger">*</span></label>
-                  <input type="text" formControlName="proformaseatingcapasity" class="form-control" placeholder="" (input)="convertToUppercase($event)" >
-                </div>
+                  <input
+                  type="text"
+                  formControlName="proformaseatingcapasity"
+                  placeholder="Enter Seating Capasity"
+ 
+                  (keypress)="restrictToNumbers($event)"
+                />
+            </div>
                 <div class="text-danger"
                   *ngIf="newInvoiceCreation.get('proformaseatingcapasity')?.hasError('required') && newInvoiceCreation.get('proformaseatingcapasity')?.touched">
                   Seating Capasity is required.
@@ -300,7 +324,7 @@
                   <label>Sector</label>
                   <!-- <input type="text" formControlName="bookingsector" class="form-control" placeholder="" (input)="convertToUppercase($event)"> -->
                   <input type="text" formControlName="bookingsector" class="form-control"
-                  (input)="updateChargeItem(0, 'description', $event.target.value)">
+                  (input)="updateChargeItem(0, 'description', $event.target.value);convertToUppercase($event)">
                 </div>
                 <div class="text-danger"
                   *ngIf="newInvoiceCreation.get('bookingsector')?.hasError('required') && newInvoiceCreation.get('bookingsector')?.touched">
@@ -451,7 +475,7 @@
             </tbody>
           </table>
 
-          <div class="amount-in-words">
+          <div class="amount-in-words" >
             Rupees in words: {{amountInWords}}
           </div>
         </div>
@@ -468,7 +492,7 @@
               <div class="notes-section form-group">
                 <label>Notes</label>
                 <textarea formControlName="notes" class="form-control"
-                  placeholder="Notes - any relevant information not covered, additional terms and conditions"></textarea>
+                  placeholder="Notes - any relevant information not covered, additional terms and conditions" (input)="convertToUppercase($event)"></textarea>
               </div>
             </div>
           </div>
@@ -699,10 +723,16 @@
             style="background-color: #f9f9f9; padding: 20px; border: 1px solid #ddd; border-radius: 8px; box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);">
             <div class="row">
               <div class="col-lg-4">
-                <div class="form-group">
-                  <label>Customer Name<span class="text-danger">*</span></label>
-                  <input type="text" formControlName="ProformaCustomerName" placeholder="">
-                </div>
+                        <div class="form-group">
+                          <label>Customer Name<span class="text-danger">*</span></label>
+                          <!-- <select formControlName="ProformaCustomerName" class="form-control" (change)="onCustomerChange($event)">
+                            <option value="">Select a customer</option>
+                            <option *ngFor="let customer of customerList" [value]="customer.customerName">{{customer.customerName}}</option>
+                          </select> -->
+                          <ng-select [items]="customerList" bindLabel="customer.customerName" bindValue="customer.customerName"
+                placeholder="Select or Add Location" [multiple]="true" [addTag]="true" formControlName="ProformaCustomerName">
+              </ng-select>
+                        </div>
                 <div class="text-danger" style="color: red;"
                   *ngIf="newInvoiceCreation.get('ProformaCustomerName')?.hasError('required') && newInvoiceCreation.get('ProformaCustomerName')?.touched">
                   Customer Name is required.
@@ -847,7 +877,7 @@
               <div class="col-lg-4">
                 <div class="form-group">
                   <label>Seating Capasity<span class="text-danger">*</span></label>
-                  <input type="text" formControlName="proformaseatingcapasity" class="form-control" placeholder=""  (input)="convertToUppercase($event)">
+                  <input type="text" formControlName="proformaseatingcapasity" class="form-control" placeholder=""  (input)="numbersOnly($event)">
                 </div>
                 <div class="text-danger" style="color: red;"
                   *ngIf="newInvoiceCreation.get('proformaseatingcapasity')?.hasError('required') && newInvoiceCreation.get('proformaseatingcapasity')?.touched">
@@ -1054,11 +1084,7 @@
   </div>
 </div>
 
-<script>
-  document.getElementById("notes").addEventListener("input", function() {
-    this.value = this.value.toUpperCase();
-  });
-</script>
+
 
 
 

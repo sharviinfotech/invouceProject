@@ -9,6 +9,7 @@ import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { ImageService } from 'src/app/image.service';
 import { ToastrService } from 'ngx-toastr';
 import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
+import { NgSelectModule } from '@ng-select/ng-select';
 interface TaxItem {
   description: string;
   percentage: number;
@@ -20,12 +21,23 @@ interface ChargeItem {
   rate: number;
   amount: number;
 }
+interface Customer {
+  _id: string;
+  customerName: string;
+  customerAddress: string;
+  customerCity: string;
+  customerState: string;
+  customerPincode: string;
+  customerGstNo: string;
+  customerPanNo: string;
+}
+
 
 @Component({
   selector: 'app-invoice',
   templateUrl: './invoice.component.html',
   styleUrls: ['./invoice.component.css'],
-  imports: [CommonModule, ReactiveFormsModule, FormsModule, BsDatepickerModule,NgxSpinnerModule],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule, BsDatepickerModule,NgxSpinnerModule,NgSelectModule],
   standalone: true
 })
 export class InvoiceComponent implements OnInit {
@@ -44,6 +56,8 @@ export class InvoiceComponent implements OnInit {
   isHoveringRemove: boolean = false;
   StateName: string = '';
   showCGST_SGST = false;
+  customerList: any[] = [];
+  
   showIGST = false;
   proformaCardHeaderName: any;
   proformaCardHeaderId: null;
@@ -69,7 +83,50 @@ export class InvoiceComponent implements OnInit {
 
   }
  
- 
+  onCustomerSelectChange(selectedCustomer: Customer | string | null) {
+    if (selectedCustomer) {
+        if (typeof selectedCustomer === 'object' && '_id' in selectedCustomer) {
+            console.log("Existing Customer Selected:", selectedCustomer);
+            this.newInvoiceCreation.patchValue({
+                ProformaCustomerName: selectedCustomer.customerName,
+                ProformaAddress: selectedCustomer.customerAddress,
+                ProformaCity: selectedCustomer.customerCity,
+                ProformaState: selectedCustomer.customerState, // Patch state first
+                ProformaPincode: selectedCustomer.customerPincode,
+                ProformaGstNo: selectedCustomer.customerGstNo,
+                ProformaPanNO: selectedCustomer.customerPanNo,
+            });
+            setTimeout(() => {
+                this.onChangeState(); // Call onChangeState after patching the state
+            }, 0);
+            console.log("this.newInvoiceCreation",this.newInvoiceCreation.value,this.newInvoiceCreation.value.ProformaState)
+        } else if (typeof selectedCustomer === 'string') {
+            console.log("Manual Entry:", selectedCustomer);
+            this.newInvoiceCreation.patchValue({
+                ProformaCustomerName: selectedCustomer,
+            });
+            this.clearOtherCustomerFields();
+        } else {
+            console.log("Unknown Selection:", selectedCustomer);
+            this.clearOtherCustomerFields();
+        }
+    } else {
+        console.log("Selection Cleared");
+        this.clearOtherCustomerFields();
+    }
+}
+
+clearOtherCustomerFields() {
+  this.newInvoiceCreation.patchValue({
+      ProformaAddress: '',
+      ProformaCity: '',
+      ProformaState: '',
+      ProformaPincode: '',
+      ProformaGstNo: '',
+      ProformaPanNO: ''
+  });
+}
+
   
   
   
@@ -196,7 +253,7 @@ export class InvoiceComponent implements OnInit {
 
   ngOnInit(): void {
     console.log("taxlist", this.taxItems)
-
+    this.getAllCustomerList();
     this.getAllInvoice()
     this.getStates();
     this.loginData = null
@@ -206,6 +263,50 @@ export class InvoiceComponent implements OnInit {
    console.log("this.loginData",this.loginData);
 
   }
+  getAllCustomerList() {
+    this.customerList = [];
+    this.service.getAllCustomerList().subscribe(
+      (res: any) => {
+        this.customerList = res.data;
+        console.log('this.customerList', this.customerList);
+      },
+      (error) => {
+        console.log('error', error);
+      }
+    );
+  }
+
+  // onCustomerChange(customerId: string) {
+  //   if (customerId) {
+  //     const selectedCustomer = this.customerList.find((customer) => customer.customerId === parseInt(customerId));
+  //     if (selectedCustomer) {
+  //       this.newInvoiceCreation.patchValue({
+  //         ProformaAddress: selectedCustomer.ProformaAddress,
+  //         ProformaCity: selectedCustomer.ProformaCity,
+  //         ProformaState: selectedCustomer.ProformaState,
+  //         ProformaPincode: selectedCustomer.ProformaPincode,
+  //         ProformaGstNo: selectedCustomer.ProformaGstNo,
+  //         ProformaPanNO: selectedCustomer.ProformaPanNO,
+  //         ProformaPan: selectedCustomer.ProformaPan,
+  //         ProformaGstNumber: selectedCustomer.ProformaGstNumber,
+  //         customerId: selectedCustomer.customerId,
+  //       });
+  //     }
+  //   } else {
+  //     // Clear fields if no customer is selected
+  //     this.newInvoiceCreation.patchValue({
+  //       ProformaAddress: '',
+  //       ProformaCity: '',
+  //       ProformaState: '',
+  //       ProformaPincode: '',
+  //       ProformaGstNo: '',
+  //       ProformaPanNO: '',
+  //       ProformaPan: '',
+  //       ProformaGstNumber: '',
+  //       customerId: '',
+  //     });
+  //   }
+  // }
   getStates() {
     this.spinner.show();
     this.service.getstateList().subscribe(
@@ -221,12 +322,14 @@ export class InvoiceComponent implements OnInit {
       }
     );
   }
+  
   onChangeState() {
-    this.taxItems = []
-    const selectedState = this.newInvoiceCreation.value.ProformaState
-    const seletedObj = this.statesList.find(item => item.stateName == selectedState);
-    console.log("seletedObj", seletedObj)
-    if (seletedObj.stateName == 'Telangana') {
+    this.taxItems = [];
+    const selectedState = this.newInvoiceCreation.value.ProformaState;
+    const selectedObj = this.statesList.find(item => item.stateName === selectedState);
+    console.log("selectedObj", selectedObj);
+  
+    if (selectedObj && selectedObj.stateName === 'Telangana') {
       this.taxItems = [
         {
           description: 'CGST @ 9%',
@@ -238,11 +341,9 @@ export class InvoiceComponent implements OnInit {
           percentage: 9,
           amount: 0
         },
-
       ];
     } else {
       this.taxItems = [
-
         {
           description: 'IGST @ 18%',
           percentage: 18,
@@ -250,19 +351,17 @@ export class InvoiceComponent implements OnInit {
         }
       ];
     }
-
-    console.log("this.activeTab ",this.activeTab ,this.subtotal)
-   if( this.activeTab == 'Edit' && this.subtotal){
-    console.log("if state")
-    this.calculateTotals()
-   } else{
-    console.log("else state")
-   }
+  
+    // Recalculate totals if needed
+    if (this.activeTab === 'Edit' && this.subtotal) {
+      this.calculateTotals();
+    }
   }
 
 
   getAllInvoice() {
     this.allInvoiceList = []
+    this.getAllCustomerList()
     this.spinner.show()
     this.service.getAllInvoice().subscribe((res: any) => {
       console.log("getAllInvoice", res);
@@ -655,7 +754,7 @@ if(this.InvoiceLogo== ''|| this.InvoiceLogo == null){
     this.grandTotal = this.subtotal + this.taxItems.reduce((sum, tax) => sum + (Number(tax.amount) || 0), 0);
 
     // Convert amount to words
-    this.amountInWords = this.numberToWordsService.convert(this.grandTotal);
+    this.amountInWords = this.numberToWordsService.convert(this.grandTotal).toUpperCase();
 
     // Debugging logs
     console.log("chargeItems", this.chargeItems);
@@ -723,13 +822,14 @@ if(this.InvoiceLogo== ''|| this.InvoiceLogo == null){
         bookingDate = this.formatDate(bookingDate);
       }
       console.log("invoiceDateSplit",invoiceDate,"bokingDateSplit",bookingDate)
+     const obj = this.newInvoiceCreation.value.ProformaCustomerName
       let createobj = {
         "header": {
         //  "invoiceHeader": this.InvoiceLogo,
         //   "invoiceImage": this.logoUrl,
         "invoiceHeader": null,
           "invoiceImage": null,
-          "ProformaCustomerName": this.newInvoiceCreation.value.ProformaCustomerName,
+          "ProformaCustomerName": obj.customerName,
           "ProformaAddress": this.newInvoiceCreation.value.ProformaAddress,
           "ProformaCity": this.newInvoiceCreation.value.ProformaCity,
           "ProformaState": this.newInvoiceCreation.value.ProformaState,
@@ -826,6 +926,8 @@ if(this.InvoiceLogo== ''|| this.InvoiceLogo == null){
 
     if (this.newInvoiceCreation.valid) {
       console.log('Invoice Updated', this.newInvoiceCreation.value);
+      const obj = this.newInvoiceCreation.value.ProformaCustomerName
+
 
       let invoiceDate = this.newInvoiceCreation.value.ProformaInvoiceDate;
     let bookingDate = this.newInvoiceCreation.value.bookingdateOfjourny;
@@ -851,7 +953,7 @@ if(this.InvoiceLogo== ''|| this.InvoiceLogo == null){
           // "invoiceImage": this.logoUrl,
           "invoiceHeader": null,
           "invoiceImage": null,
-          "ProformaCustomerName": this.newInvoiceCreation.value.ProformaCustomerName,
+          "ProformaCustomerName": obj.customerName,
           "ProformaAddress": this.newInvoiceCreation.value.ProformaAddress,
           "ProformaCity": this.newInvoiceCreation.value.ProformaCity,
           "ProformaState": this.newInvoiceCreation.value.ProformaState,
