@@ -42,6 +42,7 @@ interface Customer {
 })
 export class InvoiceComponent implements OnInit {
   statesList: any[] = [];
+  allCharges: any[] = [];
   newInvoiceCreation!: FormGroup;
   showNewInvoice = false;
   panForm: FormGroup;
@@ -115,6 +116,7 @@ export class InvoiceComponent implements OnInit {
         this.clearOtherCustomerFields();
     }
 }
+
 
 clearOtherCustomerFields() {
   this.newInvoiceCreation.patchValue({
@@ -256,6 +258,7 @@ clearOtherCustomerFields() {
     this.getAllCustomerList();
     this.getAllInvoice()
     this.getStates();
+    this.getAllCharges();
     this.loginData = null
     this.logoUrl = this.imageService.getBase64FlightLogo(); 
     this.InvoiceLogo = this.imageService.getBase64WorldLogo(); 
@@ -263,14 +266,37 @@ clearOtherCustomerFields() {
    console.log("this.loginData",this.loginData);
 
   }
+  onChargeSelectionChange(item: any, selectedChargeName: string) {
+    if (selectedChargeName) { // Check if a charge was actually selected
+      const selectedCharge = this.allCharges.find(charge => charge.chargeName === selectedChargeName);
+      if (selectedCharge) {
+        item.rate = selectedCharge.rate;
+        this.calculateTotals();
+      } else {
+        // Handle the case where the selected charge is not found.
+        // This could happen if the data in allCharges is inconsistent.
+        console.error(`Charge with name '${selectedChargeName}' not found.`);
+        // Optionally, you might want to reset the rate or display an error message.
+        item.rate = 0; // or item.rate = null;
+        this.calculateTotals();
+      }
+    } else {
+      // Handle the case where the selection was cleared (e.g., user selected the placeholder).
+      item.rate = 0; // or item.rate = null;
+      this.calculateTotals();
+    }
+  }
   getAllCustomerList() {
     this.customerList = [];
+    this.spinner.show()
     this.service.getAllCustomerList().subscribe(
       (res: any) => {
+        this.spinner.hide()
         this.customerList = res.data;
         console.log('this.customerList', this.customerList);
       },
       (error) => {
+        this.spinner.hide()
         console.log('error', error);
       }
     );
@@ -317,7 +343,7 @@ clearOtherCustomerFields() {
         }
       },
       (error) => {
-
+        this.spinner.hide()
         console.error('Error fetching statesList:', error);
       }
     );
@@ -367,6 +393,8 @@ clearOtherCustomerFields() {
       console.log("getAllInvoice", res);
       this.spinner.hide()
       this.allInvoiceList = res.data;
+    },error=>{
+      this.spinner.hide()
     })
   }
 
@@ -822,14 +850,13 @@ if(this.InvoiceLogo== ''|| this.InvoiceLogo == null){
         bookingDate = this.formatDate(bookingDate);
       }
       console.log("invoiceDateSplit",invoiceDate,"bokingDateSplit",bookingDate)
-     const obj = this.newInvoiceCreation.value.ProformaCustomerName
       let createobj = {
         "header": {
         //  "invoiceHeader": this.InvoiceLogo,
         //   "invoiceImage": this.logoUrl,
         "invoiceHeader": null,
           "invoiceImage": null,
-          "ProformaCustomerName": obj.customerName,
+          "ProformaCustomerName": this.newInvoiceCreation.value.ProformaCustomerName,
           "ProformaAddress": this.newInvoiceCreation.value.ProformaAddress,
           "ProformaCity": this.newInvoiceCreation.value.ProformaCity,
           "ProformaState": this.newInvoiceCreation.value.ProformaState,
@@ -876,6 +903,7 @@ if(this.InvoiceLogo== ''|| this.InvoiceLogo == null){
         const resp = response.data;
         if (resp) {
           this.getAllInvoice()
+          this.getAllCharges(); 
 
           this.activeTab = 'AllInvoice'
           // Reset form and related data
@@ -926,7 +954,6 @@ if(this.InvoiceLogo== ''|| this.InvoiceLogo == null){
 
     if (this.newInvoiceCreation.valid) {
       console.log('Invoice Updated', this.newInvoiceCreation.value);
-      const obj = this.newInvoiceCreation.value.ProformaCustomerName
 
 
       let invoiceDate = this.newInvoiceCreation.value.ProformaInvoiceDate;
@@ -953,7 +980,7 @@ if(this.InvoiceLogo== ''|| this.InvoiceLogo == null){
           // "invoiceImage": this.logoUrl,
           "invoiceHeader": null,
           "invoiceImage": null,
-          "ProformaCustomerName": obj.customerName,
+          "ProformaCustomerName": this.newInvoiceCreation.value.ProformaCustomerName,
           "ProformaAddress": this.newInvoiceCreation.value.ProformaAddress,
           "ProformaCity": this.newInvoiceCreation.value.ProformaCity,
           "ProformaState": this.newInvoiceCreation.value.ProformaState,
@@ -998,6 +1025,7 @@ if(this.InvoiceLogo== ''|| this.InvoiceLogo == null){
         const resp = response.updatedInvoice;
         if (resp) {
           this.getAllInvoice()
+          this.getAllCharges(); 
           // Reset form and related data
           this.newInvoiceCreation.reset();
           // this.logoUrl = '';
@@ -1055,6 +1083,15 @@ if(this.InvoiceLogo== ''|| this.InvoiceLogo == null){
     if (!pattern.test(inputChar)) {
       event.preventDefault(); // Prevent non-numeric input
     }
+  }
+  getAllCharges() {
+    this.service.getAllCharges().subscribe((res: any) => {
+      this.allCharges = res.data; // Update the allCharges array with the fetched data
+      console.log('allCharges:', this.allCharges);
+      
+    }, error => {
+      console.error("Error fetching charges:", error);
+    });
   }
   
 
