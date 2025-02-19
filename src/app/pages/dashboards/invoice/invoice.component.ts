@@ -42,6 +42,7 @@ interface Customer {
 })
 export class InvoiceComponent implements OnInit {
   statesList: any[] = [];
+  allCharges: any[] = [];
   newInvoiceCreation!: FormGroup;
   showNewInvoice = false;
   panForm: FormGroup;
@@ -115,6 +116,7 @@ export class InvoiceComponent implements OnInit {
         this.clearOtherCustomerFields();
     }
 }
+
 
 clearOtherCustomerFields() {
   this.newInvoiceCreation.patchValue({
@@ -256,6 +258,7 @@ clearOtherCustomerFields() {
     this.getAllCustomerList();
     this.getAllInvoice()
     this.getStates();
+    this.getAllCharges();
     this.loginData = null
     this.logoUrl = this.imageService.getBase64FlightLogo(); 
     this.InvoiceLogo = this.imageService.getBase64WorldLogo(); 
@@ -263,17 +266,76 @@ clearOtherCustomerFields() {
    console.log("this.loginData",this.loginData);
 
   }
+  onChargeSelectionChange(item: any, selectedChargeName: string) {
+    if (selectedChargeName) { // Check if a charge was actually selected
+      const selectedCharge = this.allCharges.find(charge => charge.chargeName === selectedChargeName);
+      if (selectedCharge) {
+        item.rate = selectedCharge.rate;
+        this.calculateTotals();
+      } else {
+        // Handle the case where the selected charge is not found.
+        // This could happen if the data in allCharges is inconsistent.
+        console.error(`Charge with name '${selectedChargeName}' not found.`);
+        // Optionally, you might want to reset the rate or display an error message.
+        item.rate = 0; // or item.rate = null;
+        this.calculateTotals();
+      }
+    } else {
+      // Handle the case where the selection was cleared (e.g., user selected the placeholder).
+      item.rate = 0; // or item.rate = null;
+      this.calculateTotals();
+    }
+  }
   getAllCustomerList() {
     this.customerList = [];
+    this.spinner.show()
     this.service.getAllCustomerList().subscribe(
       (res: any) => {
+        this.spinner.hide()
         this.customerList = res.data;
         console.log('this.customerList', this.customerList);
       },
       (error) => {
+        this.spinner.hide()
         console.log('error', error);
       }
     );
+  }
+
+  formatTime(event: any) {
+    let inputValue = event.target.value;
+    // Remove non-numeric, : and .
+    inputValue = inputValue.replace(/[^0-9:.]/g, '');
+
+    // Split by : or .
+    const parts = inputValue.split(/[:.]/);
+
+    if (parts.length > 2) {
+      // More than one : or .
+      inputValue = parts.slice(0, 2).join(':'); // Or '.', depending on your preference
+    }
+
+    if (parts.length === 2) {
+      // Limit minutes to 2 digits
+      parts[1] = parts[1].slice(0, 2);
+      inputValue = parts.join(inputValue.includes(':') ? ':' : '.');
+    }
+
+    // Limit hours to 2 digits
+    if (parts[0]) {
+      parts[0] = parts[0].slice(0, 2);
+      inputValue = parts.join(inputValue.includes(':') ? ':' : '.');
+    }
+
+    this.newInvoiceCreation.get('bookingbillingflyingtime')?.setValue(inputValue);
+    this.updateChargeItem(0, 'units', inputValue); // Update your charge item
+  }
+
+  validateTimeInput(event: KeyboardEvent) {
+    const charCode = event.which ? event.which : event.keyCode;
+    if ((charCode < 48 || charCode > 57) && charCode !== 58 && charCode !== 46) {
+      event.preventDefault(); // Prevent non-numeric, : and . input
+    }
   }
 
   // onCustomerChange(customerId: string) {
@@ -317,7 +379,7 @@ clearOtherCustomerFields() {
         }
       },
       (error) => {
-
+        this.spinner.hide()
         console.error('Error fetching statesList:', error);
       }
     );
@@ -367,6 +429,8 @@ clearOtherCustomerFields() {
       console.log("getAllInvoice", res);
       this.spinner.hide()
       this.allInvoiceList = res.data;
+    },error=>{
+      this.spinner.hide()
     })
   }
 
@@ -708,12 +772,13 @@ if(this.InvoiceLogo== ''|| this.InvoiceLogo == null){
     }
   }
   
-  updateChargeItem(index: number, field: string, value: string) {
+  updateChargeItem(index: number, field: string, value: any) {
     if (this.chargeItems.length > index) {
       this.chargeItems[index][field] = value.toUpperCase(); // Convert to uppercase
     }
     this.calculateTotals()
   }
+  
   deleteChargeItem(index: number) {
     this.chargeItems.splice(index, 1); // Remove the selected item
     this.calculateTotals(); // Recalculate totals
@@ -726,69 +791,71 @@ if(this.InvoiceLogo== ''|| this.InvoiceLogo == null){
   }
 
   calculateTotals() {
-    this.subtotal = 0
-    this.grandTotal = 0
-    // Loop through each charge item and calculate the amount
+    this.subtotal = 0;
+    this.grandTotal = 0;
+
     this.chargeItems.forEach(item => {
-      // If there are units, convert to hours and calculate the amount
-      if (item.units) {
-        const unitsInHours = this.convertUnitsToHours(item.units);
-        item.amount = unitsInHours * item.rate; // Calculate amount based on rate and hours
-      } else if (item.rate) {
-        // If no units are provided, calculate amount based only on rate (assuming 1 unit)
-        item.amount = item.rate; // If no units, assume 1 unit for calculation
-      } else {
-        // If no rate or units, set amount to 0
-        item.amount = 0;
-      }
+        if (item.units) {
+            const unitsInHours = this.convertUnitsToHours(item.units);
+            item.amount = unitsInHours * item.rate;
+        } else if (item.rate) {
+            item.amount = item.rate;
+        } else {
+            item.amount = 0;
+        }
     });
 
     this.subtotal = this.chargeItems.reduce((sum, item) => sum + (Number(item.amount) || 0), 0);
 
-    // Calculate tax amounts based on subtotal
     this.taxItems.forEach(tax => {
-      tax.amount = Math.round(this.subtotal * (Number(tax.percentage) / 100));
+        tax.amount = Math.round(this.subtotal * (Number(tax.percentage) / 100));
     });
 
-    // Calculate grand total (subtotal + tax amounts)
     this.grandTotal = this.subtotal + this.taxItems.reduce((sum, tax) => sum + (Number(tax.amount) || 0), 0);
 
-    // Convert amount to words
     this.amountInWords = this.numberToWordsService.convert(this.grandTotal).toUpperCase();
 
-    // Debugging logs
     console.log("chargeItems", this.chargeItems);
     console.log("taxItems", this.taxItems);
     console.log("subtotal", this.subtotal);
     console.log("grandTotal", this.grandTotal);
     console.log("amountInWords", this.amountInWords);
+}
 
+convertUnitsToHours(units: string | null): number {
+  if (!units || units.trim() === '') return 0;
+
+  let cleanUnits = units.trim().toLowerCase();
+  cleanUnits = cleanUnits.replace(/ hrs?$/, '');
+
+  const dotParts = cleanUnits.split('.');
+  const colonParts = cleanUnits.split(':');
+
+  let hours = 0;
+  let minutes = 0;
+
+  if (dotParts.length === 2) {
+      hours = Number(dotParts[0]);
+      minutes = Number(dotParts[1]);
+  } else if (colonParts.length === 2) {
+      hours = Number(colonParts[0]);
+      minutes = Number(colonParts[1]);
+  } else {
+      // Check if it's just whole hours (e.g., "6")
+      const wholeHours = Number(cleanUnits);
+      if (!isNaN(wholeHours)) {
+          return wholeHours;
+      }
+      return 0; // Invalid format
   }
 
+  if (isNaN(hours) || isNaN(minutes)) return 0;
 
+  if (hours > 24) hours = 24;
+  if (minutes >= 60) return 0; // Reject minutes >= 60
 
-  convertUnitsToHours(units: string | null): number {
-    if (!units || units.trim() === '') return 0;
-
-    // Clean up the 'Hrs.' part from the input
-    const cleanUnits = units.replace(' Hrs.', '').trim();
-
-    // Split the units by '.'
-    const parts = cleanUnits.split('.');
-    if (parts.length !== 2) return 0;  // Ensure there are exactly 2 parts (hours and minutes)
-
-    let hours = Number(parts[0]);  // Use 'let' instead of 'const' for reassignment
-    let minutes = Number(parts[1]); // Use 'let' instead of 'const' for reassignment
-
-    // Validate the parsed values to avoid NaN issues
-    if (isNaN(hours) || isNaN(minutes)) return 0; // Return 0 if any value is NaN
-
-    // Ensure hours and minutes are within valid ranges
-    if (hours > 24) hours = 24; // Max hours can be 24
-    if (minutes >= 60) minutes = 59; // Max minutes can be 59
-
-    return hours + minutes / 60; // Convert units to decimal hours
-  }
+  return hours + minutes / 60;
+}
   formatDate(proformaInvoiceDate: string): string {
     const date = new Date(proformaInvoiceDate);
     const day = String(date.getDate()).padStart(2, '0');
@@ -822,14 +889,13 @@ if(this.InvoiceLogo== ''|| this.InvoiceLogo == null){
         bookingDate = this.formatDate(bookingDate);
       }
       console.log("invoiceDateSplit",invoiceDate,"bokingDateSplit",bookingDate)
-     const obj = this.newInvoiceCreation.value.ProformaCustomerName
       let createobj = {
         "header": {
         //  "invoiceHeader": this.InvoiceLogo,
         //   "invoiceImage": this.logoUrl,
         "invoiceHeader": null,
           "invoiceImage": null,
-          "ProformaCustomerName": obj.customerName,
+          "ProformaCustomerName": this.newInvoiceCreation.value.ProformaCustomerName,
           "ProformaAddress": this.newInvoiceCreation.value.ProformaAddress,
           "ProformaCity": this.newInvoiceCreation.value.ProformaCity,
           "ProformaState": this.newInvoiceCreation.value.ProformaState,
@@ -876,6 +942,7 @@ if(this.InvoiceLogo== ''|| this.InvoiceLogo == null){
         const resp = response.data;
         if (resp) {
           this.getAllInvoice()
+          this.getAllCharges(); 
 
           this.activeTab = 'AllInvoice'
           // Reset form and related data
@@ -926,7 +993,6 @@ if(this.InvoiceLogo== ''|| this.InvoiceLogo == null){
 
     if (this.newInvoiceCreation.valid) {
       console.log('Invoice Updated', this.newInvoiceCreation.value);
-      const obj = this.newInvoiceCreation.value.ProformaCustomerName
 
 
       let invoiceDate = this.newInvoiceCreation.value.ProformaInvoiceDate;
@@ -953,7 +1019,7 @@ if(this.InvoiceLogo== ''|| this.InvoiceLogo == null){
           // "invoiceImage": this.logoUrl,
           "invoiceHeader": null,
           "invoiceImage": null,
-          "ProformaCustomerName": obj.customerName,
+          "ProformaCustomerName": this.newInvoiceCreation.value.ProformaCustomerName,
           "ProformaAddress": this.newInvoiceCreation.value.ProformaAddress,
           "ProformaCity": this.newInvoiceCreation.value.ProformaCity,
           "ProformaState": this.newInvoiceCreation.value.ProformaState,
@@ -998,6 +1064,7 @@ if(this.InvoiceLogo== ''|| this.InvoiceLogo == null){
         const resp = response.updatedInvoice;
         if (resp) {
           this.getAllInvoice()
+          this.getAllCharges(); 
           // Reset form and related data
           this.newInvoiceCreation.reset();
           // this.logoUrl = '';
@@ -1055,6 +1122,15 @@ if(this.InvoiceLogo== ''|| this.InvoiceLogo == null){
     if (!pattern.test(inputChar)) {
       event.preventDefault(); // Prevent non-numeric input
     }
+  }
+  getAllCharges() {
+    this.service.getAllCharges().subscribe((res: any) => {
+      this.allCharges = res.data; // Update the allCharges array with the fetched data
+      console.log('allCharges:', this.allCharges);
+      
+    }, error => {
+      console.error("Error fetching charges:", error);
+    });
   }
   
 

@@ -24,7 +24,6 @@
             <table class="table table-bordered text-center">
                 <thead>
                     <tr>
-                        <th>Serial No</th>
                         <th>Charges Id</th>
                         <th>Charges Name</th>
                         
@@ -32,7 +31,6 @@
                 </thead>
                 <tbody>
                     <tr *ngFor="let charge of allCharges; let i = index">
-                        <td>{{ i + 1 }}</td>
                         <td>{{charge.chargesUniqueId}}</td>
                         <td>{{ charge.chargesName }}</td>
                     </tr>

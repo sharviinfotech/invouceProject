@@ -240,6 +240,59 @@ body {
   to { transform: translateX(-30%); }
 }
 
+// added for resolutions 
+@media (min-width: 320px) { /* Adjust for small mobiles */
+  .custom-card {
+    max-width: 100%;
+    max-height: 100%;
+  }
+}
+ 
+@media (min-width: 480px) { /* Adjust for larger mobiles/small tablets */
+  .custom-card {
+    max-width: 100%;
+    max-height: 100%;
+  }
+  .aircraft-logo {
+    width: 100px !important;
+    height: 100px !important;
+  }
+}
+ 
+@media (min-width: 768px) { /* Adjust for tablets */
+  .custom-card {
+    max-width: 100%;
+    max-height: 100%;
+  }
+  .aircraft-logo {
+    width: 100px !important;
+    height: 100px !important;
+  }
+ 
+}
+ 
+@media (min-width: 992px) { /* Adjust for desktops */
+  .custom-card {
+    max-width: 100%;
+    max-height: 100%;
+  }
+  .aircraft-logo {
+    width: 200px !important;
+    height: 200px !important;
+  }
+}
+ 
+@media (min-width: 1200px) { /* Adjust for large desktops */
+  .custom-card {
+      max-width: 100%;
+      max-height: 100%;
+  }
+  .aircraft-logo {
+    width: 200px !important;
+    height: 200px !important;
+  }
+}
+
 
 
 

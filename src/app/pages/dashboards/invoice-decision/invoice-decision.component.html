@@ -48,14 +48,12 @@
                            {{ invoice.status }}
                       </span>
                             
-                            <span *ngIf="invoice.status === 'Pending' && invoice.reviewedDescription" class="share-icon" style="margin-right: 10px;" (click)="openSharePopup(invoice)">
-                                <i class="fas fa-eye" title="view" role="button"></i> 
+                            <span *ngIf="invoice.status === 'Pending' && invoice.reviewedDescription" class="share-icon gap-2 d-flex"  >
+                                <i class="fas fa-eye" title="view" role="button" (click)="openSharePopup(invoice)"></i>  
+                                <i class="fa fa-edit" title="edit" role="button" (click)="openEditPopup(invoice)"></i>
                                 
                                 </span> 
-                                <span *ngIf="invoice.status === 'Pending' " class="edit-icon" style="margin-right: 10px;" (click)="openEditPopup(invoice)">
-                                  <i class="fa fa-edit" title="edit" role="button"></i>
-                                  
-                                  </span> 
+                                
                         </td>
                         <!-- New Actions Column -->
                         <td [class.selected]="invoiceItem === invoice" [ngClass]="{
@@ -764,16 +762,18 @@
     this.value = this.value.toUpperCase();
   });
   </script>
-  <div class="row">
-    <div class="col-lg-4">
-      <div class="form-group">
-        <label>Description<span class="text-danger">*</span></label>
-        <input type="text" formControlName="reviewedDescriptionEdit" placeholder="Enter Description">
-      </div>
-      <div class="text-danger" *ngIf="newInvoiceCreation.get('reviewedDescriptionEdit')?.hasError('required') && newInvoiceCreation.get('reviewedDescriptionEdit')?.touched">
-        Description is required.
-      </div>
-    </div> 
+  <div class="card-body"
+  style="background-color: #f9f9f9; box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); border-radius: 8px;">
+ <div class="row">
+     <div class="col-lg-12">
+         <div class="description-section form-group">
+             <label>Description</label>
+             <textarea id="description" class="form-control" formControlName="reviewedDescriptionEdit" 
+                       placeholder="Enter Description"></textarea>
+         </div>
+     </div>
+ </div>
+ 
   </div>  
     </form>
   </div>

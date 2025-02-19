@@ -70,14 +70,14 @@
           Create New User
       </div>
       <div class="modal-body">
-          <form [formGroup]="userCreationForm"> <!-- FIXED: Added formGroup -->
+          <form [formGroup]="userCreationForm" autocomplete="off"> <!-- FIXED: Added formGroup -->
               <div class="row">
                   <!-- User Name -->
                   <div class="col-lg-4 col-md-4 col-sm-4">
                       <div class="form-group">
                           <label>User Name<span class="text-danger">*</span></label>
                           <input class="form-control form-control-sm" formControlName="userName" type="text" placeholder="" style="text-transform: uppercase;" 
-                          (input)="convertToUpperCase($event)">
+                          (input)="convertToUpperCase($event)"autocomplete="off">
                           <div class="text-danger" *ngIf="submit && f['userName'].errors">
                               User Name is required.
                           </div>
@@ -142,7 +142,7 @@
                             class="form-control"
                             formControlName="password"
                             placeholder="Enter password"
-                            [ngClass]="{ 'is-invalid': submitted && f.password.errors }"
+                            [ngClass]="{ 'is-invalid': submitted && f.password.errors }" autocomplete="new-password"
                            />
                         <button class="btn btn-light ms-0" type="button" (click)="toggleFieldTextType()">
                             <i
@@ -171,7 +171,7 @@
                         <button class="btn btn-light ms-0" type="button" (click)="toggleConfirmFieldTextType()">
                             <i
                                 class="mdi mdi-eye-outline"
-                                [ngClass]="{ 'mdi-eye-off-outline': !confirmFieldTextType, 'mdi-eye-outline': confirmFieldTextType }"
+                                [ngClass]="{ 'mdi-eye-off-outline': !confirmFieldTextType, 'mdi-eye-outline': confirmFieldTextType }" autocomplete="new-password"
                             ></i>
                         </button>
                     </div>
@@ -191,6 +191,9 @@
                           <option value="ADMIN">ADMIN</option>
                           <option value="ACCOUNTS">ACCOUNTS</option>
                       </select>
+                      <div class="text-danger" *ngIf="submit && f['activity'].errors">
+                        Activity is required.
+                   </div>
                   </div>
                   <div class="col-md-4 d-flex align-items-center">
                       <label class="me-2">Active</label>
@@ -348,6 +351,10 @@
                         <option value="ADMIN">ADMIN</option>
                         <option value="ACCOUNTS">ACCOUNTS</option>
                     </select>
+                    <div class="text-danger" *ngIf="submit && f['activity'].errors">
+                        Activity is required.
+                   </div>
+                    
                 </div>
                 <div class="col-md-4 d-flex align-items-center">
                     <label class="me-2">Active</label>
