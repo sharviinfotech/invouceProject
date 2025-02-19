@@ -160,7 +160,7 @@ export class InvoiceDecisionComponent {
       bookingdateOfjourny: [''], // Handle date input
       bookingsector: ['', Validators.required],
       bookingbillingflyingtime: ['', Validators.required], 
-      reviewedDescriptionEdit: ['', Validators.required]  
+      reviewedDescriptionEdit: ['']  
       // ... other form controls with their validators
     });
     this.getStates();
@@ -249,7 +249,7 @@ if(this.InvoiceLogo== ''|| this.InvoiceLogo == null){
 }
     console.log("this.selectedInvoice.header.invoiceUniqueNumber", this.selectedInvoice.invoiceUniqueNumber)
     console.log("this.newInvoiceCreation", this.newInvoiceCreation.value.ProformaInvoiceNumber)
-    this.modalService.open(this.editForm, { size: 'lg' }); 
+    this.modalService.open(this.editForm, { size: 'xl' }); 
 }
 resetAll() {
   // this.logoUrl = ""
@@ -1389,6 +1389,7 @@ resetAll() {
              showConfirmButton: true
            });
            this.invoiceItem = null
+           this.modalService.dismissAll();
  
          } else {
            this.spinner.hide()
