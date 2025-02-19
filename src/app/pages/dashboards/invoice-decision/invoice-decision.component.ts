@@ -165,6 +165,7 @@ export class InvoiceDecisionComponent {
     });
     this.getStates();
     this.getAllInvoice()
+    
     this.loginData = this.service.getLoginResponse()
     console.log("this.loginData ", this.loginData)
   }

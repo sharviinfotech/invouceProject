@@ -158,7 +158,7 @@
   margin-bottom: 10px;
 }
 .container {
-  width: 124%;
+  /* width: 124%; */
   /* max-width: 1000px; */
   margin: 0 auto;
 }
@@ -205,6 +205,10 @@
   border-radius: 5px;
   padding: 6px 1px;
   cursor: pointer;
+}
+.fa-edit.disabled {
+  color: gray; /* Or any color you prefer */
+  cursor: not-allowed; /* Change cursor to indicate it's disabled */
 }
 
 .btnBack svg {
