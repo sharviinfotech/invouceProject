@@ -5,6 +5,9 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root'
 })
 export class GeneralserviceService {
+  resetPasswordData(): any {
+    throw new Error('Method not implemented.');
+  }
  
   setLoginDataList: any;
   userList: any;
@@ -19,7 +22,7 @@ export class GeneralserviceService {
     this.loginResponse = data;
 }
 getLoginResponse(){
-    return  this.loginResponse;
+   return this.loginResponse;
 }
   getAllInvoice(){
     return this.http.get(environment.baseUrl+'invoice/getAllInvoices');
@@ -82,6 +85,10 @@ getLoginResponse(){
     return this.http.get(environment.baseUrl+'invoice/getAllCharges');
 
 
+  }
+  resetpassword(obj){
+    return this.http.post(environment.baseUrl+'invoice/resetPassword',obj);
+ 
   }
 
 }

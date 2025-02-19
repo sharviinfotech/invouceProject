@@ -15,13 +15,17 @@ import { RootReducerState } from 'src/app/store';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { SimplebarAngularModule } from 'simplebar-angular';
 import { GeneralserviceService } from 'src/app/generalservice.service';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ToastrService } from 'ngx-toastr';
+import Swal from 'sweetalert2';
+
 
 @Component({
   selector: 'app-topbar',
   templateUrl: './topbar.component.html',
   styleUrls: ['./topbar.component.scss'],
   standalone:true,
-  imports:[CommonModule,TranslateModule,BsDropdownModule,SimplebarAngularModule],
+  imports:[CommonModule,TranslateModule,BsDropdownModule,SimplebarAngularModule,ReactiveFormsModule],
 })
 
 /**
@@ -38,13 +42,20 @@ export class TopbarComponent implements OnInit {
   layout: string;
   dataLayout$: Observable<string>;
   loginData: any;
+  isResetPasswordModalOpen = false;
+  userUniqueId: any;
+  spinner: any;
+  submitted: boolean;
+ 
+  resetPassword!: FormGroup;
   // Define layoutMode as a property
 
-  constructor(@Inject(DOCUMENT) private document: any, private router: Router, private authService: AuthenticationService,
+  constructor(@Inject(DOCUMENT) private document: any,private fb: FormBuilder, private router: Router, private authService: AuthenticationService,
     private authFackservice: AuthfakeauthenticationService,
     public languageService: LanguageService,
     public translate: TranslateService,
-    public _cookiesService: CookieService, public store: Store<RootReducerState>,private service:GeneralserviceService) {
+    private toaster: ToastrService,
+    public _cookiesService: CookieService, public store: Store<RootReducerState>, private toastr: ToastrService,private service:GeneralserviceService) {
 
   }
 
@@ -80,10 +91,25 @@ export class TopbarComponent implements OnInit {
 
    this.loginData= this.service.getLoginResponse()
    console.log("this.loginData",this.loginData);
-
+   this.resetPassword = this.fb.group({ 
+    userName: ['', Validators.required], 
+    currentPassword: ['', Validators.required], 
+    newPassword: ['', Validators.required], 
+    confirmPassword: ['', Validators.required]
+  }, { validators: this.passwordMatchValidator });
    if(this.loginData == undefined){
     this.router.navigate(['/auth/login-2'],);
    }
+  }
+  passwordMatchValidator(formGroup: FormGroup) {
+    const newPassword = formGroup.get('newPassword')?.value;
+    const confirmPassword = formGroup.get('confirmPassword')?.value;
+
+    if (newPassword !== confirmPassword) {
+      formGroup.get('confirmPassword')?.setErrors({ passwordMismatch: true });
+    } else {
+      formGroup.get('confirmPassword')?.setErrors(null);
+    }
   }
 
   setLanguage(text: string, lang: string, flag: string) {
@@ -98,6 +124,11 @@ export class TopbarComponent implements OnInit {
    */
   toggleRightSidebar() {
     this.settingsButtonClicked.emit();
+  }
+  isLogoutDropdownOpen = false;
+
+  toggleLogoutDropdown() {
+    this.isLogoutDropdownOpen = !this.isLogoutDropdownOpen;
   }
 
   /**
@@ -165,4 +196,82 @@ export class TopbarComponent implements OnInit {
       document.documentElement.setAttribute('data-layout', layout)
     })
   }
+
+  openResetPasswordModal() {
+    console.log("this.loginData.userName",this.loginData.data.userName)
+    this.isResetPasswordModalOpen = true;
+    this.resetPassword.patchValue({
+      "userName":this.loginData.data.userName
+    })
+
+console.log("this.resetPassword",this.resetPassword.value.userName)
+}
+
+closeResetPasswordModal() {
+    this.isResetPasswordModalOpen = false;
+   
+}
+     resetpasswordSave() {
+
+    console.log("this.resetPasswordData",this.resetPassword)
+    // this.spinner.show();
+    
+  
+    if (this.resetPassword.invalid == true) {
+      // this.spinner.hide();
+      this.submitted = true;
+      return;
+    }
+  
+    const Payload = {
+      userUniqueId:this.loginData.data.userUniqueId,
+      userName: this.resetPassword.value.userName,
+      currentPassword:this.resetPassword.value.currentPassword,
+      newPassword:this.resetPassword.value.newPassword,
+      confirmPassword:this.resetPassword.value.confirmPassword
+    };
+  
+    this.service.resetpassword(Payload).subscribe(
+      (res: any) => {
+        const response = res;
+  
+        // First, stop the spinner
+        // this.spinner.hide();
+  
+        // Ensure UI update completes before showing Swal
+       
+          if (response.status === 200) {
+           
+            // this.service.getLoginResponse(response);
+  
+            // Swal.fire(response.message, `Welcome ${response.data.userFirstName} ${response.data.userLastName}`, 'success');
+            Swal.fire({
+              title: response.message,
+             
+              icon: 'success',
+              timer: 5000, // 10 seconds
+              timerProgressBar: true, // Shows a progress bar
+            });
+            this.router.navigate(['/auth/login-2'],);
+            this.submitted = false;
+          } 
+          
+          else {
+            this.toaster.error(res.message)
+          }
+  
+          
+        
+      },
+      (error) => {
+        // this.spinner.hide();
+  
+        setTimeout(() => {
+          console.log('error', error);
+          this.toaster.error(error);
+        }, 0);
+      }
+    );
+  }
+  
 }
