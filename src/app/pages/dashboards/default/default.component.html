@@ -4,6 +4,55 @@
       Invoice Data Visualization
     </div>
 
+    <div class="card">
+      <div class="rounded">
+      <div class="left-side rounded">
+          <div class="leftWidth total-records  bg-gradient-to-r from-purple-500 to-blue-500 flex flex-col justify-center items-center p-6 rounded-l-lg leftWith">
+              <div class="flex items-center">
+                  <i class="fas fa-database text-xl mr-2"></i>
+                  <h3 class="font-semibold">Total Records</h3>
+              </div>
+              <p class="font-bold text-2xl">{{ totalInvoiceCount }}</p>
+          </div>
+          <div class="middlewidth flex flex-col">
+              <div class="total-Approved bg-gradient-to-r from-orange-400 to-red-500 flex flex-col justify-center items-center ">
+                  <div class="flex items-center">
+                      <i class="fas fa-check-circle text-xl mr-2"></i>
+                      <h3 class="font-semibold">Approved</h3>
+                  </div>
+                  <p class="font-bold">{{ approvedCount }}</p>
+              </div>
+              <div class="total-rejected bg-gradient-to-r from-green-400 to-teal-500 flex flex-col justify-center items-center ">
+                  <div class="flex items-center">
+                      <i class="fas fa-times-circle text-xl mr-2"></i>
+                      <h3 class="font-semibold">Rejected</h3>
+                  </div>
+                  <p class="font-bold">{{ rejectedCount }}</p>
+              </div>
+              
+          </div>
+          <diV class="rightwidth flex flex-col">
+            <div class="total-Pending bg-gradient-to-r from-pink-500 to-purple-600 flex flex-col justify-center items-center  rounded-br-lg">
+              <div class="flex items-center">
+                  <i class="fas fa-hourglass-half text-xl mr-2"></i>
+                  <h3 class="font-semibold">Pending</h3>
+              </div>
+              <p class="font-bold">{{ pendingCount }}</p>
+          </div>
+          <div class="total-rejected-reversed bg-gradient-to-r from-pink-500 to-purple-600 flex flex-col justify-center items-center  rounded-br-lg">
+              <div class="flex items-center">
+                  <i class="fas fa-undo-alt text-xl mr-2"></i>
+                  <h3 class="font-semibold">Rejected Reversed</h3>
+              </div>
+              <p class="font-bold">{{ rejectedReversedCount }}</p>
+          </div>
+          </diV>
+      </div>
+  </div>
+
+
+    </div>
+
     <div class="row" id="barChart" style="margin-top: 30px;" style="margin-top: 10px;border: 2px solid darkviolet !important;margin-right: 0px !important;
             margin-left: 0px !important;">
       <div class="col-md-6 col-lg-6" id="leftBar">

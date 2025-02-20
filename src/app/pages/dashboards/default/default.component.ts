@@ -48,7 +48,11 @@ export class DefaultComponent {  // ... (other properties)
   filteredInvoiceList: any[] = [];    
   bsConfig: { dateInputFormat: string; containerClass: string; };
   close: any;
-
+  totalInvoiceCount: number;
+  approvedCount: number;
+  rejectedCount: number;
+  pendingCount: number;
+  rejectedReversedCount: number;
   constructor(
     private service: GeneralserviceService,
     private spinner: NgxSpinnerService,private cdr: ChangeDetectorRef
@@ -64,12 +68,12 @@ export class DefaultComponent {  // ... (other properties)
   }
 
   getAllInvoice() {
-    setTimeout(() => {
       this.spinner.show();
       this.service.getAllInvoice().subscribe(
         (res: any) => {
           this.spinner.hide();
           this.allInvoiceList = res.data;
+          this.totalAmountAndCount()
           this.filteredInvoiceList = res.data;
           console.log("Fetched Invoice Data:", this.allInvoiceList);
           if(this.allInvoiceList.length>0){
@@ -82,8 +86,45 @@ export class DefaultComponent {  // ... (other properties)
           console.error("Error fetching invoices", error);
         }
       );
-    }, 0);
+
    
+  }
+  totalAmountAndCount(){
+    let approvedTotal = 0
+let rejectedTotal = 0
+let pendingTotal = 0
+let rejectedReversedTotal = 0 
+let grandTotalInvoices = 0
+this.approvedCount = 0
+this.totalInvoiceCount = 0
+this.rejectedCount = 0
+this.pendingCount = 0
+this.rejectedReversedCount = 0
+this.allInvoiceList.forEach(invoice => {
+    grandTotalInvoices += invoice.grandTotal;
+    this.totalInvoiceCount++;
+
+    if (invoice.status === "Approved") {
+        approvedTotal += invoice.grandTotal;
+        this.approvedCount++;
+    } else if (invoice.status === "Rejected") {
+        rejectedTotal += invoice.grandTotal;
+        this.rejectedCount++;
+    } else if (invoice.status === "Pending") {
+        pendingTotal += invoice.grandTotal;
+        this.pendingCount++;
+    } else if (invoice.status === "Rejected_Reversed") {
+        rejectedReversedTotal += invoice.grandTotal;
+        this.rejectedReversedCount++;
+    }
+});
+
+// Output Variables
+console.log("Approved Count: ", this.approvedCount, " | Approved Total: ", approvedTotal);
+console.log("Rejected Count: ", this.rejectedCount, " | Rejected Total: ", rejectedTotal);
+console.log("Rejected_Reversed Count: ", this.rejectedReversedCount, " | Rejected_Reversed Total: ", rejectedReversedTotal);
+console.log("Pending Count: ", this.pendingCount, " | Pending Total: ", pendingTotal);
+console.log("Total Invoice Count: ", this.totalInvoiceCount, " | Grand Total of All Invoices: ", grandTotalInvoices);
   }
 
   updateBarChart(data: any[]) {
