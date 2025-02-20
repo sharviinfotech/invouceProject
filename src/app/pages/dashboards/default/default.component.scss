@@ -16,6 +16,11 @@
 ::ng-deep .rejected_Reversed{
   background: linear-gradient(135deg, #FFA500, #FF4500);
 }
+::ng-deep .overduecount {
+  background: linear-gradient(135deg, #f90505, #f34b4b) !important; /* Light gray gradient */
+  color: #f4eeee !important;
+}
+
 
 
 .total-records {
@@ -98,6 +103,20 @@
   margin-right: 5px;
   margin-bottom: 5px;
 }
+.total-overdue {
+  background-image: linear-gradient(to right, #fde047, #fb923c); /* bg-gradient-to-r from-yellow-500 to-orange-600 */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 5px; /* p-4 */
+  height: 20.33%;
+  border-bottom-right-radius: 0.5rem; /* rounded-br-lg */
+  color: white;
+  text-align: center;
+  margin-right: 5px; 
+  margin-bottom: 5px; 
+}
 .left-side{
   width: 100% !important;
   display: flex;
@@ -106,15 +125,16 @@
 }
 .leftWidth{
   width: 20%;
+  height: 137px;
 }
 .middlewidth{
   width: 20%;
-  height: 50%;
+  height: 523%;
 }
 
 .rightwidth{
   width: 20%;
-  height: 50%;
+  height: 498%;
 }
 .font-semibold{
   font-size: 15px;

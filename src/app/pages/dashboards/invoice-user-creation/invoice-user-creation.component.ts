@@ -85,9 +85,7 @@ confirmFieldTextType: boolean = false;
       return;
     }
   }
-  convertToUpperCase(event: any) {
-    event.target.value = event.target.value.toUpperCase();
-  }
+ 
 
   openEditModal(user: any, editUserTemplate: TemplateRef<any>): void {
     this.submit = false
@@ -194,7 +192,10 @@ confirmFieldTextType: boolean = false;
   // Open Edit Modal
  
   newUserCreation(newUserTemplate: any): void {
-    
+    this.userCreationForm.reset()
+    this.userCreationForm.patchValue({
+      "status": true
+    })
     this.modalService.open(newUserTemplate,{  backdrop: 'static', 
       keyboard: false,size:'lg' });
   
@@ -214,15 +215,15 @@ confirmFieldTextType: boolean = false;
       
       let updateObj = {
         "userUniqueId": this.userUniqueId, // Assuming the unique ID is part of the form
-        "userName": this.userEditForm.value.userName.toUpperCase(),
-        "userFirstName": this.userEditForm.value.firstName.toUpperCase(),
-        "userLastName": this.userEditForm.value.lastName.toUpperCase(),
+        "userName": this.userEditForm.value.userName,
+        "userFirstName": this.userEditForm.value.firstName,
+        "userLastName": this.userEditForm.value.lastName,
         "userEmail": this.userEditForm.value.email,
-        "userContact": this.userEditForm.value.contact.toUpperCase(),
+        "userContact": this.userEditForm.value.contact,
         "userPassword": this.userEditForm.value.password,
         "userConfirmPassword": this.userEditForm.value.confirmPassword,
         "userStatus": this.userEditForm.value.status,
-        "userActivity": this.userEditForm.value.activity.toUpperCase(),
+        "userActivity": this.userEditForm.value.activity,
 
       };
       
@@ -282,15 +283,15 @@ confirmFieldTextType: boolean = false;
     }
   
     let creatObj = {
-      "userName": this.userCreationForm.value.userName.toUpperCase(),
-      "userFirstName": this.userCreationForm.value.firstName.toUpperCase(),
-      "userLastName": this.userCreationForm.value.lastName.toUpperCase(),
+      "userName": this.userCreationForm.value.userName,
+      "userFirstName": this.userCreationForm.value.firstName,
+      "userLastName": this.userCreationForm.value.lastName,
       "userEmail": this.userCreationForm.value.email,
-      "userContact": this.userCreationForm.value.contact.toUpperCase(),
+      "userContact": this.userCreationForm.value.contact,
       "userPassword": this.userCreationForm.value.password,
       "userConfirmPassword": this.userCreationForm.value.confirmPassword,
       "userStatus": this.userCreationForm.value.status,
-      "userActivity": this.userCreationForm.value.activity.toUpperCase()
+      "userActivity": this.userCreationForm.value.activity
     };
   
     console.log("creatObj", creatObj);

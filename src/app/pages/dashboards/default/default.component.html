@@ -31,7 +31,7 @@
               </div>
               
           </div>
-          <diV class="rightwidth flex flex-col">
+          <div class="rightwidth flex flex-col">
             <div class="total-Pending bg-gradient-to-r from-pink-500 to-purple-600 flex flex-col justify-center items-center  rounded-br-lg">
               <div class="flex items-center">
                   <i class="fas fa-hourglass-half text-xl mr-2"></i>
@@ -46,7 +46,16 @@
               </div>
               <p class="font-bold">{{ rejectedReversedCount }}</p>
           </div>
-          </diV>
+          </div>
+          <div class="rightwidth flex flex-col">
+            <div class="total-overdue bg-gradient-to-r from-yellow-500 to-orange-600 flex flex-col justify-center items-center rounded-br-lg">
+              <div class="flex items-center">
+                  <i class="fas fa-undo-alt text-xl mr-2"></i> 
+                  <h3 class="font-semibold">Overdue</h3>
+              </div>
+              <p class="font-bold">{{ overdueCount }}</p>
+            </div>
+          </div>
       </div>
   </div>
 
@@ -67,8 +76,24 @@
         </apx-chart>
       </div>
     </div>
+    <div class="row" style="margin-top: 30px;">
+      <!-- Bar Chart -->
+      <div>
+        <apx-chart 
+          [series]="customerChartOptions.series" 
+          [chart]="customerChartOptions.chart" 
+          [labels]="customerChartOptions.labels"
+          [responsive]="customerChartOptions.responsive">
+        </apx-chart>
+      </div>
+      
+    
 
-  </div>
+    </div>
+    
+    
+    </div>
+
 
 
 
