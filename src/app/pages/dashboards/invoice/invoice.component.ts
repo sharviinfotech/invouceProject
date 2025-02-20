@@ -921,7 +921,8 @@ convertUnitsToHours(units: string | null): number {
         "reason":'',
         "invoiceApprovedOrRejectedByUser":"",
         "invoiceApprovedOrRejectedDateAndTime":"",
-        "loggedInUser":this.loginData.userName,
+        "loggedInUser":this.loginData.data.userName,
+        "createdByUser":this.loginData.data.userName,
         "status":"Pending",
         "proformaCardHeaderId":this.proformaCardHeaderId,
         "proformaCardHeaderName":this.proformaCardHeaderName
@@ -1045,7 +1046,8 @@ convertUnitsToHours(units: string | null): number {
         "reason":this.reason,
         "invoiceApprovedOrRejectedByUser":this.invoiceApprovedOrRejectedByUser,
         "invoiceApprovedOrRejectedDateAndTime":this.invoiceApprovedOrRejectedDateAndTime,
-        "loggedInUser":this.loginData.userName,
+        "loggedInUser":this.loginData.data.userName,
+        "createdByUser":this.loginData.data.userName,
        "status":this.reSubmitInvoiceStatus,
        "proformaCardHeaderId":this.proformaCardHeaderId,
         "proformaCardHeaderName":this.proformaCardHeaderName
