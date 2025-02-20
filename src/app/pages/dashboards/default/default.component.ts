@@ -14,7 +14,7 @@ import { BsDatepickerConfig, BsDatepickerModule } from 'ngx-bootstrap/datepicker
 
 export type ChartOptions = {
   series: any;
-  chart: ApexChart;
+  chart: any;
   xaxis: any;
   yaxis: any;
   dataLabels: any;
@@ -41,7 +41,8 @@ export type ChartOptions = {
 export class DefaultComponent {  // ... (other properties)
   public barChartOptions: Partial<ChartOptions> = {};// Initially hidden
   public pieChartOptions: Partial<ChartOptions> = {};
-  
+  public customerChartOptions: Partial<ChartOptions> = {};
+  public customerPieChartOptions: Partial<ChartOptions> = {};
   @ViewChild('barChart') barChart: ChartComponent;
   allInvoiceList: any[] = [];
   yearFilteredInvoices: any[] = [];  
@@ -53,6 +54,12 @@ export class DefaultComponent {  // ... (other properties)
   rejectedCount: number;
   pendingCount: number;
   rejectedReversedCount: number;
+  overdueCount: number;
+  customerList: any[];
+  customerInvoices: any[] = [];
+  selectedCustomer: string = '';
+
+  
   constructor(
     private service: GeneralserviceService,
     private spinner: NgxSpinnerService,private cdr: ChangeDetectorRef
@@ -65,6 +72,7 @@ export class DefaultComponent {  // ... (other properties)
  
   ngOnInit(): void {
     this.getAllInvoice();
+  
   }
 
   getAllInvoice() {
@@ -78,6 +86,8 @@ export class DefaultComponent {  // ... (other properties)
           console.log("Fetched Invoice Data:", this.allInvoiceList);
           if(this.allInvoiceList.length>0){
             this.updateBarChart(this.allInvoiceList);
+            this.updatePieChart();
+            this.updateCustomerPieChart();
 
           }
         },
@@ -86,46 +96,76 @@ export class DefaultComponent {  // ... (other properties)
           console.error("Error fetching invoices", error);
         }
       );
-
-   
   }
-  totalAmountAndCount(){
-    let approvedTotal = 0
-let rejectedTotal = 0
-let pendingTotal = 0
-let rejectedReversedTotal = 0 
-let grandTotalInvoices = 0
-this.approvedCount = 0
-this.totalInvoiceCount = 0
-this.rejectedCount = 0
-this.pendingCount = 0
-this.rejectedReversedCount = 0
-this.allInvoiceList.forEach(invoice => {
-    grandTotalInvoices += invoice.grandTotal;
-    this.totalInvoiceCount++;
+  totalAmountAndCount() {
+    let approvedTotal = 0;
+    let rejectedTotal = 0;
+    let pendingTotal = 0;
+    let rejectedReversedTotal = 0;
+    let overdueTotal = 0;
+    let grandTotalInvoices = 0;
 
-    if (invoice.status === "Approved") {
-        approvedTotal += invoice.grandTotal;
-        this.approvedCount++;
-    } else if (invoice.status === "Rejected") {
-        rejectedTotal += invoice.grandTotal;
-        this.rejectedCount++;
-    } else if (invoice.status === "Pending") {
-        pendingTotal += invoice.grandTotal;
-        this.pendingCount++;
-    } else if (invoice.status === "Rejected_Reversed") {
-        rejectedReversedTotal += invoice.grandTotal;
-        this.rejectedReversedCount++;
-    }
-});
+    this.approvedCount = 0;
+    this.totalInvoiceCount = 0;
+    this.rejectedCount = 0;
+    this.pendingCount = 0;
+    this.rejectedReversedCount = 0;
+    this.overdueCount = 0;
 
-// Output Variables
-console.log("Approved Count: ", this.approvedCount, " | Approved Total: ", approvedTotal);
-console.log("Rejected Count: ", this.rejectedCount, " | Rejected Total: ", rejectedTotal);
-console.log("Rejected_Reversed Count: ", this.rejectedReversedCount, " | Rejected_Reversed Total: ", rejectedReversedTotal);
-console.log("Pending Count: ", this.pendingCount, " | Pending Total: ", pendingTotal);
-console.log("Total Invoice Count: ", this.totalInvoiceCount, " | Grand Total of All Invoices: ", grandTotalInvoices);
-  }
+    const currentDate = new Date(); // Get the current date
+    const oneMonthAgo = new Date();
+    oneMonthAgo.setMonth(currentDate.getMonth() - 1); // Get date 1 month ago
+
+    console.log("Current Date:", currentDate);
+    console.log("One Month Ago:", oneMonthAgo);
+
+    this.allInvoiceList.forEach(invoice => {
+        grandTotalInvoices += invoice.grandTotal;
+        this.totalInvoiceCount++;
+
+        if (invoice.status === "Approved") {
+            approvedTotal += invoice.grandTotal;
+            this.approvedCount++;
+        } else if (invoice.status === "Rejected") {
+            rejectedTotal += invoice.grandTotal;
+            this.rejectedCount++;
+        } else if (invoice.status === "Pending") {
+            pendingTotal += invoice.grandTotal;
+            this.pendingCount++;
+
+            if (invoice.header && invoice.header.ProformaInvoiceDate) {
+                const invoiceDate = this.convertDate(invoice.header.ProformaInvoiceDate);
+
+                console.log(`Checking Invoice Date: ${invoice.header.ProformaInvoiceDate} -> Converted: ${invoiceDate}`);
+
+                if (!isNaN(invoiceDate.getTime()) && invoiceDate < oneMonthAgo) {
+                    overdueTotal += invoice.grandTotal;
+                    this.overdueCount++;
+                    console.log(`🚨 Overdue Invoice Found: ${invoice.header.ProformaInvoiceDate} | Count: ${this.overdueCount}`);
+                }
+            }
+        } else if (invoice.status === "Rejected_Reversed") {
+            rejectedReversedTotal += invoice.grandTotal;
+            this.rejectedReversedCount++;
+        }
+    });
+
+    // Output Variables
+    console.log("Approved Count:", this.approvedCount, " | Approved Total:", approvedTotal);
+    console.log("Rejected Count:", this.rejectedCount, " | Rejected Total:", rejectedTotal);
+    console.log("Rejected_Reversed Count:", this.rejectedReversedCount, " | Rejected_Reversed Total:", rejectedReversedTotal);
+    console.log("Pending Count:", this.pendingCount, " | Pending Total:", pendingTotal);
+    console.log("Total Invoice Count:", this.totalInvoiceCount, " | Grand Total of All Invoices:", grandTotalInvoices);
+    console.log("Overdue Count:", this.overdueCount, " | Overdue Total:", overdueTotal);
+}
+
+// 🔹 Converts "DD-MM-YYYY" to a JavaScript Date object
+convertDate(dateStr: string): Date {
+    const [day, month, year] = dateStr.split('-');
+    return new Date(`${year}-${month}-${day}`);
+}
+
+
 
   updateBarChart(data: any[]) {
     this.spinner.show()
@@ -223,14 +263,14 @@ console.log("Total Invoice Count: ", this.totalInvoiceCount, " | Grand Total of 
      
       // Define color mapping for statuses
       const statusColors: { [key: string]: string } = {
-        "Approved": "#16a34a",  // Green
-        "Rejected": "#dc2626",  // Red
-        "Pending": "#ffcc66",   // Orange
-        "Rejected_Reverse": "#FF7518",       
+        "Approved": "#16a34a",       // Green
+        "Rejected": "#dc2626",       // Red
+        "Pending": "#FFD700",        // Yellow
+        "Rejected_Reverse": "#FFD700" // Gold     
       };
   
       const chartLabels = Object.keys(statusCounts);
-      const chartColors = chartLabels.map(label => statusColors[label] || "#FF7518"); // Default grey if not found
+      const chartColors = chartLabels.map(label => statusColors[label] || "#FFD700"); // Default grey if not found
   
       this.pieChartOptions = {
         series: Object.values(statusCounts),
@@ -285,4 +325,57 @@ console.log("Total Invoice Count: ", this.totalInvoiceCount, " | Grand Total of 
 
     return yearlyStatusCounts;
   }
+  updateCustomerPieChart() {
+    const customerCounts: { [key: string]: number } = {}; // Object to store counts
+
+    // Count occurrences of each customer
+    this.allInvoiceList.forEach((invoice) => {
+      const customerName = invoice.header?.ProformaCustomerName?.trim() || "Unknown"; // Trim spaces, handle missing names
+      customerCounts[customerName] = (customerCounts[customerName] || 0) + 1;
+    });
+  
+ 
+    // Extract labels (customer names) and series data (invoice counts)
+    const customerNames = Object.keys(customerCounts);
+    const invoiceCounts = Object.values(customerCounts);
+  
+    this.customerChartOptions = { 
+      series: invoiceCounts,  // Values for Pie Chart
+      chart: {
+        type: "donut",
+        height: 350,
+        events: {
+          dataPointSelection: (event, chartContext, config) => {
+            const selectedCustomer = customerNames[config.dataPointIndex]; // Get clicked customer name
+            this.filterTableByCustomer(selectedCustomer); // Call filter function
+          }
+        }
+      },
+      labels: customerNames,  // Labels for Pie Chart
+      colors: ["#FF4560", "#008FFB", "#00E396", "#FEB019", "#775DD0"], // Custom colors
+      legend: {
+        position: "bottom"
+      }
+    };
+  
+    console.log("Pie Chart Data:", this.pieChartOptions);
+    this.cdr.detectChanges(); // Ensure UI updates
+  }
+  filterTableByCustomer(customerName: string) {
+    if (!customerName) {
+      this.filteredInvoiceList = [...this.allInvoiceList]; // Show all data
+    } else {
+      this.filteredInvoiceList = this.allInvoiceList.filter(
+        (invoice) => invoice.header?.ProformaCustomerName?.trim() === customerName
+      );
+    }
+  
+    this.cdr.detectChanges();
+  }
+  
+  
+
+
+  
+  
 }
