@@ -382,17 +382,19 @@
             class="btn btn-raised cancelBtn" 
             (click)="toggleLogoutDropdown()">
             <i class="bx bx-power-off font-size-16 align-middle me-1"></i>
-            {{ 'HEADER.LOGIN.LOGOUT' | translate }} ▼
+            {{ 'HEADER.LOGIN.LOGOUT' | translate }} 
         </button>
         
         <div *ngIf="isLogoutDropdownOpen" class="dropdown-menu show" style="position: absolute; right: 0; background: white; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); z-index: 1000;">
-            <a class="dropdown-item" (click)="logout()" role="button">
-                <i class="bx bx-power-off font-size-16 align-middle me-1"></i>
-                {{ 'HEADER.LOGIN.LOGOUT' | translate }}
-            </a>
+           
             <a class="dropdown-item" (click)="openResetPasswordModal()" role="button">
-              <i class="bx bx-reset font-size-16 align-middle me-1"></i>
+              <i class="bx bx-reset font-size-16 align-middle me-1" style="font-size: 15px;"></i>
               Reset Password
+          </a>
+          <a class="dropdown-item" (click)="logout()" role="button">
+            <i class="fas fa-sign-in-alt" style="transform: scaleX(-1); margin-right: 5px;font-size: 15px;"></i>       
+            
+          {{ 'HEADER.LOGIN.LOGOUT' | translate }}
           </a>
         </div>
     </div>
@@ -416,17 +418,51 @@
                       <input type="text" class="form-control"    formControlName ="userName">
                   </div>
                   <div class="form-group">
-                      <label >Current Password</label>
-                      <input type="password" class="form-control" autocomplete="new-password"  formControlName="currentPassword">
+                    <label>Current Password<span class="text-danger">*</span></label>
+                    <input type="password" 
+                           class="form-control form-control-sm" 
+                           autocomplete="new-password" 
+                           formControlName="currentPassword"
+                           placeholder="Enter Current Password">
+                    <div class="text-danger" *ngIf="submitted && f['currentPassword'].errors">
+                        Current Password is required.
+                    </div>
+                    <!-- <div class="text-danger" *ngIf="submitted && f['currentPassword'].errors?.minlength">
+                        Current Password must be at least 8 characters.  </div> -->
+                    <!-- <div class="text-danger" *ngIf="submitted && f['currentPassword'].errors">
+                        Current Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character. </div>
+             -->
+                </div>
+
+                <div class="form-group">
+                  <label>New Password<span class="text-danger">*</span></label>
+                  <input type="password" 
+                         class="form-control form-control-sm" 
+                         formControlName="newPassword"
+                         placeholder="Enter New Password">
+                  <div class="text-danger" *ngIf="submitted && f['newPassword'].errors">
+                      New Password is required.
                   </div>
-                  <div class="form-group">
-                      <label >New Password</label>
-                      <input type="password" class="form-control"  formControlName ="newPassword">
+                  <div class="text-danger" *ngIf="submitted && f['newPassword'].errors">
+                      New Password must be at least 8 characters.
                   </div>
-                  <div class="form-group">
-                      <label for="confirmPassword">Confirm Password</label>
-                      <input type="password" class="form-control"  formControlName ="confirmPassword">
+                  <div class="text-danger" *ngIf="submitted && f['newPassword'].errors">
+                      New Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character.
                   </div>
+              </div>
+              <div class="form-group">
+                  <label for="confirmPassword">Confirm Password<span class="text-danger">*</span></label>
+                  <input type="password" 
+                         class="form-control form-control-sm" 
+                         formControlName="confirmPassword"
+                         placeholder="Confirm New Password">
+                  <div class="text-danger" *ngIf="submitted && f['confirmPassword'].errors">
+                      Confirm Password is required.
+                  </div>
+                  <!-- <div class="text-danger" *ngIf="submitted && f['confirmPassword'].errors">
+                      Passwords do not match.
+                  </div> -->
+              </div>
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-primary" (click)="resetpasswordSave()">Reset Password</button>

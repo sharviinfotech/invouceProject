@@ -73,6 +73,8 @@ export class TopbarComponent implements OnInit {
   @Output() mobileMenuButtonClicked = new EventEmitter();
 
   ngOnInit() {
+
+
     // this.initialAppState = initialState;
     this.store.select('layout').subscribe((data) => {
       this.theme = data.DATA_LAYOUT;
@@ -92,15 +94,19 @@ export class TopbarComponent implements OnInit {
    this.loginData= this.service.getLoginResponse()
    console.log("this.loginData",this.loginData);
    this.resetPassword = this.fb.group({ 
-    userName: ['', Validators.required], 
-    currentPassword: ['', Validators.required], 
-    newPassword: ['', Validators.required], 
-    confirmPassword: ['', Validators.required]
+    userName: ['', [Validators.required]], 
+    currentPassword: ['', [Validators.required]], 
+    newPassword: ['', [Validators.required]], 
+    confirmPassword: ['', [Validators.required]]
   }, { validators: this.passwordMatchValidator });
    if(this.loginData == undefined){
     this.router.navigate(['/auth/login-2'],);
    }
   }
+
+  get f() {
+    return this.resetPassword.controls;
+    }
   passwordMatchValidator(formGroup: FormGroup) {
     const newPassword = formGroup.get('newPassword')?.value;
     const confirmPassword = formGroup.get('confirmPassword')?.value;
