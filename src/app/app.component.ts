@@ -3,6 +3,7 @@ import { RouterOutlet } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { NgxSpinnerModule } from 'ngx-spinner';
+import { SessionServiceService } from './pages/ui/session-service.service';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -11,7 +12,7 @@ import { NgxSpinnerModule } from 'ngx-spinner';
   imports: [RouterOutlet,CommonModule,NgxSpinnerModule],
 })
 export class AppComponent implements OnInit {
-  constructor(private spinner: NgxSpinnerService) {}
+  constructor(private spinner: NgxSpinnerService,private sessionService:SessionServiceService) {}
   ngOnInit() {
     this.spinner.show(undefined, {
       type: 'square-jelly-box',
