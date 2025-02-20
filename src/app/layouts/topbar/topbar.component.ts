@@ -31,6 +31,7 @@ import Swal from 'sweetalert2';
 /**
  * Topbar component
  */
+
 export class TopbarComponent implements OnInit {
   mode: any
   element: any;
@@ -46,6 +47,23 @@ export class TopbarComponent implements OnInit {
   userUniqueId: any;
   spinner: any;
   submitted: boolean;
+  fieldTextType: boolean = true;
+newPasswordFieldTextType: boolean = true;
+confirmFieldTextType: boolean = true;
+currentPasswordFieldTextType: boolean = true;
+
+toggleFieldTextType() {
+  this.fieldTextType = !this.fieldTextType;
+}
+toggleNewPasswordFieldTextType() {
+  this.newPasswordFieldTextType = !this.newPasswordFieldTextType;
+}
+toggleConfirmFieldTextType() {
+  this.confirmFieldTextType = !this.confirmFieldTextType;
+}
+toggleCurrentPasswordFieldTextType() {
+  this.currentPasswordFieldTextType = !this.currentPasswordFieldTextType;
+}
  
   resetPassword!: FormGroup;
   // Define layoutMode as a property
@@ -93,30 +111,39 @@ export class TopbarComponent implements OnInit {
 
    this.loginData= this.service.getLoginResponse()
    console.log("this.loginData",this.loginData);
-   this.resetPassword = this.fb.group({ 
-    userName: ['', [Validators.required]], 
-    currentPassword: ['', [Validators.required]], 
-    newPassword: ['', [Validators.required]], 
-    confirmPassword: ['', [Validators.required]]
-  }, { validators: this.passwordMatchValidator });
-   if(this.loginData == undefined){
-    this.router.navigate(['/auth/login-2'],);
-   }
+   this.resetPassword = this.fb.group({
+    userName: ['', Validators.required],
+    currentPassword: ['', Validators.required],
+    newPassword: ['', [Validators.required, Validators.minLength(8), Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/)]],
+    confirmPassword: ['', Validators.required],
+  }, { validators: this.mustMatch('newPassword', 'confirmPassword') });
+
+  if (this.loginData == undefined) {
+    this.router.navigate(['/auth/login-2']);
   }
+}
 
-  get f() {
-    return this.resetPassword.controls;
+get f() {
+  return this.resetPassword.controls;
+}
+
+mustMatch(controlName: string, matchingControlName: string) {
+  return (formGroup: FormGroup) => {
+    const control = formGroup.controls[controlName];
+    const matchingControl = formGroup.controls[matchingControlName];
+
+    if (matchingControl.errors && !matchingControl.errors['mustMatch']) {
+      return;
     }
-  passwordMatchValidator(formGroup: FormGroup) {
-    const newPassword = formGroup.get('newPassword')?.value;
-    const confirmPassword = formGroup.get('confirmPassword')?.value;
 
-    if (newPassword !== confirmPassword) {
-      formGroup.get('confirmPassword')?.setErrors({ passwordMismatch: true });
+    if (control.value !== matchingControl.value) {
+      matchingControl.setErrors({ mustMatch: true });
     } else {
-      formGroup.get('confirmPassword')?.setErrors(null);
+      matchingControl.setErrors(null);
     }
   }
+}
+
 
   setLanguage(text: string, lang: string, flag: string) {
     this.countryName = text;
@@ -279,5 +306,6 @@ closeResetPasswordModal() {
       }
     );
   }
+  
   
 }

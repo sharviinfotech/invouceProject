@@ -418,58 +418,89 @@
                       <input type="text" class="form-control"    formControlName ="userName">
                   </div>
                   <div class="form-group">
-                    <label>Current Password<span class="text-danger">*</span></label>
-                    <input type="password" 
-                           class="form-control form-control-sm" 
-                           autocomplete="new-password" 
-                           formControlName="currentPassword"
-                           placeholder="Enter Current Password">
+                    <label for="currentPassword">Current Password<span class="text-danger">*</span></label>
+                    <div class="input-group auth-pass-inputgroup">
+                        <input
+                            [type]="currentPasswordFieldTextType ? 'text' : 'password'"
+                            class="form-control form-control-sm"
+                            autocomplete="new-password"
+                            formControlName="currentPassword"
+                            placeholder="Enter Current Password"
+                            [ngClass]="{ 'is-invalid': submitted && f.currentPassword.errors }"
+                        />
+                        <button class="btn btn-light ms-0" type="button" (click)="toggleCurrentPasswordFieldTextType()">
+                            <i
+                                class="mdi mdi-eye-outline"
+                                [ngClass]="{ 'mdi-eye-off-outline': !currentPasswordFieldTextType, 'mdi-eye-outline': currentPasswordFieldTextType }"
+                            ></i>
+                        </button>
+                    </div>
                     <div class="text-danger" *ngIf="submitted && f['currentPassword'].errors">
                         Current Password is required.
                     </div>
-                    <!-- <div class="text-danger" *ngIf="submitted && f['currentPassword'].errors?.minlength">
-                        Current Password must be at least 8 characters.  </div> -->
-                    <!-- <div class="text-danger" *ngIf="submitted && f['currentPassword'].errors">
-                        Current Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character. </div>
-             -->
                 </div>
-
+                
                 <div class="form-group">
-                  <label>New Password<span class="text-danger">*</span></label>
-                  <input type="password" 
-                         class="form-control form-control-sm" 
-                         formControlName="newPassword"
-                         placeholder="Enter New Password">
-                  <div class="text-danger" *ngIf="submitted && f['newPassword'].errors">
-                      New Password is required.
-                  </div>
-                  <div class="text-danger" *ngIf="submitted && f['newPassword'].errors">
-                      New Password must be at least 8 characters.
-                  </div>
-                  <div class="text-danger" *ngIf="submitted && f['newPassword'].errors">
-                      New Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character.
-                  </div>
-              </div>
-              <div class="form-group">
-                  <label for="confirmPassword">Confirm Password<span class="text-danger">*</span></label>
-                  <input type="password" 
-                         class="form-control form-control-sm" 
-                         formControlName="confirmPassword"
-                         placeholder="Confirm New Password">
-                  <div class="text-danger" *ngIf="submitted && f['confirmPassword'].errors">
-                      Confirm Password is required.
-                  </div>
-                  <!-- <div class="text-danger" *ngIf="submitted && f['confirmPassword'].errors">
-                      Passwords do not match.
-                  </div> -->
-              </div>
-              </div>
+                    <label for="newPassword">New Password<span class="text-danger">*</span></label>
+                    <div class="input-group auth-pass-inputgroup">
+                        <input
+                            [type]="newPasswordFieldTextType ? 'text' : 'password'"
+                            class="form-control form-control-sm"
+                            formControlName="newPassword"
+                            placeholder="Enter New Password"
+                            [ngClass]="{ 'is-invalid': submitted && f.newPassword.errors }"
+                            autocomplete="new-password"
+                        />
+                        <button class="btn btn-light ms-0" type="button" (click)="toggleNewPasswordFieldTextType()">
+                            <i
+                                class="mdi mdi-eye-outline"
+                                [ngClass]="{ 'mdi-eye-off-outline': !newPasswordFieldTextType, 'mdi-eye-outline': newPasswordFieldTextType }"
+                            ></i>
+                        </button>
+                    </div>
+                    <div class="text-danger" *ngIf="submitted && f['newPassword'].errors?.['required']">
+                        New Password is required.
+                    </div>
+                    <div class="text-danger" *ngIf="submitted && f['newPassword'].errors?.['minlength']">
+                        New Password must be at least 8 characters.
+                    </div>
+                    <div class="text-danger" *ngIf="submitted && f['newPassword'].errors?.['pattern']">
+                        New Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character.
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="confirmPassword">Confirm Password<span class="text-danger">*</span></label>
+                    <div class="input-group auth-pass-inputgroup">
+                        <input
+                            [type]="confirmFieldTextType ? 'text' : 'password'"
+                            class="form-control form-control-sm"
+                            formControlName="confirmPassword"
+                            placeholder="Enter Confirm Password"
+                            [ngClass]="{ 'is-invalid': submitted && f.confirmPassword.errors }"
+                            autocomplete="new-password"
+                        />
+                        <button class="btn btn-light ms-0" type="button" (click)="toggleConfirmFieldTextType()">
+                            <i
+                                class="mdi mdi-eye-outline"
+                                [ngClass]="{ 'mdi-eye-off-outline': !confirmFieldTextType, 'mdi-eye-outline': confirmFieldTextType }"
+                            ></i>
+                        </button>
+                    </div>
+                    <div class="text-danger" *ngIf="submitted && f['confirmPassword'].errors?.['required']">
+                        Confirm password is required.
+                    </div>
+                    <div class="text-danger" *ngIf="f.confirmPassword?.hasError('mustMatch')">
+                        Password and Confirm Password do not match.
+                    </div>
+                </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-primary" (click)="resetpasswordSave()">Reset Password</button>
                   <button type="button" class="btn btn-secondary" (click)="closeResetPasswordModal()">Cancel</button>
          
               </div>
           </div>
+      </div>
       </div>
     </form>
   </div>
