@@ -137,9 +137,104 @@ p {
   height: 100%;
 }
 
+/* Common Styles */
+/* ... (Your existing CSS styles) ... */
 
+/* Media Queries */
 
+/* Mobile Styles (Smaller than 768px - Adjust as needed) */
+/* Tablet and Mobile Devices */
+@media (max-width: 600px) {
+  .card {
+    flex-direction: column;
+    padding: 5px;
+    
+  }
 
+  .left-side, .rightCard {
+    width: 100% !important;
+    padding: 5px;
+  }
+
+  .status-box {
+    width: 100% !important;
+    margin-bottom: 10px;
+  }
+
+  .middlewidth, .rightwidth {
+    width: 100% !important;
+    gap: 
+    10px;
+  }
+
+  .rounded {
+    flex-direction: column;
+  }
+
+  .rightCard apx-chart {
+    height: 100px; /* Adjust height for better visibility on smaller screens */
+  }
+
+  .tableFixHeadR {
+    overflow-x: auto;
+  }
+
+  .tableFixHeadR table {
+    width: 100%;
+    font-size: 9px;
+  }
+
+  .tableFixHeadR th, .tableFixHeadR td {
+    padding: 8px;
+  }
+}
+
+/* Mobile Devices with screen width 420px */
+@media (max-width: 430px) {
+  .status-box {
+    height: auto;
+    padding: 10px;
+    font-size: 1rem;
+  }
+
+  .left-side, .rightCard {
+    padding: 5px;
+  }
+
+  .rightCard apx-chart {
+    height: 200px; /* Further adjust height for smaller screens */
+  }
+
+  .tableFixHeadR table {
+    font-size: 10px;
+  }
+
+  .tableFixHeadR th, .tableFixHeadR td {
+    padding: 6px;
+  }
+}
+
+/* Mobile Devices with screen width 320px */
+@media (max-width: 320px) {
+  .status-box {
+    font-size: 0.9rem;
+  }
+
+  .rightCard apx-chart {
+    height: 160px; /* Adjust height for very small screens */
+
+  
+  }
+
+  .tableFixHeadR table {
+    font-size: 9px;
+  }
+
+  .tableFixHeadR th, .tableFixHeadR td {
+    padding: 4px;
+  }
+  
+}
 
 
 

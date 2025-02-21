@@ -240,9 +240,14 @@ mustMatch(controlName: string, matchingControlName: string) {
 console.log("this.resetPassword",this.resetPassword.value.userName)
 }
 
-closeResetPasswordModal() {
-    this.isResetPasswordModalOpen = false;
+// closeResetPasswordModal() {
+//     this.isResetPasswordModalOpen = false;
    
+// }
+closeResetPasswordModal() {
+  this.isResetPasswordModalOpen = false; // Close the modal
+  this.resetPassword.reset(); // Reset the form
+  this.submitted = false; // Reset the submitted flag, if used for validation
 }
      resetpasswordSave() {
 
