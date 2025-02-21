@@ -6,61 +6,92 @@
 
     <div class="card">
       <div class="rounded">
-      <div class="left-side rounded">
-          <div class="leftWidth total-records  bg-gradient-to-r from-purple-500 to-blue-500 flex flex-col justify-center items-center p-6 rounded-l-lg leftWith">
+        <div class="left-side">
+          <div class="status-box total-records">
+            <div class="flex items-center">
+              <i class="fas fa-database text-xl mr-2"></i>
+              <h3>Total Records</h3>
+            </div>
+            <p>{{ totalInvoiceCount }}</p>
+            <div class="flex items-center">
+              <h3>Amount</h3>
+            </div>
+            <p>{{ grandTotalInvoices }}</p>
+          </div>
+    
+          <div class="middlewidth">
+            <div class="status-box total-Approved">
               <div class="flex items-center">
-                  <i class="fas fa-database text-xl mr-2"></i>
-                  <h3 class="font-semibold">Total Records</h3>
+                <i class="fas fa-check-circle text-xl mr-2"></i>
+                <h3>Approved</h3>
               </div>
-              <p class="font-bold text-2xl">{{ totalInvoiceCount }}</p>
-          </div>
-          <div class="middlewidth flex flex-col">
-              <div class="total-Approved bg-gradient-to-r from-orange-400 to-red-500 flex flex-col justify-center items-center ">
-                  <div class="flex items-center">
-                      <i class="fas fa-check-circle text-xl mr-2"></i>
-                      <h3 class="font-semibold">Approved</h3>
-                  </div>
-                  <p class="font-bold">{{ approvedCount }}</p>
-              </div>
-              <div class="total-rejected bg-gradient-to-r from-green-400 to-teal-500 flex flex-col justify-center items-center ">
-                  <div class="flex items-center">
-                      <i class="fas fa-times-circle text-xl mr-2"></i>
-                      <h3 class="font-semibold">Rejected</h3>
-                  </div>
-                  <p class="font-bold">{{ rejectedCount }}</p>
-              </div>
-              
-          </div>
-          <div class="rightwidth flex flex-col">
-            <div class="total-Pending bg-gradient-to-r from-pink-500 to-purple-600 flex flex-col justify-center items-center  rounded-br-lg">
+              <p>{{ approvedCount }}</p>
               <div class="flex items-center">
-                  <i class="fas fa-hourglass-half text-xl mr-2"></i>
-                  <h3 class="font-semibold">Pending</h3>
+                <h3>Amount</h3>
               </div>
-              <p class="font-bold">{{ pendingCount }}</p>
-          </div>
-          <div class="total-rejected-reversed bg-gradient-to-r from-pink-500 to-purple-600 flex flex-col justify-center items-center  rounded-br-lg">
+              <p>{{ approvedTotal }}</p>
+            </div>
+    
+            <div class="status-box total-Pending">
               <div class="flex items-center">
-                  <i class="fas fa-undo-alt text-xl mr-2"></i>
-                  <h3 class="font-semibold">Rejected Reversed</h3>
+                <i class="fas fa-hourglass-half text-xl mr-2"></i>
+                <h3>Pending</h3>
               </div>
-              <p class="font-bold">{{ rejectedReversedCount }}</p>
-          </div>
-          </div>
-          <div class="rightwidth flex flex-col">
-            <div class="total-overdue bg-gradient-to-r from-yellow-500 to-orange-600 flex flex-col justify-center items-center rounded-br-lg">
+              <p>{{ pendingCount }}</p>
               <div class="flex items-center">
-                  <i class="fas fa-undo-alt text-xl mr-2"></i> 
-                  <h3 class="font-semibold">Overdue</h3>
+                <h3>Amount</h3>
               </div>
-              <p class="font-bold">{{ overdueCount }}</p>
+              <p>{{ pendingTotal }}</p>
             </div>
           </div>
+    
+          <div class="rightwidth">
+            <div class="status-box total-rejected">
+              <div class="flex items-center">
+                <i class="fas fa-times-circle text-xl mr-2"></i>
+                <h3>Rejected</h3>
+              </div>
+              <p>{{ rejectedCount }}</p>
+              <div class="flex items-center">
+                <h3>Amount</h3>
+              </div>
+              <p>{{ rejectedTotal }}</p>
+            </div>
+    
+            <div class="status-box total-rejected-reversed">
+              <div class="flex items-center">
+                <i class="fas fa-undo-alt text-xl mr-2"></i>
+                <h3>Rejected Reversed</h3>
+              </div>
+              <p>{{ rejectedReversedCount }}</p>
+              <div class="flex items-center">
+                <h3>Amount</h3>
+              </div>
+              <p>{{ rejectedReversedTotal }}</p>
+            </div>
+          </div>
+    
+          <div class="status-box total-overdue">
+            <div class="flex items-center">
+              <i class="fas fa-exclamation-circle text-xl mr-2"></i>
+              <h3>Overdue</h3>
+            </div>
+            <p>{{ overdueCount }}</p>
+            <div class="flex items-center">
+              <h3>Amount</h3>
+            </div>
+            <p>{{ overdueTotal }}</p>
+          </div>
+        </div>
+    
+        <div class="rightCard">
+          <apx-chart [series]="customerChartOptions.series" [chart]="customerChartOptions.chart"
+            [labels]="customerChartOptions.labels" [responsive]="customerChartOptions.responsive">
+          </apx-chart>
+        </div>
       </div>
-  </div>
-
-
     </div>
+    
 
     <div class="row" id="barChart" style="margin-top: 30px;" style="margin-top: 10px;border: 2px solid darkviolet !important;margin-right: 0px !important;
             margin-left: 0px !important;">
@@ -69,30 +100,28 @@
           [yaxis]="barChartOptions.yaxis" [plotOptions]="barChartOptions.plotOptions" [colors]="barChartOptions.colors">
         </apx-chart>
       </div>
-     
+
       <div *ngIf="pieChartOptions.series?.length > 0" class="col-md-6 col-lg-6" id="rightBar">
         <apx-chart [options]="pieChartOptions" [series]="pieChartOptions.series" [chart]="pieChartOptions.chart"
           [labels]="pieChartOptions.labels" [colors]="pieChartOptions.colors">
         </apx-chart>
       </div>
     </div>
-    <div class="row" style="margin-top: 30px;">
-      <!-- Bar Chart -->
+    <!-- below is comentad by sunil  start-->
+    <!-- <div class="row" style="margin-top: 30px;">
+      
       <div>
-        <apx-chart 
-          [series]="customerChartOptions.series" 
-          [chart]="customerChartOptions.chart" 
-          [labels]="customerChartOptions.labels"
-          [responsive]="customerChartOptions.responsive">
+        <apx-chart [series]="customerChartOptions.series" [chart]="customerChartOptions.chart"
+          [labels]="customerChartOptions.labels" [responsive]="customerChartOptions.responsive">
         </apx-chart>
       </div>
-      
-    
 
-    </div>
-    
-    
-    </div>
+
+
+    </div> -->
+<!-- below is comentad by sunil  end-->
+
+  </div>
 
 
 
@@ -115,28 +144,25 @@
       </thead>
       <tbody>
         <!-- (click)="invoice.status === 'Approved' ? openInvoicePopup(invoice) : null" -->
-        <tr *ngFor="let invoice of filteredInvoiceList" 
-        
-        
-        >
-      
-      <td>{{ invoice.invoiceUniqueNumber }}</td>
-      <td>{{ invoice.header.ProformaInvoiceDate }}</td>
-      <td>{{ invoice.header.ProformaCustomerName }}</td>
-      <td>{{ invoice.header.ProformaTypeOfAircraft }}</td>
-      <td>{{ invoice.header.ProformaCity }}</td>
-      <td>{{ invoice.header.BookingSector }}</td>
-      <td>{{ invoice.header.BookingDateOfJourny }}</td>
-      <td>{{ invoice.grandTotal | number: '1.2-2' }}</td>
-      <td [ngClass]="{
+        <tr *ngFor="let invoice of filteredInvoiceList">
+
+          <td>{{ invoice.invoiceUniqueNumber }}</td>
+          <td>{{ invoice.header.ProformaInvoiceDate }}</td>
+          <td>{{ invoice.header.ProformaCustomerName }}</td>
+          <td>{{ invoice.header.ProformaTypeOfAircraft }}</td>
+          <td>{{ invoice.header.ProformaCity }}</td>
+          <td>{{ invoice.header.BookingSector }}</td>
+          <td>{{ invoice.header.BookingDateOfJourny }}</td>
+          <td>{{ invoice.grandTotal | number: '1.2-2' }}</td>
+          <td [ngClass]="{
         'approved': invoice.status === 'Approved',
         'pending': invoice.status === 'Pending',
         'rejected': invoice.status === 'Rejected',
         'rejected_Reversed': invoice.status === 'Rejected_Reversed'
       }">{{ invoice.status }}</td>
-    
-    </tr>
-    
+
+        </tr>
+
 
       </tbody>
     </table>

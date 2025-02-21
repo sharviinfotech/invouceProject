@@ -10,6 +10,7 @@ import { ImageService } from 'src/app/image.service';
 import { ToastrService } from 'ngx-toastr';
 import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
 import { NgSelectModule } from '@ng-select/ng-select';
+import { object } from '@amcharts/amcharts5';
 interface TaxItem {
   description: string;
   percentage: number;
@@ -888,14 +889,28 @@ convertUnitsToHours(units: string | null): number {
       if (!dateRegex.test(bookingDate)) {
         bookingDate = this.formatDate(bookingDate);
       }
-      console.log("invoiceDateSplit",invoiceDate,"bokingDateSplit",bookingDate)
+      console.log("invoiceDateSplit", invoiceDate, "bokingDateSplit", bookingDate);
+console.log("this.newInvoiceCreation.value.ProformaCustomerName", this.newInvoiceCreation.value.ProformaCustomerName);
+
+let customerNameObj;
+
+// Check if ProformaCustomerName is an object and has the expected property
+if (
+  this.newInvoiceCreation.value.ProformaCustomerName &&
+  typeof this.newInvoiceCreation.value.ProformaCustomerName === "object" &&
+  "customerName" in this.newInvoiceCreation.value.ProformaCustomerName
+) {
+  customerNameObj = this.newInvoiceCreation.value.ProformaCustomerName.customerName;
+} else {
+  customerNameObj = this.newInvoiceCreation.value.ProformaCustomerName;
+}
       let createobj = {
         "header": {
         //  "invoiceHeader": this.InvoiceLogo,
         //   "invoiceImage": this.logoUrl,
         "invoiceHeader": null,
           "invoiceImage": null,
-          "ProformaCustomerName": this.newInvoiceCreation.value.ProformaCustomerName,
+          "ProformaCustomerName": customerNameObj,
           "ProformaAddress": this.newInvoiceCreation.value.ProformaAddress,
           "ProformaCity": this.newInvoiceCreation.value.ProformaCity,
           "ProformaState": this.newInvoiceCreation.value.ProformaState,

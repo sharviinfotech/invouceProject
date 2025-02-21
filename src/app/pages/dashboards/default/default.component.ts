@@ -58,6 +58,12 @@ export class DefaultComponent {  // ... (other properties)
   customerList: any[];
   customerInvoices: any[] = [];
   selectedCustomer: string = '';
+  grandTotalInvoices: number;
+  approvedTotal: number;
+  rejectedTotal: number;
+  pendingTotal: number;
+  rejectedReversedTotal: number;
+  overdueTotal: number;
 
   
   constructor(
@@ -98,12 +104,12 @@ export class DefaultComponent {  // ... (other properties)
       );
   }
   totalAmountAndCount() {
-    let approvedTotal = 0;
-    let rejectedTotal = 0;
-    let pendingTotal = 0;
-    let rejectedReversedTotal = 0;
-    let overdueTotal = 0;
-    let grandTotalInvoices = 0;
+    this.approvedTotal = 0;
+    this.rejectedTotal = 0;
+    this.pendingTotal = 0;
+    this.rejectedReversedTotal = 0;
+    this.overdueTotal = 0;
+    this.grandTotalInvoices = 0;
 
     this.approvedCount = 0;
     this.totalInvoiceCount = 0;
@@ -120,17 +126,17 @@ export class DefaultComponent {  // ... (other properties)
     console.log("One Month Ago:", oneMonthAgo);
 
     this.allInvoiceList.forEach(invoice => {
-        grandTotalInvoices += invoice.grandTotal;
+        this.grandTotalInvoices += invoice.grandTotal;
         this.totalInvoiceCount++;
 
         if (invoice.status === "Approved") {
-            approvedTotal += invoice.grandTotal;
+            this.approvedTotal += invoice.grandTotal;
             this.approvedCount++;
         } else if (invoice.status === "Rejected") {
-            rejectedTotal += invoice.grandTotal;
+            this.rejectedTotal += invoice.grandTotal;
             this.rejectedCount++;
         } else if (invoice.status === "Pending") {
-            pendingTotal += invoice.grandTotal;
+            this.pendingTotal += invoice.grandTotal;
             this.pendingCount++;
 
             if (invoice.header && invoice.header.ProformaInvoiceDate) {
@@ -139,24 +145,24 @@ export class DefaultComponent {  // ... (other properties)
                 console.log(`Checking Invoice Date: ${invoice.header.ProformaInvoiceDate} -> Converted: ${invoiceDate}`);
 
                 if (!isNaN(invoiceDate.getTime()) && invoiceDate < oneMonthAgo) {
-                    overdueTotal += invoice.grandTotal;
+                    this.overdueTotal += invoice.grandTotal;
                     this.overdueCount++;
                     console.log(`🚨 Overdue Invoice Found: ${invoice.header.ProformaInvoiceDate} | Count: ${this.overdueCount}`);
                 }
             }
         } else if (invoice.status === "Rejected_Reversed") {
-            rejectedReversedTotal += invoice.grandTotal;
+            this.rejectedReversedTotal += invoice.grandTotal;
             this.rejectedReversedCount++;
         }
     });
 
     // Output Variables
-    console.log("Approved Count:", this.approvedCount, " | Approved Total:", approvedTotal);
-    console.log("Rejected Count:", this.rejectedCount, " | Rejected Total:", rejectedTotal);
-    console.log("Rejected_Reversed Count:", this.rejectedReversedCount, " | Rejected_Reversed Total:", rejectedReversedTotal);
-    console.log("Pending Count:", this.pendingCount, " | Pending Total:", pendingTotal);
-    console.log("Total Invoice Count:", this.totalInvoiceCount, " | Grand Total of All Invoices:", grandTotalInvoices);
-    console.log("Overdue Count:", this.overdueCount, " | Overdue Total:", overdueTotal);
+    console.log("Approved Count:", this.approvedCount, " | Approved Total:", this.approvedTotal);
+    console.log("Rejected Count:", this.rejectedCount, " | Rejected Total:", this.rejectedTotal);
+    console.log("Rejected_Reversed Count:", this.rejectedReversedCount, " | Rejected_Reversed Total:", this.rejectedReversedTotal);
+    console.log("Pending Count:", this.pendingCount, " | Pending Total:", this.pendingTotal);
+    console.log("Total Invoice Count:", this.totalInvoiceCount, " | Grand Total of All Invoices:", this.grandTotalInvoices);
+    console.log("Overdue Count:", this.overdueCount, " | Overdue Total:", this.overdueTotal);
 }
 
 // 🔹 Converts "DD-MM-YYYY" to a JavaScript Date object
