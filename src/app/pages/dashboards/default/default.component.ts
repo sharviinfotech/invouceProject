@@ -157,12 +157,21 @@ export class DefaultComponent {  // ... (other properties)
     });
 
     // Output Variables
-    console.log("Approved Count:", this.approvedCount, " | Approved Total:", this.approvedTotal);
-    console.log("Rejected Count:", this.rejectedCount, " | Rejected Total:", this.rejectedTotal);
-    console.log("Rejected_Reversed Count:", this.rejectedReversedCount, " | Rejected_Reversed Total:", this.rejectedReversedTotal);
-    console.log("Pending Count:", this.pendingCount, " | Pending Total:", this.pendingTotal);
-    console.log("Total Invoice Count:", this.totalInvoiceCount, " | Grand Total of All Invoices:", this.grandTotalInvoices);
-    console.log("Overdue Count:", this.overdueCount, " | Overdue Total:", this.overdueTotal);
+    // console.log("Approved Count:", this.approvedCount, " | Approved Total:", this.approvedTotal);
+    // console.log("Rejected Count:", this.rejectedCount, " | Rejected Total:", this.rejectedTotal);
+    // console.log("Rejected_Reversed Count:", this.rejectedReversedCount, " | Rejected_Reversed Total:", this.rejectedReversedTotal);
+    // console.log("Pending Count:", this.pendingCount, " | Pending Total:", this.pendingTotal);
+    // console.log("Total Invoice Count:", this.totalInvoiceCount, " | Grand Total of All Invoices:", this.grandTotalInvoices);
+    // console.log("Overdue Count:", this.overdueCount, " | Overdue Total:", this.overdueTotal);
+    this.approvedTotal = this.roundToOneDecimal(this.approvedTotal);
+    this.rejectedTotal = this.roundToOneDecimal(this.rejectedTotal);
+    this.pendingTotal = this.roundToOneDecimal(this.pendingTotal);
+    this.rejectedReversedTotal = this.roundToOneDecimal(this.rejectedReversedTotal);
+    this.overdueTotal = this.roundToOneDecimal(this.overdueTotal);
+    this.grandTotalInvoices = this.roundToOneDecimal(this.grandTotalInvoices);
+}
+roundToOneDecimal(value: number): number {
+  return Math.round(value * 10) / 10;
 }
 
 // 🔹 Converts "DD-MM-YYYY" to a JavaScript Date object
@@ -191,6 +200,7 @@ convertDate(dateStr: string): Date {
         toolbar: { show: true },
         events: {
           dataPointSelection: (event, chartContext, config) => {
+            this.handleBarClick(years, config.dataPointIndex);
             const selectedYear = years[config.dataPointIndex];
             console.log("Year selected:", selectedYear);
             this.filterByYear(selectedYear);
@@ -226,8 +236,30 @@ convertDate(dateStr: string): Date {
 
     setTimeout(() => {
       this.spinner.hide()
+      if (years.length > 0) {
+        this.handleBarClick(years, 0); // Simulate click on the first year
+    }
     }, 200);
 
+  }
+  handleBarClick(years: string[], index: number) {
+    const selectedYear = years[index];
+    console.log("Year selected:", selectedYear);
+    this.filterByYear(selectedYear);
+
+    // Reset all bar styles
+    const bars = document.querySelectorAll(".apexcharts-bar-area");
+    bars.forEach((bar) => {
+        (bar as HTMLElement).style.stroke = "none";
+        (bar as HTMLElement).style.strokeWidth = "0";
+    });
+
+    // Highlight the selected bar
+    const selectedBar = document.querySelector(`.apexcharts-bar-area[j="${index}"]`);
+    if (selectedBar) {
+        (selectedBar as HTMLElement).style.stroke = "red";
+        (selectedBar as HTMLElement).style.strokeWidth = "2px";
+    }
   }
 
   filterByYear(selectedYear: string) {

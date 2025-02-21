@@ -752,10 +752,18 @@
                             <option value="">Select a customer</option>
                             <option *ngFor="let customer of customerList" [value]="customer.customerName">{{customer.customerName}}</option>
                           </select> -->
-                          <ng-select [items]="customerList" bindLabel="customer.customerName" bindValue="customer.customerName"
-                placeholder="Select or Add Location" [multiple]="true" [addTag]="true" formControlName="ProformaCustomerName">
-              </ng-select>
-                        </div>
+                          <ng-select
+                          [items]="customerList"
+                          bindLabel="customerName"
+                          placeholder="Select or Add Location"
+                          [multiple]="false"
+                          [addTag]="true"
+                          [searchable]="true"
+                          formControlName="ProformaCustomerName"
+                          (change)="onCustomerSelectChange($event)"
+                      >
+                      </ng-select>
+                      </div>
                 <div class="text-danger" style="color: red;"
                   *ngIf="newInvoiceCreation.get('ProformaCustomerName')?.hasError('required') && newInvoiceCreation.get('ProformaCustomerName')?.touched">
                   Customer Name is required.
@@ -838,7 +846,7 @@
               <div class="col-lg-4">
                 <div class="form-group">
                   <label>Invoice Number<span class="text-danger">*</span></label>
-                  <input type="text" formControlName="ProformaInvoiceNumber" class="form-control" placeholder="INV0001">
+                  <input type="text" formControlName="ProformaInvoiceNumber" class="form-control" placeholder="INV0001" readonly>
                 </div>
                 <div class="text-danger" style="color: red;"
                   *ngIf="newInvoiceCreation.get('ProformaInvoiceNumber')?.hasError('required') && newInvoiceCreation.get('ProformaInvoiceNumber')?.touched">
