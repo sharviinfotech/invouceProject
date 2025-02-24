@@ -386,7 +386,8 @@ resetAll() {
       status: status, // Set status dynamically
       reason: this.approveForm.value.remark, // Default to 'N/A' if no remark is provided
       invoiceApprovedOrRejectedByUser: this.loginData?.data.userName,
-      invoiceApprovedOrRejectedDateAndTime: formattedDateTime 
+      invoiceApprovedOrRejectedDateAndTime: formattedDateTime,
+      reviewedReSubmited:false 
 
     };
 
@@ -1362,7 +1363,9 @@ resetAll() {
          "loggedInUser":this.loginData.userName,
         "status":this.reSubmitInvoiceStatus,
         "proformaCardHeaderId":this.proformaCardHeaderId,
-         "proformaCardHeaderName":this.proformaCardHeaderName
+         "proformaCardHeaderName":this.proformaCardHeaderName,
+         "reviewedReSubmited":false ,
+         "reviewed":false,
          // "bankDetails":{
          //     "accountName":this.newInvoiceCreation.value.accountName,
          //     "bank":this.newInvoiceCreation.value.bank,
@@ -1478,7 +1481,8 @@ resetAll() {
     "reviewedDate": formattedDateTime,
     "reviewedLoggedIn": this.loginData?.data.userName,
     "originalUniqueId":this.invoiceItem.originalUniqueId,
-    "reviewed":true
+    "reviewed":true,
+    "reviewedReSubmited":false
     }
     this.spinner.show()
     this.service.reviewedUpadte(obj).subscribe((response:any)=>{

@@ -257,6 +257,7 @@ clearOtherCustomerFields() {
   }
 
   ngOnInit(): void {
+    this.loginData = null
     this.loginData= this.service.getLoginResponse()
     console.log("this.loginData",this.loginData);
     console.log("taxlist", this.taxItems)
@@ -264,7 +265,6 @@ clearOtherCustomerFields() {
     this.getAllInvoice()
     this.getStates();
     this.getAllCharges();
-    this.loginData = null
     this.logoUrl = this.imageService.getBase64FlightLogo(); 
     this.InvoiceLogo = this.imageService.getBase64WorldLogo(); 
    
@@ -955,7 +955,8 @@ if (
         "status":"Pending",
         "proformaCardHeaderId":this.proformaCardHeaderId,
         "proformaCardHeaderName":this.proformaCardHeaderName,
-        "reviewed":false
+        "reviewed":false,
+        "reviewedReSubmited":false
         
         // "bankDetails":{
         //     "accountName":this.newInvoiceCreation.value.accountName,
@@ -1087,7 +1088,8 @@ if (
        "status":this.reSubmitInvoiceStatus,
        "proformaCardHeaderId":this.proformaCardHeaderId,
         "proformaCardHeaderName":this.proformaCardHeaderName,
-        "reviewed":this.reviewedFlag
+        "reviewed":this.reviewedFlag,
+        "reviewedReSubmited":false
         // "bankDetails":{
         //     "accountName":this.newInvoiceCreation.value.accountName,
         //     "bank":this.newInvoiceCreation.value.bank,

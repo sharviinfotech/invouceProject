@@ -20,6 +20,7 @@ import { ToastrService } from 'ngx-toastr';
 import Swal from 'sweetalert2';
 import { NotificationService } from 'src/app/notification.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 
 @Component({
@@ -35,7 +36,8 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
  */
 
 export class TopbarComponent implements OnInit {
-   @ViewChild('notificationPop') notificationPop: TemplateRef<any>;
+   @ViewChild('notificationPopAdmin') notificationPopAdmin: TemplateRef<any>;
+   @ViewChild('notificationPopMD') notificationPopMD: TemplateRef<any>;
   
   mode: any
   element: any;
@@ -49,7 +51,6 @@ export class TopbarComponent implements OnInit {
   loginData: any;
   isResetPasswordModalOpen = false;
   userUniqueId: any;
-  spinner: any;
   submitted: boolean;
   fieldTextType: boolean = true;
 newPasswordFieldTextType: boolean = true;
@@ -80,7 +81,7 @@ toggleCurrentPasswordFieldTextType() {
     private authFackservice: AuthfakeauthenticationService,
     public languageService: LanguageService,
     public translate: TranslateService,
-    private toaster: ToastrService,
+    private toaster: ToastrService,private spinner: NgxSpinnerService,
     public _cookiesService: CookieService, public store: Store<RootReducerState>, private toastr: ToastrService,private service:GeneralserviceService,private notificationService: NotificationService ) {
 
   }
@@ -130,12 +131,10 @@ toggleCurrentPasswordFieldTextType() {
     this.router.navigate(['/auth/login-2']);
   }
   console.log("this.loginData?.data.userActivity",this.loginData?.data.userActivity)
-  if(this.loginData?.data.userActivity == 'ADMIN'){
-    setInterval(() => 
+  setInterval(() => 
    
-      this.fetchData(), 5000
-  ); // Check API every 5 seconds
-  }
+    this.fetchData(), 10000
+); 
   
 }
 
@@ -354,9 +353,32 @@ closeResetPasswordModal() {
     this.service.getAllNotification().subscribe((response: any) => {
       console.log("topbar", response, response.data?.length, this.data?.length);
       
-      const newCount = response.notificationCount || 0; // Ensure count is always a number
-      
+      if(this.loginData?.data.userActivity == 'ADMIN'){
+        const newCount = response.adminNotificationCount || 0; // Ensure count is always a number
+        if (newCount > this.previousNotificationCount) { // Play sound only if count increased
+          this.spinner.show()
+          this.reviewedNotificationList = []
+          this.notificationService.playNotificationSound();
+          this.notifications.unshift({
+            title: 'New Invoice Reviewed',
+            message: 'A new invoice has been added successfully.',
+            time: new Date().toLocaleTimeString()
+          });
+        }
+        console.log('this.notifications',this.notifications)
+        this.notificationCount = newCount; // Update the displayed count
+        this.previousNotificationCount = newCount; // Store new count for next comparison
+        this.data = response.adminList || []; // Ensure `this.data` is always an array\
+        this.reviewedNotificationList = response.adminList
+        console.log("this.reviewedNotificationList",this.reviewedNotificationList)
+        setTimeout(() => {
+          this.spinner.hide()
+        }, 500);
+        
+      }else{
+        const newCount = response.mdNotificationCount || 0; // Ensure count is always a number
       if (newCount > this.previousNotificationCount) { // Play sound only if count increased
+        this.spinner.show()
         this.reviewedNotificationList = []
         this.notificationService.playNotificationSound();
         this.notifications.unshift({
@@ -365,12 +387,18 @@ closeResetPasswordModal() {
           time: new Date().toLocaleTimeString()
         });
       }
-  console.log('this.notifications',this.notifications)
+      console.log('this.notifications',this.notifications)
       this.notificationCount = newCount; // Update the displayed count
       this.previousNotificationCount = newCount; // Store new count for next comparison
-      this.data = response.data || []; // Ensure `this.data` is always an array\
-      this.reviewedNotificationList = response.data
+      this.data = response.mdList || []; // Ensure `this.data` is always an array\
+      this.reviewedNotificationList = response.mdList
       console.log("this.reviewedNotificationList",this.reviewedNotificationList)
+      setTimeout(() => {
+        this.spinner.hide()
+      }, 500);
+      }
+      console.log("this.notificationCount",this.notificationCount,this.reviewedNotificationList)
+      
     }, error => {
       this.spinner.hide();
       console.error("Error fetching notifications:", error);
@@ -381,15 +409,27 @@ closeResetPasswordModal() {
 
   
   openNotificationPop() {
-    if(this.reviewedNotificationList.length>0){
-      this.modalService.open(this.notificationPop, { 
-        size: 'xl', 
-        backdrop: 'static', // Prevent closing on outside click
-        keyboard: false // (Optional) Prevent closing with Esc key
-      });
+  
+    if(this.loginData?.data.userActivity == 'ADMIN'){
+      if(this.reviewedNotificationList.length>0){
+        this.modalService.open(this.notificationPopAdmin, { 
+          size: 'xl', 
+          backdrop: 'static', // Prevent closing on outside click
+          keyboard: false // (Optional) Prevent closing with Esc key
+        });
+      }
+    }else{
+      if(this.reviewedNotificationList.length>0){
+        this.modalService.open(this.notificationPopMD, { 
+          size: 'xl', 
+          backdrop: 'static', // Prevent closing on outside click
+          keyboard: false // (Optional) Prevent closing with Esc key
+        });
+      }
     }
     
   }
+
 closeInvoice() {
   this.modalService.dismissAll(); 
 }
@@ -398,17 +438,21 @@ verifyedInvoice(invoice){
 
   let obj={
       "originalUniqueId": invoice.originalUniqueId,
-      "reviewed":false
+      "reviewed":false,
+      "reviewedReSubmited":true
      }
-
+   this.spinner.show()
   this.service.verifyedAndUpdated(obj).subscribe(
         (response: any) => {
           console.log('Response:', response); 
+          this.spinner.hide()
+          this.modalService.dismissAll(); 
         },
         (error) => {
           // Handle API errors
           Swal.fire('Error!', 'Failed to update status. Please try again.', 'error');
           console.error('Approval error:', error);
+          this.spinner.hide()
         }
       );
   

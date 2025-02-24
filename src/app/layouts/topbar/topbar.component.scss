@@ -18,3 +18,11 @@
 .text-danger{
   color:red
 }
+
+
+::ng-deep {@media (min-width: 1200px) {
+  .modal-xl {
+      --bs-modal-width: 1315px !important;
+  }
+}
+}

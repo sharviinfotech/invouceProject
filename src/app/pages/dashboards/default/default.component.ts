@@ -65,6 +65,14 @@ export class DefaultComponent {  // ... (other properties)
   rejectedReversedTotal: number;
   overdueTotal: number;
   loginData: any;
+  AmountReceivedTotal: number;
+  AmountReceivedCount: number;
+  PaymentPendingTotal: number;
+  PaymentPendingCount: number;
+  OverAllAmountTotal: number;
+  OverAllAmountCount: number;
+  TotalPQ: number;
+  TotalCountPQ: number;
 
   
   constructor(
@@ -110,6 +118,7 @@ export class DefaultComponent {  // ... (other properties)
       );
   }
   totalAmountAndCount() {
+    // Initialize totals and counts
     this.approvedTotal = 0;
     this.rejectedTotal = 0;
     this.pendingTotal = 0;
@@ -124,13 +133,47 @@ export class DefaultComponent {  // ... (other properties)
     this.rejectedReversedCount = 0;
     this.overdueCount = 0;
 
-    const currentDate = new Date(); // Get the current date
+    // Separate totals for TAX & PQ calculations
+    this.AmountReceivedTotal = 0;
+    this.AmountReceivedCount = 0;
+    this.TotalPQ = 0;
+    this.TotalCountPQ = 0;
+
+    const currentDate = new Date();
     const oneMonthAgo = new Date();
-    oneMonthAgo.setMonth(currentDate.getMonth() - 1); // Get date 1 month ago
+    oneMonthAgo.setMonth(currentDate.getMonth() - 1);
 
     console.log("Current Date:", currentDate);
     console.log("One Month Ago:", oneMonthAgo);
 
+    // Step 1: First process all "PQ" invoices
+    const pqInvoices = this.allInvoiceList.filter(invoice => invoice.proformaCardHeaderId === "PQ");
+    pqInvoices.forEach(invoice => {
+        this.TotalPQ += invoice.grandTotal;
+        this.TotalCountPQ++;
+    });
+    console.log('pqInvoices',pqInvoices)
+
+    // Step 2: Then process all "TAX" invoices separately
+    const taxInvoices = this.allInvoiceList.filter(invoice => invoice.proformaCardHeaderId === "TAX");
+    taxInvoices.forEach(invoice => {
+        this.AmountReceivedTotal += invoice.grandTotal;
+        this.AmountReceivedCount++;
+    });
+    console.log('taxInvoices',taxInvoices)
+
+    const approvedlist = this.allInvoiceList.filter(invoice => invoice.status === "Approved");
+    console.log('approvedlist',approvedlist)
+    
+
+    //   const PQLIstTotal = this.allInvoiceList.filter(invoice => invoice.proformaCardHeaderId === "PQ");
+    //   PQLIstTotal.forEach(invoice => {
+    //   this.grandTotalInvoices += invoice.grandTotal;
+    //   this.totalInvoiceCount++;
+    // });
+    // console.log('PQLIstTotal',PQLIstTotal)
+
+    // Step 3: Now process all invoices (excluding PQ & TAX calculations)
     this.allInvoiceList.forEach(invoice => {
         this.grandTotalInvoices += invoice.grandTotal;
         this.totalInvoiceCount++;
@@ -141,41 +184,35 @@ export class DefaultComponent {  // ... (other properties)
         } else if (invoice.status === "Rejected") {
             this.rejectedTotal += invoice.grandTotal;
             this.rejectedCount++;
-        } else if (invoice.status === "Pending") {
-            this.pendingTotal += invoice.grandTotal;
-            this.pendingCount++;
-
-            if (invoice.header && invoice.header.ProformaInvoiceDate) {
-                const invoiceDate = this.convertDate(invoice.header.ProformaInvoiceDate);
-
-                console.log(`Checking Invoice Date: ${invoice.header.ProformaInvoiceDate} -> Converted: ${invoiceDate}`);
-
-                if (!isNaN(invoiceDate.getTime()) && invoiceDate < oneMonthAgo) {
-                    this.overdueTotal += invoice.grandTotal;
-                    this.overdueCount++;
-                    console.log(`🚨 Overdue Invoice Found: ${invoice.header.ProformaInvoiceDate} | Count: ${this.overdueCount}`);
-                }
-            }
-        } else if (invoice.status === "Rejected_Reversed") {
-            this.rejectedReversedTotal += invoice.grandTotal;
-            this.rejectedReversedCount++;
-        }
+        } 
     });
 
-    // Output Variables
-    // console.log("Approved Count:", this.approvedCount, " | Approved Total:", this.approvedTotal);
-    // console.log("Rejected Count:", this.rejectedCount, " | Rejected Total:", this.rejectedTotal);
-    // console.log("Rejected_Reversed Count:", this.rejectedReversedCount, " | Rejected_Reversed Total:", this.rejectedReversedTotal);
-    // console.log("Pending Count:", this.pendingCount, " | Pending Total:", this.pendingTotal);
-    // console.log("Total Invoice Count:", this.totalInvoiceCount, " | Grand Total of All Invoices:", this.grandTotalInvoices);
-    // console.log("Overdue Count:", this.overdueCount, " | Overdue Total:", this.overdueTotal);
+    // Step 4: Calculate Payment Pending and Overall Amount
+    this.PaymentPendingTotal = this.TotalPQ - this.AmountReceivedTotal;
+    this.PaymentPendingCount = this.TotalCountPQ - this.AmountReceivedCount;
+
+    this.OverAllAmountTotal = this.AmountReceivedTotal + this.PaymentPendingTotal;
+    this.OverAllAmountCount = this.AmountReceivedCount + this.PaymentPendingCount;
+
+    // Log Output
+    console.log("Total PQ:", this.TotalPQ, "| Count:", this.TotalCountPQ);
+    console.log("Amount Received (TAX):", this.AmountReceivedTotal, "| Count:", this.AmountReceivedCount);
+    console.log("Payment Pending Total:", this.PaymentPendingTotal, "| Count:", this.PaymentPendingCount);
+    console.log("Overall Amount Total:", this.OverAllAmountTotal, "| Count:", this.OverAllAmountCount);
+
+    // Round off the totals
     this.approvedTotal = this.roundToOneDecimal(this.approvedTotal);
     this.rejectedTotal = this.roundToOneDecimal(this.rejectedTotal);
     this.pendingTotal = this.roundToOneDecimal(this.pendingTotal);
     this.rejectedReversedTotal = this.roundToOneDecimal(this.rejectedReversedTotal);
     this.overdueTotal = this.roundToOneDecimal(this.overdueTotal);
     this.grandTotalInvoices = this.roundToOneDecimal(this.grandTotalInvoices);
+   const PQList =  this.allInvoiceList.filter((invoice)=>invoice.proformaCardHeaderId === "PQ")
+   const TAXList =  this.allInvoiceList.filter((invoice)=>invoice.proformaCardHeaderId === "TAX")
+   console.log("PQList",PQList,"TAXList",TAXList)
+
 }
+
 roundToOneDecimal(value: number): number {
   return Math.round(value * 10) / 10;
 }

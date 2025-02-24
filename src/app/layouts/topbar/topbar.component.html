@@ -371,7 +371,7 @@
             {{ 'HEADER.LOGIN.LOGOUT' | translate}}</a>
         </div>
       </div> -->
-   <div class="m-2 mt-4" style="font-size: 16px;" *ngIf="loginData?.data.userActivity == 'ADMIN'" >
+   <div class="m-2 mt-4" style="font-size: 16px;">
     <div class="position-relative">
       <i class="fas fa-bell fa-lg text-white" role="button" (click)="openNotificationPop()"></i>
       <span class="badge bg-success rounded-pill position-absolute top-0 start-100 translate-middle">
@@ -515,9 +515,9 @@
   </div>
 </header>
 
-<ng-template #notificationPop let-modal> 
+<ng-template #notificationPopAdmin let-modal> 
   <div class="modal-header">
-     Reviewed List
+    Pending Corrections
     </div>
  
   <div class="modal-body">
@@ -533,8 +533,8 @@
             <th class="text-nowrap">Destination</th>
             <th class="text-nowrap">Date Of Journey</th>
             <th class="text-nowrap">Total Amount</th>
-            <th class="text-nowrap">Reviewed Description</th>
-            <th class="text-nowrap">Verifyed</th>
+            <th class="text-nowrap">Description</th>
+            <th class="text-nowrap">Action</th>
           </tr>
         </thead>
         <tbody>
@@ -545,10 +545,60 @@
             <td>{{ invoice.header.ProformaTypeOfAircraft }}</td>
             <td>{{ invoice.header.ProformaCity }}</td>
             <td>{{ invoice.header.BookingSector }}</td>
-            <td>{{ invoice.header.BookingDateOfJourny }}</td>
+            <td class="text-nowrap">{{ invoice.header.startBookingDateOfJourny }}/{{ invoice.header.endBookingDateOfJourny }}</td>
             <td>{{ invoice.grandTotal | number: '1.2-2'}}</td>
             <td>{{ invoice.reviewedDescription }} ({{ invoice.reviewedDate }})</td>
-            <td><i class="fa fa-check-circle text-success" role="button" (click)="verifyedInvoice(invoice)"></i></td>
+            <td><i class="fa fa-check-circle text-success" style="font-size: 20px;" role="button" (click)="verifyedInvoice(invoice)"></i></td>
+  
+          </tr>
+        </tbody>
+      </table>
+    </div>
+   
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-secondary" (click)="closeInvoice()">Close</button>
+  </div>
+
+
+</ng-template>
+
+<ng-template #notificationPopMD let-modal> 
+  <div class="modal-header">
+    <!-- Admin Update Completed -->
+    Resolved Corrections
+    </div>
+ 
+  <div class="modal-body">
+    <div class="table-responsive">
+      <table class="table table-bordered table-stripped">
+        <thead class="thead-light">
+          <tr>
+            <th class="text-nowrap">Invoice Number</th>
+            <th class="text-nowrap">Invoice Date</th>
+            <th class="text-nowrap">Customer Name</th>
+            <th class="text-nowrap">Type Of Aircraft</th>
+            <th class="text-nowrap">City</th>
+            <th class="text-nowrap">Destination</th>
+            <th class="text-nowrap">Date Of Journey</th>
+            <th class="text-nowrap">Total Amount</th>
+            <th class="text-nowrap">Description</th>
+            <th class="text-nowrap">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let invoice of reviewedNotificationList" >
+            <td>{{ invoice.invoiceUniqueNumber }}</td>
+            <td>{{ invoice.header.ProformaInvoiceDate }}</td>
+            <td>{{ invoice.header.ProformaCustomerName }}</td>
+            <td>{{ invoice.header.ProformaTypeOfAircraft }}</td>
+            <td>{{ invoice.header.ProformaCity }}</td>
+            <td>{{ invoice.header.BookingSector }}</td>
+            <td class="text-nowrap">{{ invoice.header.startBookingDateOfJourny }}/{{ invoice.header.endBookingDateOfJourny }}</td>
+            <td>{{ invoice.grandTotal | number: '1.2-2'}}</td>
+            <td>{{ invoice.reviewedDescription }} ({{ invoice.reviewedDate }})</td>
+            <td class="text-success">{{invoice.reviewedReSubmited == true?'Verifyed':''}}</td>
+            <!-- <td><i class="fa fa-check-circle text-success" style="font-size: 20px;" role="button" (click)="verifyedInvoice(invoice)"></i></td> -->
   
           </tr>
         </tbody>

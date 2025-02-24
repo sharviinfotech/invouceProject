@@ -46,12 +46,12 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 15px;
+  padding: 12px;
   height: 140px;
   color: white;
   text-align: center;
   border-radius: 8px;
-  font-size: 1.2rem;
+  font-size: 15px;
   font-weight: bold;
   width: 48%; /* Two per row */
 }
@@ -59,18 +59,23 @@
 /* Individual Colors */
 .total-records {
   background-image: linear-gradient(to right, #7e22ce, #2563eb);
+  border-left: 4px solid #2563eb;
 }
 
 .total-Approved {
   background-image: linear-gradient(to right, #22c55e, #0f766e);
+  border-left: 4px solid #065f46;
 }
 
 .total-Pending {
-  background-image: linear-gradient(to right, #f97316, #ef4444);
+  background-image: linear-gradient(to right, #ffb020, #f97316);
+  border-left: 4px solid #f97316;
+
 }
 
 .total-rejected {
   background-image: linear-gradient(to right, #e79090, #eb0a0a);
+  border-left: 4px solid #eb0a0a;
 }
 
 .total-rejected-reversed {
@@ -80,6 +85,32 @@
 .total-overdue {
   background-image: linear-gradient(to right, #fde047, #fb923c);
 }
+
+.total-overall {
+  background-image: linear-gradient(to right, #fde047, #fb923c);
+  border-left: 4px solid #f59e0b; /* Orange border */
+  color:white; /* Deep brown text for contrast */
+  padding: 16px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+.total-overall i {
+  color: #b45309; /* Dark orange icon */
+}
+
+.Recevied_Amount {
+  background-image: linear-gradient(to right, #22c55e, #0f766e);
+  border-left: 4px solid #065f46; /* Dark green border */
+  color: #ffffff; /* White text for contrast */
+  padding: 16px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+.Recevied_Amount i {
+  color: #d1fae5; /* Light green icon */
+}
+
+
 
 /* Ensures Two Boxes per Row */
 .middlewidth,
@@ -118,14 +149,14 @@ p {
 .left-side {
   display: flex;
   flex-wrap: wrap;
-  width: 50%; /* Ensure Left Side takes 50% */
+  width: 60%; /* Ensure Left Side takes 50% */
   gap: 10px;
   padding: 10px;
   align-content: flex-start;
 }
 
 .rightCard {
-  width: 50%; /* Ensure Right Side takes 50% */
+  width: 40%; /* Ensure Right Side takes 50% */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -194,7 +225,7 @@ p {
   .status-box {
     height: auto;
     padding: 10px;
-    font-size: 1rem;
+    font-size: 8px;
   }
 
   .left-side, .rightCard {
@@ -217,7 +248,7 @@ p {
 /* Mobile Devices with screen width 320px */
 @media (max-width: 320px) {
   .status-box {
-    font-size: 0.9rem;
+    font-size: 8px;
   }
 
   .rightCard apx-chart {
@@ -235,6 +266,82 @@ p {
   }
   
 }
+
+@media (max-width: 700px) {
+  .status-box {
+    height: auto;
+    padding: 10px;
+    font-size: 8px;
+  }
+
+  .left-side, .rightCard {
+    padding: 5px;
+  }
+
+  .rightCard apx-chart {
+    height: 200px; /* Further adjust height for smaller screens */
+  }
+
+  .tableFixHeadR table {
+    font-size: 10px;
+  }
+
+  .tableFixHeadR th, .tableFixHeadR td {
+    padding: 6px;
+  }
+}
+
+@media (min-width: 700px) and (max-width: 900px) {
+  .status-box {
+    height: auto;
+    padding: 10px;
+    font-size: 8px;
+  }
+
+  .left-side, .rightCard {
+    padding: 5px;
+  }
+
+  .rightCard apx-chart {
+    height: 200px; /* Further adjust height for smaller screens */
+  }
+
+  .tableFixHeadR table {
+    font-size: 10px;
+  }
+
+  .tableFixHeadR th, .tableFixHeadR td {
+    padding: 6px;
+  }
+}
+
+@media (min-width: 900px) and (max-width: 1400px) {
+  .status-box {
+    height: auto;
+    padding: 10px;
+    font-size: 13px;
+  }
+
+  .left-side, .rightCard {
+    padding: 5px;
+  }
+
+  .rightCard apx-chart {
+    height: 200px; /* Further adjust height for smaller screens */
+  }
+
+  .tableFixHeadR table {
+    font-size: 10px;
+  }
+
+  .tableFixHeadR th, .tableFixHeadR td {
+    padding: 6px;
+  }
+}
+
+
+
+
 
 
 
