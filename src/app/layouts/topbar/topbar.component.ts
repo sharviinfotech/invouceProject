@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter, Inject } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Inject, ViewChild, TemplateRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule, DOCUMENT } from '@angular/common';
 import { AuthenticationService } from '../../core/services/auth.service';
@@ -18,6 +18,8 @@ import { GeneralserviceService } from 'src/app/generalservice.service';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import Swal from 'sweetalert2';
+import { NotificationService } from 'src/app/notification.service';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 
 @Component({
@@ -33,6 +35,8 @@ import Swal from 'sweetalert2';
  */
 
 export class TopbarComponent implements OnInit {
+   @ViewChild('notificationPop') notificationPop: TemplateRef<any>;
+  
   mode: any
   element: any;
   cookieValue: any;
@@ -51,7 +55,11 @@ export class TopbarComponent implements OnInit {
 newPasswordFieldTextType: boolean = true;
 confirmFieldTextType: boolean = true;
 currentPasswordFieldTextType: boolean = true;
-
+data: any[] = []
+notifications: any[] = []; // Stores the notifications
+isNotificationDropdownOpen: boolean = false; // Tracks dropdown visibility
+notificationCount: number = 0; // Tracks new notification count
+  reviewedNotificationList: any;
 toggleFieldTextType() {
   this.fieldTextType = !this.fieldTextType;
 }
@@ -68,12 +76,12 @@ toggleCurrentPasswordFieldTextType() {
   resetPassword!: FormGroup;
   // Define layoutMode as a property
 
-  constructor(@Inject(DOCUMENT) private document: any,private fb: FormBuilder, private router: Router, private authService: AuthenticationService,
+  constructor(@Inject(DOCUMENT) private document: any,private fb: FormBuilder, private router: Router, private authService: AuthenticationService,private modalService: NgbModal,
     private authFackservice: AuthfakeauthenticationService,
     public languageService: LanguageService,
     public translate: TranslateService,
     private toaster: ToastrService,
-    public _cookiesService: CookieService, public store: Store<RootReducerState>, private toastr: ToastrService,private service:GeneralserviceService) {
+    public _cookiesService: CookieService, public store: Store<RootReducerState>, private toastr: ToastrService,private service:GeneralserviceService,private notificationService: NotificationService ) {
 
   }
 
@@ -121,6 +129,14 @@ toggleCurrentPasswordFieldTextType() {
   if (this.loginData == undefined) {
     this.router.navigate(['/auth/login-2']);
   }
+  console.log("this.loginData?.data.userActivity",this.loginData?.data.userActivity)
+  if(this.loginData?.data.userActivity == 'ADMIN'){
+    setInterval(() => 
+   
+      this.fetchData(), 5000
+  ); // Check API every 5 seconds
+  }
+  
 }
 
 get f() {
@@ -311,6 +327,94 @@ closeResetPasswordModal() {
       }
     );
   }
+  // fetchData() {
+  //   console.log("fetchData topbar")
+  //   this.service.getAllInvoice().subscribe(response => {
+  //     if (Array.isArray(response)) { // Ensure response is an array
+  //       console.log("topbar",response)
+  //       if (response.length > this.data.length) { // New invoice detected
+  //         this.notificationService.playNotificationSound();
+  //         this.notificationCount++; // Increment notification count
+  //         this.notifications.unshift({
+  //           title: 'New Invoice Created',
+  //           message: 'A new invoice has been added successfully.',
+  //           time: new Date().toLocaleTimeString()
+  //         });
+  //       }
+  //       this.data = response; // Update data
+  //     } else {
+  //       console.error('Expected an array but received:', response);
+  //     }
+  //   });
+  // }
+  private previousNotificationCount = 0; // Store previous count
+
+  fetchData() {
+   
+    this.service.getAllNotification().subscribe((response: any) => {
+      console.log("topbar", response, response.data?.length, this.data?.length);
+      
+      const newCount = response.notificationCount || 0; // Ensure count is always a number
+      
+      if (newCount > this.previousNotificationCount) { // Play sound only if count increased
+        this.reviewedNotificationList = []
+        this.notificationService.playNotificationSound();
+        this.notifications.unshift({
+          title: 'New Invoice Reviewed',
+          message: 'A new invoice has been added successfully.',
+          time: new Date().toLocaleTimeString()
+        });
+      }
+  console.log('this.notifications',this.notifications)
+      this.notificationCount = newCount; // Update the displayed count
+      this.previousNotificationCount = newCount; // Store new count for next comparison
+      this.data = response.data || []; // Ensure `this.data` is always an array\
+      this.reviewedNotificationList = response.data
+      console.log("this.reviewedNotificationList",this.reviewedNotificationList)
+    }, error => {
+      this.spinner.hide();
+      console.error("Error fetching notifications:", error);
+    });
+  }
+  
+  
+
+  
+  openNotificationPop() {
+    if(this.reviewedNotificationList.length>0){
+      this.modalService.open(this.notificationPop, { 
+        size: 'xl', 
+        backdrop: 'static', // Prevent closing on outside click
+        keyboard: false // (Optional) Prevent closing with Esc key
+      });
+    }
+    
+  }
+closeInvoice() {
+  this.modalService.dismissAll(); 
+}
+verifyedInvoice(invoice){
+
+
+  let obj={
+      "originalUniqueId": invoice.originalUniqueId,
+      "reviewed":false
+     }
+
+  this.service.verifyedAndUpdated(obj).subscribe(
+        (response: any) => {
+          console.log('Response:', response); 
+        },
+        (error) => {
+          // Handle API errors
+          Swal.fire('Error!', 'Failed to update status. Please try again.', 'error');
+          console.error('Approval error:', error);
+        }
+      );
+  
+  
+
+}
   
   
 }

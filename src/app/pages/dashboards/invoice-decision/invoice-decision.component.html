@@ -63,16 +63,22 @@
                                                   'rejected_Reversed':invoice.status === 'Rejected_Reversed'}" *ngIf="loginData?.data.userActivity == 'MD'">
 
                             <div *ngIf='invoice.status == "Pending" || invoice.status == "Rejected_Reversed"'
-                                class="d-flex gap-2">
-                                <button class="btn btn-success btn-sm" (click)="openModal('Approved', invoice)">
+                                 >
+                                <div *ngIf="invoice.reviewed == false || invoice.reviewed == null" class="d-flex gap-2">
+                                  <button class="btn btn-success btn-sm" (click)="openModal('Approved', invoice)" >
                                     Approve
                                 </button>
-                                <button class="btn btn-danger btn-sm" (click)="openModal('Rejected', invoice)">
+                                <button class="btn btn-danger btn-sm" (click)="openModal('Rejected', invoice)" >
                                     Reject
                                 </button>
-                                <button class="btn btnReview btn-sm" (click)="reviewInvoice(invoice)">
+                                <button class="btn btnReview btn-sm" (click)="reviewInvoice(invoice)" >
                                     Review
                                 </button>
+                                </div>
+                                <div *ngIf="invoice.reviewed == true">
+                                Waiting For Review
+                                </div>
+                               
                             </div>
 
 

@@ -4,6 +4,8 @@ import { CommonModule } from '@angular/common';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { SessionServiceService } from './pages/ui/session-service.service';
+import { NotificationService } from './notification.service';
+import { GeneralserviceService } from './generalservice.service';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -12,7 +14,8 @@ import { SessionServiceService } from './pages/ui/session-service.service';
   imports: [RouterOutlet,CommonModule,NgxSpinnerModule],
 })
 export class AppComponent implements OnInit {
-  constructor(private spinner: NgxSpinnerService,private sessionService:SessionServiceService) {}
+  data: any[] = []
+  constructor(private spinner: NgxSpinnerService,private sessionService:SessionServiceService,private notificationService: NotificationService,private service:GeneralserviceService) {}
   ngOnInit() {
     this.spinner.show(undefined, {
       type: 'square-jelly-box',
@@ -25,6 +28,21 @@ export class AppComponent implements OnInit {
     setTimeout(() => {
       this.spinner.hide();
     }, 1000);
+  //   setInterval(() => 
+  //     this.fetchData(), 5000
+  // ); // Check API every 5 seconds
   }
+  // fetchData() {
+  //   this.service.getAllInvoice().subscribe(response => {
+  //     if (Array.isArray(response)) { // Ensure response is an array
+  //       if (response.length !== this.data.length) { // Detect new data
+  //         this.notificationService.playNotificationSound();
+  //       }
+  //       this.data = response;
+  //     } else {
+  //       console.error('Expected an array but received:', response);
+  //     }
+  //   });
+  // }
   
 }

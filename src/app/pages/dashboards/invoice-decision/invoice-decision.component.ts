@@ -400,6 +400,7 @@ resetAll() {
             confirmButtonText: 'OK',
           });
           this.getAllInvoice()
+          
         } else {
           Swal.fire({
             text: response.message,
@@ -1472,7 +1473,8 @@ resetAll() {
       "reviewedDescription": this.reviewedDescription,
     "reviewedDate": formattedDateTime,
     "reviewedLoggedIn": this.loginData?.data.userName,
-    "originalUniqueId":this.invoiceItem.originalUniqueId
+    "originalUniqueId":this.invoiceItem.originalUniqueId,
+    "reviewed":true
     }
     this.spinner.show()
     this.service.reviewedUpadte(obj).subscribe((response:any)=>{
@@ -1485,6 +1487,7 @@ resetAll() {
           icon: 'success',
           confirmButtonText: 'OK',
         });
+        this.getAllInvoice()
       }else{
        console.log("else")
       }

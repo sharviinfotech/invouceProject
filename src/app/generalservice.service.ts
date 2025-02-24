@@ -90,5 +90,13 @@ getLoginResponse(){
     return this.http.post(environment.baseUrl+'invoice/resetPassword',obj);
  
   }
+  getAllNotification(){
+    return this.http.get(environment.baseUrl+'invoice/getAllNotification');
+ 
+  }
+  verifyedAndUpdated(obj){
+    return this.http.post(environment.baseUrl+'invoice/verifyedAndUpdated',obj);
+ 
+  }
 
 }

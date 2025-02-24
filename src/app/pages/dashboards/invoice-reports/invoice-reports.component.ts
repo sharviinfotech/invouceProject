@@ -293,10 +293,10 @@ export class InvoiceReportsComponent {
           // this.generateInvoiceHTML3(invoiceItem)
           // this.generateInvoiceHTML4(invoiceItem)
           // this.generateInvoiceHTML5(invoiceItem)
-          // this.generateInvoiceHTML6(invoiceItem)
+          this.generateInvoiceHTML6(invoiceItem)
           // this.generateInvoiceHTML7(invoiceItem)
           // this.generateInvoiceHTML8(invoiceItem)
-          this.generateInvoiceHTML9(invoiceItem)
+          // this.generateInvoiceHTML9(invoiceItem)
 
         }
       });

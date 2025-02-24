@@ -63,6 +63,7 @@ export class InvoiceComponent implements OnInit {
   showIGST = false;
   proformaCardHeaderName: any;
   proformaCardHeaderId: null;
+  reviewedFlag: boolean;
   toggleDropdown() {
     this.isDropdownOpen = !this.isDropdownOpen;
    
@@ -392,7 +393,7 @@ clearOtherCustomerFields() {
     const selectedObj = this.statesList.find(item => item.stateName === selectedState);
     console.log("selectedObj", selectedObj);
   
-    if (selectedObj && selectedObj.stateName === 'Telangana') {
+    if (selectedObj && selectedObj.stateName === 'TELANGANA') {
       this.taxItems = [
         {
           description: 'CGST @ 9%',
@@ -604,6 +605,7 @@ spinnerHideMethod(){
     this.isEditing = false;
     this.activeTab = "Edit"
     this.show = false;
+    this.reviewedFlag = false
     this.newInvoiceCreation.patchValue({
       // invoiceHeader: this.selectedInvoice.header.invoiceHeader,
       ProformaCustomerName: this.selectedInvoice.header.ProformaCustomerName,
@@ -643,7 +645,7 @@ spinnerHideMethod(){
     this.invoiceApprovedOrRejectedDateAndTime =this.selectedInvoice.invoiceApprovedOrRejectedDateAndTime,
     this.proformaCardHeaderId = this.selectedInvoice.proformaCardHeaderId,
     this.proformaCardHeaderName  =this.selectedInvoice.proformaCardHeaderName 
-    
+    this.reviewedFlag = this.selectedInvoice.reviewed
 if(this.logoUrl == ''|| this.logoUrl == null){
   this.logoUrl = this.imageService.getBase64FlightLogo(); 
 }
@@ -940,7 +942,8 @@ if (
         "createdByUser":this.loginData.data.userName,
         "status":"Pending",
         "proformaCardHeaderId":this.proformaCardHeaderId,
-        "proformaCardHeaderName":this.proformaCardHeaderName
+        "proformaCardHeaderName":this.proformaCardHeaderName,
+        "reviewed":false
         
         // "bankDetails":{
         //     "accountName":this.newInvoiceCreation.value.accountName,
@@ -1065,7 +1068,8 @@ if (
         "createdByUser":this.loginData.data.userName,
        "status":this.reSubmitInvoiceStatus,
        "proformaCardHeaderId":this.proformaCardHeaderId,
-        "proformaCardHeaderName":this.proformaCardHeaderName
+        "proformaCardHeaderName":this.proformaCardHeaderName,
+        "reviewed":this.reviewedFlag
         // "bankDetails":{
         //     "accountName":this.newInvoiceCreation.value.accountName,
         //     "bank":this.newInvoiceCreation.value.bank,
