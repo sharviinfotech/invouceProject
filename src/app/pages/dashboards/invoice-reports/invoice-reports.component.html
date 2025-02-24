@@ -101,7 +101,7 @@
             <td>{{ invoice.header.ProformaTypeOfAircraft }}</td>
             <td>{{ invoice.header.ProformaCity }}</td>
             <td>{{ invoice.header.BookingSector }}</td>
-            <td>{{ invoice.header.BookingDateOfJourny }}</td>
+            <td class="text-nowrap">{{ invoice.header.startBookingDateOfJourny }}/{{ invoice.header.endBookingDateOfJourny }}</td>
             <td>{{ invoice.grandTotal | number: '1.2-2'}}</td>
             <td [ngClass]="{
                 'text-green-600': invoice.status === 'Approved',
