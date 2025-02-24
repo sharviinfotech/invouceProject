@@ -64,6 +64,7 @@ export class DefaultComponent {  // ... (other properties)
   pendingTotal: number;
   rejectedReversedTotal: number;
   overdueTotal: number;
+  loginData: any;
 
   
   constructor(
@@ -77,13 +78,18 @@ export class DefaultComponent {  // ... (other properties)
   }
  
   ngOnInit(): void {
+    this.loginData = this.service.getLoginResponse()
+    console.log("this.loginData ", this.loginData)
     this.getAllInvoice();
   
   }
 
   getAllInvoice() {
       this.spinner.show();
-      this.service.getAllInvoice().subscribe(
+      let obj={
+        "userActivity":""
+    }
+      this.service.getAllInvoice(obj).subscribe(
         (res: any) => {
           this.spinner.hide();
           this.allInvoiceList = res.data;

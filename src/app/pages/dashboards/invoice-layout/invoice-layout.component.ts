@@ -96,6 +96,7 @@ export class InvoiceLayoutComponent {
  
    @ViewChild('logoInput') logoInput!: ElementRef;
    allInvoiceList: any;
+  loginData: any;
   
  
    constructor(private fb: FormBuilder, private numberToWordsService:NumberToWordsService,private service:GeneralserviceService,private spinner: NgxSpinnerService) {
@@ -129,12 +130,18 @@ export class InvoiceLayoutComponent {
     });
    }
    ngOnInit(): void {
+    this.loginData = this.service.getLoginResponse()
+    console.log("this.loginData ", this.loginData)
  this.getAllInvoice()
+ 
    }
  
    getAllInvoice(){
     this.spinner.show()
-     this.service.getAllInvoice().subscribe((res:any)=>{
+    let obj={
+      "userActivity":this.loginData.data.userActivity
+  }
+     this.service.getAllInvoice(obj).subscribe((res:any)=>{
        console.log("getAllInvoice",res);
        this.spinner.hide()
        this.allInvoiceList = res.invoices;

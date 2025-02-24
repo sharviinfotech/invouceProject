@@ -163,11 +163,12 @@ export class InvoiceDecisionComponent {
       reviewedDescriptionEdit: ['']  
       // ... other form controls with their validators
     });
-    this.getStates();
-    this.getAllInvoice()
+    
     
     this.loginData = this.service.getLoginResponse()
     console.log("this.loginData ", this.loginData)
+    this.getStates();
+    this.getAllInvoice()
   }
   customDateValidator(control: any): { [key: string]: boolean } | null {
     const dateRegex = /^\d{2}-\d{2}-\d{4}$/;
@@ -177,7 +178,10 @@ export class InvoiceDecisionComponent {
   getAllInvoice() {
     this.allInvoiceList = []
     this.spinner.show()
-    this.service.getAllInvoice().subscribe((res: any) => {
+    let obj={
+      "userActivity":this.loginData.data.userActivity
+  }
+    this.service.getAllInvoice(obj).subscribe((res: any) => {
       console.log("getAllInvoice", res);
       this.spinner.hide()
       this.allInvoiceList = res.data;

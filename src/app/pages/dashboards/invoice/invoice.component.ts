@@ -242,7 +242,8 @@ clearOtherCustomerFields() {
       proformatypeOfAircraft: ['', Validators.required],
       proformaseatingcapasity: ['', Validators.required],
       notes: [''],
-      bookingdateOfjourny: ['', Validators.required],
+      startBookingDateOfJourny: ['', Validators.required],
+      endBookingDateOfJourny: ['', Validators.required],
       bookingsector: ['', Validators.required],
       bookingbillingflyingtime: ['', Validators.required],
       // accountName: [''],
@@ -256,6 +257,8 @@ clearOtherCustomerFields() {
   }
 
   ngOnInit(): void {
+    this.loginData= this.service.getLoginResponse()
+    console.log("this.loginData",this.loginData);
     console.log("taxlist", this.taxItems)
     this.getAllCustomerList();
     this.getAllInvoice()
@@ -264,8 +267,7 @@ clearOtherCustomerFields() {
     this.loginData = null
     this.logoUrl = this.imageService.getBase64FlightLogo(); 
     this.InvoiceLogo = this.imageService.getBase64WorldLogo(); 
-    this.loginData= this.service.getLoginResponse()
-   console.log("this.loginData",this.loginData);
+   
 
   }
   onChargeSelectionChange(item: any, selectedChargeName: string) {
@@ -427,7 +429,10 @@ clearOtherCustomerFields() {
     this.allInvoiceList = []
     this.getAllCustomerList()
     this.spinner.show()
-    this.service.getAllInvoice().subscribe((res: any) => {
+    let obj={
+      "userActivity":this.loginData.data.userActivity
+  }
+    this.service.getAllInvoice(obj).subscribe((res: any) => {
       console.log("getAllInvoice", res);
       this.spinner.hide()
       this.allInvoiceList = res.data;
@@ -622,7 +627,8 @@ spinnerHideMethod(){
       proformatypeOfAircraft: this.selectedInvoice.header.ProformaTypeOfAircraft,
       proformaseatingcapasity: this.selectedInvoice.header.ProformaSeatingCapasity,
       notes: this.selectedInvoice.header.notes,
-      bookingdateOfjourny: this.selectedInvoice.header.BookingDateOfJourny,
+      startBookingDateOfJourny: this.selectedInvoice.header.startBookingDateOfJourny,
+      endBookingDateOfJourny: this.selectedInvoice.header.endBookingDateOfJourny,
       bookingsector: this.selectedInvoice.header.BookingSector,
       bookingbillingflyingtime: this.selectedInvoice.header.BookingBillingFlyingTime,
       // accountName: this.selectedInvoice.bankDetails.accountName,
@@ -683,7 +689,8 @@ if(this.InvoiceLogo== ''|| this.InvoiceLogo == null){
       // bookingdetailssector: "",
       // bookingdetailsbillingflyingtime: "",
       notes: "",
-      bookingdateOfjourny: "",
+      startBookingDateOfJourny: "",
+      endBookingDateOfJourny: "",
       bookingsector: "",
       bookingbillingflyingtime: "",
       // accountName: "",
@@ -879,7 +886,8 @@ convertUnitsToHours(units: string | null): number {
     } else {
       console.log('Invoice Saved', this.newInvoiceCreation.value);
       let invoiceDate = this.newInvoiceCreation.value.ProformaInvoiceDate;
-      let bookingDate = this.newInvoiceCreation.value.bookingdateOfjourny;
+      let startBookingDate = this.newInvoiceCreation.value.startBookingDateOfJourny;
+      let endBbookingDate = this.newInvoiceCreation.value.endBookingDateOfJourny;
   
       // ✅ Check if the date is already in 'DD-MM-YYYY' format
       const dateRegex = /^\d{2}-\d{2}-\d{4}$/;
@@ -888,10 +896,13 @@ convertUnitsToHours(units: string | null): number {
         invoiceDate = this.formatDate(invoiceDate);
       }
   
-      if (!dateRegex.test(bookingDate)) {
-        bookingDate = this.formatDate(bookingDate);
+      if (!dateRegex.test(startBookingDate)) {
+        startBookingDate = this.formatDate(startBookingDate);
       }
-      console.log("invoiceDateSplit", invoiceDate, "bokingDateSplit", bookingDate);
+      if (!dateRegex.test(endBbookingDate)) {
+        endBbookingDate = this.formatDate(endBbookingDate);
+      }
+      console.log("invoiceDateSplit", invoiceDate, "startBookingDate",startBookingDate,"endBbookingDate", endBbookingDate);
 console.log("this.newInvoiceCreation.value.ProformaCustomerName", this.newInvoiceCreation.value.ProformaCustomerName);
 
 let customerNameObj;
@@ -926,7 +937,8 @@ if (
           "ProformaTypeOfAircraft": this.newInvoiceCreation.value.proformatypeOfAircraft,
           "ProformaSeatingCapasity": this.newInvoiceCreation.value.proformaseatingcapasity,
           "notes": this.newInvoiceCreation.value.notes,
-          "BookingDateOfJourny": bookingDate,
+          "startBookingDateOfJourny": startBookingDate,
+          "endBookingDateOfJourny": endBbookingDate,
           "BookingSector": this.newInvoiceCreation.value.bookingsector,
           "BookingBillingFlyingTime": this.newInvoiceCreation.value.bookingbillingflyingtime
         },
@@ -1015,18 +1027,23 @@ if (
 
 
       let invoiceDate = this.newInvoiceCreation.value.ProformaInvoiceDate;
-    let bookingDate = this.newInvoiceCreation.value.bookingdateOfjourny;
-
-    // ✅ Check if the date is already in 'DD-MM-YYYY' format
-    const dateRegex = /^\d{2}-\d{2}-\d{4}$/;
-
-    if (!dateRegex.test(invoiceDate)) {
-      invoiceDate = this.formatDate(invoiceDate);
-    }
-
-    if (!dateRegex.test(bookingDate)) {
-      bookingDate = this.formatDate(bookingDate);
-    }
+      let startBookingDate = this.newInvoiceCreation.value.startBookingDateOfJourny;
+      let endBbookingDate = this.newInvoiceCreation.value.endBookingDateOfJourny;
+  
+      // ✅ Check if the date is already in 'DD-MM-YYYY' format
+      const dateRegex = /^\d{2}-\d{2}-\d{4}$/;
+  
+      if (!dateRegex.test(invoiceDate)) {
+        invoiceDate = this.formatDate(invoiceDate);
+      }
+  
+      if (!dateRegex.test(startBookingDate)) {
+        startBookingDate = this.formatDate(startBookingDate);
+      }
+      if (!dateRegex.test(endBbookingDate)) {
+        endBbookingDate = this.formatDate(endBbookingDate);
+      }
+      console.log("invoiceDateSplit update", invoiceDate, "startBookingDate",startBookingDate,"endBbookingDate", endBbookingDate);
     
     
       // Implement update logic here
@@ -1052,7 +1069,8 @@ if (
           "ProformaTypeOfAircraft": this.newInvoiceCreation.value.proformatypeOfAircraft,
           "ProformaSeatingCapasity": this.newInvoiceCreation.value.proformaseatingcapasity,
           "notes": this.newInvoiceCreation.value.notes,
-          "BookingDateOfJourny": bookingDate,
+          "startBookingDateOfJourny": startBookingDate,
+          "endBookingDateOfJourny": endBbookingDate,
           "BookingSector": this.newInvoiceCreation.value.bookingsector,
           "BookingBillingFlyingTime": this.newInvoiceCreation.value.bookingbillingflyingtime
         },

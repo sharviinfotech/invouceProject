@@ -98,6 +98,7 @@ export class InvoiceReportsComponent {
   submit: boolean = false;
   minToDate: Date | undefined;
   signature: string;
+  loginData: any;
   constructor(private service: GeneralserviceService, private spinner: NgxSpinnerService, private imageService: ImageService, private fb: FormBuilder) {
     this.bsConfig = {
       dateInputFormat: 'DD-MM-YYYY',
@@ -107,6 +108,8 @@ export class InvoiceReportsComponent {
 
   }
   ngOnInit(): void {
+    this.loginData = this.service.getLoginResponse()
+    console.log("this.loginData ", this.loginData)
     this.getAllInvoice()
     this.reportsForm = this.fb.group({
       fromDate: ['', Validators.required],
@@ -207,7 +210,10 @@ export class InvoiceReportsComponent {
   getAllInvoice() {
     this.allInvoiceList = []
     this.spinner.show()
-    this.service.getAllInvoice().subscribe((res: any) => {
+    let obj={
+      "userActivity":""
+  }
+    this.service.getAllInvoice(obj).subscribe((res: any) => {
       console.log("getAllInvoice", res);
       this.spinner.hide()
       this.allInvoiceList = res.data;

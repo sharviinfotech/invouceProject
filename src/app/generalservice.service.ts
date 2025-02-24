@@ -24,8 +24,8 @@ export class GeneralserviceService {
 getLoginResponse(){
    return this.loginResponse;
 }
-  getAllInvoice(){
-    return this.http.get(environment.baseUrl+'invoice/getAllInvoices');
+  getAllInvoice(obj){
+    return this.http.post(environment.baseUrl+'invoice/getAllInvoices',obj);
   }
   CreateInvoice(obj){
     return this.http.post(environment.baseUrl+'invoice/createNewInvoice',obj);
