@@ -597,7 +597,7 @@
             <td class="text-nowrap">{{ invoice.header.startBookingDateOfJourny }}/{{ invoice.header.endBookingDateOfJourny }}</td>
             <td>{{ invoice.grandTotal | number: '1.2-2'}}</td>
             <td>{{ invoice.reviewedDescription }} ({{ invoice.reviewedDate }})</td>
-            <td class="text-success">{{invoice.reviewedReSubmited == true?'Verifyed':''}}</td>
+            <td class="text-success">{{invoice.reviewedReSubmited == true?'Modifications Completed – Awaiting Your Decision':''}}</td>
             <!-- <td><i class="fa fa-check-circle text-success" style="font-size: 20px;" role="button" (click)="verifyedInvoice(invoice)"></i></td> -->
   
           </tr>
