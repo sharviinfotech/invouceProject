@@ -6,7 +6,7 @@
 
     <form [formGroup]="reportsForm">
       <div class="row"> <!-- Add a row to align fields in one line -->
-        <div class="col-lg-4">
+        <div class="col-lg-2">
           <div class="form-group">
             <label>From Invoice Date</label>
             <input type="text" formControlName="fromDate" class="form-control form-control-sm" [bsConfig]="bsConfig"
@@ -16,7 +16,7 @@
             </div>
           </div>
         </div>
-        <div class="col-lg-4">
+        <div class="col-lg-2">
           <div class="form-group">
             <label>To Invoice Date</label>
             <input type="text" formControlName="toDate" placeholder="Enter To Invoice Date"
@@ -26,6 +26,20 @@
             </div>
           </div>
         </div>
+        <div class="col-lg-2">
+          <div class="form-group">
+              <label>Invoice Type</label>
+              <select class="form-control form-control-sm" formControlName="invoiceType">
+                  <option value="">Select</option>
+                  <option value="Proforma Flying Quotation">PQ</option>
+                  <option value="Tax Invoice">TAX</option>
+              </select>
+              <div class="text-danger" *ngIf="submit && f['invoiceType'].errors">
+                  Invoice Type is required.
+              </div>
+          </div>
+      </div>
+        
         <div class="col-lg-2">
           <div class="form-group">
             <label>Status</label>
@@ -40,6 +54,7 @@
             </div>
           </div>
         </div>
+        
         <div class="col-lg-2 mt-4">
           <div class="d-flex gap-2">
             <button class="btn btn-success btn-sm" (click)="onChangeForm()">
@@ -48,11 +63,15 @@
             <button class="btn btn-danger btn-sm" (click)="reset()">
               Reset
             </button>
+            <button class="btn btn-primary btn-sm" (click)="printData()">
+              Print
+          </button>
           </div>
         </div>
 
       </div>
     </form>
+    
 
 
 
@@ -67,8 +86,8 @@
       </div>
 
     </div> -->
-    <div class="tableFixHeadR">
-      <table class="table table-bordered table-stripped">
+    <div class="printable-table-container">
+      <table class="table printable-table">
         <thead class="thead-light">
           <tr>
             <th class="text-nowrap">Invoice Number</th>

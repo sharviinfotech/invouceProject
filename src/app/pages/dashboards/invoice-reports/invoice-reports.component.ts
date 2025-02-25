@@ -114,7 +114,8 @@ export class InvoiceReportsComponent {
     this.reportsForm = this.fb.group({
       fromDate: ['', Validators.required],
       toDate: ['', Validators.required],
-      status: ['', Validators.required]
+      status: ['', Validators.required],
+      invoiceType: ['', Validators.required],
     });
   }
   formatDate(proformaInvoiceDate: string): string {
@@ -130,11 +131,12 @@ export class InvoiceReportsComponent {
   }
   onChangeForm() {
 
-    if (this.reportsForm.value.fromDate && this.reportsForm.value.toDate && this.reportsForm.value.status) {
+    if (this.reportsForm.value.fromDate && this.reportsForm.value.toDate && this.reportsForm.value.status && this.reportsForm.value.invoiceType) {
       this.filteredInvoices = [];  // Store or use the filtered data as needed
       const fromD = this.reportsForm.value.fromDate;
       const toD = this.reportsForm.value.toDate;
       const selectedStatus = this.reportsForm.value.status;
+      const selectedInvoiceType = this.reportsForm.value.invoiceType; // Get selected invoice type
 
       // Convert fromDate and toDate to Date objects
       const fromDateObj = this.convertToDate(fromD);
@@ -153,9 +155,9 @@ export class InvoiceReportsComponent {
 
         // Check if the status matches (case insensitive)
         const isStatusMatch = selectedStatus === '' || invoice.status.toLowerCase() === selectedStatus.toLowerCase();
-
+        const isInvoiceTypeMatch = selectedInvoiceType === '' || invoice.proformaCardHeaderName === selectedInvoiceType; // Filter by invoice type
         // Return only invoices that match both date range and status
-        return isWithinDateRange && isStatusMatch;
+        return isWithinDateRange && isStatusMatch && isInvoiceTypeMatch;
       });
 
       console.log('Filtered Invoices:', filteredInvoices);
@@ -178,6 +180,158 @@ export class InvoiceReportsComponent {
     })
     this.getAllInvoice()
   }
+  printData() {
+    const invoiceHTML = `
+    
+<html>
+<head>
+ 
+  <style>
+      
+  
+   .table-bordered {
+      border-collapse: collapse;
+      width: 100%;
+      margin-bottom: 10px;
+      // background-color:rgb(193, 205, 217); /* Added background color */
+      font-size: 12px !important;
+       border: 1px solid #ddd !important;
+    }
+     .table-bordered th {
+      border: 1px solid #ddd;
+    padding: 2px;
+    background: rgb(88 98 145) !important;
+    color: white;
+    }
+ 
+    .table-bordered td {
+    padding: 2px;
+    border: 1px solid #ddd;
+    }
+   
+ 
+   
+       
+    .bold {
+      font-weight: bold;
+    }
+    .text-right {
+      text-align: right;
+    }
+    .text-center {
+      text-align: center;
+    }
+
+  
+
+ 
+
+  @media print {
+    
+   body {
+              font-family: Arial, sans-serif;
+              margin: 0;
+              padding: 5px;
+              background-color: white;
+              -webkit-print-color-adjust: exact !important;
+              print-color-adjust: exact !important;
+              font-size: 9px;
+            }
+       
+            .table-bordered {
+      border-collapse: collapse;
+      width: 100%;
+      margin-bottom: 10px;
+      // background-color:rgb(193, 205, 217); /* Added background color */
+      font-size: 12px !important;
+       border: 1px solid #ddd !important;
+    }
+     .table-bordered th {
+      border: 1px solid #ddd;
+    padding: 2px;
+    background: rgb(88 98 145) !important;
+    color: white;
+   
+    }
+ 
+    .table-bordered td {
+    padding: 2px;
+    border: 1px solid #ddd;
+    }
+   
+ 
+   
+       
+    .bold {
+      font-weight: bold;
+    }
+    .text-right {
+      text-align: right;
+    }
+    .text-center {
+      text-align: center;
+    }
+   
+
+
+  </style>
+</head>
+<body>
+  <div class="">
+    <table class="table-bordered">
+              <thead>
+                  <tr>
+            <th class="text-nowrap">Invoice Number</th>
+            <th class="text-nowrap">Invoice Date</th>
+            <th class="text-nowrap">Customer Name</th>
+            <th class="text-nowrap">Type Of Aircraft</th>
+            <th class="text-nowrap">City</th>
+            <th class="text-nowrap">Destination</th>
+            <th class="text-nowrap">Date Of Journey</th>
+            <th class="text-nowrap">Total Amount</th>
+              </thead>
+              <tbody>
+            
+                ${this.allInvoiceList.map((invoice, index) => `
+                  <tr>
+                   
+                     <td >${invoice.invoiceUniqueNumber}</td>
+                    <td>${invoice.header.ProformaInvoiceDate}</td>
+                    <td >${invoice.header.ProformaCustomerName}</td>
+                    <td >${invoice.header.ProformaTypeOfAircraft}</td>
+                    <td >${invoice.header.ProformaCity}</td>
+                     <td>${invoice.header.BookingSector}</td>
+                    <td >${invoice.header.startBookingDateOfJourny}/${invoice.header.endBookingDateOfJourny}</td>
+                    <td >${invoice.grandTotal ? invoice.grandTotal.toFixed(2) : '0.00'}</td>
+
+                  </tr>
+                `).join('')}
+               
+                
+              </tbody>
+            </table>
+
+        </div>
+   
+  </div>
+</body>
+</html>
+ 
+ 
+    `;
+ 
+    const newWindow = window.open('', '', 'height=600,width=800');
+    if (newWindow) {
+      newWindow.document.write(invoiceHTML);
+      newWindow.document.close();
+ 
+      setTimeout(() => {
+        newWindow.print();
+        
+      }, 500);
+    }
+  }
+  
 
   // Helper method to convert date string to Date object
   convertToDate(dateString: any): Date {

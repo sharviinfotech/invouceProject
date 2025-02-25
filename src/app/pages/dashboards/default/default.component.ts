@@ -73,6 +73,7 @@ export class DefaultComponent {  // ... (other properties)
   OverAllAmountCount: number;
   TotalPQ: number;
   TotalCountPQ: number;
+  tableData: any;
 
   
   constructor(
@@ -225,173 +226,195 @@ convertDate(dateStr: string): Date {
 
 
 
-  updateBarChart(data: any[]) {
-    this.spinner.show()
+updateBarChart(data: any[]) {
+  this.spinner.show();
 
-    const yearlyStatusCounts = this.calculateYearlyStatusCounts(data);
-    if (Object.keys(yearlyStatusCounts).length === 0) return;
+  const yearlyStatusCounts = this.calculateYearlyStatusCounts(data);
+  if (Object.keys(yearlyStatusCounts).length === 0) return;
 
-    const years = Object.keys(yearlyStatusCounts).sort();
-    const seriesData = years.map(year => yearlyStatusCounts[year]);
+  const years = Object.keys(yearlyStatusCounts).sort();
+  const seriesData = years.map(year => yearlyStatusCounts[year]);
 
-    this.barChartOptions = {
+  this.barChartOptions = {
       series: [{ name: "Invoices", data: seriesData }],
       chart: {
-        type: "bar",
-        height: 350,
-        stacked: false,
-        toolbar: { show: true },
-        events: {
-          dataPointSelection: (event, chartContext, config) => {
-            this.handleBarClick(years, config.dataPointIndex);
-            const selectedYear = years[config.dataPointIndex];
-            console.log("Year selected:", selectedYear);
-            this.filterByYear(selectedYear);
-    
-            // Reset all bar styles
-            const bars = document.querySelectorAll(".apexcharts-bar-area");
-            bars.forEach((bar) => {
-              (bar as HTMLElement).style.stroke = "none"; // Remove previous borders
-              (bar as HTMLElement).style.strokeWidth = "0";
-            });
-    
-            // Highlight the selected bar
-            const selectedBar = document.querySelector(
-              `.apexcharts-bar-area[j="${config.dataPointIndex}"]`
-            );
-            if (selectedBar) {
-              (selectedBar as HTMLElement).style.stroke = "red"; // Add red border
-              (selectedBar as HTMLElement).style.strokeWidth = "2px";
-            }
-          }
-        }
-      },
-      plotOptions: {
-        bar: {
-          columnWidth: "20%", // Decrease this value to make bars thinner
-        }
-      },
-      colors: ["#007BFF"], 
+          type: "bar",
+          height: 350,
+          stacked: false,
+          toolbar: { show: true },
+          events: {
+              dataPointSelection: (event, chartContext, config) => {
+                  this.handleBarClick(years, config.dataPointIndex);
+                  const selectedYear = years[config.dataPointIndex];
+                  console.log("Year selected:", selectedYear);
+                  this.filterByYear(selectedYear);
+          
+                  // Reset all bar styles
+                  const bars = document.querySelectorAll(".apexcharts-bar-area");
+                  bars.forEach((bar) => {
+                    (bar as HTMLElement).style.stroke = "none"; // Remove previous borders
+                    (bar as HTMLElement).style.strokeWidth = "0";
+                  });
+          
+                  // Highlight the selected bar
+                  const selectedBar = document.querySelector(
+                    `.apexcharts-bar-area[j="${config.dataPointIndex}"]`
+                  );
+                  if (selectedBar) {
+                    (selectedBar as HTMLElement).style.stroke = "red"; // Add red border
+                    (selectedBar as HTMLElement).style.strokeWidth = "2px";
+                  }
+                }
+              }
+            },
+          
+      plotOptions: { bar: { columnWidth: "20%" } },
+      colors: ["#007BFF"],
       xaxis: { categories: years, title: { text: "Year" } },
       yaxis: { title: { text: "Invoice Count" } },
       legend: { position: 'bottom' }
-    }; 
+  };
 
-    setTimeout(() => {
-      this.spinner.hide()
-      if (years.length > 0) {
-        this.handleBarClick(years, 0); // Simulate click on the first year
-    }
-    }, 200);
+  setTimeout(() => {
+      this.spinner.hide();
+      this.updatePieChart(); // Load overall data initially
+  }, 200);
+}
 
+handleBarClick(years: string[], index: number) {
+  const selectedYear = years[index];
+  console.log("Year selected:", selectedYear);
+  this.filterByYear(selectedYear);
+
+  // Reset all bar styles
+  const bars = document.querySelectorAll(".apexcharts-bar-area");
+  bars.forEach((bar) => {
+      (bar as HTMLElement).style.stroke = "none";
+      (bar as HTMLElement).style.strokeWidth = "0";
+  });
+
+  // Highlight the selected bar
+  const selectedBar = document.querySelector(`.apexcharts-bar-area[j="${index}"]`);
+  if (selectedBar) {
+      (selectedBar as HTMLElement).style.stroke = "red";
+      (selectedBar as HTMLElement).style.strokeWidth = "2px";
   }
-  handleBarClick(years: string[], index: number) {
-    const selectedYear = years[index];
-    console.log("Year selected:", selectedYear);
-    this.filterByYear(selectedYear);
+}
 
-    // Reset all bar styles
-    const bars = document.querySelectorAll(".apexcharts-bar-area");
-    bars.forEach((bar) => {
-        (bar as HTMLElement).style.stroke = "none";
-        (bar as HTMLElement).style.strokeWidth = "0";
-    });
+// Function to filter and update table and pie chart by selected year
+filterByYear(selectedYear: string) {
+  console.log("Selected Year:", selectedYear);
 
-    // Highlight the selected bar
-    const selectedBar = document.querySelector(`.apexcharts-bar-area[j="${index}"]`);
-    if (selectedBar) {
-        (selectedBar as HTMLElement).style.stroke = "red";
-        (selectedBar as HTMLElement).style.strokeWidth = "2px";
-    }
+  // Filter invoices for the selected year
+  const filteredInvoices = this.allInvoiceList.filter(invoice => invoice.year === selectedYear);
+
+  if (!filteredInvoices.length) {
+      console.warn("No invoices found for the selected year.");
+      this.pieChartOptions.series = [];
+      this.tableData = []; // Clear table data if no records found
+      this.cdr.detectChanges();
+      return;
   }
-
-  filterByYear(selectedYear: string) {
-    this.yearFilteredInvoices = this.allInvoiceList.filter(invoice => {
-      if (!invoice.header?.ProformaInvoiceDate) return false;
-      const [day, month, year] = invoice.header.ProformaInvoiceDate.split('-');
-      return year === selectedYear;
-    });
-
-    this.filteredInvoiceList = [...this.yearFilteredInvoices]; // Reset to year filter
-    this.updatePieChart();
-  }
-  updatePieChart() {
-    this.spinner.show();
   
-    setTimeout(() => {
+
+  // Update Pie Chart
+  this.updatePieChart(selectedYear);
+
+  // Update Table Data
+  this.updateTableData(filteredInvoices);
+}
+
+
+// Function to update the pie chart based on the selected year or all data initially
+updatePieChart(selectedYear?: string) {
+  this.spinner.show();
+
+  setTimeout(() => {
+      let invoicesToProcess = this.allInvoiceList;
+
+      if (selectedYear) {
+          invoicesToProcess = this.allInvoiceList.filter(invoice => invoice.year === selectedYear);
+      }
+
       const statusCounts: { [status: string]: number } = {};
-  
-      if (!this.yearFilteredInvoices || this.yearFilteredInvoices.length === 0) {
-        console.warn("No invoices available for the selected year.");
-        this.pieChartOptions.series = [];
-        this.cdr.detectChanges();
-        return;
+
+      if (!invoicesToProcess || invoicesToProcess.length === 0) {
+          console.warn("No invoices available.");
+          this.pieChartOptions.series = [];
+          this.cdr.detectChanges();
+          this.spinner.hide();
+          return;
       }
-  
-      this.yearFilteredInvoices.forEach(invoice => {
-        const status = invoice.status || "Unknown";
-        statusCounts[status] = (statusCounts[status] || 0) + 1;
+
+      invoicesToProcess.forEach(invoice => {
+          const status = invoice.status || "Unknown";
+          statusCounts[status] = (statusCounts[status] || 0) + 1;
       });
-  
+
       console.log("Pie Chart Data:", statusCounts);
-  
+
       if (Object.keys(statusCounts).length === 0) {
-        console.warn("No status data found for pie chart.");
-        this.pieChartOptions.series = [];
-        this.cdr.detectChanges();
-        return;
+          console.warn("No status data found for pie chart.");
+          this.pieChartOptions.series = [];
+          this.cdr.detectChanges();
+          this.spinner.hide();
+          return;
       }
-     
+
       // Define color mapping for statuses
       const statusColors: { [key: string]: string } = {
-        "Approved": "#16a34a",       // Green
-        "Rejected": "#dc2626",       // Red
-        "Pending": "#FFD700",        // Yellow
-        "Rejected_Reverse": "#FFD700" // Gold     
+          "Approved": "#11db52",
+          "Rejected": "#f93d3d",
+          "Pending": "#ffb020",
+          "Rejected_Reversed": "linear-gradient(135deg, #FFA500, #FF4500)"
       };
-  
+
       const chartLabels = Object.keys(statusCounts);
-      const chartColors = chartLabels.map(label => statusColors[label] || "#FFD700"); // Default grey if not found
-  
+      const chartColors = chartLabels.map(label => statusColors[label] || "#FFD700");
+
       this.pieChartOptions = {
-        series: Object.values(statusCounts),
-        chart: {
-          type: "pie",
-          height: 350,
-          events: {
-            dataPointSelection: (event, chartContext, config) => {
-              const selectedStatus = chartLabels[config.dataPointIndex];
-              console.log("Selected Status:", selectedStatus);
-              this.filterTableByStatus(selectedStatus);
-            }
-          }
-        },
-        labels: chartLabels,
-        colors: chartColors,
-        legend: { position: "bottom" },
-        tooltip: { y: { formatter: (val) => `${val} invoices` } }
+          series: Object.values(statusCounts),
+          chart: {
+              type: "pie",
+              height: 350,
+              events: {
+                  dataPointSelection: (event, chartContext, config) => {
+                      const selectedStatus = chartLabels[config.dataPointIndex];
+                      console.log("Selected Status:", selectedStatus);
+                      this.filterTableByStatus(selectedStatus);
+                  }
+              }
+          },
+          labels: chartLabels,
+          colors: chartColors,
+          legend: { position: "bottom" },
+          tooltip: { y: { formatter: (val) => `${val} invoices` } }
       };
-  
+
+      this.updateTableData(invoicesToProcess);
       this.cdr.detectChanges();
       this.spinner.hide();
-    }, 500);
-  }
-  
-  
-  
+  }, 500);
+}
 
-  filterTableByStatus(selectedStatus: string) {
-    this.filteredInvoiceList = this.yearFilteredInvoices.filter(invoice => invoice.status?.trim().toLowerCase() === selectedStatus.trim().toLowerCase());
-    console.log("Filtered Table Data by Status:", this.filteredInvoiceList);
-    this.cdr.detectChanges(); // Ensure Angular detects the changes
-  }
-  
-  
+// Function to update table data
+updateTableData(filteredInvoices) {
+  this.tableData = filteredInvoices;
+  this.cdr.detectChanges();
+}
 
-  calculateYearlyStatusCounts(invoices: any[]): { [year: string]: number } {
-    const yearlyStatusCounts: { [year: string]: number } = {};
+// Function to filter the table based on the selected status
+filterTableByStatus(selectedStatus: string) {
+  this.filteredInvoiceList = this.allInvoiceList.filter(invoice => invoice.status?.trim().toLowerCase() === selectedStatus.trim().toLowerCase());
+  console.log("Filtered Table Data by Status:", this.filteredInvoiceList);
+  this.cdr.detectChanges();
+}
 
-    invoices.forEach(invoice => {
+// Function to calculate yearly invoice counts
+calculateYearlyStatusCounts(invoices: any[]): { [year: string]: number } {
+  const yearlyStatusCounts: { [year: string]: number } = {};
+
+  invoices.forEach(invoice => {
       if (!invoice.header?.ProformaInvoiceDate) return;
 
       const dateStr = invoice.header.ProformaInvoiceDate;
@@ -402,10 +425,12 @@ convertDate(dateStr: string): Date {
 
       const yearStr = date.getFullYear().toString();
       yearlyStatusCounts[yearStr] = (yearlyStatusCounts[yearStr] || 0) + 1;
-    });
+  });
 
-    return yearlyStatusCounts;
-  }
+  return yearlyStatusCounts;
+}
+
+
   updateCustomerPieChart() {
     const customerCounts: { [key: string]: number } = {}; // Object to store counts
 
