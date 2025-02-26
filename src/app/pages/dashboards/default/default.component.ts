@@ -156,7 +156,7 @@ export class DefaultComponent {  // ... (other properties)
     console.log('pqInvoices',pqInvoices)
 
     // Step 2: Then process all "TAX" invoices separately
-    const taxInvoices = this.allInvoiceList.filter(invoice => invoice.proformaCardHeaderId === "TAX");
+    const taxInvoices = this.allInvoiceList.filter(invoice => invoice.status === "Amount Received");
     taxInvoices.forEach(invoice => {
         this.AmountReceivedTotal += invoice.grandTotal;
         this.AmountReceivedCount++;

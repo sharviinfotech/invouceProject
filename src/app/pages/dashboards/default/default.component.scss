@@ -21,7 +21,10 @@
   color: #f4eeee !important;
 }
 
-
+::ng-deep .AmountReceived {
+  background-image: linear-gradient(to right, #00796B, #1bc223);  
+  color: #f4eeee !important;
+}
 
 .card {
   display: flex;
@@ -99,16 +102,16 @@
 }
 
 .Recevied_Amount {
-  background-image: linear-gradient(to right, #22c55e, #0f766e);
-  border-left: 4px solid #065f46; /* Dark green border */
+  // background-image: linear-gradient(to right, #22c55e, #0f766e);
+  background-image: linear-gradient(to right, #00796B, #1bc223);  
+  border-left: 4px solid #1bc223; /* Dark green border */
   color: #ffffff; /* White text for contrast */
   padding: 16px;
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  color:white; /* Light green icon */
 }
-.Recevied_Amount i {
-  color: #d1fae5; /* Light green icon */
-}
+
 
 
 

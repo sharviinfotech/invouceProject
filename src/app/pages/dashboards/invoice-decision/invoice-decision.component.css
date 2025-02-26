@@ -40,6 +40,7 @@
   ::ng-deep .text-green-600 {
     color: #16a34a !important;
     text-decoration: underline !important;
+    cursor: pointer !important;
   }
   
   ::ng-deep .text-orange-600 {
@@ -62,10 +63,12 @@
   ::ng-deep  .rejected_Reversed{
     /* color: linear-gradient(135deg, #FFA500, #FF4500) !important; */
     color: #FF4500 !important;
-    text-decoration: underline !important;
-
-    
+    text-decoration: underline !important  
    
+  }
+  ::ng-deep .text-Amount_Received {
+    color: #21e421 !important;
+    font-weight: 700 !important;
   }
   .icon-container {
     display: flex;

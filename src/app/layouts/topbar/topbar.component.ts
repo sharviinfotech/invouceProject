@@ -349,7 +349,6 @@ closeResetPasswordModal() {
   private previousNotificationCount = 0; // Store previous count
 
   fetchData() {
-   
     this.service.getAllNotification().subscribe((response: any) => {
       console.log("topbar", response, response.data?.length, this.data?.length);
       

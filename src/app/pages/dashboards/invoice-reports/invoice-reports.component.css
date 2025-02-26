@@ -36,6 +36,7 @@
   
   ::ng-deep .text-green-600 {
     color: #16a34a !important;
+    cursor: pointer !important;
   }
   
   ::ng-deep .text-orange-600 {
@@ -58,5 +59,35 @@
   -webkit-text-fill-color: transparent !important;
   font-weight: bold !important;
 }
+
+::ng-deep  .btnCustomize{
+
+  padding: 5px !important;
+  width: 93px !important;
+  height: 37px !important;
+  font-size: 18px !important;
+  margin-left: 10px !important;
+
+}
+.btn-success{
+  background-color: #16a34a !important;
+  color: white !important;
+
+}
+.btn-danger{
+  background-color: red !important;
+  color: white !important;
+
+}
+.btn-primary{
+  background-color: #2563eb !important;
+  color: white !important;
+}
+
+::ng-deep .text-Amount_Received {
+  color: #21e421 !important;
+  font-weight: 700 !important;
+}
+
  
   

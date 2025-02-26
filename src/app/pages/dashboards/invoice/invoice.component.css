@@ -649,6 +649,10 @@ input:focus {
   -webkit-text-fill-color: transparent !important;
   font-weight: bold !important;
 }
+::ng-deep .text-Amount_Received {
+  color: #21e421 !important;
+  font-weight: 700 !important;
+}
 
 
 .cursor-pointer {

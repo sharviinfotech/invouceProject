@@ -64,25 +64,42 @@ export class InvoiceComponent implements OnInit {
   proformaCardHeaderName: any;
   proformaCardHeaderId: null;
   reviewedFlag: boolean;
+  PQList: any;
+  pqSameforTAX: number;
   toggleDropdown() {
     this.isDropdownOpen = !this.isDropdownOpen;
    
   }
   selectInvoiceType(type){
     this.resetAll()
+
     this.proformaCardHeaderId = null
     this.proformaCardHeaderName = null
     this.proformaCardHeaderId = type
 
     if(this.proformaCardHeaderId == "PQ"){
-     this.proformaCardHeaderName = "Proforma Flying Quotation"
+     this.proformaCardHeaderName = "PROFORMA FLYING QUOTATION"
     }else{
-      this.proformaCardHeaderName = "Tax Invoice"
+      this.proformaCardHeaderName = "TAX INVOICE"
+
+
 
     }
     this.activeTab = "NewInvoice";
     this.isDropdownOpen = false
     console.log("this.proformaCardHeaderId",this.proformaCardHeaderId,this.proformaCardHeaderName)
+     // Update validation dynamically
+     this.PQList = []
+  if (this.proformaCardHeaderName === "Tax Invoice") {
+    this.newInvoiceCreation.controls['PQInvoiceNumber'].setValidators(Validators.required);
+    this.PQList = this.allInvoiceList.filter(invoice => invoice.proformaCardHeaderId === "PQ");
+    console.log('this.PQList',this.PQList)
+
+  } else {
+    this.newInvoiceCreation.controls['PQInvoiceNumber'].clearValidators();
+  }
+
+  this.newInvoiceCreation.controls['PQInvoiceNumber'].updateValueAndValidity();
 
   }
  
@@ -118,6 +135,21 @@ export class InvoiceComponent implements OnInit {
         this.clearOtherCustomerFields();
     }
 }
+onSelectProformaNumber(event: any) {
+  this.pqSameforTAX=0
+  console.log("onSelectProformaNumber event", event);
+var extractedNumber
+  // Extract numeric part from invoiceUniqueNumber
+  if (event?.invoiceUniqueNumber) {
+    const match = event.invoiceUniqueNumber.match(/PQ-(\d+)\//);
+     extractedNumber = match ? parseInt(match[1], 10) : null;
+
+   
+  }
+  console.log("Extracted Number:", extractedNumber);
+  this.pqSameforTAX = extractedNumber
+}
+
 
 
 clearOtherCustomerFields() {
@@ -207,6 +239,7 @@ clearOtherCustomerFields() {
   invoiceApprovedOrRejectedDateAndTime: any;
   constructor(private fb: FormBuilder, private numberToWordsService: NumberToWordsService, private service: GeneralserviceService, private datePipe: DatePipe, private spinner: NgxSpinnerService,private imageService: ImageService,private toaster: ToastrService) {
     this.newInvoiceCreation = this.fb.group({
+      PQInvoiceNumber:[''],
       invoiceHeader: [''],
       ProformaCustomerName: ['', Validators.required],
       ProformaAddress: ['', Validators.required],
@@ -636,6 +669,7 @@ spinnerHideMethod(){
       // accountNumber: this.selectedInvoice.bankDetails.accountNumber,
       // branch:this.selectedInvoice.bankDetails.branch,
       // ifscCode:this.selectedInvoice.bankDetails.ifscCode 
+      
     })
 
     this.chargeItems = this.selectedInvoice.chargesList;
@@ -661,6 +695,7 @@ if(this.InvoiceLogo== ''|| this.InvoiceLogo == null){
 }
     console.log("this.selectedInvoice.header.invoiceUniqueNumber", this.selectedInvoice.invoiceUniqueNumber)
     console.log("this.newInvoiceCreation", this.newInvoiceCreation.value.ProformaInvoiceNumber)
+    this.pqSameforTAX = this.selectedInvoice.pqSameforTAX
   }
   resetAll() {
     // this.logoUrl = ""
@@ -917,6 +952,12 @@ if (
 } else {
   customerNameObj = this.newInvoiceCreation.value.ProformaCustomerName;
 }
+    var statusUpdate 
+   if(this.proformaCardHeaderId == "PQ"){
+       statusUpdate = "Pending"
+   }else{
+       statusUpdate = "Amount Received"
+   }
       let createobj = {
         "header": {
         //  "invoiceHeader": this.InvoiceLogo,
@@ -952,11 +993,12 @@ if (
         "invoiceApprovedOrRejectedDateAndTime":"",
         "loggedInUser":this.loginData.data.userName,
         "createdByUser":this.loginData.data.userName,
-        "status":"Pending",
+        "status":statusUpdate,
         "proformaCardHeaderId":this.proformaCardHeaderId,
         "proformaCardHeaderName":this.proformaCardHeaderName,
         "reviewed":false,
-        "reviewedReSubmited":false
+        "reviewedReSubmited":false,
+        "pqSameforTAX":this.pqSameforTAX?this.pqSameforTAX:0
         
         // "bankDetails":{
         //     "accountName":this.newInvoiceCreation.value.accountName,
@@ -1005,7 +1047,7 @@ if (
         this.spinner.hide()
         console.log('Error creating invoice:', error);
         Swal.fire({
-          text: 'An error occurred while creating the invoice',
+          text: error,
           icon: 'error',
           showConfirmButton: true
         });
@@ -1045,7 +1087,7 @@ if (
         endBbookingDate = this.formatDate(endBbookingDate);
       }
       console.log("invoiceDateSplit update", invoiceDate, "startBookingDate",startBookingDate,"endBbookingDate", endBbookingDate);
-    
+     
     
       // Implement update logic here
       let updateobj = {
@@ -1089,7 +1131,8 @@ if (
        "proformaCardHeaderId":this.proformaCardHeaderId,
         "proformaCardHeaderName":this.proformaCardHeaderName,
         "reviewed":this.reviewedFlag,
-        "reviewedReSubmited":false
+        "reviewedReSubmited":false,
+           "pqSameforTAX":this.pqSameforTAX?this.pqSameforTAX:0
         // "bankDetails":{
         //     "accountName":this.newInvoiceCreation.value.accountName,
         //     "bank":this.newInvoiceCreation.value.bank,

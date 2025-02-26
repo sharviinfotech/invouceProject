@@ -24,7 +24,8 @@
                     <tr *ngFor="let invoice of allInvoiceList">
                       <td>
                         <span [ngClass]="{
-                          'text-green-600 underline cursor-pointer': invoice.status === 'Approved'
+                          'text-green-600  underline cursor-pointer': invoice.status === 'Approved',
+                          'text-Amount_Received underline cursor-pointer': invoice.status === 'Amount Received'
                         }" (click)="selectInvoice(invoice)">
                           {{ invoice.invoiceUniqueNumber }}
                         </span>
@@ -38,9 +39,10 @@
                         <td>{{ invoice.grandTotal | number: '1.2-2'}}</td>
                         <td *ngIf="loginData?.data.userActivity != 'MD'" class="d-flex align-items-center" 
                         [ngClass]="{
-                  'text-green-600 ': invoice.status === 'Approved',
+                  'text-green-600 cursor-pointer': invoice.status === 'Approved',
                   'text-orange-600': invoice.status === 'Pending',
                   'text-red-600': invoice.status === 'Rejected',
+                  'text-Amount_Received': invoice.status === 'Amount Received',
                   'rejected_Reversed':invoice.status === 'Rejected_Reversed'
                 }" >
                 <span [ngClass]="{'reasonOpen': invoice.invoiceApprovedOrRejectedByUser}"
@@ -57,9 +59,10 @@
                         </td>
                         <!-- New Actions Column -->
                         <td [class.selected]="invoiceItem === invoice" [ngClass]="{
-                                                 'text-green-600': invoice.status === 'Approved',
+                                                 'text-green-600 cursor-pointer': invoice.status === 'Approved',
                                                  'text-orange-600': invoice.status === 'Pending',
                                                  'text-red-600': invoice.status === 'Rejected',
+                                                 'text-Amount_Received': invoice.status === 'Amount Received',
                                                   'rejected_Reversed':invoice.status === 'Rejected_Reversed'}" *ngIf="loginData?.data.userActivity == 'MD'">
 
                             <div *ngIf='invoice.status == "Pending" || invoice.status == "Rejected_Reversed"'

@@ -73,7 +73,7 @@
                   'text-green-600 underline cursor-pointer': invoice.status === 'Approved',
                   'text-orange-600': invoice.status === 'Pending',
                   'text-red-600': invoice.status === 'Rejected',
-                  'rejected_Reversed':invoice.status === 'Rejected_Reversed'
+                  'text-Amount_Received':invoice.status === 'Amount Received'
                 }">{{ invoice.invoiceUniqueNumber }}</td>
                 <td>{{ invoice.header.ProformaInvoiceDate }}</td>
                 <td>{{ invoice.header.ProformaCustomerName }}</td>
@@ -121,6 +121,27 @@
           <div class="card-body"
             style="background-color: #f9f9f9; padding: 20px; border: 1px solid #ddd; border-radius: 8px; box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);">
             <div class="row">
+              <div class="col-lg-4" *ngIf="proformaCardHeaderId == 'TAX'">
+                <div class="form-group">
+                  <label>Proforma Invoice Number<span class="text-danger">*</span></label>
+                  <!-- <input type="text" formControlName="ProformaCustomerName" placeholder="" (input)="convertToUppercase($event)" > -->
+                 <ng-select
+    [items]="PQList"
+    bindLabel="invoiceUniqueNumber"
+    placeholder="Select or Add Location"
+    [multiple]="false"
+    [addTag]="true"
+    [searchable]="true"
+    formControlName="PQInvoiceNumber"
+    (change)="onSelectProformaNumber($event)"
+>
+</ng-select>
+                </div>
+                <div class="text-danger" style="color: red;"
+                  *ngIf="newInvoiceCreation.get('PQInvoiceNumber')?.hasError('required') && newInvoiceCreation.get('PQInvoiceNumber')?.touched">
+                  Proforma Invoice NUmber is required.
+                </div>
+              </div>
               <div class="col-lg-4">
                 <div class="form-group">
                   <label>Customer Name<span class="text-danger">*</span></label>
@@ -542,7 +563,7 @@
 
 
 
-      <div class="col-sm-12 col-md-12 col-lg-12 text-right" style="text-align: end;">
+      <div class="col-sm-12 col-md-12 col-lg-12 text-right mb-2" style="text-align: end;">
         <button class="btnSave btn" (click)="CreateInvoice()">Create Invoice</button>
         <button class="btnClose btn">Close Invoice</button>
       </div>

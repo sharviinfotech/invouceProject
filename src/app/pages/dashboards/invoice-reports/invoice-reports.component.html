@@ -31,8 +31,8 @@
               <label>Invoice Type</label>
               <select class="form-control form-control-sm" formControlName="invoiceType">
                   <option value="">Select</option>
-                  <option value="Proforma Flying Quotation">PQ</option>
-                  <option value="Tax Invoice">TAX</option>
+                  <option value="PQ">PQ</option>
+                  <option value="TAX">TAX</option>
               </select>
               <div class="text-danger" *ngIf="submit && f['invoiceType'].errors">
                   Invoice Type is required.
@@ -45,9 +45,10 @@
             <label>Status</label>
             <select class="form-control form-control-sm" formControlName="status">
               <option value="">Select</option>
-              <option value="approved">Approved</option>
-              <option value="rejected">Rejected</option>
-              <option value="pending">Pending</option>
+              <option value="approved" *ngIf="this.reportsForm.value.invoiceType == 'PQ'">Approved</option>
+              <option value="rejected" *ngIf="this.reportsForm.value.invoiceType == 'PQ'"> Rejected</option>
+              <option value="pending" *ngIf="this.reportsForm.value.invoiceType == 'PQ'">Pending</option>
+              <option value="Amount Received" *ngIf="this.reportsForm.value.invoiceType == 'TAX'">Amount Received</option>
             </select>
             <div class="text-danger" *ngIf="submit && f['status'].errors">
               Status is required.
@@ -55,18 +56,19 @@
           </div>
         </div>
         
-        <div class="col-lg-2 mt-4">
-          <div class="d-flex gap-2">
-            <button class="btn btn-success btn-sm" (click)="onChangeForm()">
+        <div class="col-lg-4 mt-4" style="text-align: end;">
+          
+            <button class="btnCustomize btn-success btn-md" (click)="onChangeForm()">
               Get
             </button>
-            <button class="btn btn-danger btn-sm" (click)="reset()">
-              Reset
-            </button>
-            <button class="btn btn-primary btn-sm" (click)="printData()">
+            
+            <button class="btnCustomize btn-primary btn-md " (click)="printData()">
               Print
           </button>
-          </div>
+          <button class="btnCustomize btn-danger btn-md " (click)="reset()">
+            Reset
+          </button>
+          
         </div>
 
       </div>
@@ -110,6 +112,7 @@
                 'text-green-600 underline cursor-pointer': invoice.status === 'Approved',
                 'text-orange-600': invoice.status === 'Pending',
                 'text-red-600': invoice.status === 'Rejected',
+                'text-Amount_Received underline cursor-pointer': invoice.status === 'Amount Received',
                 'rejected_Reversed':invoice.status === 'Rejected_Reversed'
               }">
                 {{ invoice.invoiceUniqueNumber }}
@@ -126,6 +129,7 @@
                 'text-green-600': invoice.status === 'Approved',
                 'text-orange-600': invoice.status === 'Pending',
                 'text-red-600': invoice.status === 'Rejected',
+                'text-Amount_Received underline cursor-pointer': invoice.status === 'Amount Received',
                 'rejected_Reversed':invoice.status === 'Rejected_Reversed'
               }">
               {{ invoice.status }}
