@@ -26,7 +26,7 @@
             </div>
           </div>
         </div>
-        <div class="col-lg-2">
+        <div class="col-lg-2" >
           <div class="form-group">
               <label>Invoice Type</label>
               <select class="form-control form-control-sm" formControlName="invoiceType">
@@ -118,7 +118,7 @@
                 {{ invoice.invoiceUniqueNumber }}
               </span>
             </td>
-            <td>{{ invoice.header.ProformaInvoiceDate }}</td>
+            <td >{{ invoice.header.ProformaInvoiceDate }}</td>
             <td>{{ invoice.header.ProformaCustomerName }}</td>
             <td>{{ invoice.header.ProformaTypeOfAircraft }}</td>
             <td>{{ invoice.header.ProformaCity }}</td>
@@ -129,7 +129,7 @@
                 'text-green-600': invoice.status === 'Approved',
                 'text-orange-600': invoice.status === 'Pending',
                 'text-red-600': invoice.status === 'Rejected',
-                'text-Amount_Received underline cursor-pointer': invoice.status === 'Amount Received',
+                'text-Amount_Received  ': invoice.status === 'Amount Received',
                 'rejected_Reversed':invoice.status === 'Rejected_Reversed'
               }">
               {{ invoice.status }}

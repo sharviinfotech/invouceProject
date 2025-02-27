@@ -39,6 +39,7 @@
     cursor: pointer !important;
   }
   
+  
   ::ng-deep .text-orange-600 {
     color: orange !important;
   }
