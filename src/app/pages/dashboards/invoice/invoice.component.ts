@@ -90,7 +90,7 @@ export class InvoiceComponent implements OnInit {
     console.log("this.proformaCardHeaderId",this.proformaCardHeaderId,this.proformaCardHeaderName)
      // Update validation dynamically
      this.PQList = []
-  if (this.proformaCardHeaderName === "Tax Invoice") {
+  if (this.proformaCardHeaderName === "TAX INVOICE") {
     this.newInvoiceCreation.controls['PQInvoiceNumber'].setValidators(Validators.required);
     this.PQList = this.allInvoiceList.filter(invoice => invoice.proformaCardHeaderId === "PQ");
     console.log('this.PQList',this.PQList)
@@ -274,7 +274,7 @@ clearOtherCustomerFields() {
       ProformaGstNumber: ['36AAICS9057Q1ZD', Validators.required],
       proformatypeOfAircraft: ['', Validators.required],
       proformaseatingcapasity: ['', Validators.required],
-      notes: [''],
+      notes: ['',Validators.required],
       startBookingDateOfJourny: ['', Validators.required],
       endBookingDateOfJourny: ['', Validators.required],
       bookingsector: ['', Validators.required],
@@ -955,8 +955,10 @@ if (
     var statusUpdate 
    if(this.proformaCardHeaderId == "PQ"){
        statusUpdate = "Pending"
+
    }else{
        statusUpdate = "Amount Received"
+       
    }
       let createobj = {
         "header": {

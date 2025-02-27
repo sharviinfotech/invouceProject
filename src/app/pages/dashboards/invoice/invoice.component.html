@@ -556,6 +556,10 @@
                 <textarea formControlName="notes" class="form-control"
                   placeholder="Notes - any relevant information not covered, additional terms and conditions" (input)="convertToUppercase($event)"></textarea>
               </div>
+              <div class="text-danger"
+                  *ngIf="newInvoiceCreation.get('notes')?.hasError('required') && newInvoiceCreation.get('notes')?.touched">
+                  Notes is required.
+                </div>
             </div>
           </div>
         </div>
@@ -1167,6 +1171,10 @@
           <textarea id="notes" class="form-control"  formControlName="notes"
             placeholder="Notes - any relevant information not covered, additional terms and conditions"></textarea>
         </div>
+        <div class="text-danger"
+        *ngIf="newInvoiceCreation.get('notes')?.hasError('required') && newInvoiceCreation.get('notes')?.touched">
+        Notes is required.
+      </div>
       </div>
       <!-- <div  contenteditable="true">RITHWIK GREEN POWER & AVIATION PRIVATE LIMITED</div> -->
 
