@@ -49,6 +49,7 @@ export class DefaultComponent {  // ... (other properties)
   filteredInvoiceList: any[] = [];    
   bsConfig: { dateInputFormat: string; containerClass: string; };
   close: any;
+  selectedStatus: string = '';
   totalInvoiceCount: number;
   approvedCount: number;
   rejectedCount: number;
@@ -223,6 +224,109 @@ convertDate(dateStr: string): Date {
     const [day, month, year] = dateStr.split('-');
     return new Date(`${year}-${month}-${day}`);
 }
+updatePieChart(selectedYear?: string) {
+  this.spinner.show();
+
+  setTimeout(() => {
+    let invoicesToProcess = this.allInvoiceList.filter(invoice => {
+      if (!invoice.header?.ProformaInvoiceDate) return false;
+      const dateStr = invoice.header.ProformaInvoiceDate;
+      const [day, month, year] = dateStr.split('-');
+      return selectedYear ? year === selectedYear : true;
+    });
+
+    if (!invoicesToProcess.length) {
+      console.warn("No invoices available.");
+      this.pieChartOptions.series = [];
+      this.cdr.detectChanges();
+      this.spinner.hide();
+      return;
+    }
+
+    // Count invoices by status
+    const statusCounts: { [status: string]: number } = {};
+    invoicesToProcess.forEach(invoice => {
+      const status = invoice.status || "Unknown";
+      statusCounts[status] = (statusCounts[status] || 0) + 1;
+    });
+
+    const chartLabels = Object.keys(statusCounts);
+    const chartData = Object.values(statusCounts);
+    const statusColors: { [key: string]: string } = {
+      "Approved": "#11db52",
+      "Rejected": "#f93d3d",
+      "Pending": "#ffb020",
+      "Rejected_Reversed": "linear-gradient(135deg, #FFA500, #FF4500)"
+    };
+    const chartColors = chartLabels.map(label => statusColors[label] || "#FFD700");
+
+    this.pieChartOptions = {
+      series: chartData,
+      chart: {
+        type: "pie",
+        height: 350,
+        events: {
+          dataPointSelection: (event, chartContext, config) => {
+            const selectedStatus = chartLabels[config.dataPointIndex];
+            console.log("Selected Status:", selectedStatus);
+            this.filterTableByStatus(selectedStatus, selectedYear);
+          }
+        }
+      },
+      labels: chartLabels,
+      colors: chartColors,
+      legend: { position: "bottom" },
+      tooltip: { y: { formatter: (val) => `${val} invoices` } }
+    };
+
+    this.cdr.detectChanges();
+    this.spinner.hide();
+  }, 500);
+}
+
+filterTableByStatus(selectedStatus: string, selectedYear?: string) {
+  console.log(`Filtering table by Status: ${selectedStatus}, Year: ${selectedYear}`);
+
+  this.filteredInvoiceList = this.allInvoiceList.filter(invoice => {
+    if (!invoice.header?.ProformaInvoiceDate) return false;
+    const dateStr = invoice.header.ProformaInvoiceDate;
+    const [day, month, year] = dateStr.split('-');
+
+    const isYearMatch = selectedYear ? year === selectedYear : true;
+    const isStatusMatch = invoice.status === selectedStatus;
+
+    return isYearMatch && isStatusMatch;
+  });
+
+  console.log("Filtered invoices after pie selection:", this.filteredInvoiceList);
+
+  // Trigger change detection to update the UI
+  this.cdr.detectChanges();
+}
+
+
+
+filterByYear(selectedYear: string) {
+  console.log("Selected Year:", selectedYear);
+
+  this.filteredInvoiceList = this.allInvoiceList.filter(invoice => {
+    if (!invoice.header?.ProformaInvoiceDate) return false;
+    const dateStr = invoice.header.ProformaInvoiceDate;
+    const [day, month, year] = dateStr.split('-');
+    return year === selectedYear;
+  });
+
+  if (!this.filteredInvoiceList.length) {
+    console.warn("No invoices found for the selected year.");
+    this.pieChartOptions.series = [];
+    this.filteredInvoiceList = []; // Ensure it's cleared
+    this.cdr.detectChanges();
+    return;
+  }
+
+  // Update Pie Chart with filtered data
+  this.updatePieChart(selectedYear);
+}
 
 
 
@@ -244,7 +348,6 @@ updateBarChart(data: any[]) {
           toolbar: { show: true },
           events: {
               dataPointSelection: (event, chartContext, config) => {
-                  this.handleBarClick(years, config.dataPointIndex);
                   const selectedYear = years[config.dataPointIndex];
                   console.log("Year selected:", selectedYear);
                   this.filterByYear(selectedYear);
@@ -280,136 +383,6 @@ updateBarChart(data: any[]) {
       this.updatePieChart(); // Load overall data initially
   }, 200);
 }
-
-handleBarClick(years: string[], index: number) {
-  const selectedYear = years[index];
-  console.log("Year selected:", selectedYear);
-  this.filterByYear(selectedYear);
-
-  // Reset all bar styles
-  const bars = document.querySelectorAll(".apexcharts-bar-area");
-  bars.forEach((bar) => {
-      (bar as HTMLElement).style.stroke = "none";
-      (bar as HTMLElement).style.strokeWidth = "0";
-  });
-
-  // Highlight the selected bar
-  const selectedBar = document.querySelector(`.apexcharts-bar-area[j="${index}"]`);
-  if (selectedBar) {
-      (selectedBar as HTMLElement).style.stroke = "red";
-      (selectedBar as HTMLElement).style.strokeWidth = "2px";
-  }
-}
-
-// Function to filter and update table and pie chart by selected year
-filterByYear(selectedYear: string) {
-  console.log("Selected Year:", selectedYear);
-
-  // Filter invoices for the selected year
-  const filteredInvoices = this.allInvoiceList.filter(invoice => invoice.year === selectedYear);
-
-  if (!filteredInvoices.length) {
-      console.warn("No invoices found for the selected year.");
-      this.pieChartOptions.series = [];
-      this.tableData = []; // Clear table data if no records found
-      this.cdr.detectChanges();
-      return;
-  }
-  
-
-  // Update Pie Chart
-  this.updatePieChart(selectedYear);
-
-  // Update Table Data
-  this.updateTableData(filteredInvoices);
-}
-
-
-// Function to update the pie chart based on the selected year or all data initially
-updatePieChart(selectedYear?: string) {
-  this.spinner.show();
-
-  setTimeout(() => {
-      let invoicesToProcess = this.allInvoiceList;
-
-      if (selectedYear) {
-          invoicesToProcess = this.allInvoiceList.filter(invoice => invoice.year === selectedYear);
-      }
-
-      const statusCounts: { [status: string]: number } = {};
-
-      if (!invoicesToProcess || invoicesToProcess.length === 0) {
-          console.warn("No invoices available.");
-          this.pieChartOptions.series = [];
-          this.cdr.detectChanges();
-          this.spinner.hide();
-          return;
-      }
-
-      invoicesToProcess.forEach(invoice => {
-          const status = invoice.status || "Unknown";
-          statusCounts[status] = (statusCounts[status] || 0) + 1;
-      });
-
-      console.log("Pie Chart Data:", statusCounts);
-
-      if (Object.keys(statusCounts).length === 0) {
-          console.warn("No status data found for pie chart.");
-          this.pieChartOptions.series = [];
-          this.cdr.detectChanges();
-          this.spinner.hide();
-          return;
-      }
-
-      // Define color mapping for statuses
-      const statusColors: { [key: string]: string } = {
-          "Approved": "#11db52",
-          "Rejected": "#f93d3d",
-          "Pending": "#ffb020",
-          "Rejected_Reversed": "linear-gradient(135deg, #FFA500, #FF4500)"
-      };
-
-      const chartLabels = Object.keys(statusCounts);
-      const chartColors = chartLabels.map(label => statusColors[label] || "#FFD700");
-
-      this.pieChartOptions = {
-          series: Object.values(statusCounts),
-          chart: {
-              type: "pie",
-              height: 350,
-              events: {
-                  dataPointSelection: (event, chartContext, config) => {
-                      const selectedStatus = chartLabels[config.dataPointIndex];
-                      console.log("Selected Status:", selectedStatus);
-                      this.filterTableByStatus(selectedStatus);
-                  }
-              }
-          },
-          labels: chartLabels,
-          colors: chartColors,
-          legend: { position: "bottom" },
-          tooltip: { y: { formatter: (val) => `${val} invoices` } }
-      };
-
-      this.updateTableData(invoicesToProcess);
-      this.cdr.detectChanges();
-      this.spinner.hide();
-  }, 500);
-}
-
-// Function to update table data
-updateTableData(filteredInvoices) {
-  this.tableData = filteredInvoices;
-  this.cdr.detectChanges();
-}
-
-// Function to filter the table based on the selected status
-filterTableByStatus(selectedStatus: string) {
-  this.filteredInvoiceList = this.allInvoiceList.filter(invoice => invoice.status?.trim().toLowerCase() === selectedStatus.trim().toLowerCase());
-  console.log("Filtered Table Data by Status:", this.filteredInvoiceList);
-  this.cdr.detectChanges();
-}
-
 // Function to calculate yearly invoice counts
 calculateYearlyStatusCounts(invoices: any[]): { [year: string]: number } {
   const yearlyStatusCounts: { [year: string]: number } = {};
@@ -429,6 +402,14 @@ calculateYearlyStatusCounts(invoices: any[]): { [year: string]: number } {
 
   return yearlyStatusCounts;
 }
+
+
+
+
+
+
+
+
 
 
   updateCustomerPieChart() {
