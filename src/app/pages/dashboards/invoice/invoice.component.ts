@@ -66,6 +66,7 @@ export class InvoiceComponent implements OnInit {
   reviewedFlag: boolean;
   PQList: any;
   pqSameforTAX: number;
+  selectedPQUniqueId: any;
   toggleDropdown() {
     this.isDropdownOpen = !this.isDropdownOpen;
    
@@ -76,7 +77,7 @@ export class InvoiceComponent implements OnInit {
     this.proformaCardHeaderId = null
     this.proformaCardHeaderName = null
     this.proformaCardHeaderId = type
-
+    this.selectedPQUniqueId = 0
     if(this.proformaCardHeaderId == "PQ"){
      this.proformaCardHeaderName = "PROFORMA FLYING QUOTATION"
     }else{
@@ -92,7 +93,7 @@ export class InvoiceComponent implements OnInit {
      this.PQList = []
   if (this.proformaCardHeaderName === "TAX INVOICE") {
     this.newInvoiceCreation.controls['PQInvoiceNumber'].setValidators(Validators.required);
-    this.PQList = this.allInvoiceList.filter(invoice => invoice.proformaCardHeaderId === "PQ");
+    this.PQList = this.allInvoiceList.filter(invoice => invoice.pqStatus === "inComplete");
     console.log('this.PQList',this.PQList)
 
   } else {
@@ -136,6 +137,7 @@ export class InvoiceComponent implements OnInit {
     }
 }
 onSelectProformaNumber(event: any) {
+  this.selectedPQUniqueId = 0
   this.pqSameforTAX=0
   console.log("onSelectProformaNumber event", event);
 var extractedNumber
@@ -147,7 +149,8 @@ var extractedNumber
    
   }
   console.log("Extracted Number:", extractedNumber);
-  this.pqSameforTAX = extractedNumber
+  this.pqSameforTAX = extractedNumber,
+  this.selectedPQUniqueId = event.originalUniqueId
 }
 
 
@@ -496,129 +499,132 @@ spinnerHideMethod(){
 
   // Method to select and show an invoice
   selectInvoice(invoice: any) {
-    this.reSubmitInvoice = false
-    this.invoiceItem = null
-    this.invoiceItem = invoice
-    console.log("invoice", invoice)
-    console.log("this.invoiceItem", this.invoiceItem.invoiceReferenceNo);
-    console.log("this.invoiceItem.header.status", this.invoiceItem.header.status)
-    
-    if (this.invoiceItem.status == "Approved") {
-      console.log("If approved")
-      Swal.fire({
-        // title: 'question',
-        text: 'The selected invoice has been approved,Do you want to Preview Invoice?',
-        icon: 'question',
-        showCancelButton: true,
-        showConfirmButton: true,
-      }).then((result) => {
-        if (result.isConfirmed) {
-          this.invoiceItem = invoice
-          console.log("this.invoiceItem", this.invoiceItem)
-          this.activeTab = 'Preview'
-          this.spinnerHideMethod()
-          
-        } else {
-          // this.spinnerHideMethod()
-          this.getAllInvoice()
-          this.invoiceItem = null
-          this.reSubmitInvoice = false
-        }
-      });
-    }
-    else {
-
-      if (this.invoiceItem.status == "Rejected") {
-        console.log("If rejected")
+   
+    if(invoice.proformaCardHeaderId == "PQ"){
+      this.reSubmitInvoice = false
+      this.invoiceItem = null
+      this.invoiceItem = invoice
+      console.log("invoice", invoice)
+      console.log("this.invoiceItem", this.invoiceItem.invoiceReferenceNo);
+      console.log("this.invoiceItem.header.status", this.invoiceItem.header.status)
+      if (this.invoiceItem.status == "Approved") {
+        console.log("If approved")
         Swal.fire({
-          text: 'The selected invoice has been rejected.Do you still want to edit it to make changes and resubmit, or just preview the invoice?',
-          icon: 'info',
-          showCancelButton: true,  // Cancel Button
-          cancelButtonText: 'Cancel',
-          showDenyButton: true,  // Preview Button
-          denyButtonText: 'Preview',
-          showConfirmButton: true,  // Edit Button
-          confirmButtonText: 'Edit',
+          // title: 'question',
+          text: 'The selected invoice has been approved,Do you want to Preview Invoice?',
+          icon: 'question',
+          showCancelButton: true,
+          showConfirmButton: true,
         }).then((result) => {
           if (result.isConfirmed) {
-            // Edit action
-            this.editRow(invoice);
-            this.reSubmitInvoice = true
-            this.reSubmitInvoiceStatus = "Rejected_Reversed"
-          } else if (result.isDenied) {
-            // Preview action
-            this.invoiceItem = invoice;
-            console.log("this.invoiceItem", this.invoiceItem);
-            this.activeTab = 'Preview';
+            this.invoiceItem = invoice
+            console.log("this.invoiceItem", this.invoiceItem)
+            this.activeTab = 'Preview'
             this.spinnerHideMethod()
-            this.reSubmitInvoice = false
+            
           } else {
-            // Cancel action (Optional: You can add any logic if needed)
-            console.log("Action Cancelled");
-            this.getAllInvoice()
-            this.invoiceItem = null
-            this.reSubmitInvoice = null
             // this.spinnerHideMethod()
-          }
-        });
-
-
-        // Swal.fire({
-        //   // title: 'question',
-        //   text: 'The selected invoice has been rejected',
-        //   icon: 'info',
-        //   showCancelButton: true,
-        //   showConfirmButton: true,
-        // }).then((result) => {
-        //   if (result.isConfirmed) {
-        //     this.invoiceItem = invoice
-        //     console.log("this.invoiceItem", this.invoiceItem)
-        //     this.activeTab = 'Preview'
-        //     this.spinnerHideMethod()
-        //   } else {
-        //     this.invoiceItem = invoice
-        //     console.log("this.invoiceItem", this.invoiceItem)
-        //     // this.spinnerHideMethod()
-        //     this.getAllInvoice()
-        //     this.invoiceItem = null
-        //   }
-        // });
-      } else {
-        console.log("If pending");
-        Swal.fire({
-          text: 'Do you want to Edit or Preview the Invoice?',
-          icon: 'info',
-          showCancelButton: true,  // Cancel Button
-          cancelButtonText: 'Cancel',
-          showDenyButton: true,  // Preview Button
-          denyButtonText: 'Preview',
-          showConfirmButton: true,  // Edit Button
-          confirmButtonText: 'Edit',
-        }).then((result) => {
-          if (result.isConfirmed) {
-            // Edit action
-            this.editRow(invoice);
-            this.reSubmitInvoice = false
-          } else if (result.isDenied) {
-            // Preview action
-            this.invoiceItem = invoice;
-            console.log("this.invoiceItem", this.invoiceItem);
-            this.activeTab = 'Preview';
-            this.spinnerHideMethod()
-            this.reSubmitInvoice = false
-          } else {
-            // Cancel action (Optional: You can add any logic if needed)
-            console.log("Action Cancelled");
             this.getAllInvoice()
             this.invoiceItem = null
             this.reSubmitInvoice = false
-            // this.spinnerHideMethod()
           }
         });
-
       }
-
+      else {
+  
+        if (this.invoiceItem.status == "Rejected") {
+          console.log("If rejected")
+          Swal.fire({
+            text: 'The selected invoice has been rejected.Do you still want to edit it to make changes and resubmit, or just preview the invoice?',
+            icon: 'info',
+            showCancelButton: true,  // Cancel Button
+            cancelButtonText: 'Cancel',
+            showDenyButton: true,  // Preview Button
+            denyButtonText: 'Preview',
+            showConfirmButton: true,  // Edit Button
+            confirmButtonText: 'Edit',
+          }).then((result) => {
+            if (result.isConfirmed) {
+              // Edit action
+              this.editRow(invoice);
+              this.reSubmitInvoice = true
+              this.reSubmitInvoiceStatus = "Rejected_Reversed"
+            } else if (result.isDenied) {
+              // Preview action
+              this.invoiceItem = invoice;
+              console.log("this.invoiceItem", this.invoiceItem);
+              this.activeTab = 'Preview';
+              this.spinnerHideMethod()
+              this.reSubmitInvoice = false
+            } else {
+              // Cancel action (Optional: You can add any logic if needed)
+              console.log("Action Cancelled");
+              this.getAllInvoice()
+              this.invoiceItem = null
+              this.reSubmitInvoice = null
+              // this.spinnerHideMethod()
+            }
+          });
+  
+  
+          // Swal.fire({
+          //   // title: 'question',
+          //   text: 'The selected invoice has been rejected',
+          //   icon: 'info',
+          //   showCancelButton: true,
+          //   showConfirmButton: true,
+          // }).then((result) => {
+          //   if (result.isConfirmed) {
+          //     this.invoiceItem = invoice
+          //     console.log("this.invoiceItem", this.invoiceItem)
+          //     this.activeTab = 'Preview'
+          //     this.spinnerHideMethod()
+          //   } else {
+          //     this.invoiceItem = invoice
+          //     console.log("this.invoiceItem", this.invoiceItem)
+          //     // this.spinnerHideMethod()
+          //     this.getAllInvoice()
+          //     this.invoiceItem = null
+          //   }
+          // });
+        } else {
+          console.log("If pending");
+          Swal.fire({
+            text: 'Do you want to Edit or Preview the Invoice?',
+            icon: 'info',
+            showCancelButton: true,  // Cancel Button
+            cancelButtonText: 'Cancel',
+            showDenyButton: true,  // Preview Button
+            denyButtonText: 'Preview',
+            showConfirmButton: true,  // Edit Button
+            confirmButtonText: 'Edit',
+          }).then((result) => {
+            if (result.isConfirmed) {
+              // Edit action
+              this.editRow(invoice);
+              this.reSubmitInvoice = false
+            } else if (result.isDenied) {
+              // Preview action
+              this.invoiceItem = invoice;
+              console.log("this.invoiceItem", this.invoiceItem);
+              this.activeTab = 'Preview';
+              this.spinnerHideMethod()
+              this.reSubmitInvoice = false
+            } else {
+              // Cancel action (Optional: You can add any logic if needed)
+              console.log("Action Cancelled");
+              this.getAllInvoice()
+              this.invoiceItem = null
+              this.reSubmitInvoice = false
+              // this.spinnerHideMethod()
+            }
+          });
+  
+        }
+  
+      }
     }
+   
 
 
   }
@@ -953,12 +959,17 @@ if (
   customerNameObj = this.newInvoiceCreation.value.ProformaCustomerName;
 }
     var statusUpdate 
+    var pqStatus
+    var pqUniqueId
    if(this.proformaCardHeaderId == "PQ"){
-       statusUpdate = "Pending"
+       statusUpdate = "Pending",
+       pqStatus = "inComplete"
+       pqUniqueId = 0
 
    }else{
        statusUpdate = "Amount Received"
-       
+       pqStatus = "Completed",
+       pqUniqueId =this.selectedPQUniqueId
    }
       let createobj = {
         "header": {
@@ -1000,7 +1011,9 @@ if (
         "proformaCardHeaderName":this.proformaCardHeaderName,
         "reviewed":false,
         "reviewedReSubmited":false,
-        "pqSameforTAX":this.pqSameforTAX?this.pqSameforTAX:0
+        "pqSameforTAX":this.pqSameforTAX?this.pqSameforTAX:0,
+        "pqStatus":pqStatus,
+        "pqUniqueId":pqUniqueId,
         
         // "bankDetails":{
         //     "accountName":this.newInvoiceCreation.value.accountName,

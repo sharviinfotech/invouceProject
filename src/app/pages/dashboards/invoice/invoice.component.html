@@ -322,75 +322,75 @@
           </div>
         </div>
 
-        <div class="card mb-4">
-          <div class="card-header " style="text-align: center;">
-            Booking Details
-          </div>
-          <div class="card-body"
-            style="background-color: #f9f9f9; box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); border-radius: 8px;">
-            <div class="row">
-              <div class="col-lg-4">
-                <div class="form-group mb-0">
-                  <label>Date Of Journey<span class="text-danger">*</span></label>
-                  
-                </div>
-                <div class="row mb-0">
-                 <div class="col-lg-6">
-                  <label>Start Date<span class="text-danger">*</span></label>
-                  <input type="text" placeholder="Date" formControlName="startBookingDateOfJourny"
-                  class="form-control form-control-sm" [bsConfig]="bsConfig" bsDatepicker  (input)="convertToUppercase($event)"/>
-                  <div class="text-danger"
-                  *ngIf="newInvoiceCreation.get('startBookingDateOfJourny')?.hasError('required') && newInvoiceCreation.get('startBookingDateOfJourny')?.touched">
-                  Start Date  is required.
-                </div>
-                 </div>
-                
-                 <div class="col-lg-6">
-                  <label>End Date<span class="text-danger">*</span></label>
-                  <input type="text" placeholder="Date" formControlName="endBookingDateOfJourny"
-                  class="form-control form-control-sm" [bsConfig]="bsConfig" bsDatepicker  (input)="convertToUppercase($event)"/>
-                  <div class="text-danger"
-                  *ngIf="newInvoiceCreation.get('endBookingDateOfJourny')?.hasError('required') && newInvoiceCreation.get('endBookingDateOfJourny')?.touched">
-                  End Date  is required.
-                </div>
-                 </div>
-               
-                </div>
-                
-              </div>
-              <div class="col-lg-4 pt-4" style="border-left: 2px solid blue;">
-                <div class="form-group">
-                  <label>Sector</label>
-                  <!-- <input type="text" formControlName="bookingsector" class="form-control" placeholder="" (input)="convertToUppercase($event)"> -->
-                  <input type="text" formControlName="bookingsector" class="form-control"
-                  (input)="updateChargeItem(0, 'description', $event.target.value);convertToUppercase($event)">
-                </div>
-                <div class="text-danger"
-                  *ngIf="newInvoiceCreation.get('bookingsector')?.hasError('required') && newInvoiceCreation.get('bookingsector')?.touched">
-                  Sector is required.
-                </div>
-              </div>
-              <div class="col-lg-4 pt-4" style="border-left: 2px solid blue;">
-                <div class="form-group">
-                  <label>Billing Flying Time<span class="text-danger">*</span></label>
-                  <!-- <input type="text" formControlName="bookingbillingflyingtime" class="form-control" placeholder="" (input)="convertToUppercase($event)"> -->
-                  <input type="text" formControlName="bookingbillingflyingtime" class="form-control"
-                  (input)="updateChargeItem(0, 'units', $event.target.value)">
-                </div>
-                <div class="text-danger"
-                  *ngIf="newInvoiceCreation.get('bookingbillingflyingtime')?.hasError('required') && newInvoiceCreation.get('bookingbillingflyingtime')?.touched">
-                  Billing Flying Time is required.
-                </div>
-
-              </div>
-            </div>
-          </div>
-        </div>
+        
 
 
 
       </div>
+      <div class="card mt-2">
+        <div class="card-header " style="text-align: center;">
+          Booking Details
+        </div>
+        <div class="card-body"
+          style="background-color: #f9f9f9; box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); border-radius: 8px;">
+          <div class="row">
+            <div class="col-lg-4">
+              <div class="form-group mb-0">
+                <label>Date Of Journey<span class="text-danger">*</span></label>
+                
+              </div>
+              <div class="row mb-0">
+               <div class="col-lg-6">
+                <label>Start Date<span class="text-danger">*</span></label>
+                <input type="text" placeholder="Date" formControlName="startBookingDateOfJourny"
+                class="form-control form-control-sm" [bsConfig]="bsConfig" bsDatepicker  (input)="convertToUppercase($event)"/>
+                <div class="text-danger"
+                *ngIf="newInvoiceCreation.get('startBookingDateOfJourny')?.hasError('required') && newInvoiceCreation.get('startBookingDateOfJourny')?.touched">
+                Start Date  is required.
+              </div>
+               </div>
+              
+               <div class="col-lg-6">
+                <label>End Date<span class="text-danger">*</span></label>
+                <input type="text" placeholder="Date" formControlName="endBookingDateOfJourny"
+                class="form-control form-control-sm" [bsConfig]="bsConfig" bsDatepicker  (input)="convertToUppercase($event)"/>
+                <div class="text-danger"
+                *ngIf="newInvoiceCreation.get('endBookingDateOfJourny')?.hasError('required') && newInvoiceCreation.get('endBookingDateOfJourny')?.touched">
+                End Date  is required.
+              </div>
+               </div>
+             
+              </div>
+              
+            </div>
+            <div class="col-lg-4 pt-4" style="border-left: 2px solid blue;">
+              <div class="form-group">
+                <label>Sector</label>
+                <!-- <input type="text" formControlName="bookingsector" class="form-control" placeholder="" (input)="convertToUppercase($event)"> -->
+                <input type="text" formControlName="bookingsector" class="form-control"
+                (input)="updateChargeItem(0, 'description', $event.target.value);convertToUppercase($event)">
+              </div>
+              <div class="text-danger"
+                *ngIf="newInvoiceCreation.get('bookingsector')?.hasError('required') && newInvoiceCreation.get('bookingsector')?.touched">
+                Sector is required.
+              </div>
+            </div>
+            <div class="col-lg-4 pt-4" style="border-left: 2px solid blue;">
+              <div class="form-group">
+                <label>Billing Flying Time<span class="text-danger">*</span></label>
+                <!-- <input type="text" formControlName="bookingbillingflyingtime" class="form-control" placeholder="" (input)="convertToUppercase($event)"> -->
+                <input type="text" formControlName="bookingbillingflyingtime" class="form-control"
+                (input)="updateChargeItem(0, 'units', $event.target.value)">
+              </div>
+              <div class="text-danger"
+                *ngIf="newInvoiceCreation.get('bookingbillingflyingtime')?.hasError('required') && newInvoiceCreation.get('bookingbillingflyingtime')?.touched">
+                Billing Flying Time is required.
+              </div>
 
+            </div>
+          </div>
+        </div>
+      </div>
       <div class="card mt-1 mb-2">
         <div class="m-3">
           <table class="table table-bordered">
@@ -543,7 +543,7 @@
         </div>
 
       </div>
-      <div class="card mb-4">
+      <div class="card">
         <div class="card-header" style="text-align: center;">
           Notes
         </div>
@@ -632,7 +632,7 @@
 
       </div>
 
-      <div class="card mb-4">
+      <div class="card mt-2">
         <div class="orange-background" style="text-align: center;">
           Booking Details
         </div>
@@ -963,72 +963,72 @@
           </div>
         </div>
 
-        <div class="card mb-4">
-          <div class="card-header " style="text-align: center;">
-            Booking Details
-          </div>
-          <div class="card-body"
-            style="background-color: #f9f9f9; box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); border-radius: 8px;">
-            <div class="row">
-              <div class="col-lg-4">
-                <div class="form-group mb-0">
-                  <label>Date Of Journey<span class="text-danger">*</span></label>
-                  
-                </div>
-                <div class="row mb-0">
-                 <div class="col-lg-6">
-                  <label>Start Date<span class="text-danger">*</span></label>
-                  <input type="text" placeholder="Date" formControlName="startBookingDateOfJourny"
-                  class="form-control form-control-sm" [bsConfig]="bsConfig" bsDatepicker  (input)="convertToUppercase($event)"/>
-                  <div class="text-danger"
-                  *ngIf="newInvoiceCreation.get('startBookingDateOfJourny')?.hasError('required') && newInvoiceCreation.get('startBookingDateOfJourny')?.touched">
-                  Start Date  is required.
-                </div>
-                 </div>
-                
-                 <div class="col-lg-6">
-                  <label>End Date<span class="text-danger">*</span></label>
-                  <input type="text" placeholder="Date" formControlName="endBookingDateOfJourny"
-                  class="form-control form-control-sm" [bsConfig]="bsConfig" bsDatepicker  (input)="convertToUppercase($event)"/>
-                  <div class="text-danger"
-                  *ngIf="newInvoiceCreation.get('endBookingDateOfJourny')?.hasError('required') && newInvoiceCreation.get('endBookingDateOfJourny')?.touched">
-                  End Date  is required.
-                </div>
-                 </div>
-               
-                </div>
+       
+      </div>
+      <div class="card mt-2">
+        <div class="card-header " style="text-align: center;">
+          Booking Details
+        </div>
+        <div class="card-body"
+          style="background-color: #f9f9f9; box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); border-radius: 8px;">
+          <div class="row">
+            <div class="col-lg-4">
+              <div class="form-group mb-0">
+                <label>Date Of Journey<span class="text-danger">*</span></label>
                 
               </div>
-              <div class="col-lg-4 pt-4" style="border-left: 2px solid blue;">
-                <div class="form-group">
-                  <label>Sector</label>
-                  <!-- <input type="text" formControlName="bookingsector" class="form-control" placeholder="" (input)="convertToUppercase($event)"> -->
-                  <input type="text" formControlName="bookingsector" class="form-control"
-                  (input)="updateChargeItem(0, 'description', $event.target.value)">
-                </div>
+              <div class="row mb-0">
+               <div class="col-lg-6">
+                <label>Start Date<span class="text-danger">*</span></label>
+                <input type="text" placeholder="Date" formControlName="startBookingDateOfJourny"
+                class="form-control form-control-sm" [bsConfig]="bsConfig" bsDatepicker  (input)="convertToUppercase($event)"/>
                 <div class="text-danger"
-                  *ngIf="newInvoiceCreation.get('bookingsector')?.hasError('required') && newInvoiceCreation.get('bookingsector')?.touched">
-                  Sector is required.
-                </div>
+                *ngIf="newInvoiceCreation.get('startBookingDateOfJourny')?.hasError('required') && newInvoiceCreation.get('startBookingDateOfJourny')?.touched">
+                Start Date  is required.
               </div>
-              <div class="col-lg-4 pt-4" style="border-left: 2px solid blue;">
-                <div class="form-group">
-                  <label>Billing Flying Time<span class="text-danger">*</span></label>
-                  <!-- <input type="text" formControlName="bookingbillingflyingtime" class="form-control" placeholder="" (input)="convertToUppercase($event)"> -->
-                  <input type="text" formControlName="bookingbillingflyingtime" class="form-control"
-                  (input)="updateChargeItem(0, 'units', $event.target.value)">
-                </div>
+               </div>
+              
+               <div class="col-lg-6">
+                <label>End Date<span class="text-danger">*</span></label>
+                <input type="text" placeholder="Date" formControlName="endBookingDateOfJourny"
+                class="form-control form-control-sm" [bsConfig]="bsConfig" bsDatepicker  (input)="convertToUppercase($event)"/>
                 <div class="text-danger"
-                  *ngIf="newInvoiceCreation.get('bookingbillingflyingtime')?.hasError('required') && newInvoiceCreation.get('bookingbillingflyingtime')?.touched">
-                  Billing Flying Time is required.
-                </div>
+                *ngIf="newInvoiceCreation.get('endBookingDateOfJourny')?.hasError('required') && newInvoiceCreation.get('endBookingDateOfJourny')?.touched">
+                End Date  is required.
+              </div>
+               </div>
+             
+              </div>
+              
+            </div>
+            <div class="col-lg-4 pt-4" style="border-left: 2px solid blue;">
+              <div class="form-group">
+                <label>Sector</label>
+                <!-- <input type="text" formControlName="bookingsector" class="form-control" placeholder="" (input)="convertToUppercase($event)"> -->
+                <input type="text" formControlName="bookingsector" class="form-control"
+                (input)="updateChargeItem(0, 'description', $event.target.value)">
+              </div>
+              <div class="text-danger"
+                *ngIf="newInvoiceCreation.get('bookingsector')?.hasError('required') && newInvoiceCreation.get('bookingsector')?.touched">
+                Sector is required.
+              </div>
+            </div>
+            <div class="col-lg-4 pt-4" style="border-left: 2px solid blue;">
+              <div class="form-group">
+                <label>Billing Flying Time<span class="text-danger">*</span></label>
+                <!-- <input type="text" formControlName="bookingbillingflyingtime" class="form-control" placeholder="" (input)="convertToUppercase($event)"> -->
+                <input type="text" formControlName="bookingbillingflyingtime" class="form-control"
+                (input)="updateChargeItem(0, 'units', $event.target.value)">
+              </div>
+              <div class="text-danger"
+                *ngIf="newInvoiceCreation.get('bookingbillingflyingtime')?.hasError('required') && newInvoiceCreation.get('bookingbillingflyingtime')?.touched">
+                Billing Flying Time is required.
+              </div>
 
-              </div>
             </div>
           </div>
         </div>
       </div>
-
       <div class="card mt-1 mb-2">
         <div class="m-3">
           <table class="table table-bordered">
@@ -1158,7 +1158,7 @@
         </div>
 
       </div>
-      <div class="card mb-4">
+      <div class="card">
   <div class="card-header" style="text-align: center;">
     Notes
   </div>
@@ -1187,7 +1187,7 @@
 
 
 
-      <div class="col-sm-12 col-md-12 col-lg-12 text-right" style="text-align: end;">
+      <div class="col-sm-12 col-md-12 col-lg-12 text-right mb-2" style="text-align: end;">
         <button class="btnSave btn" (click)="UpdateInvoice()">Update</button>
       </div>
 

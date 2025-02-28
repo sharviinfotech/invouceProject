@@ -354,6 +354,7 @@ closeResetPasswordModal() {
       
       if(this.loginData?.data.userActivity == 'ADMIN'){
         const newCount = response.adminNotificationCount || 0; // Ensure count is always a number
+        console.log("newCount Admin",newCount,this.previousNotificationCount)
         if (newCount > this.previousNotificationCount) { // Play sound only if count increased
           this.spinner.show()
           this.reviewedNotificationList = []
@@ -376,6 +377,7 @@ closeResetPasswordModal() {
         
       }else{
         const newCount = response.mdNotificationCount || 0; // Ensure count is always a number
+        console.log("newCount MD",newCount,this.previousNotificationCount)
       if (newCount > this.previousNotificationCount) { // Play sound only if count increased
         this.spinner.show()
         this.reviewedNotificationList = []
