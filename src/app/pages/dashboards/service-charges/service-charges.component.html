@@ -26,6 +26,7 @@
                     <tr>
                         <th>Charges Id</th>
                         <th>Charges Name</th>
+                        <th>Action</th>
                         
                     </tr>
                 </thead>
@@ -33,6 +34,10 @@
                     <tr *ngFor="let charge of allCharges; let i = index">
                         <td>{{charge.chargesUniqueId}}</td>
                         <td>{{ charge.chargesName }}</td>
+                       <td> 
+                        <!-- <i class="edit-btn fa fa-edit"  (click)="openEditModal(data, editUserTemplate)"></i> -->
+                        <i class="delete-btn bx bx-trash"  (click)="delete(charge)"></i>
+                      </td>
                     </tr>
                 </tbody>
             </table>

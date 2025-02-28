@@ -16,7 +16,7 @@
                     <thead>
                         <tr>
                            
-                            <th>Customer Name</th>
+                            <th class="text-nowrap">Customer Name</th>
                             <th>Address</th>
                             <th>City</th>
                             <th>State</th>
@@ -25,9 +25,10 @@
                             <th>Pan No</th>
                             <th>Email</th>
                             <th>Contact</th>
-                            <th>AlernativeContact</th>
-                             <th>Credit Period</th>
-                            <th>Actions</th>
+                            <th class="text-nowrap">Alernative No</th>
+                             <th class="text-nowrap"    >Credit Period</th>
+                            <th 
+                            *ngIf='loginData?.data.userActivity != "MD"'>Actions</th>
                            
                             <!-- <th *ngIf='loginData?.data.userActivity != "customer"'>Action</th> -->
                            
@@ -36,29 +37,28 @@
                     <tbody>
                         <tr *ngFor="let data of customerList">
                            
-                            <td>{{data.customerName}}</td>
-                            <td>{{data.customerAddress}}</td>
-                            <td>{{data.customerCity}}</td>
-                            <td>{{data.customerState}}</td>
-                            <td>{{data.customerPincode}}</td>
-                            <td>{{data.customerGstNo}}</td>
-                            <td>{{data.customerPanNo}}</td>
-                            <td>{{data.customerEmail}}</td>
-                            <td>{{data.customerContact}}</td>
-                            <td>{{data.customerAlernativecontact}}</td>
-                            <td>{{data.customerCreditPeriod}}</td>
+                            <td class="text-nowrap">{{data.customerName}}</td>
+                            <td class="text-nowrap">{{data.customerAddress}}</td>
+                            <td class="text-nowrap">{{data.customerCity}}</td>
+                            <td class="text-nowrap">{{data.customerState}}</td>
+                            <td class="text-nowrap">{{data.customerPincode}}</td>
+                            <td class="text-nowrap">{{data.customerGstNo}}</td>
+                            <td class="text-nowrap">{{data.customerPanNo}}</td>
+                            <td class="text-nowrap">{{data.customerEmail}}</td>
+                            <td class="text-nowrap">{{data.customerContact}}</td>
+                            <td class="text-nowrap">{{data.customerAlernativecontact}}</td>
+                            <td class="text-nowrap">{{data.customerCreditPeriod}}</td>
                        
                             <!-- <td>
                               {{ data.userStatus ? 'Active' : 'Inactive' }}
                             </td> -->
  
-                           <td class="text-center" *ngIf='loginData?.data.customerActivity != "customer"'>
-                            <button class="btn btnEdit btn-raised"
-                            (click)="openEditModal(data, editCustomerTemplate)"
-                            >
-                            <i class="fa fa-edit"></i>
-                            </button>
-                           </td>
+                           <td class="text-center d-flex" *ngIf='loginData?.data.userActivity != "MD"'
+                           >
+                            
+                            <i class="edit-btn fa fa-edit"  (click)="openEditModal(data, editCustomerTemplate)"></i>
+                            <i class="delete-btn bx bx-trash"  (click)="delete(data)"></i>
+                          
                            
                         </tr>
                        
@@ -181,7 +181,7 @@
                 <div class="col-lg-4 col-md-4 col-sm-4">
                     <div class="form-group">
                         <label>PAN No<span class="text-danger">*</span></label>
-                        <input class="form-control form-control-sm" formControlName="customerPanNo" type="text" placeholder="Enter PAN No" maxlength="10" pattern="[A-Z]{5}[0-9]{4}[A-Z]" style="text-transform: uppercase;" 
+                        <input class="form-control form-control-sm" formControlName="customerPanNo" type="text" placeholder="Enter PAN No"
                         (input)="convertToUpperCase($event)">
                         <div class="text-danger" *ngIf="submit && f['customerPanNo'].errors">
                             PAN No is required.

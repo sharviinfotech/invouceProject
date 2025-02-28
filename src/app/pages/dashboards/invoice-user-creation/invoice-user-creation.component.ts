@@ -321,6 +321,7 @@ confirmFieldTextType: boolean = false;
         }
       });
       }
+      
   
      
   
@@ -335,6 +336,42 @@ confirmFieldTextType: boolean = false;
 
     });
   }
+   delete(data): void {
+      console.log('Deleting Customer with ID:',data, this.userUniqueId);
+    this.userUniqueId = data.userUniqueId
+      let deletePayload = {
+        globalId: this.userUniqueId,
+        screenName: "user"
+      };
+    
+      console.log("Delete payload:", deletePayload);
+    this.spinner.show()
+      this.service.deteleGlobal(deletePayload).subscribe((res: any) => {
+          console.log("deleteGlobal response:", res);
+          this.spinner.hide()
+          if (res.status === 400) {
+            this.toastr.error(res.message);
+          } else {
+            
+            Swal.fire({
+              title: 'succes',
+              text: res.message,
+              icon: 'success',
+              confirmButtonText: 'OK'
+            }).then(() => {
+              
+            });
+            this.modalService.dismissAll();
+           
+          }
+        },
+        (error) => {
+          this.spinner.hide()
+          console.error("Error deleting customer:", error);
+          this.toastr.error("Failed to delete customer");
+        }
+      );
+    }
   
   getAllUserList(){
     this.userList = [];

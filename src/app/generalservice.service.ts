@@ -5,6 +5,7 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root'
 })
 export class GeneralserviceService {
+ 
   resetPasswordData(): any {
     throw new Error('Method not implemented.');
   }
@@ -96,6 +97,10 @@ getLoginResponse(){
   }
   verifyedAndUpdated(obj){
     return this.http.post(environment.baseUrl+'invoice/verifyedAndUpdated',obj);
+ 
+  }
+  deteleGlobal(obj){
+    return this.http.post(environment.baseUrl+'invoice/deteleGlobal',obj);
  
   }
 

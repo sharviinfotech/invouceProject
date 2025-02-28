@@ -31,7 +31,7 @@ export class CustomerCreationComponent {
    customerNewCreation: any[];
    customerList: any[];
    submit: boolean=false;
-   customerUniqueId: string;
+   customerUniqueId: number;
    loginData: any;
    StateName: string;
  
@@ -65,13 +65,12 @@ newCustomerTemplate: any;
       ],
        customerGstNo: ['', Validators.required],
        customerPanNo:  ['',
-        Validators.required,
-        Validators.pattern(/^[A-Z]{5}[0-9]{4}[A-Z]$/)  // Correct PAN format
+        [Validators.required, Validators.pattern(/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/)]  // Correct PAN format
       ],
    
        customerEmail: ['', [Validators.required, Validators.pattern('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$')]],
        customerContact: ['', [Validators.required,  Validators.pattern('^[0-9]{10}$')]],
-       customerAlernativecontact: ['',[Validators.pattern('^[0-9]{10}$')]],
+       customerAlernativecontact: ['',],
        customerCreditPeriod: ['', Validators.required]
  
  
@@ -93,7 +92,7 @@ newCustomerTemplate: any;
           Validators.pattern(/^[0-9]{6}$/)
         ]
       ],       customerGstNo: ['', Validators.required],
-       customerPanNo: ['', [Validators.required, Validators.pattern(/^[A-Z]{5}[0-9]{4}[A-Z]$/)]],
+       customerPanNo: ['', [Validators.required, Validators.pattern(/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/)]],
 
        customerEmail: ['', [Validators.required, Validators.pattern('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$')]],
        customerContact: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
@@ -294,10 +293,12 @@ newCustomerTemplate: any;
     };
   
     console.log("Updating customer with data:", updateObj);
+    this.spinner.show();
   
     this.service.updateExitCustomer(updateObj, this.customerUniqueId).subscribe(
       (res: any) => {
         console.log("updateCustomerCreation response:", res);
+        this.spinner.hide()
   
         if (res.status === 400) {
           this.toastr.error(res.message);
@@ -318,19 +319,58 @@ newCustomerTemplate: any;
         this.submitted = false;
       },
       (error) => {
+        this.spinner.hide()
         console.error("Error updating customer:", error);
         this.toastr.error("Failed to update customer");
       }
     );
   }
+  delete(data): void {
+    console.log('Deleting Customer with ID:',data, this.customerUniqueId);
+  this.customerUniqueId = data.customerUniqueId
+    let deletePayload = {
+      globalId: this.customerUniqueId,
+      screenName: "customer"
+    };
   
+    console.log("Delete payload:", deletePayload);
+  this.spinner.show()
+    this.service.deteleGlobal(deletePayload).subscribe((res: any) => {
+        console.log("deleteGlobal response:", res);
+        this.spinner.hide()
+        if (res.status === 400) {
+          this.toastr.error(res.message);
+        } else {
+          Swal.fire({
+            title: 'succes',
+            text: res.message,
+            icon: 'success',
+            confirmButtonText: 'OK'
+          }).then(() => {
+            this.getAllCustomerList();
+          });
+          this.modalService.dismissAll();
+         
+        }
+      },
+      (error) => {
+        this.spinner.hide()
+        console.error("Error deleting customer:", error);
+        this.toastr.error("Failed to delete customer");
+      }
+    );
+  }
+    
    getAllCustomerList(){
      this.customerList = [];
+     this.spinner.show()
      this.service.getAllCustomerList().subscribe((res:any)=>{
        this.customerList = res.data
        console.log("this.customerList",this.customerList)
+       this.spinner.hide()
      },error =>{
      console.log("error",error)
+     this.spinner.hide();
      })
    }
    

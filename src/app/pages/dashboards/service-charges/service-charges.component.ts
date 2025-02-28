@@ -17,6 +17,7 @@ export class ServiceChargesComponent implements OnInit {
   chargesForm: FormGroup;
   allCharges: any[] = []; // Initialize as an empty array
   submit: boolean = false;
+  chargesUniqueId:number;
 
   constructor(
     private fb: FormBuilder,
@@ -46,9 +47,12 @@ export class ServiceChargesComponent implements OnInit {
     let data = {
       chargesName: this.chargesName.value.toUpperCase(),
     };
-
+    this.spinner.show()
     this.service.SaveCharges(data).subscribe((res: any) => {
+      this.spinner.hide()
+
       if (res.status === 200) {
+
         this.getAllCharges(); // Refresh the list after saving
         this.chargesForm.reset(); // Reset the form
           Swal.fire({
@@ -65,14 +69,59 @@ export class ServiceChargesComponent implements OnInit {
     }, error => {
       this.toastr.error('An error occurred while saving the charge.');
       console.error("Error saving charge:", error);
+      this.spinner.hide()
+
     });
+  
   }
+  
+  delete(charge): void {
+    console.log('Deleting Customer with ID:',charge);
+    this.chargesUniqueId= null
+  this.chargesUniqueId = charge.chargesUniqueId
+    let deletePayload = {
+      globalId: this.chargesUniqueId,
+      screenName: "charges"
+    };
+  
+    console.log("Delete payload:", deletePayload);
+  this.spinner.show()
+    this.service.deteleGlobal(deletePayload).subscribe((res: any) => {
+        console.log("deleteGlobal response:", res);
+        this.spinner.hide()
+        if (res.status === 400) {
+          this.toastr.error(res.message);
+        } else {
+          Swal.fire({
+            title: 'succes',
+            text: res.message,
+            icon: 'success',
+            confirmButtonText: 'OK'
+          }).then(() => {
+            this.getAllCharges();
+          });
+          // this.modalService.dismissAll();
+         
+        }
+      },
+      (error) => {
+        this.spinner.hide()
+        console.error("Error deleting customer:", error);
+        this.toastr.error("Failed to delete customer");
+      }
+    );
+  }
+ 
 
   getAllCharges() {
+    this.spinner.show()
     this.service.getAllCharges().subscribe((res: any) => {
       this.allCharges = res.data; // Update the allCharges array with the fetched data
+      this.spinner.hide()
     }, error => {
       console.error("Error fetching charges:", error);
+      this.spinner.hide()
+
     });
   }
 }
