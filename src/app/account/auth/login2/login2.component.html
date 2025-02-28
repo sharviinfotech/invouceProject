@@ -85,24 +85,18 @@
 
 
  -->
- <div class="container-fluid d-flex align-items-center justify-content-center vh-100 loginBody" >
-    <!-- <img src="assets/images/seabeach.jpg" alt="Aircraft Logo" class="aircraft-logo mb-3"> -->
-    
-    
+ <div class="container-fluid d-flex align-items-center justify-content-center vh-100 loginBody">
     <div class="card custom-card">
         <div class="row g-0 h-100">
-            <!-- Image Section -->
             <div class="col-md-8 image-section d-none d-md-flex">
                 <div class="image-container">
                     <img [src]="images[currentIndex]" alt="Image Slide" class="background-img">
                 </div>
             </div>
 
-            <!-- Login Form Section -->
             <div class="col-md-4 form-section d-flex align-items-center justify-content-center rightCard">
                 <div class="p-1 w-100">
                     <div class="text-center">
-                    
                         <img src="assets/images/AircraftFlight.png" alt="Aircraft Logo" class="aircraft-logo mb-3">
                     </div>
 
@@ -144,7 +138,6 @@
                         </div>
                     </form>
 
-                    
                     <form *ngIf="isForgotPassword" [formGroup]="forgotPasswordForm" (ngSubmit)="onForgotPasswordSubmit()">
                         <div class="mb-3">
                             <label for="email" style="color: white !important;">Enter your Email</label>
@@ -163,9 +156,6 @@
 
                     <div class="text-center mt-3 text-white">
                         <p>© {{2025}} Sharviinfotech. All Rights Reserved</p>
-                        <!-- <div class="marquee-text">© {{2025}} Sharviinfotech. All Rights Reserved</div> -->
-
-
                     </div>
                 </div>
             </div>
