@@ -7618,5 +7618,379 @@ background-image: linear-gradient(to right, #7e22ce, #2563eb);
       }, 500);
     }
   }
+  generateInvoiceHTMLTax4(invoiceItem: InvoiceItem) {
+    this.logoUrl = this.imageService.getBase64FlightLogo();
+    this.InvoiceLogo = this.imageService.getBase64WorldLogo();
+    this.signature = this.imageService.getBase64Signature();
+  
+    const invoiceHTML = `
+      
+  <html lang="en">
+  <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>GST Invoice</title>
+      <style>
+          body { font-family: Arial, sans-serif; margin: 0; padding: 20px; }
+          .invoice-container1 { width: 80%; margin: auto; background-color: white; padding: 5px; border: 1px solid #ddd; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); box-sizing: border-box;  }
+               .orange-background {
+          background-color: rgb(206, 205, 213) !important;
+          color: black !important;
+          -webkit-print-color-adjust: exact;
+          print-color-adjust: exact;
+           text-align:center;
+      }
+   
+   
+       .header-section {
+     display: flex;
+     justify-content: space-between;
+     align-items: center;
+     margin-bottom: 10px;
+      border: 1px solid #ddd;
+   }
+  
+   .header-section .logo {
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+     width:558px;
+   }
+  
+   .header-section .left-logo,
+   .header-section .right-logo {
+     width: 112px;* Adjust as needed */
+   }
+     
+  .details-container {
+      display: flex;
+      gap: 10px;
+  }
+  
+  .company-details, .invoice-info {
+      width: 50%;
+      background: #f8f9fa;
+      padding: 15px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+  }
+  
+   .header-section img {
+     max-width: 100%;
+     height: auto;
+   }
+          .company-details, .bill-to, .invoice-info {
+              margin-bottom: 12px;
+              border: 1px solid #ddd;
+               background: #f8f9fa;
+          }
+          .company-details p, .bill-to p, .invoice-info p {
+              margin: 5px 0;
+          }
+          table {
+              width: 100%;
+              border-collapse: collapse;
+              margin-bottom: 9px;
+          }
+          table, th, td {
+              border: 1px solid #ddd;
+          }
+          th, td {
+              padding: 10px;
+              text-align: end;
+          }
+          th {
+              background-color: #f9f9f9;
+          }
+          .totals {
+              display: flex;
+              justify-content: space-between;
+              margin-bottom: 20px;
+          }
+          .amount-words, .summary {
+              width: 48%;
+          }
+          .footer {
+              text-align: end;
+              margin-top: 20px;
+          }
+              .tax-list {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #ddd;
+    padding: 10px;
+  }
+  
+  .tax-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 5px 0;
+    border-bottom: 1px solid #eee;
+  }
+  
+  .tax-description {
+    flex: 1;
+  }
+    .amount-container {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .amount-words, .terms-conditions {
+    width: 100%; /* Ensure full width */
+    margin-bottom: 10px; /* Add spacing between them */
+  }
+  
+  
+  .tax-amount {
+    flex: 0.3;
+    text-align: right;
+  }
+    @media print {
+     body { font-family: Arial, sans-serif; margin: 0; padding: 20px; }
+          .invoice-container1 { width: 80%; margin: auto; background-color: white; padding: 20px; border: 1px solid #ddd; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); box-sizing: border-box;  }
+               .orange-background {
+          background-color: rgb(206, 205, 213) !important;
+          color: black !important;
+          -webkit-print-color-adjust: exact;
+          print-color-adjust: exact;
+           text-align:center;
+      }
+   
+   
+     .header-section {
+     display: flex;
+     justify-content: space-between;
+     align-items: center;
+     margin-bottom: 10px;
+      border: 1px solid #ddd;
+   }
+   .header-section img {
+     max-width: 100%;
+     height: auto;
+   }
+   .header-section .logo {
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+     width:558px;
+   }
+  
+   .header-section .left-logo,
+   .header-section .right-logo {
+     width: 112px;* Adjust as needed */
+   }
+      .amount-container {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .amount-words, .terms-conditions {
+    width: 100%; /* Ensure full width */
+    margin-bottom: 10px; /* Add spacing between them */
+  }
+  
+  
+  
+     
+  .details-container {
+      display: flex;
+      gap: 10px;
+  }
+  
+  .company-details, .invoice-info {
+      width: 50%;
+      background: #f8f9fa;
+      padding: 15px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+  }
+  
+  
+          .company-details, .bill-to, .invoice-info {
+              margin-bottom: 12px;
+              border: 1px solid #ddd;
+               background: #f8f9fa;
+          }
+          .company-details p, .bill-to p, .invoice-info p {
+              margin: 5px 0;
+          }
+          table {
+              width: 100%;
+              border-collapse: collapse;
+              margin-bottom: 9px;
+          }
+          table, th, td {
+              border: 1px solid #ddd;
+          }
+          th, td {
+              padding: 10px;
+              text-align: end;
+          }
+          th {
+              background-color: #f9f9f9;
+          }
+          .totals {
+              display: flex;
+              justify-content: space-between;
+              margin-bottom: 20px;
+          }
+          .amount-words, .summary {
+              width: 48%;
+          }
+          .footer {
+              text-align: end;
+              margin-top: 20px;
+          }
+              .tax-list {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #ddd;
+    padding: 10px;
+  }
+  
+  .tax-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 5px 0;
+    border-bottom: 1px solid #eee;
+  }
+  
+  .tax-description {
+    flex: 1;
+  }
+  
+  .tax-amount {
+    flex: 0.3;
+    text-align: right;
+  }
+  }
+  
+      </style>
+  </head>
+  <body>
+     
+     <div class="header-section">
+             <div class="logo left-logo"><img src="${this.logoUrl}" alt="Invoice Logo"></div>
+        <div class="logo"><h3>RITHWIK GREEN POWER & AVIATION PRIVATE LIMITED</h3></div>
+              <div class="logo right-logo"><img src="${this.InvoiceLogo}" alt="Company Logo"></div>
+      </div>
+  
+     
+      <div class="orange-background">${invoiceItem.proformaCardHeaderName}</div>
+      <div class="bill-section">
+      <div class="bill-to">
+          <p><b>To:</b></p>
+          <p><b>Customer Name:</b> ${invoiceItem.header.ProformaCustomerName}</p>
+          <p><b>Address:</b> ${invoiceItem.header.ProformaAddress}</p>
+          <p><b>City - State - Pincode:</b> ${invoiceItem.header.ProformaCity} - ${invoiceItem.header.ProformaState} - ${invoiceItem.header.ProformaPincode}</p>
+          <p><b>PAN No.:</b> ${invoiceItem.header.ProformaPan}</p>
+          <p><b>GST NO:</b> ${invoiceItem.header.ProformaGstNo}</p>
+      </div>
+  
+      <div class="details-container">
+          <div class="company-details">
+              <p><b>From:</b></p>
+              <p><b>PAN NO:</b> ${invoiceItem.header.ProformaPanNO}</p>
+              <p><b>GST NO:</b> ${invoiceItem.header.ProformaGstNumber}</p>
+              <p><b>Type Of Aircraft:</b> ${invoiceItem.header.ProformaTypeOfAircraft}</p>
+              <p><b>Seating Capacity:</b> ${invoiceItem.header.ProformaSeatingCapasity}</p>
+          </div>
+  
+          <div class="invoice-info">
+              <p><b>Invoice No.:</b> ${invoiceItem.invoiceUniqueNumber}</p>
+              <p><b>Date:</b> ${invoiceItem.header.ProformaInvoiceDate}</p>
+          </div>
+      </div>
+  </div>
+  
+  
+      <table>
+          <thead>
+              <tr>
+                  <th>S.NO</th>
+                  <th>Description</th>
+                  <th>Units</th>
+                  <th>Rate</th>
+                  <th>Amount</th>
+              </tr>
+          </thead>
+         <tbody>
+               <tr>
+                <td>1</td>
+                <td class="bold">Charges</td>
+                <td class="text-right"></td>
+                <td class="text-right"></td>
+                <td></td>
+              </tr>
+                  ${invoiceItem.chargesList.map((charge, index) => `
+                    <tr>
+                     
+                       <td class="text-center"></td>
+                      <td>${charge.description}</td>
+                      <td class="text-center">${charge.units ? charge.units : ''}</td>
+                      <td class="text-right">${charge.rate}</td>
+                      <td class="text-right">${charge.amount}</td>
+                    </tr>
+                  `).join('')}
+                 
+                  <tr>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                    <td  class="text-right bold" style="background-color: rgb(181, 179, 200);">Total</td>
+                    <td class="text-right bold"  style="background-color: rgb(181, 179, 200);">${invoiceItem.subtotal}</td>
+                  </tr>
+                  <tr>
+                </tbody>
+              </table>
+  
+      <div class="totals">
+          <div class="amount-words">
+              <p><b>Amount in words:</b>${invoiceItem.amountInWords}</p>
+          </div>
+          <div class="terms-conditions">
+            <label>Note:</label>
+            <textarea [(ngModel)]="invoiceItem.header.notes"></textarea>
+          </div>
+          <div class="summary">
+              
+  
+              <div class="tax-list">
+                       ${invoiceItem.taxList.map(tax => `
+                      <div class="tax-item">
+                      <div class="tax-description">${tax.description}</div>
+                      <div class="tax-amount text-right">${tax.amount}</div>
+                    </div>
+                  `).join('')}
+               </div>
+  
+             
+              <p><b>Total Invoice Amount:</b> ₹ ${invoiceItem.grandTotal}</p>
+             
+          </div>
+      </div>
+  
+      <div class="footer">
+        <div> 
+          <img src="${this.signature}" alt="Company Logo" class="logo"></div>
+           Authorised Signatory
+                 
+        </div>
+      </div>
+  </body>
+  </html>
+    `;
+  
+    const newWindow = window.open('', '', 'height=600,width=800');
+    if (newWindow) {
+        newWindow.document.write(invoiceHTML);
+        newWindow.document.close();
+  
+        setTimeout(() => {
+            newWindow.print();
+        }, 500);
+    }
+  }
  
 }
