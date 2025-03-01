@@ -129,7 +129,7 @@
   
       <form *ngIf="isForgotPassword" [formGroup]="forgotPasswordForm" (ngSubmit)="onForgotPasswordSubmit()">
         <div class="mb-3">
-          <label for="email" style="display: block; color: black; margin-bottom: 5px;">Enter your Email</label>
+          <label for="email" style="display: block; color: black; margin-bottom: 5px;">Email</label>
           <input type="email" style="width: calc(100% - 18px); padding: 8px; border: 2px solid rgba(255, 255, 255, 0.3); background-color: rgba(255, 255, 255, 0.1); color:black;font-size: 14px;font-weight: 500; box-sizing: border-box;" class="form-control" formControlName="email" placeholder="Enter your email">
           <div class="text-danger" *ngIf="submittedForgot && gForgot['email'].errors">
             Valid email is required.

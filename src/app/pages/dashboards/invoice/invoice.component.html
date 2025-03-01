@@ -138,7 +138,7 @@
 </ng-select>
                 </div>
                 <div class="text-danger" style="color: red;"
-                  *ngIf="newInvoiceCreation.get('PQInvoiceNumber')?.hasError('required') && newInvoiceCreation.get('PQInvoiceNumber')?.touched">
+                  *ngIf="newInvoiceCreation.get('PQInvoiceNumber')?.hasError('required') && newInvoiceCreation.get('PQInvoiceNumber')?.touched && submited">
                   Proforma Invoice NUmber is required.
                 </div>
               </div>
@@ -159,7 +159,7 @@
 </ng-select>
                 </div>
                 <div class="text-danger" style="color: red;"
-                  *ngIf="newInvoiceCreation.get('ProformaCustomerName')?.hasError('required') && newInvoiceCreation.get('ProformaCustomerName')?.touched">
+                  *ngIf="newInvoiceCreation.get('ProformaCustomerName')?.hasError('required') && newInvoiceCreation.get('ProformaCustomerName')?.touched && submited">
                   Customer Name is required.
                 </div>
               </div>
@@ -169,7 +169,7 @@
                   <input type="text" formControlName="ProformaAddress" placeholder="" (input)="convertToUppercase($event)" >
                 </div>
                 <div class="text-danger"
-                  *ngIf="newInvoiceCreation.get('ProformaAddress')?.hasError('required') && newInvoiceCreation.get('ProformaAddress')?.touched">
+                  *ngIf="newInvoiceCreation.get('ProformaAddress')?.hasError('required') && newInvoiceCreation.get('ProformaAddress')?.touched && submited">
                   Address is required.
                 </div>
               </div>
@@ -179,7 +179,7 @@
                   <input type="text" formControlName="ProformaCity" placeholder="" (input)="convertToUppercase($event)" >
                 </div>
                 <div class="text-danger"
-                  *ngIf="newInvoiceCreation.get('ProformaCity')?.hasError('required') && newInvoiceCreation.get('ProformaCity')?.touched">
+                  *ngIf="newInvoiceCreation.get('ProformaCity')?.hasError('required') && newInvoiceCreation.get('ProformaCity')?.touched && submited">
                   city name is required.
                 </div>
               </div>
@@ -193,7 +193,7 @@
                   </select>
                 </div>
                 <div class="text-danger"
-                  *ngIf="newInvoiceCreation.get('ProformaState')?.hasError('required') && newInvoiceCreation.get('ProformaState')?.touched">
+                  *ngIf="newInvoiceCreation.get('ProformaState')?.hasError('required') && newInvoiceCreation.get('ProformaState')?.touched && submited">
                   state is required.
                 </div>
               </div>
@@ -210,7 +210,7 @@
                     (keypress)="restrictToNumbers($event)"
                   />
                   <div class="text-danger"
-                    *ngIf="newInvoiceCreation.get('ProformaPincode')?.hasError('required') && newInvoiceCreation.get('ProformaPincode')?.touched">
+                    *ngIf="newInvoiceCreation.get('ProformaPincode')?.hasError('required') && newInvoiceCreation.get('ProformaPincode')?.touched && submited">
                     Pincode is required.
                   </div>
                   <div class="text-danger"
@@ -226,7 +226,7 @@
                   <input type="text" formControlName="ProformaGstNo" placeholder="" (input)="convertToUppercase($event)" >
                 </div>
                 <div class="text-danger"
-                  *ngIf="newInvoiceCreation.get('ProformaGstNo')?.hasError('required') && newInvoiceCreation.get('ProformaGstNo')?.touched">
+                  *ngIf="newInvoiceCreation.get('ProformaGstNo')?.hasError('required') && newInvoiceCreation.get('ProformaGstNo')?.touched && submited">
                   GST No is required.
                 </div>
               </div>
@@ -236,12 +236,12 @@
                   <input id="ProformaPanNO" type="text" formControlName="ProformaPanNO" maxlength="10"
                     placeholder="Enter PAN NO (e.g., ABCD1234E)" (input)="convertToUppercase($event)" />
                   <div
-                    *ngIf="newInvoiceCreation.get('ProformaPanNO')?.hasError('pattern') && newInvoiceCreation.get('ProformaPanNO')?.touched">
+                    *ngIf="newInvoiceCreation.get('ProformaPanNO')?.hasError('pattern') && newInvoiceCreation.get('ProformaPanNO')?.touched && submited">
                     PAN number must be in the format: 4 capital letters, 4 numbers, and 1 capital letter (e.g.,
                     ABCD1234E).
                   </div>
                   <div class="text-danger"
-                    *ngIf="newInvoiceCreation.get('ProformaPanNO')?.hasError('required') && newInvoiceCreation.get('ProformaPanNO')?.touched">
+                    *ngIf="newInvoiceCreation.get('ProformaPanNO')?.hasError('required') && newInvoiceCreation.get('ProformaPanNO')?.touched && submited">
                     PAN number is required.
                   </div>
 
@@ -262,7 +262,7 @@
                     class="form-control form-control-sm" [bsConfig]="bsConfig" bsDatepicker />
                 </div>
                 <div class="text-danger"
-                  *ngIf="newInvoiceCreation.get('ProformaInvoiceDate')?.hasError('required') && newInvoiceCreation.get('ProformaInvoiceDate')?.touched">
+                  *ngIf="newInvoiceCreation.get('ProformaInvoiceDate')?.hasError('required') && newInvoiceCreation.get('ProformaInvoiceDate')?.touched && submited">
                   Date is required.
                 </div>
               </div>
@@ -272,12 +272,12 @@
                   <input id="ProformaPanNumber" type="text" formControlName="ProformaPan" maxlength="10"
                     placeholder="Enter PAN Number (e.g., ABCD1234E)" (input)="convertToUppercase($event)" />
                   <div
-                    *ngIf="newInvoiceCreation.get('ProformaPan')?.hasError('pattern') && newInvoiceCreation.get('ProformaPan')?.touched">
+                    *ngIf="newInvoiceCreation.get('ProformaPan')?.hasError('pattern') && newInvoiceCreation.get('ProformaPan')?.touched && submited">
                     PAN number must be in the format: 4 capital letters, 4 numbers, and 1 capital letter (e.g.,
                     ABCD1234E).
                   </div>
                   <div class="text-danger"
-                    *ngIf="newInvoiceCreation.get('ProformaPan')?.hasError('required') && newInvoiceCreation.get('ProformaPan')?.touched">
+                    *ngIf="newInvoiceCreation.get('ProformaPan')?.hasError('required') && newInvoiceCreation.get('ProformaPan')?.touched && submited">
                     PAN number is required.
                   </div>
                 </div>
@@ -288,7 +288,7 @@
                   <input type="text" formControlName="ProformaGstNumber" class="form-control" placeholder="" (input)="convertToUppercase($event)" >
                 </div>
                 <div class="text-danger"
-                  *ngIf="newInvoiceCreation.get('ProformaGstNumber')?.hasError('required') && newInvoiceCreation.get('ProformaGstNumber')?.touched">
+                  *ngIf="newInvoiceCreation.get('ProformaGstNumber')?.hasError('required') && newInvoiceCreation.get('ProformaGstNumber')?.touched && submited">
                   GST No is required.
                 </div>
               </div>
@@ -298,7 +298,7 @@
                   <input type="text" formControlName="proformatypeOfAircraft" class="form-control" placeholder="" (input)="convertToUppercase($event)" >
                 </div>
                 <div class="text-danger"
-                  *ngIf="newInvoiceCreation.get('proformatypeOfAircraft')?.hasError('required') && newInvoiceCreation.get('proformatypeOfAircraft')?.touched">
+                  *ngIf="newInvoiceCreation.get('proformatypeOfAircraft')?.hasError('required') && newInvoiceCreation.get('proformatypeOfAircraft')?.touched && submited">
                   Type of Aircraft is required.
                 </div>
               </div>
@@ -314,7 +314,7 @@
                 />
             </div>
                 <div class="text-danger"
-                  *ngIf="newInvoiceCreation.get('proformaseatingcapasity')?.hasError('required') && newInvoiceCreation.get('proformaseatingcapasity')?.touched">
+                  *ngIf="newInvoiceCreation.get('proformaseatingcapasity')?.hasError('required') && newInvoiceCreation.get('proformaseatingcapasity')?.touched && submited">
                   Seating Capasity is required.
                 </div>
               </div>
@@ -345,7 +345,7 @@
                 <input type="text" placeholder="Date" formControlName="startBookingDateOfJourny"
                 class="form-control form-control-sm" [bsConfig]="bsConfig" bsDatepicker  (input)="convertToUppercase($event)"/>
                 <div class="text-danger"
-                *ngIf="newInvoiceCreation.get('startBookingDateOfJourny')?.hasError('required') && newInvoiceCreation.get('startBookingDateOfJourny')?.touched">
+                *ngIf="newInvoiceCreation.get('startBookingDateOfJourny')?.hasError('required') && newInvoiceCreation.get('startBookingDateOfJourny')?.touched && submited">
                 Start Date  is required.
               </div>
                </div>
@@ -355,7 +355,7 @@
                 <input type="text" placeholder="Date" formControlName="endBookingDateOfJourny"
                 class="form-control form-control-sm" [bsConfig]="bsConfig" bsDatepicker  (input)="convertToUppercase($event)"/>
                 <div class="text-danger"
-                *ngIf="newInvoiceCreation.get('endBookingDateOfJourny')?.hasError('required') && newInvoiceCreation.get('endBookingDateOfJourny')?.touched">
+                *ngIf="newInvoiceCreation.get('endBookingDateOfJourny')?.hasError('required') && newInvoiceCreation.get('endBookingDateOfJourny')?.touched && submited">
                 End Date  is required.
               </div>
                </div>
@@ -371,7 +371,7 @@
                 (input)="updateChargeItem(0, 'description', $event.target.value);convertToUppercase($event)">
               </div>
               <div class="text-danger"
-                *ngIf="newInvoiceCreation.get('bookingsector')?.hasError('required') && newInvoiceCreation.get('bookingsector')?.touched">
+                *ngIf="newInvoiceCreation.get('bookingsector')?.hasError('required') && newInvoiceCreation.get('bookingsector')?.touched && submited">
                 Sector is required.
               </div>
             </div>
@@ -383,7 +383,7 @@
                 (input)="updateChargeItem(0, 'units', $event.target.value)">
               </div>
               <div class="text-danger"
-                *ngIf="newInvoiceCreation.get('bookingbillingflyingtime')?.hasError('required') && newInvoiceCreation.get('bookingbillingflyingtime')?.touched">
+                *ngIf="newInvoiceCreation.get('bookingbillingflyingtime')?.hasError('required') && newInvoiceCreation.get('bookingbillingflyingtime')?.touched && submited">
                 Billing Flying Time is required.
               </div>
 
@@ -557,7 +557,7 @@
                   placeholder="Notes - any relevant information not covered, additional terms and conditions" (input)="convertToUppercase($event)"></textarea>
               </div>
               <div class="text-danger"
-                  *ngIf="newInvoiceCreation.get('notes')?.hasError('required') && newInvoiceCreation.get('notes')?.touched">
+                  *ngIf="newInvoiceCreation.get('notes')?.hasError('required') && newInvoiceCreation.get('notes')?.touched && submited">
                   Notes is required.
                 </div>
             </div>

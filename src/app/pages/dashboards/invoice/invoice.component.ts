@@ -67,13 +67,14 @@ export class InvoiceComponent implements OnInit {
   PQList: any;
   pqSameforTAX: number;
   selectedPQUniqueId: any;
+  submited: boolean=false;
   toggleDropdown() {
     this.isDropdownOpen = !this.isDropdownOpen;
    
   }
   selectInvoiceType(type){
     this.resetAll()
-
+    this.submited = false
     this.proformaCardHeaderId = null
     this.proformaCardHeaderName = null
     this.proformaCardHeaderId = type
@@ -800,6 +801,7 @@ if(this.InvoiceLogo== ''|| this.InvoiceLogo == null){
       // branch:"",
       // ifscCode:"" 
     })
+    this.submited = false
     setTimeout(() => {
       this.spinner.hide()
       console.log("enter into new or all spinner")
@@ -980,11 +982,41 @@ convertUnitsToHours(units: string | null): number {
     
 
     console.log('this.newInvoiceCreation', this.newInvoiceCreation.invalid);
-    if (this.newInvoiceCreation.invalid == true) {
+    if (this.newInvoiceCreation.invalid) {
       console.log('this.newInvoiceCreation', this.newInvoiceCreation);
+      this.submited = true; // Ensure it's set before checking invalid fields
       this.newInvoiceCreation.markAllAsTouched();
-
-    } else {
+    
+      // Find the first invalid control and focus on it
+      for (const key of Object.keys(this.newInvoiceCreation.controls)) {
+        if (this.newInvoiceCreation.controls[key].invalid) {
+          setTimeout(() => {
+            let invalidControl = document.querySelector(`[formControlName="${key}"]`);
+    
+            if (invalidControl) {
+              const ngSelectInput = invalidControl.querySelector('input'); // Get the input inside ng-select
+              if (ngSelectInput) {
+                ngSelectInput.focus(); // Focus the input inside ng-select
+              } else {
+                (invalidControl as HTMLElement).focus(); // Default focus for normal fields
+              }
+            }
+          }, 0); // Small delay to ensure the DOM updates
+          break; // Stop after focusing on the first invalid field
+        }
+      }
+    }
+   else if(this.chargeItems.length == 0){
+     console.log("this.chargeItems.length",this.chargeItems.length)
+    //  this.toaster.warning("Please Add Charges In Table")
+     Swal.fire({
+      text:"Please Add Charges In Table",
+      icon: 'warning',
+      showConfirmButton: true
+    });
+     return
+    }
+    else {
       console.log('Invoice Saved', this.newInvoiceCreation.value);
       let invoiceDate = this.newInvoiceCreation.value.ProformaInvoiceDate;
       let startBookingDate = this.newInvoiceCreation.value.startBookingDateOfJourny;
@@ -1087,9 +1119,10 @@ if (
       this.spinner.show()
       this.service.CreateInvoice(createobj).subscribe((response: any) => {
         console.log("CreateInvoice", response);
-        this.spinner.hide()
+       
         const resp = response.data;
-        if (resp) {
+        if (resp.status === 200 && resp.data) {
+          
           this.getAllInvoice()
           this.getAllCharges(); 
 
@@ -1108,6 +1141,7 @@ if (
             icon: 'success',
             showConfirmButton: true
           });
+          this.spinner.hide()
 
         } else {
           this.spinner.hide()

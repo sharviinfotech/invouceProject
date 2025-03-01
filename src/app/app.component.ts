@@ -17,17 +17,17 @@ export class AppComponent implements OnInit {
   data: any[] = []
   constructor(private spinner: NgxSpinnerService,private sessionService:SessionServiceService,private notificationService: NotificationService,private service:GeneralserviceService) {}
   ngOnInit() {
-    this.spinner.show(undefined, {
-      type: 'square-jelly-box',
-      size: 'medium',
-      bdColor: 'rgba(0, 0, 0, 0.8)',
-      color: '#fff',
-      fullScreen: true
-    });
+    // this.spinner.show(undefined, {
+    //   type: 'square-jelly-box',
+    //   size: 'medium',
+    //   bdColor: 'rgba(0, 0, 0, 0.8)',
+    //   color: '#fff',
+    //   fullScreen: true
+    // });
 
-    setTimeout(() => {
-      this.spinner.hide();
-    }, 1000);
+    // setTimeout(() => {
+    //   this.spinner.hide();
+    // },5000);
   //   setInterval(() => 
   //     this.fetchData(), 5000
   // ); // Check API every 5 seconds
