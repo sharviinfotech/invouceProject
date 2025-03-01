@@ -151,6 +151,7 @@ var extractedNumber
   console.log("Extracted Number:", extractedNumber);
   this.pqSameforTAX = extractedNumber,
   this.selectedPQUniqueId = event.originalUniqueId
+  this.pathPQDataToTAX(event);
 }
 
 
@@ -628,6 +629,65 @@ spinnerHideMethod(){
 
 
   }
+  pathPQDataToTAX(invoice) {
+   
+    this.spinnerHideMethod()
+    this.selectedInvoice = null
+    this.selectedInvoice = invoice;
+    console.log("this.selectedInvoice",this.selectedInvoice)
+    this.newInvoiceCreation.patchValue({
+      // invoiceHeader: this.selectedInvoice.header.invoiceHeader,
+      ProformaCustomerName: this.selectedInvoice.header.ProformaCustomerName,
+      ProformaAddress: this.selectedInvoice.header.ProformaAddress,
+      ProformaCity: this.selectedInvoice.header.ProformaCity,
+      ProformaState: this.selectedInvoice.header.ProformaState,
+      ProformaPincode: this.selectedInvoice.header.ProformaPincode,
+      ProformaGstNo: this.selectedInvoice.header.ProformaGstNo,
+      ProformaPanNO: this.selectedInvoice.header.ProformaPanNO,
+      // ProformaInvoiceNumber: this.selectedInvoice.invoiceUniqueNumber,
+      ProformaInvoiceDate: this.selectedInvoice.header.ProformaInvoiceDate,
+      ProformaPan: this.selectedInvoice.header.ProformaPan,
+      ProformaGstNumber: this.selectedInvoice.header.ProformaGstNumber,
+      proformatypeOfAircraft: this.selectedInvoice.header.ProformaTypeOfAircraft,
+      proformaseatingcapasity: this.selectedInvoice.header.ProformaSeatingCapasity,
+      notes: this.selectedInvoice.header.notes,
+      startBookingDateOfJourny: this.selectedInvoice.header.startBookingDateOfJourny,
+      endBookingDateOfJourny: this.selectedInvoice.header.endBookingDateOfJourny,
+      bookingsector: this.selectedInvoice.header.BookingSector,
+      bookingbillingflyingtime: this.selectedInvoice.header.BookingBillingFlyingTime,
+      // accountName: this.selectedInvoice.bankDetails.accountName,
+      // bankname: this.selectedInvoice.bankDetails.bank,
+      // accountNumber: this.selectedInvoice.bankDetails.accountNumber,
+      // branch:this.selectedInvoice.bankDetails.branch,
+      // ifscCode:this.selectedInvoice.bankDetails.ifscCode 
+      
+    })
+
+    this.chargeItems = this.selectedInvoice.chargesList;
+    this.taxItems = this.selectedInvoice.taxList;
+    this.subtotal = this.selectedInvoice.subtotal;
+    this.grandTotal = this.selectedInvoice.grandTotal
+    this.amountInWords = this.selectedInvoice.amountInWords
+    this.logoUrl = this.selectedInvoice.header.invoiceImage
+    this.InvoiceLogo = this.selectedInvoice.header.invoiceHeader
+    this.reSubmitInvoiceStatus =this.selectedInvoice.status 
+    this.reason =this.selectedInvoice.reason ,
+    this.invoiceApprovedOrRejectedByUser =this.selectedInvoice.invoiceApprovedOrRejectedByUser ,
+    this.invoiceApprovedOrRejectedDateAndTime =this.selectedInvoice.invoiceApprovedOrRejectedDateAndTime,
+    // this.proformaCardHeaderId = this.selectedInvoice.proformaCardHeaderId,
+    // this.proformaCardHeaderName  =this.selectedInvoice.proformaCardHeaderName 
+    this.reviewedFlag = this.selectedInvoice.reviewed
+if(this.logoUrl == ''|| this.logoUrl == null){
+  this.logoUrl = this.imageService.getBase64FlightLogo(); 
+}
+if(this.InvoiceLogo== ''|| this.InvoiceLogo == null){
+  this.InvoiceLogo = this.imageService.getBase64WorldLogo(); 
+
+}
+    console.log("this.selectedInvoice.header.invoiceUniqueNumber", this.selectedInvoice.invoiceUniqueNumber)
+    console.log("this.newInvoiceCreation", this.newInvoiceCreation.value.ProformaInvoiceNumber)
+    this.pqSameforTAX = this.selectedInvoice.pqSameforTAX
+  }
   editRow(invoice) {
     this.reSubmitInvoiceStatus = null
     this.reason =null ,
@@ -864,7 +924,7 @@ if(this.InvoiceLogo== ''|| this.InvoiceLogo == null){
 
     this.grandTotal = this.subtotal + this.taxItems.reduce((sum, tax) => sum + (Number(tax.amount) || 0), 0);
 
-    this.amountInWords = this.numberToWordsService.convert(this.grandTotal).toUpperCase();
+    this.amountInWords = this.numberToWordsService.convert(Math.round(this.grandTotal)).toUpperCase();
 
     console.log("chargeItems", this.chargeItems);
     console.log("taxItems", this.taxItems);

@@ -365,7 +365,7 @@
             </div>
             <div class="col-lg-4 pt-4" style="border-left: 2px solid blue;">
               <div class="form-group">
-                <label>Sector</label>
+                <label>Sector<span class="text-danger">*</span></label>
                 <!-- <input type="text" formControlName="bookingsector" class="form-control" placeholder="" (input)="convertToUppercase($event)"> -->
                 <input type="text" formControlName="bookingsector" class="form-control"
                 (input)="updateChargeItem(0, 'description', $event.target.value);convertToUppercase($event)">
@@ -552,7 +552,7 @@
           <div class="row">
             <div class="col-lg-12">
               <div class="notes-section form-group">
-                <label>Notes</label>
+                <label>Notes<span class="text-danger">*</span></label>
                 <textarea formControlName="notes" class="form-control"
                   placeholder="Notes - any relevant information not covered, additional terms and conditions" (input)="convertToUppercase($event)"></textarea>
               </div>
@@ -886,7 +886,7 @@
               </div>
             </div>
             <div class="row">
-              <div class="col-lg-4">
+              <div class="col-lg-4" >
                 <div class="form-group">
                   <label>Invoice Number<span class="text-danger">*</span></label>
                   <input type="text" formControlName="ProformaInvoiceNumber" class="form-control" placeholder="INV0001" style="pointer-events: none; background-color: #f8f9fa; cursor: not-allowed;">
@@ -1003,7 +1003,7 @@
             </div>
             <div class="col-lg-4 pt-4" style="border-left: 2px solid blue;">
               <div class="form-group">
-                <label>Sector</label>
+                <label>Sector<span class="text-danger">*</span></label>
                 <!-- <input type="text" formControlName="bookingsector" class="form-control" placeholder="" (input)="convertToUppercase($event)"> -->
                 <input type="text" formControlName="bookingsector" class="form-control"
                 (input)="updateChargeItem(0, 'description', $event.target.value)">
@@ -1167,7 +1167,7 @@
     <div class="row">
       <div class="col-lg-12">
         <div class="notes-section form-group">
-          <label>Notes</label>
+          <label>Notes<span class="text-danger">*</span></label>
           <textarea id="notes" class="form-control"  formControlName="notes"
             placeholder="Notes - any relevant information not covered, additional terms and conditions"></textarea>
         </div>
