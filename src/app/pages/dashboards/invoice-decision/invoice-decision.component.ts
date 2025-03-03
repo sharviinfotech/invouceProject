@@ -5,8 +5,9 @@ import { GeneralserviceService } from 'src/app/generalservice.service';
 import { NgxPrintModule } from 'ngx-print';
 import Swal from 'sweetalert2';
 import { Component, ElementRef, TemplateRef, ViewChild, ViewEncapsulation } from '@angular/core';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ImageService } from 'src/app/image.service';
+import { GlobalReviewEditComponent } from '../../dashboards/global-review-edit/global-review-edit.component';
 import { NumberToWordsService } from 'src/app/number-to-words.service';
 
 interface TaxItem {
@@ -111,6 +112,7 @@ export class InvoiceDecisionComponent {
   showSharePopup: boolean = false;
   logoUrl: string;
   InvoiceLogo: string;
+   modalRef: NgbModalRef;
   signature: string;
   // reviewedDescription:any
   enableDescription: boolean=true;
@@ -199,63 +201,80 @@ export class InvoiceDecisionComponent {
   closeInvoice() {
     this.modalService.dismissAll(); 
   }
-  openEditPopup(invoice: any) {
-    this.selectedInvoice = null
-    this.selectedInvoice = invoice; 
-    this.activeTab = 'Edit';
-    console.log('Invoice data:', invoice);
-    this.newInvoiceCreation.patchValue({
-      // invoiceHeader: this.selectedInvoice.header.invoiceHeader,
-      ProformaCustomerName: this.selectedInvoice.header.ProformaCustomerName,
-      ProformaAddress: this.selectedInvoice.header.ProformaAddress,
-      ProformaCity: this.selectedInvoice.header.ProformaCity,
-      ProformaState: this.selectedInvoice.header.ProformaState,
-      ProformaPincode: this.selectedInvoice.header.ProformaPincode,
-      ProformaGstNo: this.selectedInvoice.header.ProformaGstNo,
-      ProformaPanNO: this.selectedInvoice.header.ProformaPanNO,
-      ProformaInvoiceNumber: this.selectedInvoice.invoiceUniqueNumber,
-      ProformaInvoiceDate: this.selectedInvoice.header.ProformaInvoiceDate,
-      ProformaPan: this.selectedInvoice.header.ProformaPan,
-      ProformaGstNumber: this.selectedInvoice.header.ProformaGstNumber,
-      proformatypeOfAircraft: this.selectedInvoice.header.ProformaTypeOfAircraft,
-      proformaseatingcapasity: this.selectedInvoice.header.ProformaSeatingCapasity,
-      notes: this.selectedInvoice.header.notes,
-      bookingdateOfjourny: this.selectedInvoice.header.BookingDateOfJourny,
-      bookingsector: this.selectedInvoice.header.BookingSector,
-      bookingbillingflyingtime: this.selectedInvoice.header.BookingBillingFlyingTime,
-      reviewedDescriptionEdit:  this.selectedInvoice.reviewedDescription,
-      // accountName: this.selectedInvoice.bankDetails.accountName,
-      // bankname: this.selectedInvoice.bankDetails.bank,
-      // accountNumber: this.selectedInvoice.bankDetails.accountNumber,
-      // branch:this.selectedInvoice.bankDetails.branch,
-      // ifscCode:this.selectedInvoice.bankDetails.ifscCode 
-    })
-
-    this.chargeItems = this.selectedInvoice.chargesList;
-    this.taxItems = this.selectedInvoice.taxList;
-    this.subtotal = this.selectedInvoice.subtotal;
-    this.grandTotal = this.selectedInvoice.grandTotal
-    this.amountInWords = this.selectedInvoice.amountInWords
-    this.logoUrl = this.selectedInvoice.header.invoiceImage
-    this.InvoiceLogo = this.selectedInvoice.header.invoiceHeader
-    this.reSubmitInvoiceStatus =this.selectedInvoice.status 
-    this.reason =this.selectedInvoice.reason ,
-    this.invoiceApprovedOrRejectedByUser =this.selectedInvoice.invoiceApprovedOrRejectedByUser ,
-    this.invoiceApprovedOrRejectedDateAndTime =this.selectedInvoice.invoiceApprovedOrRejectedDateAndTime,
-    this.proformaCardHeaderId = this.selectedInvoice.proformaCardHeaderId,
-    this.proformaCardHeaderName  =this.selectedInvoice.proformaCardHeaderName 
+    openGlobalReviewPopup(invoice: any) {
+      this.selectedInvoice = invoice;
     
-if(this.logoUrl == ''|| this.logoUrl == null){
-  this.logoUrl = this.imageService.getBase64FlightLogo(); 
-}
-if(this.InvoiceLogo== ''|| this.InvoiceLogo == null){
-  this.InvoiceLogo = this.imageService.getBase64WorldLogo(); 
+      // Open GlobalReviewEditComponent in a modal
+      this.modalRef = this.modalService.open(GlobalReviewEditComponent, {  backdrop: 'static', 
+        keyboard: false,size:'lg' });
+     
+    
+      // Pass data to the component
+      this.modalRef.componentInstance.invoiceData = this.selectedInvoice;
+    
+      // Handle modal close
+      this.modalRef.componentInstance.closeModal.subscribe(() => {
+        this.modalRef.close();
+      });
+    }
+  
+//   openEditPopup(invoice: any) {
+//     this.selectedInvoice = null
+//     this.selectedInvoice = invoice; 
+//     this.activeTab = 'Edit';
+//     console.log('Invoice data:', invoice);
+//     this.newInvoiceCreation.patchValue({
+//       // invoiceHeader: this.selectedInvoice.header.invoiceHeader,
+//       ProformaCustomerName: this.selectedInvoice.header.ProformaCustomerName,
+//       ProformaAddress: this.selectedInvoice.header.ProformaAddress,
+//       ProformaCity: this.selectedInvoice.header.ProformaCity,
+//       ProformaState: this.selectedInvoice.header.ProformaState,
+//       ProformaPincode: this.selectedInvoice.header.ProformaPincode,
+//       ProformaGstNo: this.selectedInvoice.header.ProformaGstNo,
+//       ProformaPanNO: this.selectedInvoice.header.ProformaPanNO,
+//       ProformaInvoiceNumber: this.selectedInvoice.invoiceUniqueNumber,
+//       ProformaInvoiceDate: this.selectedInvoice.header.ProformaInvoiceDate,
+//       ProformaPan: this.selectedInvoice.header.ProformaPan,
+//       ProformaGstNumber: this.selectedInvoice.header.ProformaGstNumber,
+//       proformatypeOfAircraft: this.selectedInvoice.header.ProformaTypeOfAircraft,
+//       proformaseatingcapasity: this.selectedInvoice.header.ProformaSeatingCapasity,
+//       notes: this.selectedInvoice.header.notes,
+//       bookingdateOfjourny: this.selectedInvoice.header.BookingDateOfJourny,
+//       bookingsector: this.selectedInvoice.header.BookingSector,
+//       bookingbillingflyingtime: this.selectedInvoice.header.BookingBillingFlyingTime,
+//       reviewedDescriptionEdit:  this.selectedInvoice.reviewedDescription,
+//       // accountName: this.selectedInvoice.bankDetails.accountName,
+//       // bankname: this.selectedInvoice.bankDetails.bank,
+//       // accountNumber: this.selectedInvoice.bankDetails.accountNumber,
+//       // branch:this.selectedInvoice.bankDetails.branch,
+//       // ifscCode:this.selectedInvoice.bankDetails.ifscCode 
+//     })
 
-}
-    console.log("this.selectedInvoice.header.invoiceUniqueNumber", this.selectedInvoice.invoiceUniqueNumber)
-    console.log("this.newInvoiceCreation", this.newInvoiceCreation.value.ProformaInvoiceNumber)
-    this.modalService.open(this.editForm, { size: 'xl' }); 
-}
+//     this.chargeItems = this.selectedInvoice.chargesList;
+//     this.taxItems = this.selectedInvoice.taxList;
+//     this.subtotal = this.selectedInvoice.subtotal;
+//     this.grandTotal = this.selectedInvoice.grandTotal
+//     this.amountInWords = this.selectedInvoice.amountInWords
+//     this.logoUrl = this.selectedInvoice.header.invoiceImage
+//     this.InvoiceLogo = this.selectedInvoice.header.invoiceHeader
+//     this.reSubmitInvoiceStatus =this.selectedInvoice.status 
+//     this.reason =this.selectedInvoice.reason ,
+//     this.invoiceApprovedOrRejectedByUser =this.selectedInvoice.invoiceApprovedOrRejectedByUser ,
+//     this.invoiceApprovedOrRejectedDateAndTime =this.selectedInvoice.invoiceApprovedOrRejectedDateAndTime,
+//     this.proformaCardHeaderId = this.selectedInvoice.proformaCardHeaderId,
+//     this.proformaCardHeaderName  =this.selectedInvoice.proformaCardHeaderName 
+    
+// if(this.logoUrl == ''|| this.logoUrl == null){
+//   this.logoUrl = this.imageService.getBase64FlightLogo(); 
+// }
+// if(this.InvoiceLogo== ''|| this.InvoiceLogo == null){
+//   this.InvoiceLogo = this.imageService.getBase64WorldLogo(); 
+
+// }
+//     console.log("this.selectedInvoice.header.invoiceUniqueNumber", this.selectedInvoice.invoiceUniqueNumber)
+//     console.log("this.newInvoiceCreation", this.newInvoiceCreation.value.ProformaInvoiceNumber)
+//     this.modalService.open(this.editForm, { size: 'xl' }); 
+// }
 resetAll() {
   // this.logoUrl = ""
   this.amountInWords = ""
@@ -2303,6 +2322,7 @@ resetAll() {
      
        // Implement update logic here
        let updateobj = {
+        
  
          "originalUniqueId": this.selectedInvoice.originalUniqueId,
          "header": {
@@ -2358,6 +2378,7 @@ resetAll() {
          const resp = response.updatedInvoice;
          if (resp) {
            this.getAllInvoice()
+           this.selectedInvoice.status = 'updated';
            // Reset form and related data
            this.newInvoiceCreation.reset();
            // this.logoUrl = '';

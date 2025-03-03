@@ -50,11 +50,13 @@
                            {{ invoice.status }}
                       </span>
                             
-                            <span *ngIf="invoice.status === 'Pending' && invoice.reviewedDescription" class="share-icon gap-2 d-flex"  >
+                            <span *ngIf="invoice.status === 'Pending' && invoice.reviewed == true" class="share-icon gap-2 d-flex"  >
                                 <i class="fas fa-eye" title="view" role="button" (click)="openSharePopup(invoice)"></i>  
-                                <i class="fa fa-edit" title="edit" role="button" (click)="openEditPopup(invoice)"></i>
+                                <!-- <i class="fa fa-edit" title="edit" role="button" (click)="openGlobalReviewPopup(invoice)" ></i> -->
+                                <i class="fa fa-edit" title="edit" role="button" (click)="openGlobalReviewPopup(invoice)" *ngIf="invoice.status !== 'updated'"></i>
+
                                 
-                                </span> 
+                            </span> 
                                 
                         </td>
                         <!-- New Actions Column -->
@@ -793,6 +795,9 @@
   </div>
 
 
+</ng-template>
+<ng-template>
+  <app-global-review-edit [childMessage]="parentMessage" (messageEvent)="receiveMessage(invoice)"></app-global-review-edit>
 </ng-template>
 
 
