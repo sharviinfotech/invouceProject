@@ -6,6 +6,7 @@ import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } 
 import { ToastrService } from 'ngx-toastr';
 import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
 import Swal from 'sweetalert2';
+import { ActivatedRoute } from '@angular/router';
 @Component({
   selector: 'app-service-charges',
   templateUrl: './service-charges.component.html',
@@ -18,13 +19,13 @@ export class ServiceChargesComponent implements OnInit {
   allCharges: any[] = []; // Initialize as an empty array
   submit: boolean = false;
   chargesUniqueId:number;
-
+  userRole: string = '';
   constructor(
     private fb: FormBuilder,
     private http: HttpClient,
     private service: GeneralserviceService,
     private toastr: ToastrService,
-    private spinner: NgxSpinnerService
+    private spinner: NgxSpinnerService,private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
@@ -32,6 +33,10 @@ export class ServiceChargesComponent implements OnInit {
       chargesName: ['', Validators.required]
     });
     this.getAllCharges(); // Fetch charges when the component initializes
+    this.route.queryParams.subscribe(params => {
+      this.userRole = params['role'];
+      console.log('User Role:', this.userRole);
+    });
   }
 
   get chargesName() {

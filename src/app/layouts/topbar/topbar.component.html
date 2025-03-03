@@ -538,7 +538,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let invoice of reviewedNotificationList" >
+          <tr *ngFor="let invoice of reviewedNotificationList" (click)="openGlobalReviewPopup(invoice)">
             <td>{{ invoice.invoiceUniqueNumber }}</td>
             <td>{{ invoice.header.ProformaInvoiceDate }}</td>
             <td>{{ invoice.header.ProformaCustomerName }}</td>
@@ -611,4 +611,9 @@
   </div>
 
 
+</ng-template>
+
+
+<ng-template>
+  <app-global-review-edit [childMessage]="parentMessage" (messageEvent)="receiveMessage(invoice)"></app-global-review-edit>
 </ng-template>

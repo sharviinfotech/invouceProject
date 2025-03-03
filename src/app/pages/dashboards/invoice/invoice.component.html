@@ -983,7 +983,7 @@
                 <input type="text" placeholder="Date" formControlName="startBookingDateOfJourny"
                 class="form-control form-control-sm" [bsConfig]="bsConfig" bsDatepicker  (input)="convertToUppercase($event)"/>
                 <div class="text-danger"
-                *ngIf="newInvoiceCreation.get('startBookingDateOfJourny')?.hasError('required') && newInvoiceCreation.get('startBookingDateOfJourny')?.touched">
+                *ngIf="newInvoiceCreation.get('startBookingDateOfJourny')?.hasError('required') && newInvoiceCreation.get('startBookingDateOfJourny')?.touched && submited">
                 Start Date  is required.
               </div>
                </div>
@@ -993,7 +993,7 @@
                 <input type="text" placeholder="Date" formControlName="endBookingDateOfJourny"
                 class="form-control form-control-sm" [bsConfig]="bsConfig" bsDatepicker  (input)="convertToUppercase($event)"/>
                 <div class="text-danger"
-                *ngIf="newInvoiceCreation.get('endBookingDateOfJourny')?.hasError('required') && newInvoiceCreation.get('endBookingDateOfJourny')?.touched">
+                *ngIf="newInvoiceCreation.get('endBookingDateOfJourny')?.hasError('required') && newInvoiceCreation.get('endBookingDateOfJourny')?.touched && submited">
                 End Date  is required.
               </div>
                </div>

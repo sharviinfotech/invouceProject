@@ -10,10 +10,14 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { NgxSpinnerModule } from 'ngx-spinner';
+import { ReviewNotificationComponent } from './review-notification/review-notification.component';
+// import { GlobalReviewEditComponent } from './global-review-edit/global-review-edit.component';
 
 @NgModule({
   declarations: [
     SampleComponentComponent,
+    // ReviewNotificationComponent,
+    // GlobalReviewEditComponent,
     // InvoiceUserCreationComponent,
     // InvoiceReportsComponent,
     // InvoiceComponent,

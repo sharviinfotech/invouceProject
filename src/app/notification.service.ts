@@ -1,13 +1,24 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { environment } from 'src/environments/environment';
+import { GeneralserviceService } from './generalservice.service';
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class NotificationService {
     private audio = new Audio('assets/Sounds/notification-2-269292.mp3'); // Adjusted path
+  loginData: any;
 
-    constructor() {
-      this.audio.load(); // Preload the audio
+    constructor(private http: HttpClient,private service:GeneralserviceService) {
+    
+      this.loginData= this.service.getLoginResponse()
+      console.log("this.loginData=",this.loginData)
+      if(this.loginData){
+        // this.audio.load(); // Preload the audio
+      }
+     
     }
   
     playNotificationSound() {
@@ -26,4 +37,8 @@ export class NotificationService {
         }
       });
     }
+     getAllNotification(){
+        return this.http.get(environment.baseUrl+'invoice/getAllNotification');
+     
+      }
 }

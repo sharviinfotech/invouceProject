@@ -14,6 +14,8 @@ import { InvoiceUserCreationComponent } from './invoice-user-creation/invoice-us
 import { InvoiceDecisionComponent } from './invoice-decision/invoice-decision.component';
 import { CustomerCreationComponent } from './customer-creation/customer-creation.component';
 import { ServiceChargesComponent } from './service-charges/service-charges.component';
+import { GlobalReviewEditComponent } from './global-review-edit/global-review-edit.component';
+import { ReviewNotificationComponent } from './review-notification/review-notification.component';
 
 const routes: Routes = [
     {
@@ -51,6 +53,14 @@ const routes: Routes = [
     {
         path: 'ServiceCharges',
         component: ServiceChargesComponent
+    },
+    {
+        path: 'globalReviewEdit',
+        component: GlobalReviewEditComponent
+    },
+    {
+        path: 'ReviewNotification',
+        component: ReviewNotificationComponent
     },
     // {
     //     path: 'saas',

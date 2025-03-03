@@ -1,5 +1,4 @@
 .delete-btn {
-    transform: translateY(-50%);
     background: red;
     color: white;
     border: none;
@@ -8,7 +7,6 @@
     border-radius: 3px;
   }
   .edit-btn{
-    transform: translateY(-50%);
     background: green;
     color: white;
     border: none;

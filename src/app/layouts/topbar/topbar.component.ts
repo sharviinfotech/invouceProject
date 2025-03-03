@@ -19,16 +19,16 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { ToastrService } from 'ngx-toastr';
 import Swal from 'sweetalert2';
 import { NotificationService } from 'src/app/notification.service';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { NgxSpinnerService } from 'ngx-spinner';
-
+import { GlobalReviewEditComponent } from '../../pages/dashboards/global-review-edit/global-review-edit.component';
 
 @Component({
   selector: 'app-topbar',
   templateUrl: './topbar.component.html',
   styleUrls: ['./topbar.component.scss'],
   standalone:true,
-  imports:[CommonModule,TranslateModule,BsDropdownModule,SimplebarAngularModule,ReactiveFormsModule],
+  imports:[CommonModule,TranslateModule,BsDropdownModule,SimplebarAngularModule,ReactiveFormsModule ],
 })
 
 /**
@@ -38,7 +38,8 @@ import { NgxSpinnerService } from 'ngx-spinner';
 export class TopbarComponent implements OnInit {
    @ViewChild('notificationPopAdmin') notificationPopAdmin: TemplateRef<any>;
    @ViewChild('notificationPopMD') notificationPopMD: TemplateRef<any>;
-  
+   parentMessage: string = "Hello from Parent!";
+   receivedMessage: string = "";
   mode: any
   element: any;
   cookieValue: any;
@@ -61,6 +62,8 @@ notifications: any[] = []; // Stores the notifications
 isNotificationDropdownOpen: boolean = false; // Tracks dropdown visibility
 notificationCount: number = 0; // Tracks new notification count
   reviewedNotificationList: any;
+  selectedInvoice: any = null;
+  modalRef: NgbModalRef;
 toggleFieldTextType() {
   this.fieldTextType = !this.fieldTextType;
 }
@@ -131,10 +134,12 @@ toggleCurrentPasswordFieldTextType() {
     this.router.navigate(['/auth/login-2']);
   }
   console.log("this.loginData?.data.userActivity",this.loginData?.data.userActivity)
+ if(this.loginData){
   setInterval(() => 
    
     this.fetchData(), 10000
 ); 
+ }
   
 }
 
@@ -349,7 +354,7 @@ closeResetPasswordModal() {
   private previousNotificationCount = 0; // Store previous count
 
   fetchData() {
-    this.service.getAllNotification().subscribe((response: any) => {
+    this.notificationService.getAllNotification().subscribe((response: any) => {
       console.log("topbar", response, response.data?.length, this.data?.length);
       
       if(this.loginData?.data.userActivity == 'ADMIN'){
@@ -410,31 +415,36 @@ closeResetPasswordModal() {
 
   
   openNotificationPop() {
-  
-    if(this.loginData?.data.userActivity == 'ADMIN'){
-      if(this.reviewedNotificationList.length>0){
-        this.modalService.open(this.notificationPopAdmin, { 
-          size: 'xl', 
-          backdrop: 'static', // Prevent closing on outside click
-          keyboard: false // (Optional) Prevent closing with Esc key
-        });
-      }
-    }else{
-      if(this.reviewedNotificationList.length>0){
-        this.modalService.open(this.notificationPopMD, { 
-          size: 'xl', 
-          backdrop: 'static', // Prevent closing on outside click
-          keyboard: false // (Optional) Prevent closing with Esc key
-        });
+
+    if(this.reviewedNotificationList.length>0){
+      if(this.loginData?.data.userActivity == 'ADMIN'){
+        // if(this.reviewedNotificationList.length>0){
+        //   this.modalService.open(this.notificationPopAdmin, { 
+        //     size: 'xl', 
+        //     backdrop: 'static', // Prevent closing on outside click
+        //     keyboard: false // (Optional) Prevent closing with Esc key
+        //   });
+        // }
+        this.router.navigate(['/ReviewNotification'], { queryParams: { role: 'admin' } });
+      }else{
+        // if(this.reviewedNotificationList.length>0){
+        //   this.modalService.open(this.notificationPopMD, { 
+        //     size: 'lg', 
+        //     backdrop: 'static', // Prevent closing on outside click
+        //     keyboard: false // (Optional) Prevent closing with Esc key
+        //   });
+        // }
+        this.router.navigate(['/ReviewNotification'], { queryParams: { role: 'MD' } });
       }
     }
-    
   }
 
 closeInvoice() {
   this.modalService.dismissAll(); 
 }
 verifyedInvoice(invoice){
+
+
 
 
   let obj={
@@ -460,6 +470,20 @@ verifyedInvoice(invoice){
   
 
 }
+// openGlobalReviewPopup(invoice: any) {
+//   this.selectedInvoice = invoice;
+
+//   // Open GlobalReviewEditComponent in a modal
+//   this.modalRef = this.modalService.open(GlobalReviewEditComponent, { size: 'lg' });
+
+//   // Pass data to the component
+//   this.modalRef.componentInstance.invoiceData = this.selectedInvoice;
+
+//   // Handle modal close
+//   this.modalRef.componentInstance.closeModal.subscribe(() => {
+//     this.modalRef.close();
+//   });
+// }
   
   
 }
