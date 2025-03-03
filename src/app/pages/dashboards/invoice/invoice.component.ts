@@ -1121,7 +1121,7 @@ if (
         console.log("CreateInvoice", response);
        
         const resp = response.data;
-        if (resp.status === 200 && resp.data) {
+        if (response.status === 200 && resp) {
           
           this.getAllInvoice()
           this.getAllCharges(); 
@@ -1255,7 +1255,7 @@ if (
         console.log("updateInvoice", response);
         this.spinner.hide()
         const resp = response.updatedInvoice;
-        if (resp) {
+        if (response.status === 200 && resp) {
           this.getAllInvoice()
           this.getAllCharges(); 
           // Reset form and related data
