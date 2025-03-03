@@ -687,7 +687,7 @@ if(this.InvoiceLogo== ''|| this.InvoiceLogo == null){
 }
     console.log("this.selectedInvoice.header.invoiceUniqueNumber", this.selectedInvoice.invoiceUniqueNumber)
     console.log("this.newInvoiceCreation", this.newInvoiceCreation.value.ProformaInvoiceNumber)
-    this.pqSameforTAX = this.selectedInvoice.pqSameforTAX
+    // this.pqSameforTAX = this.selectedInvoice.pqSameforTAX
   }
   editRow(invoice) {
     this.reSubmitInvoiceStatus = null
