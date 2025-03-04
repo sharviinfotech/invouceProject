@@ -7718,7 +7718,7 @@ background-color: rgb(93, 92, 98);
               border: 1px solid #ddd;
           }
           th, td {
-              padding: 10px;
+              padding: 5px;
               text-align: end;
           }
           th {
@@ -7727,14 +7727,14 @@ background-color: rgb(93, 92, 98);
           .totals {
               display: flex;
               justify-content: space-between;
-              margin-bottom: 20px;
+              margin-bottom: 0px;
           }
           .amount-words, .summary {
               width: 48%;
           }
           .footer {
               text-align: end;
-              margin-top: 20px;
+              margin-top: 10px;
           }
               .tax-list {
     display: flex;
@@ -7756,7 +7756,7 @@ background-color: rgb(93, 92, 98);
         width: 48%;
         border-left: 14px solid black;
     }
-
+ 
     .booking-header, .billing-header, .shipping-header {
         padding: 3px;
         font-size: 12px;
@@ -7766,31 +7766,32 @@ background-color: rgb(93, 92, 98);
     justify-content: space-between;
     border:none;
 }
-
+ 
 .invoice-details, .booking-details {
     width: 50%;
     padding: 5px;
 }
-
+ 
 .booking-data {
     display: flex;
     justify-content: space-between;
 }
-
+ 
 .booking-data > div {
     padding: 5px;
 }
-
+ 
 .bold {
     font-weight: bold;
     margin-bottom: 5px;
 }
-
+ 
   .tax-item {
     display: flex;
     justify-content: space-between;
     padding: 5px 0;
     border-bottom: 1px solid #eee;
+    font-weight: bold;
   }
  
   .tax-description {
@@ -7822,11 +7823,11 @@ background-color: rgb(93, 92, 98);
      .invoice-container { width: 100%; background-color: white; padding: 10px; border: 1px solid #ddd; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); box-sizing: border-box;  }
                .orange-background {
           background-color:  teal  !important;
-          color: black !important;
+          color: white !important;
           -webkit-print-color-adjust: exact;
           print-color-adjust: exact;
            text-align:center;
-           padding: 8px;
+           padding: 5px;
       }
             .booking-details {
     border: 1px solid #ccc;
@@ -7840,13 +7841,13 @@ background-color: rgb(93, 92, 98);
       text-align: center;
     border-bottom: 1px solid #ccc;
   }
-
-
+ 
+ 
     .booking-header, .billing-header, .shipping-header {
         padding: 5px;
         font-size: 12px;
     }
-
+ 
      .billing-shipping-container {
             display: flex;
             justify-content: space-between;
@@ -7856,16 +7857,18 @@ background-color: rgb(93, 92, 98);
         }
    .billing-box{
         width: 48%;
+ 
        
        
     }
         .shipping-box {
         width: 48%;
         border-left: 1px solid black;
+        padding-left:5px;
     }
-
+ 
     .booking-header, .billing-header, .shipping-header {
-        padding: 3px;
+     
         font-size: 12px;
          margin: 0px;
             padding:0px;
@@ -7875,29 +7878,30 @@ background-color: rgb(93, 92, 98);
     justify-content: space-between;
     border:none;
 }
-
+ 
 .invoice-details, .booking-details {
     width: 50%;
    margin: 0px;
     padding:0px;
-
+ 
 }
-
+ 
 .booking-data {
     display: flex;
     justify-content: space-between;
 }
-
+ 
 .booking-data > div {
     padding: 1px;
 }
-
+ 
 .bold {
     font-weight: bold;
     margin-bottom: 0px;
+    text-align:left;
 }
-
-
+ 
+ 
    
      .header-section {
      display: flex;
@@ -7926,64 +7930,48 @@ background-color: rgb(93, 92, 98);
     flex-direction: column;
   }
  
-  .amount-words, .terms-conditions {
-    width: 100%; /* Ensure full width */
-    margin-bottom: 1px; /* Add spacing between them */
-  }
+ 
  .details-container {
       display: flex;
       gap: 0px;
-  } 
-          table {
-              width: 100%;
-              border-collapse: collapse;
-              margin-bottom: 5px;
-          }
-          table, th, td {
-              border: 1px solid #ddd;
-          }
-          th, td {
-              padding: 5px;
-              text-align: end;
-          }
-          th {
-              background-color: #f9f9f9;
-          }
-          .totals {
-              display: flex;
-              justify-content: space-between;
-              margin-bottom: 0px;
-          }
-          .amount-words, .summary {
-              width: 100%;
-          }
-        .footer { 
-        display: flex; 
-        justify-content: space-between; 
-        align-items: flex-start; 
-        margin-top: 5px; 
+  }
+          table { width: 100%; border-collapse: collapse; margin-bottom: 0px; }
+            table, th, td { border: 1px solid #ddd; }
+            th, td { padding: 5px; text-align: end; }
+            th { background-color: #f9f9f9; }
+            .totals { display: flex; justify-content: space-between; margin-bottom: 0px; }
+            .amount-words, .summary {
+            width: 100%;
+            padding:0px;
+            margin:0px;
+             }
+        .footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-top: 0px;
     }
-    
-    .footer-notes { 
-        width: 55%; 
-        font-size: 14px; 
-         text-align: left; 
-        
+   
+    .footer-notes {
+        width: 55%;
+        font-size: 14px;
+         text-align: left;
+       
     }
         .back{
        
         -webkit-print-color-adjust: exact;
         }
-    
-    .footer-signature { 
-        width: 40%; 
-        text-align: center; 
+   
+    .footer-signature {
+        width: 40%;
+        text-align: center;
     }
-    
-    .footer-signature img { 
+   
+    .footer-signature img {
         max-width: 120px; /* Reduce signature image size */
-        height: auto; 
-        margin-bottom: 5px; 
+        height: auto;
+        margin-bottom: 0px;
     }
               .tax-list {
     display: flex;
@@ -7991,7 +7979,7 @@ background-color: rgb(93, 92, 98);
     border: 1px solid #ddd;
     padding: 0px;
   }
-    
+   
  
   .tax-item {
     display: flex;
@@ -8011,8 +7999,99 @@ background-color: rgb(93, 92, 98);
   }
     .billing-header{
             border-bottom: 1px solid black;
-
+         
+ 
     }
+ 
+    @page {
+        size: A4;
+        margin: 5mm; /* Reduce margins */
+    }
+ 
+    body {
+        font-size: 12px; /* Reduce font size */
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+ 
+    }
+ 
+    .invoice-container {
+        width: 100%;
+        border:1px solid black;
+        padding: 5px;
+    }
+ 
+    .header-section img {
+        max-width: 90px; /* Reduce logo size */
+    }
+ 
+    .footer-signature img {
+        max-width: 100px; /* Reduce signature size */
+    }
+ 
+    .billing-shipping-container {
+        display: flex;
+        gap: 5px;
+        padding: 5px;
+    }
+ 
+    .billing-box, .shipping-box {
+        width: 48%;
+        padding: 5px;
+    }
+ 
+    .booking-header, .billing-header, .shipping-header {
+        font-size: 10px;
+        padding: 3px;
+    }
+ 
+    table, th, td {
+        border: 1px solid #ddd;
+        font-size:16px;
+        padding: 10px; /* Reduce table cell padding */
+    }
+ 
+    th,  {
+    text-align:left;
+        font-size: 10px; /* Reduce text size in table */
+    }
+    td {
+    text-align:center
+        font-size: 10px; /* Reduce text size in table */
+    }
+ 
+    .tax-list {
+    font-size:14px;
+        padding: 10px;
+        font-weight: bold;
+    }
+.amount-words, .terms-conditions {
+font-size:14px;
+    width: 100%; /* Ensure full width */
+    margin-bottom: 10px; /* Add spacing between them */
+    padding:10px;
+  }
+    .footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-top: 0;
+    }
+ 
+    .footer-notes {
+        width: 50%;
+        font-size: 12px;
+        text-align: left;
+    }
+ 
+    .footer-signature {
+        width: 40%;
+        text-align: center;
+    }
+ 
+ 
   }
  
       </style>
@@ -8027,7 +8106,7 @@ background-color: rgb(93, 92, 98);
  
      
       <div class="orange-background">${invoiceItem.proformaCardHeaderName}</div>
-    
+   
      <div class="invoice-container">
     <div class="billing-shipping-container">
         <div class="billing-box">
@@ -8040,14 +8119,15 @@ background-color: rgb(93, 92, 98);
             </div>
         </div>
         <div class="shipping-box">
-            <div class="shipping-header"><strong>INVOICE-NUMBER</strong></div>
+            <div class="shipping-header billing-header"><strong>INVOICE DETAILS</strong></div>
             <div class="shipping-content ">
                 <p><b>Invoice No.:</b> ${invoiceItem.invoiceUniqueNumber}</p>
             <p><b>Date:</b> ${invoiceItem.header.ProformaInvoiceDate}</p>
               </div>
         </div>
     </div>
-
+    <br>
+ 
       <div class="billing-shipping-container">
         <div class="billing-box">
             <div class="billing-header"><strong>TO</strong></div>
@@ -8061,7 +8141,7 @@ background-color: rgb(93, 92, 98);
             </div>
         </div>
         <div class="shipping-box">
-            <div class="shipping-header"><strong>BOOKING DETAILS</strong></div>
+            <div class="shipping-header billing-header"><strong>BOOKING DETAILS</strong></div>
             <div class="shipping-content">
              <p><b>Date Of Journey:</b> 03/03/25-04/03/2025</p>
             <p><b>Sector:</b> ${invoiceItem.header.BookingSector}</p>
@@ -8069,34 +8149,34 @@ background-color: rgb(93, 92, 98);
         </div>
     </div>
     </div>
-
-
+ 
+ 
       <table>
           <thead>
               <tr>
-                  <th>S.NO</th>
-                  <th>Description</th>
-                  <th>Units</th>
-                  <th>Rate</th>
-                  <th>Amount</th>
+                  <th style="text-align:left;">S.NO</th>
+                  <th style="text-align:left;">DESCRIPTION</th>
+                  <th style="text-align:left;">UNITS</th>
+                  <th style="text-align:left;">RATE</th>
+                  <th style="text-align:left;">AMOUNT</th>
               </tr>
           </thead>
          <tbody>
                <tr>
                 <td>1</td>
-                <td class="bold">Charges</td>
-                <td class="text-right"></td>
-                <td class="text-right"></td>
-                <td></td>
+                <td class="bold" >CHARGES</td>
+                <td class="text-right" style="text-align:center;"></td>
+                <td class="text-right" style="text-align:center;"></td>
+                <td style="text-align:center;"></td>
               </tr>
                   ${invoiceItem.chargesList.map((charge, index) => `
                     <tr>
                      
-                       <td class="text-center"></td>
-                      <td>${charge.description}</td>
-                      <td class="text-center">${charge.units ? charge.units : ''}</td>
-                      <td class="text-right">${charge.rate}</td>
-                      <td class="text-right">${charge.amount}</td>
+                       <td class="text-center" style="text-align:center;"></td>
+                      <td style="text-align:center;">${charge.description}</td>
+                      <td style="text-align:center;">${charge.units ? charge.units : ''}</td>
+                      <td ">${charge.rate}</td>
+                      <td class="text-right" style="text-align:center;">${charge.amount}</td>
                     </tr>
                   `).join('')}
                  
@@ -8104,8 +8184,8 @@ background-color: rgb(93, 92, 98);
                   <td></td>
                   <td></td>
                   <td></td>
-                    <td  class="text-right bold" style="background-color: rgb(181, 179, 200);">Total</td>
-                    <td class="text-right bold"  style="background-color: rgb(181, 179, 200);">${invoiceItem.subtotal}</td>
+                    <td  class="text-right bold" style="background-color: rgb(181, 179, 200);" style="text-align:center;">TOTAL</td>
+                    <td class="text-right bold"  style="background-color: rgb(181, 179, 200);" style="text-align:center;">${invoiceItem.subtotal}</td>
                   </tr>
                   <tr>
                 </tbody>
@@ -8113,35 +8193,44 @@ background-color: rgb(93, 92, 98);
  
      
          
-          <div class="summary">
+          <div class="summary" style="display:flex">
              
  
-              <div class="tax-list">
+            <div style="width:70%">
+            </div>
+              <div class="tax-list" style="width:30%">
                        ${invoiceItem.taxList.map(tax => `
-                      <div class="tax-item">
+                      <div class="tax-item" >
                       <div class="tax-description">${tax.description}</div>
                       <div class="tax-amount text-right">${tax.amount}</div>
                     </div>
                   `).join('')}
                </div>
  
+             </div>
              
-              <p><b>Total Invoice Amount:</b> ₹ ${invoiceItem.grandTotal}</p>
                <div class="totals">
-          <div class="amount-words">
-             <p><b>Amount in words:</b>${invoiceItem.amountInWords}</p>
+          <div class="amount-words" style="display:flex;width:100%">
+          <div style="width:70%">
+             <p><strong>AMOUNT IN WORDS:</strong><br>${invoiceItem.amountInWords}</br></p>
+          </div>
+          <div style="width:30%;text-align:end">
+           <p style="font-size:16px" padding:10px;><b>TOTAL AMOUNT</b> ₹ ${invoiceItem.grandTotal}</p>
+          </div>
+         
           </div>
              
           </div>
-      </div>
+      
  
       <div class="footer">
-            <div class="footer-notes"><strong>Note:</strong> <p>${invoiceItem.header.notes}</p></div>
+            <div class="footer-notes" style="font-size:16px" ><strong>Note:</strong> <p>${invoiceItem.header.notes}</p></div>
             <div class="footer-signature">
                   <div><h4>RITHWIK GREEN POWER & AVIATION PRIVATE LIMITED</h4></div>
                 <img src="${this.signature}" alt="Signature">
                 <p>Authorised Signatory</p>
             </div>
+        </div>
         </div>
       </div>
   </body>
@@ -8172,20 +8261,23 @@ background-color: rgb(93, 92, 98);
        body {
     font-family: Arial, sans-serif;
     margin: 0;
-    padding: 20px;
+    padding: 5px;
     background-color: #f4f4f4;
+        border: 1px solid black;
 }
+       
  
  .header-section {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            margin-bottom: 5px;
         }
       .orange-background {
       background-color: rgb(93, 92, 98);
-      font-size: 14px;
+      font-size: 12px;
       color:white;
-      padding: 8px;
+      padding: 5px;
       text-align: center;
       font-weight: bold;
     }
@@ -8195,6 +8287,21 @@ background-color: rgb(93, 92, 98);
             justify-content: space-between;
             align-items: center;
         }
+            .tax-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 5px 0;
+    font-weight: bold;
+  }
+ 
+  .tax-description {
+    flex: 1;
+  }
+  .tax-amount {
+    flex: 0.3;
+    text-align: right;
+  }
+ 
          
  
 .header-section .logo {
@@ -8217,7 +8324,7 @@ background-color: rgb(93, 92, 98);
 }
  
 .header-section img {
-    max-width: 100px; /* Adjust as needed */
+    max-width: 80px; /* Adjust as needed */
     height: auto;
 }
  
@@ -8225,25 +8332,29 @@ background-color: rgb(93, 92, 98);
 .from-to-ship {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 20px;
+    margin-bottom: 5px;
 }
  
 .from, .to, .ship {
-    width: 30%;
+    width: 32%;
     border: 1px solid #ddd;
-    padding: 15px;
+    padding: 8px;
+    font-size: 14px;
 }
  
 .items {
     width: 100%;
     border-collapse: collapse;
-    margin-bottom: 20px;
+    font-size: 14px;
+    margin-bottom: 5px;
+    height: 205px;
 }
  
 .items th, .items td {
     border: 1px solid #ddd;
-    padding: 10px;
+    padding: 6px;
     text-align: left;
+    font-weight: bold;
 }
  
 .items th {
@@ -8267,9 +8378,10 @@ background-color: rgb(93, 92, 98);
 }
  
 .totals {
-    width: 45%;
-    border: 1px solid #ddd;
-    padding: 15px;
+     width: 99%;
+   
+    padding: 3px;
+    font-size: 14px;
 }
  
 .totals p {
@@ -8277,50 +8389,63 @@ background-color: rgb(93, 92, 98);
 }
  
 .notes {
-    border: 1px solid #ddd;
-    padding: 15px;
-    margin-bottom: 20px;
+  padding: 8px;
+  font-size: 15px;
+  margin-bottom: 5px;
+  width: 433px;
 }
  
 .signatures {
-    display: flex;
-    justify-content: space-between;
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
 }
  
 .client-signature, .business-signature {
-    width: 45%;
-    text-align: center;
+  width: 45%;
+  text-align: center;
 }
  
         /* Print Media Adjustments */
  
     @media print {
-   
- 
-    body {
+     @page {
+      size: A4;
+      margin: 5mm;
+  }
+ body {
     font-family: Arial, sans-serif;
     margin: 0;
-    padding: 20px;
+    -webkit-print-color-adjust: exact; /* Chrome, Safari */
+        print-color-adjust: exact; /* Firefox */
+    padding: 5px;
     background-color: #f4f4f4;
+        border: 1px solid black;
 }
- .header-section {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-      .orange-background {
-      background-color: rgb(93, 92, 98);
-      font-size: 14px;
-      color:white;
-      padding: 8px;
-      text-align: center;
-      font-weight: bold;
+ 
+    .orange-background {
+        background-color: brown;
+        font-size: 12px;
+        color: white;
+        padding: 5px;
+        text-align: center;
+        font-weight: bold;
     }
+   
+ 
+ .header-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+    margin-bottom: 5px;
+}
+     
      
         .header-section {
             display: flex;
             justify-content: space-between;
             align-items: center;
+             page-break-inside: avoid;
         }
          
  
@@ -8344,7 +8469,7 @@ background-color: rgb(93, 92, 98);
 }
  
 .header-section img {
-    max-width: 100px; /* Adjust as needed */
+    max-width: 80px; /* Adjust as needed */
     height: auto;
 }
  
@@ -8352,29 +8477,55 @@ background-color: rgb(93, 92, 98);
 .from-to-ship {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 20px;
+    margin-bottom: 5px;
+     font-weight: bold;
 }
  
 .from, .to, .ship {
-    width: 30%;
+    width: 32%;
     border: 1px solid #ddd;
-    padding: 15px;
+    padding: 8px;
+   font-size: 14px;
+     page-break-inside: avoid;
+      font-weight: bold;
 }
+      .tax-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 5px 0;
+    font-weight: bold;
+  }
+ 
+  .tax-description {
+    flex: 1;
+  }
+  .tax-amount {
+    flex: 0.3;
+    text-align: right;
+  }
+ 
  
 .items {
     width: 100%;
     border-collapse: collapse;
-    margin-bottom: 20px;
+    margin-bottom: 12px;
+    margin-bottom: 5px;
+     page-break-inside: avoid;
+     height: 205px;
+     font-size: 14px;
 }
  
 .items th, .items td {
     border: 1px solid #ddd;
-    padding: 10px;
-    text-align: left;
+    padding: 6px;
+    text-align: end;
+        font-weight: bold;
 }
  
 .items th {
     background-color: #f0f0f0;
+          padding: 4px;
+           font-weight: bold;
 }
  
 .items tbody tr:nth-child(even) {
@@ -8394,26 +8545,38 @@ background-color: rgb(93, 92, 98);
 }
  
 .totals {
-    width: 45%;
-    border: 1px solid #ddd;
-    padding: 15px;
+   
+    width: 99%;
+   
+    padding: 3px;
+    font-size: 14px;
+     page-break-inside: avoid;
+      font-weight: bold;
 }
  
 .totals p {
-    margin: 5px 0;
+    margin: 3px 0;
 }
  
 .notes {
-    border: 1px solid #ddd;
-    padding: 15px;
-    margin-bottom: 20px;
+     padding: 8px;
+           font-size: 15px;
+            margin-bottom: 5px;
+            width: 433px;  
+             font-weight: bold;
 }
+           
  
 .signatures {
     display: flex;
     justify-content: space-between;
+     page-break-inside: avoid;
+      font-size: 12px;
+       font-weight: bold;
 }
- 
+  .signatures img {
+                max-width: 100px;
+            }
 .client-signature, .business-signature {
     width: 45%;
     text-align: center;
@@ -8437,11 +8600,11 @@ background-color: rgb(93, 92, 98);
         <div class="from-to-ship">
             <div class="from">
               <p><b>From:</b></p>
+              <p><b>Invoice No.:</b> ${invoiceItem.invoiceUniqueNumber}</p>
               <p><b>PAN NO:</b> ${invoiceItem.header.ProformaPanNO}</p>
               <p><b>GST NO:</b> ${invoiceItem.header.ProformaGstNumber}</p>
               <p><b>Type Of Aircraft:</b> ${invoiceItem.header.ProformaTypeOfAircraft}</p>
               <p><b>Seating Capacity:</b> ${invoiceItem.header.ProformaSeatingCapasity}</p>
-              <p><b>Invoice No.:</b> ${invoiceItem.invoiceUniqueNumber}</p>
               <p><b>Date:</b> ${invoiceItem.header.ProformaInvoiceDate}</p>
             </div>
             <div class="to">
@@ -8495,40 +8658,34 @@ background-color: rgb(93, 92, 98);
                   <td></td>
                   <td></td>
                   <td></td>
-                    <td  class="text-right bold" style="background-color: rgb(181, 179, 200);">Total</td>
-                    <td class="text-right bold"  style="background-color: rgb(181, 179, 200);">${invoiceItem.subtotal}</td>
+                    <td  class="text-right bold" style="background-color: rgb(181, 179, 200); text-align: end;">Total</td>
+                    <td class="text-right bold"  style="background-color: rgb(181, 179, 200); text-align: end;">${invoiceItem.subtotal}</td>
                   </tr>
                   <tr>
             </tbody>
         </table>
-         <div class="summary">
-             
- 
+   
+         
+         <div class="summary" style="
+    text-align: end;>
               <div class="tax-list">
                        ${invoiceItem.taxList.map(tax => `
                       <div class="tax-item">
                       <div class="tax-description">${tax.description}</div>
-                      <div class="tax-amount text-right">${tax.amount}</div>
+                      <div class="tax-amount">${tax.amount}</div>
                     </div>
                   `).join('')}
+                  <p><b>Total Invoice Amount:</b> ₹ ${invoiceItem.grandTotal}</p>
                </div>
- 
-             
-              <p><b>Total Invoice Amount:</b> ₹ ${invoiceItem.grandTotal}</p>
-               <div class="totals">
-          <div class="amount-words">
-             <p><b>Amount in words:</b>${invoiceItem.amountInWords}</p>
-          </div>
-             
-          </div>
       </div>
- 
- 
-       
- 
+      <div class="totals">
+          <div class="amount-words">
+             <div><strong>Amount in words:</strong> <p>${invoiceItem.amountInWords}</p></div>
+          </div>
+        </div>
         <div class="notes">
             <div><strong>Notes:</strong> <p>${invoiceItem.header.notes}</p></div>
-            <p></p>
+           
         </div>
  
         <div class="signatures">
@@ -8537,6 +8694,7 @@ background-color: rgb(93, 92, 98);
             </div>
             <div class="business-signature">
               <div>
+              <div><h4>RITHWIK GREEN POWER & AVIATION PRIVATE LIMITED</h4></div>
                 <img src="${this.signature}" alt="Company Logo" class="logo"></div>
                 Authorised Signatory        
               </div>
@@ -8558,6 +8716,7 @@ background-color: rgb(93, 92, 98);
       }, 500);
     }
   }
+ 
  
  
 }
