@@ -497,7 +497,7 @@ selectInvoice(invoice: any) {
                   this.generateInvoiceHTMLProfoma1(invoiceItem);
                   // Additional checks if needed
                 }else if (invoiceItem.proformaCardHeaderId === "TAX") {
-                  this.generateInvoiceHTMLTax1(invoiceItem);
+                  this.generateInvoiceHTMLTax4(invoiceItem);
                 } else {
                   Swal.fire({
                     text: "No valid invoice type selected for printing.",
@@ -523,7 +523,7 @@ selectInvoice(invoice: any) {
                 this.generateInvoiceHTMLProfoma1(invoiceItem);
                 // Additional checks if needed
               }else if (invoiceItem.proformaCardHeaderId === "TAX") {
-                this.generateInvoiceHTMLTax1(invoiceItem);
+                this.generateInvoiceHTMLTax4(invoiceItem);
               } else {
                 Swal.fire({
                   text: "No valid invoice type selected for printing.",
@@ -6384,7 +6384,7 @@ generateInvoiceHTML4(invoiceItem: InvoiceItem) {
 
 <html>
 <head>
-    <title>Invoice Template 1</title>
+  
     <style>
         body { font-family: Arial, sans-serif; margin: 0; padding: 20px; }
         .invoice-container { width: 80%; margin: auto; background-color: white; padding: 20px; border: 1px solid #ddd; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); }
@@ -6820,7 +6820,7 @@ background-image: linear-gradient(to right, #7e22ce, #2563eb);
 
 <html>
 <head>
-    <title>Invoice Template 1</title>
+   
     <style>
         body { font-family: Arial, sans-serif; margin: 0; padding: 20px; }
         .invoice-container1 { width: 80%; margin: auto; background-color: white; padding: 20px; border: 1px solid #ddd; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); box-sizing: border-box; }
@@ -6856,8 +6856,8 @@ background-image: linear-gradient(to right, #7e22ce, #2563eb);
         }
 
         .billing-header, .shipping-header {
-            background-color: #28a745 !important;
-            color: white;
+           
+          
             padding: 10px;
             border-radius: 4px 4px 0 0;
             margin-bottom: 15px;
@@ -6911,8 +6911,8 @@ background-image: linear-gradient(to right, #7e22ce, #2563eb);
         }
 
         .booking-header {
-            background-color: #28a745;
-            color: white;
+           
+           
             padding: 10px;
             border-radius: 4px 4px 0 0;
             margin-bottom: 15px;
@@ -7005,18 +7005,18 @@ background-image: linear-gradient(to right, #7e22ce, #2563eb);
 
     /* Colors remain the same in print */
     .orange-background {
-        background-color: rgb(181, 179, 200) !important;
+        background-color: #edab32 !important;
         color: white !important;
     }
 
     .billing-header, .shipping-header {
-        background-color:rgb(40, 135, 167) !important;
-        color: white !important;
+         border: 2px solid black;
+        color: black !important;
     }
 
     .booking-header {
-        background-color: rgb(40, 135, 167) !important;
-        color: white !important;
+     border: 2px solid black;
+        color: black !important;
         
     }
 
@@ -7214,7 +7214,7 @@ background-image: linear-gradient(to right, #7e22ce, #2563eb);
 
 <html>
 <head>
-    <title>Invoice Template 1</title>
+   
     <style>
         body { font-family: Arial, sans-serif; margin: 0; padding: 20px; }
         .invoice-container1 { width: 80%; margin: auto; background-color: white; padding: 20px; border: 1px solid #ddd; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); box-sizing: border-box;  }
@@ -7231,6 +7231,7 @@ background-image: linear-gradient(to right, #7e22ce, #2563eb);
       padding: 8px;
       text-align: center;
       font-weight: bold;
+      margin-bottom:10px;
     }
       
         .header-section {
@@ -7306,13 +7307,11 @@ background-image: linear-gradient(to right, #7e22ce, #2563eb);
         }
 
         .table-bordered th {
-            background-color: #f0f0f0;
+            
             font-weight: 600;
         }
 
-        .table-bordered tbody tr:nth-child(even) {
-            background-color: #f9f9f9;
-        }
+        
 
         .charges {
             font-weight: 600;
@@ -7365,10 +7364,11 @@ background-image: linear-gradient(to right, #7e22ce, #2563eb);
     
     }
             .orange-background {
-        background-color: rgb(206, 205, 213) !important;
-        color: black !important;
+background-color: rgb(93, 92, 98);
+        color: white !important;
         -webkit-print-color-adjust: exact;
         print-color-adjust: exact;
+         margin-bottom:10px;
     }
 
 
@@ -7431,7 +7431,7 @@ background-image: linear-gradient(to right, #7e22ce, #2563eb);
         font-size: 13px; 
     }
         .back{
-        background-color: #e0e0e0 !important;
+       
         -webkit-print-color-adjust: exact;
         }
     
@@ -7622,9 +7622,9 @@ background-image: linear-gradient(to right, #7e22ce, #2563eb);
     this.logoUrl = this.imageService.getBase64FlightLogo();
     this.InvoiceLogo = this.imageService.getBase64WorldLogo();
     this.signature = this.imageService.getBase64Signature();
-  
+ 
     const invoiceHTML = `
-      
+     
   <html lang="en">
   <head>
       <meta charset="UTF-8">
@@ -7634,11 +7634,12 @@ background-image: linear-gradient(to right, #7e22ce, #2563eb);
           body { font-family: Arial, sans-serif; margin: 0; padding: 20px; }
           .invoice-container1 { width: 80%; margin: auto; background-color: white; padding: 5px; border: 1px solid #ddd; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); box-sizing: border-box;  }
                .orange-background {
-          background-color: rgb(206, 205, 213) !important;
+          background-color:  teal !important;
           color: black !important;
           -webkit-print-color-adjust: exact;
           print-color-adjust: exact;
            text-align:center;
+           padding: 8px;
       }
    
    
@@ -7649,14 +7650,33 @@ background-image: linear-gradient(to right, #7e22ce, #2563eb);
      margin-bottom: 10px;
       border: 1px solid #ddd;
    }
-  
+       .booking-details {
+    border: 1px solid #ccc;
+    width: 100%;
+  }
+ 
+  .booking-header {
+    background-color: rgb(88, 98, 145);
+    padding: 5px;
+    color:white;
+      text-align: center;
+    border-bottom: 1px solid #ccc;
+  }
+ 
+  .booking-data {
+        padding: 5px;
+  width: 100%;
+  display: flex;
+  font-size: 14px;
+  }
+ 
    .header-section .logo {
      display: flex;
      flex-direction: column;
      align-items: center;
      width:558px;
    }
-  
+ 
    .header-section .left-logo,
    .header-section .right-logo {
      width: 112px;* Adjust as needed */
@@ -7666,15 +7686,16 @@ background-image: linear-gradient(to right, #7e22ce, #2563eb);
       display: flex;
       gap: 10px;
   }
-  
+ 
   .company-details, .invoice-info {
       width: 50%;
       background: #f8f9fa;
       padding: 15px;
       border: 1px solid #ddd;
       border-radius: 8px;
+       border-bottom: 14px solid black;
   }
-  
+ 
    .header-section img {
      max-width: 100%;
      height: auto;
@@ -7683,6 +7704,7 @@ background-image: linear-gradient(to right, #7e22ce, #2563eb);
               margin-bottom: 12px;
               border: 1px solid #ddd;
                background: #f8f9fa;
+                border-bottom: 14px solid black;
           }
           .company-details p, .bill-to p, .invoice-info p {
               margin: 5px 0;
@@ -7719,15 +7741,58 @@ background-image: linear-gradient(to right, #7e22ce, #2563eb);
     flex-direction: column;
     border: 1px solid #ddd;
     padding: 10px;
-  }
-  
+  }  .billing-shipping-container {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+            gap: 10px;
+        }
+    .billing-box{
+        width: 48%;
+        padding: 10px;
+       
+    }
+        .shipping-box {
+        width: 48%;
+        border-left: 14px solid black;
+    }
+
+    .booking-header, .billing-header, .shipping-header {
+        padding: 3px;
+        font-size: 12px;
+    }
+        .invoice-booking-details {
+    display: flex;
+    justify-content: space-between;
+    border:none;
+}
+
+.invoice-details, .booking-details {
+    width: 50%;
+    padding: 5px;
+}
+
+.booking-data {
+    display: flex;
+    justify-content: space-between;
+}
+
+.booking-data > div {
+    padding: 5px;
+}
+
+.bold {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
   .tax-item {
     display: flex;
     justify-content: space-between;
     padding: 5px 0;
     border-bottom: 1px solid #eee;
   }
-  
+ 
   .tax-description {
     flex: 1;
   }
@@ -7735,34 +7800,110 @@ background-image: linear-gradient(to right, #7e22ce, #2563eb);
     display: flex;
     flex-direction: column;
   }
-  
+ 
   .amount-words, .terms-conditions {
     width: 100%; /* Ensure full width */
     margin-bottom: 10px; /* Add spacing between them */
   }
-  
-  
+ 
+ 
   .tax-amount {
     flex: 0.3;
     text-align: right;
   }
     @media print {
-     body { font-family: Arial, sans-serif; margin: 0; padding: 20px; }
-          .invoice-container1 { width: 80%; margin: auto; background-color: white; padding: 20px; border: 1px solid #ddd; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); box-sizing: border-box;  }
+ body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        transform: scale(0.9); /* Shrinks the content to fit */
+        transform-origin: top center;
+    }
+     .invoice-container { width: 100%; background-color: white; padding: 10px; border: 1px solid #ddd; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); box-sizing: border-box;  }
                .orange-background {
-          background-color: rgb(206, 205, 213) !important;
+          background-color:  teal  !important;
           color: black !important;
           -webkit-print-color-adjust: exact;
           print-color-adjust: exact;
            text-align:center;
+           padding: 8px;
       }
-   
+            .booking-details {
+    border: 1px solid #ccc;
+    width: 100%;
+  }
+ 
+  .booking-header {
+    background-color: rgb(88, 98, 145);
+    padding: 5px;
+    color:white;
+      text-align: center;
+    border-bottom: 1px solid #ccc;
+  }
+
+
+    .booking-header, .billing-header, .shipping-header {
+        padding: 5px;
+        font-size: 12px;
+    }
+
+     .billing-shipping-container {
+            display: flex;
+            justify-content: space-between;
+            margin: 0px;
+            padding:0px;
+            gap: 10px;
+        }
+   .billing-box{
+        width: 48%;
+       
+       
+    }
+        .shipping-box {
+        width: 48%;
+        border-left: 1px solid black;
+    }
+
+    .booking-header, .billing-header, .shipping-header {
+        padding: 3px;
+        font-size: 12px;
+         margin: 0px;
+            padding:0px;
+    }
+        .invoice-booking-details {
+    display: flex;
+    justify-content: space-between;
+    border:none;
+}
+
+.invoice-details, .booking-details {
+    width: 50%;
+   margin: 0px;
+    padding:0px;
+
+}
+
+.booking-data {
+    display: flex;
+    justify-content: space-between;
+}
+
+.booking-data > div {
+    padding: 1px;
+}
+
+.bold {
+    font-weight: bold;
+    margin-bottom: 0px;
+}
+
+
    
      .header-section {
      display: flex;
      justify-content: space-between;
      align-items: center;
-     margin-bottom: 10px;
+     margin-bottom: 1px;
       border: 1px solid #ddd;
    }
    .header-section img {
@@ -7775,7 +7916,7 @@ background-image: linear-gradient(to right, #7e22ce, #2563eb);
      align-items: center;
      width:558px;
    }
-  
+ 
    .header-section .left-logo,
    .header-section .right-logo {
      width: 112px;* Adjust as needed */
@@ -7784,47 +7925,25 @@ background-image: linear-gradient(to right, #7e22ce, #2563eb);
     display: flex;
     flex-direction: column;
   }
-  
+ 
   .amount-words, .terms-conditions {
     width: 100%; /* Ensure full width */
-    margin-bottom: 10px; /* Add spacing between them */
+    margin-bottom: 1px; /* Add spacing between them */
   }
-  
-  
-  
-     
-  .details-container {
+ .details-container {
       display: flex;
-      gap: 10px;
-  }
-  
-  .company-details, .invoice-info {
-      width: 50%;
-      background: #f8f9fa;
-      padding: 15px;
-      border: 1px solid #ddd;
-      border-radius: 8px;
-  }
-  
-  
-          .company-details, .bill-to, .invoice-info {
-              margin-bottom: 12px;
-              border: 1px solid #ddd;
-               background: #f8f9fa;
-          }
-          .company-details p, .bill-to p, .invoice-info p {
-              margin: 5px 0;
-          }
+      gap: 0px;
+  } 
           table {
               width: 100%;
               border-collapse: collapse;
-              margin-bottom: 9px;
+              margin-bottom: 5px;
           }
           table, th, td {
               border: 1px solid #ddd;
           }
           th, td {
-              padding: 10px;
+              padding: 5px;
               text-align: end;
           }
           th {
@@ -7833,39 +7952,69 @@ background-image: linear-gradient(to right, #7e22ce, #2563eb);
           .totals {
               display: flex;
               justify-content: space-between;
-              margin-bottom: 20px;
+              margin-bottom: 0px;
           }
           .amount-words, .summary {
-              width: 48%;
+              width: 100%;
           }
-          .footer {
-              text-align: end;
-              margin-top: 20px;
-          }
+        .footer { 
+        display: flex; 
+        justify-content: space-between; 
+        align-items: flex-start; 
+        margin-top: 5px; 
+    }
+    
+    .footer-notes { 
+        width: 55%; 
+        font-size: 14px; 
+         text-align: left; 
+        
+    }
+        .back{
+       
+        -webkit-print-color-adjust: exact;
+        }
+    
+    .footer-signature { 
+        width: 40%; 
+        text-align: center; 
+    }
+    
+    .footer-signature img { 
+        max-width: 120px; /* Reduce signature image size */
+        height: auto; 
+        margin-bottom: 5px; 
+    }
               .tax-list {
     display: flex;
     flex-direction: column;
     border: 1px solid #ddd;
-    padding: 10px;
+    padding: 0px;
   }
-  
+    
+ 
   .tax-item {
     display: flex;
     justify-content: space-between;
-    padding: 5px 0;
+    padding: 0px;
+    margin:0px;
     border-bottom: 1px solid #eee;
   }
-  
+ 
   .tax-description {
     flex: 1;
   }
-  
+ 
   .tax-amount {
     flex: 0.3;
     text-align: right;
   }
+    .billing-header{
+            border-bottom: 1px solid black;
+
+    }
   }
-  
+ 
       </style>
   </head>
   <body>
@@ -7875,36 +8024,53 @@ background-image: linear-gradient(to right, #7e22ce, #2563eb);
         <div class="logo"><h3>RITHWIK GREEN POWER & AVIATION PRIVATE LIMITED</h3></div>
               <div class="logo right-logo"><img src="${this.InvoiceLogo}" alt="Company Logo"></div>
       </div>
-  
+ 
      
       <div class="orange-background">${invoiceItem.proformaCardHeaderName}</div>
-      <div class="bill-section">
-      <div class="bill-to">
-          <p><b>To:</b></p>
-          <p><b>Customer Name:</b> ${invoiceItem.header.ProformaCustomerName}</p>
-          <p><b>Address:</b> ${invoiceItem.header.ProformaAddress}</p>
-          <p><b>City - State - Pincode:</b> ${invoiceItem.header.ProformaCity} - ${invoiceItem.header.ProformaState} - ${invoiceItem.header.ProformaPincode}</p>
-          <p><b>PAN No.:</b> ${invoiceItem.header.ProformaPan}</p>
-          <p><b>GST NO:</b> ${invoiceItem.header.ProformaGstNo}</p>
-      </div>
-  
-      <div class="details-container">
-          <div class="company-details">
-              <p><b>From:</b></p>
-              <p><b>PAN NO:</b> ${invoiceItem.header.ProformaPanNO}</p>
-              <p><b>GST NO:</b> ${invoiceItem.header.ProformaGstNumber}</p>
-              <p><b>Type Of Aircraft:</b> ${invoiceItem.header.ProformaTypeOfAircraft}</p>
-              <p><b>Seating Capacity:</b> ${invoiceItem.header.ProformaSeatingCapasity}</p>
-          </div>
-  
-          <div class="invoice-info">
-              <p><b>Invoice No.:</b> ${invoiceItem.invoiceUniqueNumber}</p>
-              <p><b>Date:</b> ${invoiceItem.header.ProformaInvoiceDate}</p>
-          </div>
-      </div>
-  </div>
-  
-  
+    
+     <div class="invoice-container">
+    <div class="billing-shipping-container">
+        <div class="billing-box">
+            <div class="billing-header"><strong>FROM</strong></div>
+            <div class="billing-content">
+            <p><b>PAN NO:</b> ${invoiceItem.header.ProformaPanNO}</p>
+            <p><b>GST NO:</b> ${invoiceItem.header.ProformaGstNumber}</p>
+            <p><b>Type Of Aircraft:</b> ${invoiceItem.header.ProformaTypeOfAircraft}</p>
+            <p><b>Seating Capacity:</b> ${invoiceItem.header.ProformaSeatingCapasity}</p>
+            </div>
+        </div>
+        <div class="shipping-box">
+            <div class="shipping-header"><strong>INVOICE-NUMBER</strong></div>
+            <div class="shipping-content ">
+                <p><b>Invoice No.:</b> ${invoiceItem.invoiceUniqueNumber}</p>
+            <p><b>Date:</b> ${invoiceItem.header.ProformaInvoiceDate}</p>
+              </div>
+        </div>
+    </div>
+
+      <div class="billing-shipping-container">
+        <div class="billing-box">
+            <div class="billing-header"><strong>TO</strong></div>
+            <div class="billing-content">
+                <p>${invoiceItem.header.ProformaCustomerName}<br>
+                ${invoiceItem.header.ProformaAddress}<br>
+                ${invoiceItem.header.ProformaCity}<br>
+                ${invoiceItem.header.ProformaPincode}<br>
+                <strong>GST NO:</strong> ${invoiceItem.header.ProformaGstNo}<br>
+                <strong>PAN NO:</strong> ${invoiceItem.header.ProformaPan}</p>
+            </div>
+        </div>
+        <div class="shipping-box">
+            <div class="shipping-header"><strong>BOOKING DETAILS</strong></div>
+            <div class="shipping-content">
+             <p><b>Date Of Journey:</b> 03/03/25-04/03/2025</p>
+            <p><b>Sector:</b> ${invoiceItem.header.BookingSector}</p>
+                <p><b>Billing Flying Time:</b> ${invoiceItem.header.BookingBillingFlyingTime}</p>
+        </div>
+    </div>
+    </div>
+
+
       <table>
           <thead>
               <tr>
@@ -7944,18 +8110,12 @@ background-image: linear-gradient(to right, #7e22ce, #2563eb);
                   <tr>
                 </tbody>
               </table>
-  
-      <div class="totals">
-          <div class="amount-words">
-              <p><b>Amount in words:</b>${invoiceItem.amountInWords}</p>
-          </div>
-          <div class="terms-conditions">
-            <label>Note:</label>
-            <textarea [(ngModel)]="invoiceItem.header.notes"></textarea>
-          </div>
+ 
+     
+         
           <div class="summary">
-              
-  
+             
+ 
               <div class="tax-list">
                        ${invoiceItem.taxList.map(tax => `
                       <div class="tax-item">
@@ -7964,33 +8124,440 @@ background-image: linear-gradient(to right, #7e22ce, #2563eb);
                     </div>
                   `).join('')}
                </div>
-  
+ 
              
               <p><b>Total Invoice Amount:</b> ₹ ${invoiceItem.grandTotal}</p>
+               <div class="totals">
+          <div class="amount-words">
+             <p><b>Amount in words:</b>${invoiceItem.amountInWords}</p>
+          </div>
              
           </div>
       </div>
-  
+ 
       <div class="footer">
-        <div> 
-          <img src="${this.signature}" alt="Company Logo" class="logo"></div>
-           Authorised Signatory
-                 
+            <div class="footer-notes"><strong>Note:</strong> <p>${invoiceItem.header.notes}</p></div>
+            <div class="footer-signature">
+                  <div><h4>RITHWIK GREEN POWER & AVIATION PRIVATE LIMITED</h4></div>
+                <img src="${this.signature}" alt="Signature">
+                <p>Authorised Signatory</p>
+            </div>
         </div>
       </div>
   </body>
   </html>
     `;
-  
+ 
     const newWindow = window.open('', '', 'height=600,width=800');
     if (newWindow) {
         newWindow.document.write(invoiceHTML);
         newWindow.document.close();
-  
+ 
         setTimeout(() => {
             newWindow.print();
         }, 500);
     }
   }
+  generateInvoiceHTMLTax5 (invoiceItem: InvoiceItem) {
+ 
+    this.logoUrl = this.imageService.getBase64FlightLogo();
+    this.InvoiceLogo = this.imageService.getBase64WorldLogo();
+    this.signature = this.imageService.getBase64Signature();
+    const invoiceHTML = `
+ 
+ 
+<html>
+<head>
+    <style>
+       body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+    background-color: #f4f4f4;
+}
+ 
+ .header-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+      .orange-background {
+      background-color: rgb(93, 92, 98);
+      font-size: 14px;
+      color:white;
+      padding: 8px;
+      text-align: center;
+      font-weight: bold;
+    }
+     
+        .header-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+         
+ 
+.header-section .logo {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center content vertically */
+}
+ 
+.header-section .left-logo {
+    text-align: left; /* Align text to the left */
+}
+ 
+.header-section .right-logo {
+    text-align: right; /* Align text to the right */
+}
+ 
+.header-section .company-name {
+    text-align: center; /* Center the company name */
+    flex-grow: 1; /* Allow the company name to take up available space */
+}
+ 
+.header-section img {
+    max-width: 100px; /* Adjust as needed */
+    height: auto;
+}
+ 
+ 
+.from-to-ship {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+ 
+.from, .to, .ship {
+    width: 30%;
+    border: 1px solid #ddd;
+    padding: 15px;
+}
+ 
+.items {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+ 
+.items th, .items td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+}
+ 
+.items th {
+    background-color: #f0f0f0;
+}
+ 
+.items tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+ 
+.payment {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+ 
+.payment-instruction {
+    width: 45%;
+    border: 1px solid #ddd;
+    padding: 15px;
+}
+ 
+.totals {
+    width: 45%;
+    border: 1px solid #ddd;
+    padding: 15px;
+}
+ 
+.totals p {
+    margin: 5px 0;
+}
+ 
+.notes {
+    border: 1px solid #ddd;
+    padding: 15px;
+    margin-bottom: 20px;
+}
+ 
+.signatures {
+    display: flex;
+    justify-content: space-between;
+}
+ 
+.client-signature, .business-signature {
+    width: 45%;
+    text-align: center;
+}
+ 
+        /* Print Media Adjustments */
+ 
+    @media print {
+   
+ 
+    body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+    background-color: #f4f4f4;
+}
+ .header-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+      .orange-background {
+      background-color: rgb(93, 92, 98);
+      font-size: 14px;
+      color:white;
+      padding: 8px;
+      text-align: center;
+      font-weight: bold;
+    }
+     
+        .header-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+         
+ 
+.header-section .logo {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center content vertically */
+}
+ 
+.header-section .left-logo {
+    text-align: left; /* Align text to the left */
+}
+ 
+.header-section .right-logo {
+    text-align: right; /* Align text to the right */
+}
+ 
+.header-section .company-name {
+    text-align: center; /* Center the company name */
+    flex-grow: 1; /* Allow the company name to take up available space */
+}
+ 
+.header-section img {
+    max-width: 100px; /* Adjust as needed */
+    height: auto;
+}
+ 
+ 
+.from-to-ship {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+ 
+.from, .to, .ship {
+    width: 30%;
+    border: 1px solid #ddd;
+    padding: 15px;
+}
+ 
+.items {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+ 
+.items th, .items td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+}
+ 
+.items th {
+    background-color: #f0f0f0;
+}
+ 
+.items tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+ 
+.payment {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+ 
+.payment-instruction {
+    width: 45%;
+    border: 1px solid #ddd;
+    padding: 15px;
+}
+ 
+.totals {
+    width: 45%;
+    border: 1px solid #ddd;
+    padding: 15px;
+}
+ 
+.totals p {
+    margin: 5px 0;
+}
+ 
+.notes {
+    border: 1px solid #ddd;
+    padding: 15px;
+    margin-bottom: 20px;
+}
+ 
+.signatures {
+    display: flex;
+    justify-content: space-between;
+}
+ 
+.client-signature, .business-signature {
+    width: 45%;
+    text-align: center;
+}
+ 
+ 
+    </style>
+</head>
+<body>
+    <div class="invoice-container1">
+        <!-- Header Section -->
+       
+    <div class="header-section">
+           <div class="logo left-logo"><img src="${this.logoUrl}" alt="Invoice Logo"></div>
+      <div class="logo"><h3>RITHWIK GREEN POWER & AVIATION PRIVATE LIMITED</h3></div>
+            <div class="logo right-logo"><img src="${this.InvoiceLogo}" alt="Company Logo"></div>
+    </div>
+   
+    <div class="orange-background">${invoiceItem.proformaCardHeaderName}</div>
+ 
+        <div class="from-to-ship">
+            <div class="from">
+              <p><b>From:</b></p>
+              <p><b>PAN NO:</b> ${invoiceItem.header.ProformaPanNO}</p>
+              <p><b>GST NO:</b> ${invoiceItem.header.ProformaGstNumber}</p>
+              <p><b>Type Of Aircraft:</b> ${invoiceItem.header.ProformaTypeOfAircraft}</p>
+              <p><b>Seating Capacity:</b> ${invoiceItem.header.ProformaSeatingCapasity}</p>
+              <p><b>Invoice No.:</b> ${invoiceItem.invoiceUniqueNumber}</p>
+              <p><b>Date:</b> ${invoiceItem.header.ProformaInvoiceDate}</p>
+            </div>
+            <div class="to">
+                <p><b>To:</b></p>
+                <p><b>Customer Name:</b> ${invoiceItem.header.ProformaCustomerName}</p>
+                <p><b>Address:</b> ${invoiceItem.header.ProformaAddress}</p>
+                <p><b>City - State - Pincode:</b> ${invoiceItem.header.ProformaCity} - ${invoiceItem.header.ProformaState} - ${invoiceItem.header.ProformaPincode}</p>
+                <p><b>PAN No.:</b> ${invoiceItem.header.ProformaPan}</p>
+                <p><b>GST NO:</b> ${invoiceItem.header.ProformaGstNo}</p>
+            </div>
+            <div class="ship">
+              <p><b>Booking Details:</b></p>
+              <p><b>Date Of Journey:</b>  ${invoiceItem.header.BookingDateOfJourny}</p>
+              <p><b>Sector:</b> ${invoiceItem.header.BookingSector}</p>
+              <p><b>Sector:</b>  ${invoiceItem.header.BookingSector}</p>
+              <p><b>Billing Flying Time:</b> ${invoiceItem.header.BookingBillingFlyingTime}</p>
+            </div>
+          </div>
+        </div>
+ 
+        <table class="items">
+            <thead>
+                <tr>
+                   <th>S.NO</th>
+                  <th>Description</th>
+                  <th>Units</th>
+                  <th>Rate</th>
+                  <th>Amount</th>              
+                </tr>
+            </thead>
+            <tbody>
+               <tr>
+                <td>1</td>
+                <td class="bold">Charges</td>
+                <td class="text-right"></td>
+                <td class="text-right"></td>
+                <td></td>
+              </tr>
+                  ${invoiceItem.chargesList.map((charge, index) => `
+                    <tr>
+                     
+                       <td class="text-center"></td>
+                      <td>${charge.description}</td>
+                      <td class="text-center">${charge.units ? charge.units : ''}</td>
+                      <td class="text-right">${charge.rate}</td>
+                      <td class="text-right">${charge.amount}</td>
+                    </tr>
+                  `).join('')}
+                 
+                  <tr>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                    <td  class="text-right bold" style="background-color: rgb(181, 179, 200);">Total</td>
+                    <td class="text-right bold"  style="background-color: rgb(181, 179, 200);">${invoiceItem.subtotal}</td>
+                  </tr>
+                  <tr>
+            </tbody>
+        </table>
+         <div class="summary">
+             
+ 
+              <div class="tax-list">
+                       ${invoiceItem.taxList.map(tax => `
+                      <div class="tax-item">
+                      <div class="tax-description">${tax.description}</div>
+                      <div class="tax-amount text-right">${tax.amount}</div>
+                    </div>
+                  `).join('')}
+               </div>
+ 
+             
+              <p><b>Total Invoice Amount:</b> ₹ ${invoiceItem.grandTotal}</p>
+               <div class="totals">
+          <div class="amount-words">
+             <p><b>Amount in words:</b>${invoiceItem.amountInWords}</p>
+          </div>
+             
+          </div>
+      </div>
+ 
+ 
+       
+ 
+        <div class="notes">
+            <div><strong>Notes:</strong> <p>${invoiceItem.header.notes}</p></div>
+            <p></p>
+        </div>
+ 
+        <div class="signatures">
+            <div class="client-signature">
+               
+            </div>
+            <div class="business-signature">
+              <div>
+                <img src="${this.signature}" alt="Company Logo" class="logo"></div>
+                Authorised Signatory        
+              </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+ 
+     `;
+ 
+    const newWindow = window.open('', '', 'height=600,width=800');
+    if (newWindow) {
+      newWindow.document.write(invoiceHTML);
+      newWindow.document.close();
+ 
+      setTimeout(() => {
+        newWindow.print();
+      }, 500);
+    }
+  }
+ 
  
 }
