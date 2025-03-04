@@ -113,7 +113,8 @@
 </div>
 <ng-template #approveModal let-modal>
     <div class="modal-header">
-        <h5 class="modal-title">Approval</h5>
+        <h5 class="modal-title" *ngIf="selectedAction == 'Approved'">Approve Reason</h5>
+        <h5 class="modal-title" *ngIf="selectedAction == 'Rejected'">Reject Reason</h5>
         <!-- <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
             <span aria-hidden="true">&times;</span>
         </button> -->
@@ -122,6 +123,10 @@
         <form [formGroup]="approveForm">
             <label>Remarks:</label>
             <input type="text" formControlName="remark" class="form-control">
+            <div class="text-danger"
+            *ngIf="approveForm.get('remark')?.hasError('required') && approveForm.get('remark')?.touched">
+            Remarks is required.
+          </div>
         </form>
     </div>
     <div class="modal-footer">

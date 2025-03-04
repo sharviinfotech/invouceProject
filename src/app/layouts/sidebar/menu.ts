@@ -13,13 +13,7 @@ export const MENU: MenuItem[] = [
                 parentId: 2,
                 icon: 'bx-home-circle',
             },
-            {
-                id: 3,
-                label: 'Customer Creation',
-                link: '/CustomerCreation',
-                parentId: 1,
-                icon: 'bx-user-check', // Represents invoice approval/decision
-            },
+            
             // {
             //     id:4 ,
             //     label: 'Invoice Layout',
@@ -48,6 +42,13 @@ export const MENU: MenuItem[] = [
                 link: '/InvoiceReports',
                 parentId: 1,
                 icon: 'bx bx-spreadsheet',
+            },
+            {
+                id: 3,
+                label: 'Customer Creation',
+                link: '/CustomerCreation',
+                parentId: 1,
+                icon: 'bx-user-check', // Represents invoice approval/decision
             },
             {
                 id: 8,

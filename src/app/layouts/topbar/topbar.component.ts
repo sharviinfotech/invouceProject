@@ -392,6 +392,9 @@ closeResetPasswordModal() {
           message: 'A new invoice has been added successfully.',
           time: new Date().toLocaleTimeString()
         });
+        // this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+        //   this.router.navigate(['InvoiceDecision']); // Replace 'parent' with your actual route
+        // });
       }
       console.log('this.notifications',this.notifications)
       this.notificationCount = newCount; // Update the displayed count

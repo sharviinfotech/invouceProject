@@ -18,7 +18,7 @@
                     <th class="text-nowrap">Date Of Journey</th>
                     <th class="text-nowrap">Total Amount</th>
                     <th class="text-nowrap">Description</th>
-                    <th class="text-nowrap">Action</th>
+                    <!-- <th class="text-nowrap">Action</th> -->
                   </tr>
                 </thead>
                 <tbody>
@@ -32,7 +32,7 @@
                     <td class="text-nowrap">{{ invoice.header.startBookingDateOfJourny }}/{{ invoice.header.endBookingDateOfJourny }}</td>
                     <td class="text-nowrap">{{ invoice.grandTotal | number: '1.2-2'}}</td>
                     <td class="text-nowrap">{{ invoice.reviewedDescription }} ({{ invoice.reviewedDate }})</td>
-                    <td ><i class="edit-btn fa fa-edit" style="font-size: 20px;" role="button" (click)="openGlobalReviewPopup(invoice)"></i></td>
+                    <!-- <td ><i class="edit-btn fa fa-edit" style="font-size: 20px;" role="button" (click)="openGlobalReviewPopup(invoice)"></i></td> -->
           
                   </tr>
                 </tbody>

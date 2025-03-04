@@ -8,7 +8,7 @@ import { GeneralserviceService } from './generalservice.service';
   providedIn: 'root'
 })
 export class NotificationService {
-    private audio = new Audio('assets/Sounds/notification-2-269292.mp3'); // Adjusted path
+    private audio = new Audio('assets/Sounds/notification-2-2692.mp3'); // Adjusted path
   loginData: any;
 
     constructor(private http: HttpClient,private service:GeneralserviceService) {
