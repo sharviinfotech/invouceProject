@@ -7,7 +7,7 @@
     <div class="card">
       <div class="rounded">
         <div class="left-side">
-          <div class="status-box total-records" >
+          <div class="status-box total-records" role="button" (click)="OnClickCard('1')">
             <div class="flex items-center">
               <i class="fas fa-database text-xl mr-2"></i>
               <h3>Total Records</h3>
@@ -20,7 +20,7 @@
           </div>
     
           <div class="middlewidth">
-            <div class="status-box total-Approved">
+            <div class="status-box total-Approved" role="button" (click)="OnClickCard('2')">
               <div class="flex items-center">
                 <i class="fas fa-check-circle text-xl mr-2"></i>
                 <h3>Approved</h3>
@@ -32,7 +32,7 @@
               <p>{{ approvedTotal | number:'1.2-2'  }}</p>
             </div>
     
-            <div class="status-box total-rejected">
+            <div class="status-box total-rejected" role="button" (click)="OnClickCard('3')">
               <div class="flex items-center">
                 <i class="fas fa-times-circle text-xl mr-2"></i>
                 <h3>Rejected</h3>
@@ -46,7 +46,7 @@
           </div>
     
           <div class="rightwidth">
-            <div class="status-box Recevied_Amount">
+            <div class="status-box Recevied_Amount" role="button" (click)="OnClickCard('4')">
               <div class="flex items-center">
                 <i class="fas fa-wallet text-xl mr-2"></i> <!-- Changed to a wallet icon -->
                 <h3 class="font-semibold">Amount Received</h3>
@@ -61,7 +61,7 @@
             
            
     
-            <div class="status-box total-Pending">
+            <div class="status-box total-Pending" role="button" (click)="OnClickCard('5')">
               <div class="flex items-center">
                 <i class="fas fa-hourglass-half text-xl mr-2"></i>
                 <h3>Payment Pending</h3>
@@ -74,7 +74,7 @@
             </div>
           </div>
     
-          <div class="status-box total-overall">
+          <div class="status-box total-overall" role="button" (click)="OnClickCard('6')">
             <div class="flex items-center">
               <i class="fas fa-coins text-xl mr-2 text-white"></i>
               <h3 class="font-semibold">Over All Count</h3>

@@ -140,7 +140,8 @@ export class DefaultComponent {  // ... (other properties)
     this.AmountReceivedCount = 0;
     this.TotalPQ = 0;
     this.TotalCountPQ = 0;
-
+    this.PaymentPendingTotal =0
+    this.PaymentPendingCount=0
     const currentDate = new Date();
     const oneMonthAgo = new Date();
     oneMonthAgo.setMonth(currentDate.getMonth() - 1);
@@ -166,6 +167,20 @@ export class DefaultComponent {  // ... (other properties)
 
     const approvedlist = this.allInvoiceList.filter(invoice => invoice.status === "Approved");
     console.log('approvedlist',approvedlist)
+
+   // Step 2: Filter invoices where status is "Approved" and pqStatus is "inComplete"
+const approvedAndPaymentPending = this.allInvoiceList.filter(invoice => 
+  invoice.status === "Approved" && invoice.pqStatus === "inComplete"
+);
+console.log('approvedAndPaymentPending', approvedAndPaymentPending);
+
+// Step 3: Process the "Approved" and "inComplete" invoices
+approvedAndPaymentPending.forEach(invoice => {
+  if (invoice.grandTotal && typeof invoice.grandTotal === "number") {
+      this.PaymentPendingTotal += invoice.grandTotal;
+      this.PaymentPendingCount++;
+  }
+});
     
 
     //   const PQLIstTotal = this.allInvoiceList.filter(invoice => invoice.proformaCardHeaderId === "PQ");
@@ -189,9 +204,9 @@ export class DefaultComponent {  // ... (other properties)
         } 
     });
 
-    // Step 4: Calculate Payment Pending and Overall Amount
-    this.PaymentPendingTotal = this.TotalPQ - this.AmountReceivedTotal;
-    this.PaymentPendingCount = this.TotalCountPQ - this.AmountReceivedCount;
+    // // Step 4: Calculate Payment Pending and Overall Amount
+    // this.PaymentPendingTotal = this.TotalPQ - this.AmountReceivedTotal;
+    // this.PaymentPendingCount = this.TotalCountPQ - this.AmountReceivedCount;
 
     this.OverAllAmountTotal = this.AmountReceivedTotal + this.PaymentPendingTotal;
     this.OverAllAmountCount = this.AmountReceivedCount + this.PaymentPendingCount;
@@ -211,8 +226,9 @@ export class DefaultComponent {  // ... (other properties)
     this.grandTotalInvoices = this.roundToOneDecimal(this.grandTotalInvoices);
    const PQList =  this.allInvoiceList.filter((invoice)=>invoice.proformaCardHeaderId === "PQ")
    const TAXList =  this.allInvoiceList.filter((invoice)=>invoice.proformaCardHeaderId === "TAX")
-   console.log("PQList",PQList,"TAXList",TAXList)
+   console.log("PQList",PQList,"TAXList",TAXList);
 
+  
 }
 
 roundToOneDecimal(value: number): number {
@@ -461,7 +477,43 @@ calculateYearlyStatusCounts(invoices: any[]): { [year: string]: number } {
   }
   
   
+  OnClickCard(type){
+    console.log("type",type)
 
+
+    if(type == '1'){
+      this.filteredInvoiceList = this.allInvoiceList
+    }
+    else if(type == '2'){
+      const approvedlist = this.allInvoiceList.filter(invoice => invoice.status === "Approved");
+      console.log('approvedlist',approvedlist)
+      this.filteredInvoiceList = approvedlist
+    }
+    else if(type == '3'){
+      const rejectedlist = this.allInvoiceList.filter(invoice => invoice.status === "Rejected");
+      console.log('rejectedlist',rejectedlist)
+      this.filteredInvoiceList = rejectedlist
+    }
+    else if(type == '4'){
+      const ReceivedList = this.allInvoiceList.filter(invoice => invoice.status === "Amount Received");
+      console.log('ReceivedList',ReceivedList)
+      this.filteredInvoiceList = ReceivedList
+    }
+    else if(type == '5'){
+      const PaymentPendingList = this.allInvoiceList.filter(invoice => invoice.status === "Approved" && invoice.pqStatus === "inComplete");
+      console.log('PaymentPendingList',PaymentPendingList)
+      this.filteredInvoiceList = PaymentPendingList
+    }
+    else if(type == '6'){
+      const ReceivedList = this.allInvoiceList.filter(invoice => invoice.status === "Amount Received");
+      const PaymentPendingList = this.allInvoiceList.filter(invoice => invoice.status === "Approved" && invoice.pqStatus === "inComplete");
+
+      this.filteredInvoiceList = [...ReceivedList,...PaymentPendingList]
+    }
+    
+    console.log("OnClickCard this.filteredInvoiceList",this.filteredInvoiceList)
+
+  }
 
   
   
