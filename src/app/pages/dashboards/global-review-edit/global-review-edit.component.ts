@@ -10,6 +10,7 @@ import { ImageService } from 'src/app/image.service';
 import { NumberToWordsService } from 'src/app/number-to-words.service';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { NgSelectModule } from '@ng-select/ng-select';
+import { Router } from '@angular/router';
 interface TaxItem {
   description: string;
   percentage: number;
@@ -99,7 +100,7 @@ export class GlobalReviewEditComponent {
   };
   allCharges: any;
 
-  constructor(private fb: FormBuilder, private numberToWordsService: NumberToWordsService, private service: GeneralserviceService, private spinner: NgxSpinnerService, private modalService: NgbModal, private imageService: ImageService,) {
+  constructor(private fb: FormBuilder, private numberToWordsService: NumberToWordsService, private service: GeneralserviceService, private spinner: NgxSpinnerService, private modalService: NgbModal, private imageService: ImageService,private router: Router) {
 
 
   }
@@ -573,6 +574,10 @@ export class GlobalReviewEditComponent {
         console.log('Response:', response);
         this.spinner.hide()
         this.modalService.dismissAll();
+        // Reload the route
+    this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+      this.router.navigate(['InvoiceDecision']); // Replace 'parent' with your actual route
+    });
       },
       (error) => {
         // Handle API errors

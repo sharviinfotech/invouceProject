@@ -94,7 +94,7 @@ export class InvoiceComponent implements OnInit {
      this.PQList = []
   if (this.proformaCardHeaderName === "TAX INVOICE") {
     this.newInvoiceCreation.controls['PQInvoiceNumber'].setValidators(Validators.required);
-    this.PQList = this.allInvoiceList.filter(invoice => invoice.pqStatus === "inComplete");
+    this.PQList = this.allInvoiceList.filter(invoice => invoice.pqStatus === "inComplete" && invoice.status === "Approved");
     console.log('this.PQList',this.PQList)
 
   } else {
