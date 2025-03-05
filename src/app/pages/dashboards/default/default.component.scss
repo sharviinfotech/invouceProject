@@ -25,6 +25,18 @@
   background-image: linear-gradient(to right, #00796B, #1bc223);  
   color: #f4eeee !important;
 }
+.btn-primary {
+  background-color: #007bff !important; /* Ensures blue background */
+  border-color: #007bff !important;
+}
+
+.btn-primary:active, 
+.btn-primary:focus, 
+.btn-primary:hover {
+  background-color: #0056b3 !important; /* A slightly darker blue when clicked */
+  border-color: #0056b3 !important;
+  box-shadow: none !important; /* Removes any unwanted shadows */
+}
 
 .card {
   display: flex;
