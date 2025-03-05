@@ -75,6 +75,7 @@ export class DefaultComponent {  // ... (other properties)
   TotalPQ: number;
   TotalCountPQ: number;
   tableData: any;
+  monthlyBarChartOptions: { series: { name: string; data: number[]; }[]; chart: { type: string; height: number; events: { dataPointSelection: (event: any, chartContext: any, config: any) => void; }; }; plotOptions: { bar: { columnWidth: string; }; }; colors: string[]; xaxis: { categories: string[]; title: { text: string; }; }; yaxis: { title: { text: string; }; }; legend: { position: string; }; };
 
   
   constructor(
@@ -240,7 +241,7 @@ convertDate(dateStr: string): Date {
     const [day, month, year] = dateStr.split('-');
     return new Date(`${year}-${month}-${day}`);
 }
-updatePieChart(selectedYear?: string) {
+updatePieChart(selectedYear?: string, selectedMonth?: string) {
   this.spinner.show();
 
   setTimeout(() => {
@@ -248,7 +249,12 @@ updatePieChart(selectedYear?: string) {
       if (!invoice.header?.ProformaInvoiceDate) return false;
       const dateStr = invoice.header.ProformaInvoiceDate;
       const [day, month, year] = dateStr.split('-');
-      return selectedYear ? year === selectedYear : true;
+
+      const isYearMatch = selectedYear ? year === selectedYear : true;
+      const isMonthMatch = selectedMonth ? 
+          new Date(`${year}-${month}-${day}`).toLocaleString('default', { month: 'short' }) === selectedMonth : true;
+
+      return isYearMatch && isMonthMatch;
     });
 
     if (!invoicesToProcess.length) {
@@ -259,7 +265,6 @@ updatePieChart(selectedYear?: string) {
       return;
     }
 
-    // Count invoices by status
     const statusCounts: { [status: string]: number } = {};
     invoicesToProcess.forEach(invoice => {
       const status = invoice.status || "Unknown";
@@ -285,7 +290,7 @@ updatePieChart(selectedYear?: string) {
           dataPointSelection: (event, chartContext, config) => {
             const selectedStatus = chartLabels[config.dataPointIndex];
             console.log("Selected Status:", selectedStatus);
-            this.filterTableByStatus(selectedStatus, selectedYear);
+            this.filterTableByStatus(selectedStatus, selectedYear, selectedMonth);
           }
         }
       },
@@ -300,7 +305,8 @@ updatePieChart(selectedYear?: string) {
   }, 500);
 }
 
-filterTableByStatus(selectedStatus: string, selectedYear?: string) {
+
+filterTableByStatus(selectedStatus: string, selectedYear?: string, selectedMonth?: string) {
   console.log(`Filtering table by Status: ${selectedStatus}, Year: ${selectedYear}`);
 
   this.filteredInvoiceList = this.allInvoiceList.filter(invoice => {
@@ -356,6 +362,65 @@ updateBarChart(data: any[]) {
   const seriesData = years.map(year => yearlyStatusCounts[year]);
 
   this.barChartOptions = {
+    series: [{ name: "Invoices", data: seriesData }],
+    chart: {
+      type: "bar",
+      height: 350,
+      stacked: false,
+      toolbar: { show: true },
+      events: {
+        dataPointSelection: (event, chartContext, config) => {
+          const selectedYear = years[config.dataPointIndex];
+          console.log("Year selected:", selectedYear);
+          this.filterByYear(selectedYear);
+          this.updateMonthlyBarChart(selectedYear); // **Monthly chart ni update cheyyataniki call chestunnam**
+        }
+      }
+    },
+    plotOptions: { bar: { columnWidth: "20%" } },
+    colors: ["#007BFF"],
+    xaxis: { categories: years, title: { text: "Year" } },
+    yaxis: { title: { text: "Invoice Count" } },
+    legend: { position: 'bottom' }
+  };
+
+  setTimeout(() => {
+    this.spinner.hide();
+    this.updatePieChart(); // **Pie chart lo overall data load chestunnam**
+  }, 200);
+}
+updateMonthlyBarChart(selectedYear: string) {
+  this.spinner.show();
+
+  // **Selected Year లో ఉన్న అన్ని ఇన్వాయిస్లను తీసుకోండి**
+  const filteredInvoices = this.allInvoiceList.filter(invoice => {
+      if (!invoice.header?.ProformaInvoiceDate) return false;
+      const dateStr = invoice.header.ProformaInvoiceDate;
+      const [day, month, year] = dateStr.split('-');
+      return year === selectedYear;
+  });
+
+  if (!filteredInvoices.length) {
+      console.warn("No invoices found for selected year.");
+      this.barChartOptions.series = [];
+      this.cdr.detectChanges();
+      this.spinner.hide();
+      return;
+  }
+
+  // **Month-wise Invoice Count తీసుకోవాలి**
+  const monthlyCounts: { [month: string]: number } = {};
+  filteredInvoices.forEach(invoice => {
+      const dateStr = invoice.header.ProformaInvoiceDate;
+      const [day, month, year] = dateStr.split('-');
+      const monthName = new Date(`${year}-${month}-01`).toLocaleString('default', { month: 'short' });
+      monthlyCounts[monthName] = (monthlyCounts[monthName] || 0) + 1;
+  });
+
+  const months = Object.keys(monthlyCounts);
+  const seriesData = months.map(month => monthlyCounts[month]);
+
+  this.barChartOptions = {
       series: [{ name: "Invoices", data: seriesData }],
       chart: {
           type: "bar",
@@ -364,41 +429,47 @@ updateBarChart(data: any[]) {
           toolbar: { show: true },
           events: {
               dataPointSelection: (event, chartContext, config) => {
-                  const selectedYear = years[config.dataPointIndex];
-                  console.log("Year selected:", selectedYear);
-                  this.filterByYear(selectedYear);
-          
-                  // Reset all bar styles
-                  const bars = document.querySelectorAll(".apexcharts-bar-area");
-                  bars.forEach((bar) => {
-                    (bar as HTMLElement).style.stroke = "none"; // Remove previous borders
-                    (bar as HTMLElement).style.strokeWidth = "0";
-                  });
-          
-                  // Highlight the selected bar
-                  const selectedBar = document.querySelector(
-                    `.apexcharts-bar-area[j="${config.dataPointIndex}"]`
-                  );
-                  if (selectedBar) {
-                    (selectedBar as HTMLElement).style.stroke = "red"; // Add red border
-                    (selectedBar as HTMLElement).style.strokeWidth = "2px";
-                  }
-                }
+                  const selectedMonth = months[config.dataPointIndex];
+                  console.log("Month selected:", selectedMonth);
+
+                  // **Month Select అయితే Pie Chart & Table Update చేయాలి**
+                  this.filterByMonth(selectedYear, selectedMonth);
               }
-            },
-          
+          }
+      },
       plotOptions: { bar: { columnWidth: "20%" } },
       colors: ["#007BFF"],
-      xaxis: { categories: years, title: { text: "Year" } },
+      xaxis: { categories: months, title: { text: "Month" } },
       yaxis: { title: { text: "Invoice Count" } },
       legend: { position: 'bottom' }
   };
 
   setTimeout(() => {
       this.spinner.hide();
-      this.updatePieChart(); // Load overall data initially
   }, 200);
 }
+filterByMonth(selectedYear: string, selectedMonth: string) {
+  console.log(`Filtering table by Year: ${selectedYear}, Month: ${selectedMonth}`);
+
+  this.filteredInvoiceList = this.allInvoiceList.filter(invoice => {
+      if (!invoice.header?.ProformaInvoiceDate) return false;
+      const dateStr = invoice.header.ProformaInvoiceDate;
+      const [day, month, year] = dateStr.split('-');
+
+      const monthName = new Date(`${year}-${month}-01`).toLocaleString('default', { month: 'short' });
+      return year === selectedYear && monthName === selectedMonth;
+  });
+
+  console.log("Filtered invoices for month:", this.filteredInvoiceList);
+
+  // **Pie Chart Data Update**
+  this.updatePieChart(selectedYear);
+
+  // **Change Detection Trigger**
+  this.cdr.detectChanges();
+}
+
+
 // Function to calculate yearly invoice counts
 calculateYearlyStatusCounts(invoices: any[]): { [year: string]: number } {
   const yearlyStatusCounts: { [year: string]: number } = {};

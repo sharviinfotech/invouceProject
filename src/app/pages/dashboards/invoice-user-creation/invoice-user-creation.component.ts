@@ -336,42 +336,111 @@ confirmFieldTextType: boolean = false;
 
     });
   }
-   delete(data): void {
-      console.log('Deleting Customer with ID:',data, this.userUniqueId);
-    this.userUniqueId = data.userUniqueId
-      let deletePayload = {
-        globalId: this.userUniqueId,
-        screenName: "user"
-      };
+  //  delete(data): void {
+  //     console.log('Deleting Customer with ID:',data, this.userUniqueId);
+  //   this.userUniqueId = data.userUniqueId
+  //     let deletePayload = {
+  //       globalId: this.userUniqueId,
+  //       screenName: "user"
+  //     };
     
-      console.log("Delete payload:", deletePayload);
-    this.spinner.show()
-      this.service.deteleGlobal(deletePayload).subscribe((res: any) => {
-          console.log("deleteGlobal response:", res);
-          this.spinner.hide()
-          if (res.status === 400) {
-            this.toastr.error(res.message);
-          } else {
+  //     console.log("Delete payload:", deletePayload);
+  //   this.spinner.show()
+  //     this.service.deteleGlobal(deletePayload).subscribe((res: any) => {
+  //         console.log("deleteGlobal response:", res);
+  //         this.spinner.hide()
+  //         if (res.status === 400) {
+  //           this.toastr.error(res.message);
+  //         } else {
             
-            Swal.fire({
-              title: 'succes',
-              text: res.message,
-              icon: 'success',
-              confirmButtonText: 'OK'
-            }).then(() => {
+  //           Swal.fire({
+  //             title: 'succes',
+  //             text: res.message,
+  //             icon: 'success',
+  //             confirmButtonText: 'OK'
+  //           }).then(() => {
               
-            });
-            this.modalService.dismissAll();
+  //           });
+  //           this.modalService.dismissAll();
            
-          }
-        },
-        (error) => {
-          this.spinner.hide()
-          console.error("Error deleting customer:", error);
-          this.toastr.error("Failed to delete customer");
+  //         }
+  //       },
+  //       (error) => {
+  //         this.spinner.hide()
+  //         console.error("Error deleting customer:", error);
+  //         this.toastr.error("Failed to delete customer");
+  //       }
+  //     );
+  //   }
+  delete(data): void {
+    console.log('Deleting Customer with ID:', data, this.userUniqueId);
+    this.userUniqueId = data.userUniqueId;
+    let deletePayload = {
+      globalId: this.userUniqueId,
+      screenName: "user"
+    };
+   
+    console.log("Delete payload:", deletePayload);
+   
+    this.service.getAllUserList().subscribe((response: any) => {
+      console.log("Users List:", response);
+      const users = response.data || [];
+   
+      if (Array.isArray(users)) {
+        const adminCount = users.filter(user => user.role === 'admin').length;
+        console.log("Admin Count:", adminCount);
+   
+        // If there is only one admin and we are trying to delete an admin, show error message
+        if (adminCount === 1 && data.role === 'admin') {
+          Swal.fire({
+            title: 'Cannot Delete!',
+            text: "At least one admin must remain. Please create another admin before deleting.",
+            icon: 'error',
+            confirmButtonText: 'OK'
+          });
+          return; // Stop further execution
         }
-      );
-    }
+   
+        // If more than one admin exists, allow deletion
+        Swal.fire({
+          title: 'Are you sure?',
+          text: "Do you want to delete this user?",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            this.spinner.show();
+            this.service.deteleGlobal(deletePayload).subscribe((res: any) => {
+              console.log("deleteGlobal response:", res);
+              this.spinner.hide();
+              if (res.status === 400) {
+                this.toastr.error(res.message);
+              } else {
+                Swal.fire({
+                  title: 'Success',
+                  text: res.message,
+                  icon: 'success',
+                  confirmButtonText: 'OK'
+                }).then(() => {
+                  this.modalService.dismissAll();
+                });
+              }
+            }, (error) => {
+              this.spinner.hide();
+              console.error("Error deleting customer:", error);
+              this.toastr.error("Failed to delete customer");
+            });
+          }
+        });
+      } else {
+        console.error("Expected users to be an array, but got:", typeof users);
+        this.toastr.error("Error: Users list is not in the expected format.");
+      }
+    });
+  }
   
   getAllUserList(){
     this.userList = [];
