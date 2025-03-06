@@ -68,6 +68,7 @@ export class InvoiceComponent implements OnInit {
   pqSameforTAX: number;
   selectedPQUniqueId: any;
   submited: boolean=false;
+  rePQStatus: any;
   toggleDropdown() {
     this.isDropdownOpen = !this.isDropdownOpen;
    
@@ -509,7 +510,43 @@ spinnerHideMethod(){
       console.log("invoice", invoice)
       console.log("this.invoiceItem", this.invoiceItem.invoiceReferenceNo);
       console.log("this.invoiceItem.header.status", this.invoiceItem.header.status)
-      if (this.invoiceItem.status == "Approved") {
+      
+      
+       if (this.invoiceItem.status == "Approved" && this.invoiceItem.pqStatus == "inComplete") {
+        console.log("If approved")
+        Swal.fire({
+          // title: 'question',
+          text: 'The selected invoice has been approved,Still Do you want to Edit Invoice?',
+          icon: 'question',
+          showCancelButton: true,  // Cancel Button
+          cancelButtonText: 'Cancel',
+          showDenyButton: true,  // Preview Button
+          denyButtonText: 'Preview',
+          showConfirmButton: true,  // Edit Button
+          confirmButtonText: 'Edit',
+        }).then((result) => {
+          if (result.isConfirmed) {
+            // Edit action
+            this.editRow(invoice);
+            this.reSubmitInvoice = false
+          } else if (result.isDenied) {
+            // Preview action
+            this.invoiceItem = invoice;
+            console.log("this.invoiceItem", this.invoiceItem);
+            this.activeTab = 'Preview';
+            this.spinnerHideMethod()
+            this.reSubmitInvoice = false
+          } else {
+            // Cancel action (Optional: You can add any logic if needed)
+            console.log("Action Cancelled");
+            this.getAllInvoice()
+            this.invoiceItem = null
+            this.reSubmitInvoice = false
+            // this.spinnerHideMethod()
+          }
+        });
+      }
+     else if (this.invoiceItem.status == "Approved") {
         console.log("If approved")
         Swal.fire({
           // title: 'question',
@@ -691,6 +728,7 @@ if(this.InvoiceLogo== ''|| this.InvoiceLogo == null){
   }
   editRow(invoice) {
     this.reSubmitInvoiceStatus = null
+    this.rePQStatus = null
     this.reason =null ,
     this.invoiceApprovedOrRejectedByUser =null ,
     this.invoiceApprovedOrRejectedDateAndTime =null ,
@@ -762,7 +800,8 @@ if(this.InvoiceLogo== ''|| this.InvoiceLogo == null){
 }
     console.log("this.selectedInvoice.header.invoiceUniqueNumber", this.selectedInvoice.invoiceUniqueNumber)
     console.log("this.newInvoiceCreation", this.newInvoiceCreation.value.ProformaInvoiceNumber)
-    this.pqSameforTAX = this.selectedInvoice.pqSameforTAX
+    this.pqSameforTAX = this.selectedInvoice.pqSameforTAX,
+    this.rePQStatus =this.selectedInvoice.pqStatus 
   }
   resetAll() {
     // this.logoUrl = ""
@@ -924,9 +963,9 @@ if(this.InvoiceLogo== ''|| this.InvoiceLogo == null){
         tax.amount = Math.round(this.subtotal * (Number(tax.percentage) / 100));
     });
 
-    this.grandTotal = this.subtotal + this.taxItems.reduce((sum, tax) => sum + (Number(tax.amount) || 0), 0);
+    this.grandTotal = Math.round(this.subtotal + this.taxItems.reduce((sum, tax) => sum + (Number(tax.amount) || 0), 0));
 
-    this.amountInWords = this.numberToWordsService.convert(Math.round(this.grandTotal)).toUpperCase();
+    this.amountInWords = this.numberToWordsService.convert(this.grandTotal).toUpperCase();
 
     console.log("chargeItems", this.chargeItems);
     console.log("taxItems", this.taxItems);
@@ -1196,7 +1235,18 @@ if (
         endBbookingDate = this.formatDate(endBbookingDate);
       }
       console.log("invoiceDateSplit update", invoiceDate, "startBookingDate",startBookingDate,"endBbookingDate", endBbookingDate);
-     
+      var pqStatus
+      var statusUpdate
+      var rePQStatus
+      console.log("this.reSubmitInvoiceStatus",this.reSubmitInvoiceStatus,"this.rePQStatus",this.rePQStatus)
+     if(this.reSubmitInvoiceStatus == "Approved" && this.rePQStatus == 'inComplete' ){
+         statusUpdate = "Pending",
+         rePQStatus = 'inComplete'
+       
+     }else{
+         statusUpdate = this.reSubmitInvoiceStatus,
+          rePQStatus = 'inComplete'
+     }
     
       // Implement update logic here
       let updateobj = {
@@ -1236,12 +1286,14 @@ if (
         "invoiceApprovedOrRejectedDateAndTime":this.invoiceApprovedOrRejectedDateAndTime,
         "loggedInUser":this.loginData.data.userName,
         "createdByUser":this.loginData.data.userName,
-       "status":this.reSubmitInvoiceStatus,
+       "status":statusUpdate,
        "proformaCardHeaderId":this.proformaCardHeaderId,
         "proformaCardHeaderName":this.proformaCardHeaderName,
         "reviewed":this.reviewedFlag,
         "reviewedReSubmited":false,
-           "pqSameforTAX":this.pqSameforTAX?this.pqSameforTAX:0
+           "pqSameforTAX":this.pqSameforTAX?this.pqSameforTAX:0,
+           "pqStatus":rePQStatus,
+
         // "bankDetails":{
         //     "accountName":this.newInvoiceCreation.value.accountName,
         //     "bank":this.newInvoiceCreation.value.bank,
