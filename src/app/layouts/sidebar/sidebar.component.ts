@@ -172,9 +172,9 @@ export class SidebarComponent implements OnInit, AfterViewInit, OnChanges {
             { id: 7, label: "Invoice Reports", link: "/InvoiceReports", parentId: 1, icon: "bx bx-spreadsheet" }
         ],
         'ACCOUNTS': [
-            { id: 2, label: "Dashboard", link: "/dashboard", parentId: 2, icon: "bx-home-circle" },
-            { id: 7, label: "Invoice Reports", link: "/InvoiceReports", parentId: 1, icon: "bx bx-spreadsheet" },
-            { id: 3, label: "Customer Creation", link: "/CustomerCreation", parentId: 1, icon: "bx-user-check" }
+          { id: 2, label: "Dashboard", link: "/dashboard", parentId: 2, icon: "bx-home-circle" },
+          { id: 6, label: "Invoice Decision", link: "/InvoiceDecision", parentId: 1, icon: "bx-sync" },
+          { id: 7, label: "Invoice Reports", link: "/InvoiceReports", parentId: 1, icon: "bx bx-spreadsheet" }
         ]
     };
 
