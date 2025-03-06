@@ -576,16 +576,14 @@ updateMonthlyBarChart(selectedYear: string) {
       events: {
         dataPointSelection: (event, chartContext, config) => {
           const selectedMonth = config.dataPointIndex + 1;
-          const selectedStatusIndex = config.seriesIndex;
-          const statusMap = ['Approved', 'Rejected', 'Pending', 'Amount Received'];
-          const selectedStatus = statusMap[selectedStatusIndex];
 
-          console.log('Month selected:', selectedMonth, 'Status selected:', selectedStatus);
+          console.log('Month selected:', selectedMonth);
 
-          this.updateMonthlyPieChart(selectedYear, selectedMonth, selectedStatus);
-          this.updateMonthlyTable(selectedYear, selectedMonth, selectedStatus);
+          // Update Pie Chart & Table
+          this.updateMonthlyPieChart(selectedYear, selectedMonth);
+          this.updateMonthlyTable(selectedYear, selectedMonth);
 
-          // **Highlight the selected bar**
+          // Highlight the clicked bar
           setTimeout(() => {
             // Remove previous highlights
             const bars = document.querySelectorAll(".apexcharts-bar-series rect");
@@ -594,13 +592,13 @@ updateMonthlyBarChart(selectedYear: string) {
               (bar as HTMLElement).style.strokeWidth = "0";
             });
 
-            // **Highlight the clicked bar**
+            // Highlight the clicked bar
             const selectedBar = document.querySelector(
-              `.apexcharts-bar-series rect[j="${config.dataPointIndex}"][i="${config.seriesIndex}"]`
+              `.apexcharts-bar-series rect[j="${config.dataPointIndex}"]`
             );
             if (selectedBar) {
-              (selectedBar as HTMLElement).style.stroke = "dark pink"; // Highlight color
-              (selectedBar as HTMLElement).style.strokeWidth = "4px";
+              (selectedBar as HTMLElement).style.stroke = "black"; // Black border
+              (selectedBar as HTMLElement).style.strokeWidth = "10px";
             }
           }, 100);
         }
@@ -637,23 +635,20 @@ updateMonthlyBarChart(selectedYear: string) {
   this.cdr.detectChanges();
 }
 
+updateMonthlyPieChart(selectedYear: string, selectedMonth?: number) {
+  console.log('Updating Pie Chart for:', { selectedYear, selectedMonth });
 
-
-updateMonthlyPieChart(selectedYear: string, selectedMonth?: number, selectedStatus?: string) {
-  console.log('Updating Pie Chart for:', { selectedYear, selectedMonth, selectedStatus });
-
-  // Filter invoices based on selected year, month, and status
+  // Filter invoices based on the selected year and month
   const invoicesToProcess = this.allInvoiceList.filter(invoice => {
     if (!invoice.header?.ProformaInvoiceDate) return false;
     const [day, month, year] = invoice.header.ProformaInvoiceDate.split('-');
     return (
       selectedYear === year &&
-      (!selectedMonth || parseInt(month, 10) === selectedMonth) &&
-      (!selectedStatus || invoice.status === selectedStatus)
+      (!selectedMonth || parseInt(month, 10) === selectedMonth)
     );
   });
 
-  // Count statuses
+  // Count occurrences of each status
   const statusCounts: { [status: string]: number } = {};
   invoicesToProcess.forEach(invoice => {
     const status = invoice.status || 'Unknown';
@@ -665,14 +660,14 @@ updateMonthlyPieChart(selectedYear: string, selectedMonth?: number, selectedStat
     'Approved': '#11db52',
     'Rejected': '#f93d3d',
     'Pending': '#ffb020',
-    'Amount Received':'#008000'
+    'Amount Received': '#008000'
   };
 
-  // 🛑 Completely recreate the pie chart options object
+  // Reset pie chart before updating
   this.monthlyPieChartOptions = null;
-  this.cdr.detectChanges(); // Force UI update before reassigning options
+  this.cdr.detectChanges(); // Force UI update
 
-  // Assign new chart options
+  // Update with new data
   this.monthlyPieChartOptions = {
     series: Object.values(statusCounts),
     chart: { type: 'pie', height: 350 },
@@ -681,22 +676,190 @@ updateMonthlyPieChart(selectedYear: string, selectedMonth?: number, selectedStat
     legend: { position: 'bottom' }
   };
 
-  this.cdr.detectChanges(); // Ensure changes are applied
+  this.cdr.detectChanges(); // Apply changes
 }
 
-updateMonthlyTable(selectedYear: string, selectedMonth?: number, selectedStatus?: string) {
+updateMonthlyTable(selectedYear: string, selectedMonth?: number) {
   this.filteredInvoiceList = this.allInvoiceList.filter(invoice => {
     if (!invoice.header?.ProformaInvoiceDate) return false;
     const [day, month, year] = invoice.header.ProformaInvoiceDate.split('-');
     return (
       selectedYear === year &&
-      (!selectedMonth || parseInt(month, 10) === selectedMonth) &&
-      (!selectedStatus || invoice.status === selectedStatus)
+      (!selectedMonth || parseInt(month, 10) === selectedMonth)
     );
   });
 
   this.cdr.detectChanges();
 }
+
+// updateMonthlyBarChart(selectedYear: string) {
+//   this.selectedYear = selectedYear;
+//   this.monthlyCardDisplay = true;
+
+//   const monthlyApproved = new Array(12).fill(0);
+//   const monthlyRejected = new Array(12).fill(0);
+//   const monthlyPending = new Array(12).fill(0);
+//   const monthlyAmountReceived = new Array(12).fill(0);
+
+//   this.allInvoiceList.forEach(invoice => {
+//     if (!invoice.header?.ProformaInvoiceDate) return;
+//     const [day, month, year] = invoice.header.ProformaInvoiceDate.split('-');
+//     if (year === selectedYear) {
+//       const monthIndex = parseInt(month, 10) - 1;
+//       switch (invoice.status) {
+//         case 'Approved':
+//           monthlyApproved[monthIndex] += 1;
+//           break;
+//         case 'Rejected':
+//           monthlyRejected[monthIndex] += 1;
+//           break;
+//         case 'Pending':
+//           monthlyPending[monthIndex] += 1;
+//           break;
+//         case 'Amount Received':
+//           monthlyAmountReceived[monthIndex] += 1;
+//           break;
+//         default:
+//           break;
+//       }
+//     }
+//   });
+
+//   this.monthlyBarChartOptions = {
+//     series: [
+//       { name: 'Approved', data: monthlyApproved },
+//       { name: 'Rejected', data: monthlyRejected },
+//       { name: 'Pending', data: monthlyPending },
+//       { name: 'Amount Received', data: monthlyAmountReceived }
+//     ],
+//     chart: {
+//       type: 'bar',
+//       height: 350,
+//       toolbar: { show: true },
+//       events: {
+//         dataPointSelection: (event, chartContext, config) => {
+//           const selectedMonth = config.dataPointIndex + 1;
+//           const selectedStatusIndex = config.seriesIndex;
+//           const statusMap = ['Approved', 'Rejected', 'Pending', 'Amount Received'];
+//           const selectedStatus = statusMap[selectedStatusIndex];
+
+//           console.log('Month selected:', selectedMonth, 'Status selected:', selectedStatus);
+
+//           this.updateMonthlyPieChart(selectedYear, selectedMonth, selectedStatus);
+//           this.updateMonthlyTable(selectedYear, selectedMonth, selectedStatus);
+
+//           // **Highlight the selected bar**
+//           setTimeout(() => {
+//             // Remove previous highlights
+//             const bars = document.querySelectorAll(".apexcharts-bar-series rect");
+//             bars.forEach((bar) => {
+//               (bar as HTMLElement).style.stroke = "none";
+//               (bar as HTMLElement).style.strokeWidth = "0";
+//             });
+
+//             // **Highlight the clicked bar**
+//             const selectedBar = document.querySelector(
+//               `.apexcharts-bar-series rect[j="${config.dataPointIndex}"][i="${config.seriesIndex}"]`
+//             );
+//             if (selectedBar) {
+//               (selectedBar as HTMLElement).style.stroke = "dark pink"; // Highlight color
+//               (selectedBar as HTMLElement).style.strokeWidth = "4px";
+//             }
+//           }, 100);
+//         }
+//       }
+//     },
+//     plotOptions: {
+//       bar: {
+//         columnWidth: '100%',
+//         distributed: false
+//       }
+//     },
+//     colors: ['#11db52', '#f93d3d', '#ffb020', '#008000'],
+//     xaxis: {
+//       categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+//       title: { text: 'Months' }
+//     },
+//     yaxis: {
+//       title: { text: 'Invoice Count' }
+//     },
+//     legend: {
+//       position: 'bottom'
+//     },
+//     states: {
+//       active: {
+//         filter: {
+//           type: 'darken',
+//           value: 0.8
+//         }
+//       }
+//     }
+//   };
+
+//   this.resetPieChart();
+//   this.cdr.detectChanges();
+// }
+
+
+
+// updateMonthlyPieChart(selectedYear: string, selectedMonth?: number, selectedStatus?: string) {
+//   console.log('Updating Pie Chart for:', { selectedYear, selectedMonth, selectedStatus });
+
+//   // Filter invoices based on selected year, month, and status
+//   const invoicesToProcess = this.allInvoiceList.filter(invoice => {
+//     if (!invoice.header?.ProformaInvoiceDate) return false;
+//     const [day, month, year] = invoice.header.ProformaInvoiceDate.split('-');
+//     return (
+//       selectedYear === year &&
+//       (!selectedMonth || parseInt(month, 10) === selectedMonth) &&
+//       (!selectedStatus || invoice.status === selectedStatus)
+//     );
+//   });
+
+//   // Count statuses
+//   const statusCounts: { [status: string]: number } = {};
+//   invoicesToProcess.forEach(invoice => {
+//     const status = invoice.status || 'Unknown';
+//     statusCounts[status] = (statusCounts[status] || 0) + 1;
+//   });
+
+//   // Define colors for each status
+//   const statusColors: { [key: string]: string } = {
+//     'Approved': '#11db52',
+//     'Rejected': '#f93d3d',
+//     'Pending': '#ffb020',
+//     'Amount Received':'#008000'
+//   };
+
+//   // 🛑 Completely recreate the pie chart options object
+//   this.monthlyPieChartOptions = null;
+//   this.cdr.detectChanges(); // Force UI update before reassigning options
+
+//   // Assign new chart options
+//   this.monthlyPieChartOptions = {
+//     series: Object.values(statusCounts),
+//     chart: { type: 'pie', height: 350 },
+//     labels: Object.keys(statusCounts),
+//     colors: Object.keys(statusCounts).map(status => statusColors[status] || "#CCCCCC"),
+//     legend: { position: 'bottom' }
+//   };
+
+//   this.cdr.detectChanges(); // Ensure changes are applied
+// }
+
+// updateMonthlyTable(selectedYear: string, selectedMonth?: number, selectedStatus?: string) {
+//   this.filteredInvoiceList = this.allInvoiceList.filter(invoice => {
+//     if (!invoice.header?.ProformaInvoiceDate) return false;
+//     const [day, month, year] = invoice.header.ProformaInvoiceDate.split('-');
+//     return (
+//       selectedYear === year &&
+//       (!selectedMonth || parseInt(month, 10) === selectedMonth) &&
+//       (!selectedStatus || invoice.status === selectedStatus)
+//     );
+//   });
+
+//   this.cdr.detectChanges();
+// }
 
 
 
