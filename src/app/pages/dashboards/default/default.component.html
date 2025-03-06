@@ -1,3 +1,4 @@
+
 <div class="flex w-full flex-auto flex-col">
   <div class="mx-auto flex w-full max-w-screen-xl flex-wrap p-1 shadow-md">
     <div class="card-header" style="text-align: center !important;">
@@ -7,7 +8,7 @@
     <div class="card">
       <div class="rounded">
         <div class="left-side">
-          <div class="status-box total-records" role="button" (click)="OnClickCard('1')">
+          <div class="status-box total-records" role="button" (click)="OnClickCard('1')">  
             <div class="flex items-center">
               <i class="fas fa-database text-xl mr-2"></i>
               <h3>Total Records</h3>
@@ -95,9 +96,73 @@
         </div>
       </div>
     </div>
+    <div class="card">
+      <div style="display: flex; justify-content: flex-end; margin-bottom: 10px;">
+        <button *ngIf="monthlyCardDisplay" (click)="goBackToYearChart()" class="btn btn-primary">
+          <i class="fas fa-arrow-left"></i> Back
+        </button>
+      </div>
+      
+      
+      <div class="row" id="barChart" style="margin-top: 30px; border: 2px solid darkviolet !important; margin-right: 0px !important; margin-left: 0px !important;">
+        
+        <!-- Yearly Bar Chart -->
+        <div class="col-md-6 col-lg-6" id="leftBar">
+          <apx-chart 
+            [series]="barChartOptions.series" 
+            [chart]="barChartOptions.chart"
+            [xaxis]="barChartOptions.xaxis"
+            [yaxis]="barChartOptions.yaxis"
+            [plotOptions]="barChartOptions.plotOptions" 
+            [colors]="barChartOptions.colors">
+          </apx-chart>
+        </div>
+    
+        <!-- Pie Chart (Appears only when data exists) -->
+        <div *ngIf="pieChartOptions.series?.length > 0" class="col-md-6 col-lg-6" id="rightBar">
+          <apx-chart 
+            [series]="pieChartOptions.series" 
+            [chart]="pieChartOptions.chart"
+            [labels]="pieChartOptions.labels" 
+            [colors]="pieChartOptions.colors">
+          </apx-chart>
+        </div>
+      
+      </div>
+    
+      <!-- Monthly Bar Chart (Appears only when there is data) -->
+     
+
+<div *ngIf="monthlyCardDisplay" class="row mt-3">
+  <h3 >Year: {{ selectedYear }}</h3> <!-- Add this line here -->
+
+  <div class="col-md-6 col-lg-6" id="leftBar">
+    <apx-chart 
+      [series]="monthlyBarChartOptions.series" 
+      [chart]="monthlyBarChartOptions.chart"
+      [xaxis]="monthlyBarChartOptions.xaxis"
+      [yaxis]="monthlyBarChartOptions.yaxis"
+      [plotOptions]="monthlyBarChartOptions.plotOptions" 
+      [colors]="monthlyBarChartOptions.colors">
+    </apx-chart>
+  </div>
+
+  <div *ngIf="monthlyPieChartOptions" class="col-md-6 col-lg-6" id="rightBar">
+    <apx-chart 
+      [series]="monthlyPieChartOptions.series" 
+      [chart]="monthlyPieChartOptions.chart" 
+      [labels]="monthlyPieChartOptions.labels" 
+      [colors]="monthlyPieChartOptions.colors" 
+      [legend]="monthlyPieChartOptions.legend">
+    </apx-chart>
+  </div>
+</div>
+
+
+    </div>
     
 
-    <div class="card">
+    <!-- <div class="card">
       <div class="row" id="barChart" style="margin-top: 30px;" style="margin-top: 10px;border: 2px solid darkviolet !important;margin-right: 0px !important;
             margin-left: 0px !important;">
       <div class="col-md-6 col-lg-6" id="leftBar">
@@ -113,7 +178,7 @@
       </div>
     </div>
 
-    </div>
+    </div> -->
     <!-- below is comentad by sunil  start-->
     <!-- <div class="row" style="margin-top: 30px;">
       
