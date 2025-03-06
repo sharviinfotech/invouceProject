@@ -1,3 +1,6 @@
+
+
+
 import { Component, OnInit,AfterViewInit, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
 import { GeneralserviceService } from 'src/app/generalservice.service';
 import { CommonModule } from '@angular/common';
@@ -73,12 +76,10 @@ export class DefaultComponent {  // ... (other properties)
   OverAllAmountTotal: number;
   OverAllAmountCount: number;
   TotalPQ: number;
-  selectedYear: string = "";
-backButtonVisible: boolean = false;
   TotalCountPQ: number;
   tableData: any;
-  monthlyBarChartOptions: { series: { name: string; data: number[]; }[]; chart: { type: string; height: number; events: { dataPointSelection: (event: any, chartContext: any, config: any) => void; }; }; plotOptions: { bar: { columnWidth: string; }; }; colors: string[]; xaxis: { categories: string[]; title: { text: string; }; }; yaxis: { title: { text: string; }; }; legend: { position: string; }; };
-  filteredTableData: any[];
+  monthlyPieChartOptions: { series: number[]; chart: { type: string; height: number; }; labels: string[]; colors: string[]; legend: { position: string; }; };
+  monthlyBarChartOptions: { series: { name: string; data: any[]; }[]; chart: { type: string; height: number; toolbar: { show: boolean; }; events: { dataPointSelection: (event: any, chartContext: any, config: any) => void; }; }; xaxis: { categories: string[]; }; yaxis: { title: { text: string; }; }; };
 
   
   constructor(
@@ -144,8 +145,7 @@ backButtonVisible: boolean = false;
     this.AmountReceivedCount = 0;
     this.TotalPQ = 0;
     this.TotalCountPQ = 0;
-    this.PaymentPendingTotal =0
-    this.PaymentPendingCount=0
+
     const currentDate = new Date();
     const oneMonthAgo = new Date();
     oneMonthAgo.setMonth(currentDate.getMonth() - 1);
@@ -171,20 +171,6 @@ backButtonVisible: boolean = false;
 
     const approvedlist = this.allInvoiceList.filter(invoice => invoice.status === "Approved");
     console.log('approvedlist',approvedlist)
-
-   // Step 2: Filter invoices where status is "Approved" and pqStatus is "inComplete"
-const approvedAndPaymentPending = this.allInvoiceList.filter(invoice => 
-  invoice.status === "Approved" && invoice.pqStatus === "inComplete"
-);
-console.log('approvedAndPaymentPending', approvedAndPaymentPending);
-
-// Step 3: Process the "Approved" and "inComplete" invoices
-approvedAndPaymentPending.forEach(invoice => {
-  if (invoice.grandTotal && typeof invoice.grandTotal === "number") {
-      this.PaymentPendingTotal += invoice.grandTotal;
-      this.PaymentPendingCount++;
-  }
-});
     
 
     //   const PQLIstTotal = this.allInvoiceList.filter(invoice => invoice.proformaCardHeaderId === "PQ");
@@ -208,9 +194,9 @@ approvedAndPaymentPending.forEach(invoice => {
         } 
     });
 
-    // // Step 4: Calculate Payment Pending and Overall Amount
-    // this.PaymentPendingTotal = this.TotalPQ - this.AmountReceivedTotal;
-    // this.PaymentPendingCount = this.TotalCountPQ - this.AmountReceivedCount;
+    // Step 4: Calculate Payment Pending and Overall Amount
+    this.PaymentPendingTotal = this.TotalPQ - this.AmountReceivedTotal;
+    this.PaymentPendingCount = this.TotalCountPQ - this.AmountReceivedCount;
 
     this.OverAllAmountTotal = this.AmountReceivedTotal + this.PaymentPendingTotal;
     this.OverAllAmountCount = this.AmountReceivedCount + this.PaymentPendingCount;
@@ -230,9 +216,8 @@ approvedAndPaymentPending.forEach(invoice => {
     this.grandTotalInvoices = this.roundToOneDecimal(this.grandTotalInvoices);
    const PQList =  this.allInvoiceList.filter((invoice)=>invoice.proformaCardHeaderId === "PQ")
    const TAXList =  this.allInvoiceList.filter((invoice)=>invoice.proformaCardHeaderId === "TAX")
-   console.log("PQList",PQList,"TAXList",TAXList);
+   console.log("PQList",PQList,"TAXList",TAXList)
 
-  
 }
 
 roundToOneDecimal(value: number): number {
@@ -244,7 +229,7 @@ convertDate(dateStr: string): Date {
     const [day, month, year] = dateStr.split('-');
     return new Date(`${year}-${month}-${day}`);
 }
-// updatePieChart(selectedYear?: string, selectedMonth?: string) {
+// updatePieChart(selectedYear?: string) {
 //   this.spinner.show();
 
 //   setTimeout(() => {
@@ -252,12 +237,7 @@ convertDate(dateStr: string): Date {
 //       if (!invoice.header?.ProformaInvoiceDate) return false;
 //       const dateStr = invoice.header.ProformaInvoiceDate;
 //       const [day, month, year] = dateStr.split('-');
-
-//       const isYearMatch = selectedYear ? year === selectedYear : true;
-//       const isMonthMatch = selectedMonth ? 
-//           new Date(`${year}-${month}-${day}`).toLocaleString('default', { month: 'short' }) === selectedMonth : true;
-
-//       return isYearMatch && isMonthMatch;
+//       return selectedYear ? year === selectedYear : true;
 //     });
 
 //     if (!invoicesToProcess.length) {
@@ -268,6 +248,7 @@ convertDate(dateStr: string): Date {
 //       return;
 //     }
 
+//     // Count invoices by status
 //     const statusCounts: { [status: string]: number } = {};
 //     invoicesToProcess.forEach(invoice => {
 //       const status = invoice.status || "Unknown";
@@ -293,7 +274,7 @@ convertDate(dateStr: string): Date {
 //           dataPointSelection: (event, chartContext, config) => {
 //             const selectedStatus = chartLabels[config.dataPointIndex];
 //             console.log("Selected Status:", selectedStatus);
-//             this.filterTableByStatus(selectedStatus, selectedYear, selectedMonth);
+//             this.filterTableByStatus(selectedStatus, selectedYear);
 //           }
 //         }
 //       },
@@ -307,20 +288,14 @@ convertDate(dateStr: string): Date {
 //     this.spinner.hide();
 //   }, 500);
 // }
-updatePieChart(selectedYear?: string, selectedMonth?: string) {
+updatePieChart(selectedYear?: string) {
   this.spinner.show();
 
   setTimeout(() => {
     let invoicesToProcess = this.allInvoiceList.filter(invoice => {
       if (!invoice.header?.ProformaInvoiceDate) return false;
-      const dateStr = invoice.header.ProformaInvoiceDate;
-      const [day, month, year] = dateStr.split('-');
-      const monthName = new Date(`${year}-${month}-01`).toLocaleString('default', { month: 'short' });
-
-      const isYearMatch = selectedYear ? year === selectedYear : true;
-      const isMonthMatch = selectedMonth ? monthName === selectedMonth : true;
-
-      return isYearMatch && isMonthMatch;
+      const [day, month, year] = invoice.header.ProformaInvoiceDate.split('-');
+      return selectedYear ? year === selectedYear : true;
     });
 
     if (!invoicesToProcess.length) {
@@ -331,33 +306,37 @@ updatePieChart(selectedYear?: string, selectedMonth?: string) {
       return;
     }
 
-    // Define status counts with specific categories
-    const statusCounts = { Approved: 0, Pending: 0, Rejected: 0 };
-
+    // Count invoices by status
+    const statusCounts: { [status: string]: number } = {};
     invoicesToProcess.forEach(invoice => {
       const status = invoice.status || "Unknown";
-      if (status === "Approved") statusCounts.Approved++;
-      else if (status === "Pending") statusCounts.Pending++;
-      else if (status === "Rejected") statusCounts.Rejected++;
+      statusCounts[status] = (statusCounts[status] || 0) + 1;
     });
 
+    const chartLabels = Object.keys(statusCounts);
+    const chartData = Object.values(statusCounts);
+    const statusColors: { [key: string]: string } = {
+      "Approved": "#11db52",
+      "Rejected": "#f93d3d",
+      "Pending": "#ffb020"
+    };
+
     this.pieChartOptions = {
-      series: [statusCounts.Approved, statusCounts.Pending, statusCounts.Rejected],
-      labels: ["Approved", "Pending", "Rejected"],
+      series: chartData,
       chart: {
         type: "pie",
         height: 350,
         events: {
           dataPointSelection: (event, chartContext, config) => {
-            const selectedStatus = ["Approved", "Pending", "Rejected"][config.dataPointIndex];
+            const selectedStatus = chartLabels[config.dataPointIndex];
             console.log("Selected Status:", selectedStatus);
-            this.filterTableByStatus(selectedStatus, selectedYear, selectedMonth);
+            this.filterTableByStatus(selectedStatus, selectedYear);
           }
         }
       },
-      colors: ["#11db52", "#ffb020", "#f93d3d"],
-      legend: { position: "bottom" },
-      tooltip: { y: { formatter: (val) => `${val} invoices` } }
+      labels: chartLabels,
+      colors: chartLabels.map(label => statusColors[label] || "#FFD700"),
+      legend: { position: "bottom" }
     };
 
     this.cdr.detectChanges();
@@ -366,10 +345,7 @@ updatePieChart(selectedYear?: string, selectedMonth?: string) {
 }
 
 
-
-
-
-filterTableByStatus(selectedStatus: string, selectedYear?: string, selectedMonth?: string) {
+filterTableByStatus(selectedStatus: string, selectedYear?: string) {
   console.log(`Filtering table by Status: ${selectedStatus}, Year: ${selectedYear}`);
 
   this.filteredInvoiceList = this.allInvoiceList.filter(invoice => {
@@ -391,13 +367,9 @@ filterTableByStatus(selectedStatus: string, selectedYear?: string, selectedMonth
 
 
 
-
 filterByYear(selectedYear: string) {
   console.log("Selected Year:", selectedYear);
-  this.selectedYear = selectedYear; // Store selected year
-  this.backButtonVisible = true; // Show back button
 
-  // Filter invoices by selected year
   this.filteredInvoiceList = this.allInvoiceList.filter(invoice => {
     if (!invoice.header?.ProformaInvoiceDate) return false;
     const dateStr = invoice.header.ProformaInvoiceDate;
@@ -413,37 +385,16 @@ filterByYear(selectedYear: string) {
     return;
   }
 
-  // Update charts with filtered data
+  // Update Pie Chart with filtered data
   this.updatePieChart(selectedYear);
-  this.updateMonthlyBarChart(selectedYear);
 }
-updateTable(selectedYear: string, selectedMonth: string, selectedStatus: string) {
-  this.filteredTableData = this.allInvoiceList.filter(invoice => {
-      if (!invoice.header?.ProformaInvoiceDate) return false;
-      const dateStr = invoice.header.ProformaInvoiceDate;
-      const [day, month, year] = dateStr.split('-');
-      const monthName = new Date(`${year}-${month}-01`).toLocaleString('default', { month: 'short' });
-
-      return year === selectedYear && monthName === selectedMonth && invoice.status === selectedStatus;
-  });
-
-  this.cdr.detectChanges();
-}
-
-
-goBackToYearlyView() {
-  this.selectedYear = "";
-  this.backButtonVisible = false;
-  this.updateBarChart(this.allInvoiceList);
-}
-
 
 
 updateBarChart(data: any[]) {
   this.spinner.show();
 
   const yearlyStatusCounts = this.calculateYearlyStatusCounts(data);
-  if (Object.keys(yearlyStatusCounts).length === 0) return;
+  if (!Object.keys(yearlyStatusCounts).length) return;
 
   const years = Object.keys(yearlyStatusCounts).sort();
   const seriesData = years.map(year => yearlyStatusCounts[year]);
@@ -453,14 +404,13 @@ updateBarChart(data: any[]) {
     chart: {
       type: "bar",
       height: 350,
-      stacked: false,
       toolbar: { show: true },
       events: {
         dataPointSelection: (event, chartContext, config) => {
           const selectedYear = years[config.dataPointIndex];
           console.log("Year selected:", selectedYear);
           this.filterByYear(selectedYear);
-          this.updateMonthlyBarChart(selectedYear); // **Monthly chart ni update cheyyataniki call chestunnam**
+          this.updateMonthlyBarChart(selectedYear); // Load Monthly Data
         }
       }
     },
@@ -473,112 +423,63 @@ updateBarChart(data: any[]) {
 
   setTimeout(() => {
     this.spinner.hide();
-    this.updatePieChart(); // **Pie chart lo overall data load chestunnam**
+    this.updatePieChart(); // Load overall data initially
   }, 200);
 }
 
-updateMonthlyBarChart(selectedYear: string) {
-  this.spinner.show();
+// updateBarChart(data: any[]) {
+//   this.spinner.show();
 
-  const filteredInvoices = this.allInvoiceList.filter(invoice => {
-      if (!invoice.header?.ProformaInvoiceDate) return false;
-      const dateStr = invoice.header.ProformaInvoiceDate;
-      const [day, month, year] = dateStr.split('-');
-      return year === selectedYear;
-  });
+//   const yearlyStatusCounts = this.calculateYearlyStatusCounts(data);
+//   if (Object.keys(yearlyStatusCounts).length === 0) return;
 
-  if (!filteredInvoices.length) {
-      console.warn("No invoices found for selected year.");
-      this.barChartOptions.series = [];
-      this.cdr.detectChanges();
-      this.spinner.hide();
-      return;
-  }
+//   const years = Object.keys(yearlyStatusCounts).sort();
+//   const seriesData = years.map(year => yearlyStatusCounts[year]);
 
-  // **Initialize Status Count Object**
-  const monthlyStatusCounts: { [month: string]: { [status: string]: number } } = {};
+//   this.barChartOptions = {
+//       series: [{ name: "Invoices", data: seriesData }],
+//       chart: {
+//           type: "bar",
+//           height: 350,
+//           stacked: false,
+//           toolbar: { show: true },
+//           events: {
+//               dataPointSelection: (event, chartContext, config) => {
+//                   const selectedYear = years[config.dataPointIndex];
+//                   console.log("Year selected:", selectedYear);
+//                   this.filterByYear(selectedYear);
+          
+//                   // Reset all bar styles
+//                   const bars = document.querySelectorAll(".apexcharts-bar-area");
+//                   bars.forEach((bar) => {
+//                     (bar as HTMLElement).style.stroke = "none"; // Remove previous borders
+//                     (bar as HTMLElement).style.strokeWidth = "0";
+//                   });
+          
+//                   // Highlight the selected bar
+//                   const selectedBar = document.querySelector(
+//                     `.apexcharts-bar-area[j="${config.dataPointIndex}"]`
+//                   );
+//                   if (selectedBar) {
+//                     (selectedBar as HTMLElement).style.stroke = "red"; // Add red border
+//                     (selectedBar as HTMLElement).style.strokeWidth = "2px";
+//                   }
+//                 }
+//               }
+//             },
+          
+//       plotOptions: { bar: { columnWidth: "20%" } },
+//       colors: ["#007BFF"],
+//       xaxis: { categories: years, title: { text: "Year" } },
+//       yaxis: { title: { text: "Invoice Count" } },
+//       legend: { position: 'bottom' }
+//   };
 
-  filteredInvoices.forEach(invoice => {
-      const dateStr = invoice.header.ProformaInvoiceDate;
-      const [day, month, year] = dateStr.split('-');
-      const monthName = new Date(`${year}-${month}-01`).toLocaleString('default', { month: 'short' });
-
-      const status = invoice.status || "Unknown";
-
-      if (!monthlyStatusCounts[monthName]) {
-          monthlyStatusCounts[monthName] = { Approved: 0, Pending: 0, Rejected: 0 };
-      }
-
-      if (status === "Approved") monthlyStatusCounts[monthName].Approved++;
-      else if (status === "Pending") monthlyStatusCounts[monthName].Pending++;
-      else if (status === "Rejected") monthlyStatusCounts[monthName].Rejected++;
-  });
-
-  const months = Object.keys(monthlyStatusCounts);
-  const approvedData = months.map(month => monthlyStatusCounts[month].Approved);
-  const pendingData = months.map(month => monthlyStatusCounts[month].Pending);
-  const rejectedData = months.map(month => monthlyStatusCounts[month].Rejected);
-
-  this.barChartOptions = {
-      series: [
-          { name: "Approved", data: approvedData },
-          { name: "Pending", data: pendingData },
-          { name: "Rejected", data: rejectedData },
-      ],
-      chart: {
-          type: "bar",
-          height: 350,
-          stacked: false,
-          toolbar: { show: true },
-          events: {
-              dataPointSelection: (event, chartContext, config) => {
-                  const selectedMonth = months[config.dataPointIndex];
-                  const selectedStatus = config.seriesIndex === 0 ? "Approved" :
-                                        config.seriesIndex === 1 ? "Pending" :
-                                        "Rejected";
-                  console.log("Month selected:", selectedMonth, "Status:", selectedStatus);
-
-                  // Call methods to update Pie Chart & Table
-                  this.updatePieChart(selectedYear, selectedMonth);
-                  this.updateTable(selectedYear, selectedMonth, selectedStatus);
-              }
-          }
-      },
-      plotOptions: { bar: { columnWidth: "20%" } },
-      colors: ["#11db52", "#ffb020", "#f93d3d"],  // Green, Orange, Red
-      xaxis: { categories: months, title: { text: "Month" } },
-      yaxis: { title: { text: "Invoice Count" } },
-      legend: { position: 'bottom' }
-  };
-
-  setTimeout(() => {
-      this.spinner.hide();
-  }, 200);
-}
-
-
-filterByMonth(selectedYear: string, selectedMonth: string) {
-  console.log(`Filtering table by Year: ${selectedYear}, Month: ${selectedMonth}`);
-
-  this.filteredInvoiceList = this.allInvoiceList.filter(invoice => {
-      if (!invoice.header?.ProformaInvoiceDate) return false;
-      const dateStr = invoice.header.ProformaInvoiceDate;
-      const [day, month, year] = dateStr.split('-');
-
-      const monthName = new Date(`${year}-${month}-01`).toLocaleString('default', { month: 'short' });
-      return year === selectedYear && monthName === selectedMonth;
-  });
-
-  console.log("Filtered invoices for month:", this.filteredInvoiceList);
-
-  // **Pie Chart Data Update**
-  this.updatePieChart(selectedYear);
-
-  // **Change Detection Trigger**
-  this.cdr.detectChanges();
-}
-
-
+//   setTimeout(() => {
+//       this.spinner.hide();
+//       this.updatePieChart(); // Load overall data initially
+//   }, 200);
+// }
 // Function to calculate yearly invoice counts
 calculateYearlyStatusCounts(invoices: any[]): { [year: string]: number } {
   const yearlyStatusCounts: { [year: string]: number } = {};
@@ -598,6 +499,69 @@ calculateYearlyStatusCounts(invoices: any[]): { [year: string]: number } {
 
   return yearlyStatusCounts;
 }
+updateMonthlyBarChart(selectedYear: string) {
+  let monthlyData = new Array(12).fill(0);
+
+  this.allInvoiceList.forEach(invoice => {
+    if (!invoice.header?.ProformaInvoiceDate) return;
+    const [day, month, year] = invoice.header.ProformaInvoiceDate.split('-');
+    if (year === selectedYear) {
+      monthlyData[parseInt(month) - 1] += 1; // Increment for that month
+    }
+  });
+
+  this.monthlyBarChartOptions = {
+    series: [{ name: "Invoices", data: monthlyData }],
+    chart: {
+      type: "bar",
+      height: 350,
+      toolbar: { show: true },
+      events: {
+        dataPointSelection: (event, chartContext, config) => {
+          const selectedMonth = config.dataPointIndex + 1;
+          console.log("Month selected:", selectedMonth);
+          this.updateMonthlyPieChart(selectedYear, selectedMonth);
+        }
+      }
+    },
+    xaxis: { categories: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"] },
+    yaxis: { title: { text: "Invoice Count" } }
+  };
+
+  this.updateMonthlyPieChart(selectedYear);
+}
+
+updateMonthlyPieChart(selectedYear: string, selectedMonth?: number) {
+  let invoicesToProcess = this.allInvoiceList.filter(invoice => {
+    if (!invoice.header?.ProformaInvoiceDate) return false;
+    const [day, month, year] = invoice.header.ProformaInvoiceDate.split('-');
+    return selectedYear === year && (!selectedMonth || parseInt(month) === selectedMonth);
+  });
+
+  let statusCounts: { [status: string]: number } = {};
+  invoicesToProcess.forEach(invoice => {
+    const status = invoice.status || "Unknown";
+    statusCounts[status] = (statusCounts[status] || 0) + 1;
+  });
+
+  this.monthlyPieChartOptions = {
+    series: Object.values(statusCounts),
+    chart: { type: "pie", height: 350 },
+    labels: Object.keys(statusCounts),
+    colors: ["#11db52", "#f93d3d", "#ffb020"],
+    legend: { position: "bottom" }
+  };
+}
+updateMonthlyTable(selectedYear: string, selectedMonth?: number) {
+  this.filteredInvoiceList = this.allInvoiceList.filter(invoice => {
+    if (!invoice.header?.ProformaInvoiceDate) return false;
+    const [day, month, year] = invoice.header.ProformaInvoiceDate.split('-');
+    return selectedYear === year && (!selectedMonth || parseInt(month) === selectedMonth);
+  });
+
+  this.cdr.detectChanges();
+}
+
 
 
 
@@ -654,47 +618,7 @@ calculateYearlyStatusCounts(invoices: any[]): { [year: string]: number } {
     }
   
     this.cdr.detectChanges();
-  }
-  
-  
-  OnClickCard(type){
-    console.log("type",type)
-
-
-    if(type == '1'){
-      this.filteredInvoiceList = this.allInvoiceList
-    }
-    else if(type == '2'){
-      const approvedlist = this.allInvoiceList.filter(invoice => invoice.status === "Approved");
-      console.log('approvedlist',approvedlist)
-      this.filteredInvoiceList = approvedlist
-    }
-    else if(type == '3'){
-      const rejectedlist = this.allInvoiceList.filter(invoice => invoice.status === "Rejected");
-      console.log('rejectedlist',rejectedlist)
-      this.filteredInvoiceList = rejectedlist
-    }
-    else if(type == '4'){
-      const ReceivedList = this.allInvoiceList.filter(invoice => invoice.status === "Amount Received");
-      console.log('ReceivedList',ReceivedList)
-      this.filteredInvoiceList = ReceivedList
-    }
-    else if(type == '5'){
-      const PaymentPendingList = this.allInvoiceList.filter(invoice => invoice.status === "Approved" && invoice.pqStatus === "inComplete");
-      console.log('PaymentPendingList',PaymentPendingList)
-      this.filteredInvoiceList = PaymentPendingList
-    }
-    else if(type == '6'){
-      const ReceivedList = this.allInvoiceList.filter(invoice => invoice.status === "Amount Received");
-      const PaymentPendingList = this.allInvoiceList.filter(invoice => invoice.status === "Approved" && invoice.pqStatus === "inComplete");
-
-      this.filteredInvoiceList = [...ReceivedList,...PaymentPendingList]
-    }
-    
-    console.log("OnClickCard this.filteredInvoiceList",this.filteredInvoiceList)
-
-  }
-
-  
-  
+  } 
 }
+
+
