@@ -255,36 +255,60 @@ approvedAndPaymentPending.forEach(invoice => {
  
 OnClickCard(type){
   console.log("type",type)
-
+this.spinner.show()
 
   if(type == '1'){
     this.filteredInvoiceList = this.allInvoiceList
+    setTimeout(() => {
+      this.spinner.hide()
+     }, 1000);
+
   }
   else if(type == '2'){
     const approvedlist = this.allInvoiceList.filter(invoice => invoice.status === "Approved");
     console.log('approvedlist',approvedlist)
     this.filteredInvoiceList = approvedlist
+    setTimeout(() => {
+      this.spinner.hide()
+     }, 1000);
+
   }
   else if(type == '3'){
     const rejectedlist = this.allInvoiceList.filter(invoice => invoice.status === "Rejected");
     console.log('rejectedlist',rejectedlist)
     this.filteredInvoiceList = rejectedlist
+    setTimeout(() => {
+      this.spinner.hide()
+     }, 1000);
+
   }
   else if(type == '4'){
     const ReceivedList = this.allInvoiceList.filter(invoice => invoice.status === "Amount Received");
     console.log('ReceivedList',ReceivedList)
     this.filteredInvoiceList = ReceivedList
+    setTimeout(() => {
+      this.spinner.hide()
+     }, 1000);
+
   }
   else if(type == '5'){
     const PaymentPendingList = this.allInvoiceList.filter(invoice => invoice.status === "Approved" && invoice.pqStatus === "inComplete");
     console.log('PaymentPendingList',PaymentPendingList)
     this.filteredInvoiceList = PaymentPendingList
+    setTimeout(() => {
+      this.spinner.hide()
+     }, 1000);
+
   }
   else if(type == '6'){
     const ReceivedList = this.allInvoiceList.filter(invoice => invoice.status === "Amount Received");
     const PaymentPendingList = this.allInvoiceList.filter(invoice => invoice.status === "Approved" && invoice.pqStatus === "inComplete");
 
     this.filteredInvoiceList = [...ReceivedList,...PaymentPendingList]
+   setTimeout(() => {
+    this.spinner.hide()
+   }, 1000);
+
   }
  
   console.log("OnClickCard this.filteredInvoiceList",this.filteredInvoiceList)
