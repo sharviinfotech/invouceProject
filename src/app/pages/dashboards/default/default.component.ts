@@ -723,7 +723,7 @@ updateMonthlyBarChart(selectedYear: string) {
       title: { text: 'Months' }
     },
     yaxis: {
-      title: { text: 'Grand Total (₹)' },
+      title: { text: 'Grand Total' },
       labels: {
         formatter: function (value) {
           return value.toFixed(1); // Ensures only one decimal place
