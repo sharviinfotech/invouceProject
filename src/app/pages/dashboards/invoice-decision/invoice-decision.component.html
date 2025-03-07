@@ -15,8 +15,8 @@
                         <th class="text-nowrap">Destination</th>
                         <th class="text-nowrap">Date Of Journey</th>
                         <th class="text-nowrap">Total Amount</th>
-                        <th clas="text-nowrap" *ngIf="loginData?.data.userActivity != 'MD'">Status</th>
-                        <th class="text-nowrap" *ngIf="loginData?.data.userActivity == 'MD'">Actions</th>
+                        <th clas="text-nowrap" *ngIf="loginData?.data.userActivity != 'ACCOUNTS'">Status</th>
+                        <th class="text-nowrap" *ngIf="loginData?.data.userActivity == 'ACCOUNTS'">Actions</th>
                         <!-- New column for buttons -->
                     </tr>
                 </thead>
@@ -37,7 +37,7 @@
                         <td>{{ invoice.header.BookingSector }}</td>
                         <td class="text-nowrap">{{ invoice.header.startBookingDateOfJourny }}/{{ invoice.header.endBookingDateOfJourny }}</td>
                         <td>{{ invoice.grandTotal | number: '1.2-2'}}</td>
-                        <td *ngIf="loginData?.data.userActivity != 'MD'" class="d-flex align-items-center" 
+                        <td *ngIf="loginData?.data.userActivity != 'ACCOUNTS'" class="d-flex align-items-center" 
                         [ngClass]="{
                   'text-green-600 cursor-pointer': invoice.status === 'Approved',
                   'text-orange-600': invoice.status === 'Pending',
@@ -65,7 +65,7 @@
                                                  'text-orange-600': invoice.status === 'Pending',
                                                  'text-red-600': invoice.status === 'Rejected',
                                                  'text-Amount_Received': invoice.status === 'Amount Received',
-                                                  'rejected_Reversed':invoice.status === 'Rejected_Reversed'}" *ngIf="loginData?.data.userActivity == 'MD'">
+                                                  'rejected_Reversed':invoice.status === 'Rejected_Reversed'}" *ngIf="loginData?.data.userActivity == 'ACCOUNTS'">
 
                             <div *ngIf='invoice.status == "Pending" || invoice.status == "Rejected_Reversed"'
                                  >
