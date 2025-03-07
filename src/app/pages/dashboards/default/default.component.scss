@@ -354,7 +354,29 @@ p {
   }
 }
 
+.tooltip-box {
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0.75);
+  color:black;
+  padding: 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  top: 40px; /* Adjust positioning */
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  z-index: 1000;
+  box-shadow: 0px 0px 5px rgb(237, 233, 233);
+  opacity: 1;
+  transition: opacity 0.2s ease-in-out;
+  background-color: white;
+}
 
+.tooltip-target {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+}
 
 
 

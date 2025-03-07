@@ -1,24 +1,46 @@
 
-<div class="flex w-full flex-auto flex-col">
+<div class="flex w-full flex-auto flex-col" id="dashboard-container" >
   <div class="mx-auto flex w-full max-w-screen-xl flex-wrap p-1 shadow-md">
-    <div class="card-header" style="text-align: center !important;">
-      Invoice Data Visualization
+    <div class="card-header d-flex justify-content-between align-items-center">
+      <div class="flex-grow-1 text-center fw-bold">Invoice Data Visualization</div>
+      <div>
+        <i class="fas fa-print fs-4 text-dark cursor-pointer" (click)="downloadPDF()"></i>
+      </div>
     </div>
 
     <div class="card">
       <div class="rounded">
         <div class="left-side">
-          <div class="status-box total-records" role="button" (click)="OnClickCard('1')">  
+          <div class="status-box total-records" role="button" (click)="OnClickCard('1')" style="position: relative;">
             <div class="flex items-center">
-              <i class="fas fa-database text-xl mr-2"></i>
-              <h3>Total Records</h3>
+            <i class="fas fa-database text-xl mr-2"></i>
+            <h3>Total Records</h3>
             </div>
-            <p>{{ totalInvoiceCount }}</p>
-            <div class="flex items-center">
-              <h3>Amount</h3>
+             
+             <!-- Invoice Count with Tooltip -->
+             <p (mouseenter)="showTooltip = true" (mouseleave)="showTooltip = false" class="tooltip-target">
+              {{ totalInvoiceCount }}
+             
+              <!-- Tooltip -->
+              <span class="tooltip-box" *ngIf="showTooltip">
+                Total Proforma Records : {{TotalCountPQ}}
+                <div class="d-flex gap-2">
+                  <div>Approved: {{ approvedCount }}</div>
+                <div>Rejected: {{ rejectedCount }}</div>
+                <div>Pending: {{ pendingCount }}</div>
+                </div>
+               
+               
+              </span>
+            </p>
+             
+              <div class="flex items-center">
+            <h3>Amount</h3>
             </div>
             <p>{{ grandTotalInvoices | number:'1.2-2' }}</p>
-          </div>
+            </div>
+            
+             
     
           <div class="middlewidth">
             <div class="status-box total-Approved" role="button" (click)="OnClickCard('2')">

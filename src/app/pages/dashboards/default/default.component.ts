@@ -10,7 +10,8 @@ import {
   ApexResponsive
 } from "ng-apexcharts";
 import { BsDatepickerConfig, BsDatepickerModule } from 'ngx-bootstrap/datepicker';
-
+import html2canvas from 'html2canvas';
+import { jsPDF } from 'jspdf';
 // ... (Other imports and interfaces remain the same)
 
 export type ChartOptions = {
@@ -58,6 +59,7 @@ export class DefaultComponent {  // ... (other properties)
   approvedCount: number;
   rejectedCount: number;
   pendingCount: number;
+  showTooltip = false;
   rejectedReversedCount: number;
   overdueCount: number;
   customerList: any[];
@@ -219,6 +221,9 @@ approvedAndPaymentPending.forEach(invoice => {
             this.rejectedTotal += invoice.grandTotal;
             this.rejectedCount++;
         }
+        else if (invoice.status === "Pending") {
+          this.pendingCount++;
+      }
     });
  
     // // Step 4: Calculate Payment Pending and Overall Amount
@@ -886,6 +891,45 @@ updateMonthlyTable(selectedYear: string, selectedMonth?: number, selectedStatus?
   
     this.cdr.detectChanges();
   } 
+  downloadPDF(): void {
+    this.spinner.show()
+    const dashboardElement = document.getElementById('dashboard-container');
+    const printIcon = document.querySelector('.fas.fa-print'); // Select the print icon
+    const tableFixHeadR = document.querySelector('.tableFixHeadR') as HTMLElement; // Select the scrollable table container
+  
+    if (!dashboardElement) return;
+  
+    // Hide the print icon before capturing the screenshot
+    if (printIcon) (printIcon as HTMLElement).style.display = 'none';
+  
+    // Temporarily remove scrolling restriction for full table capture
+    let originalMaxHeight = '';
+    if (tableFixHeadR) {
+      originalMaxHeight = tableFixHeadR.style.maxHeight;
+      tableFixHeadR.style.maxHeight = 'none';
+      tableFixHeadR.style.overflowY = 'visible'; // Allow full content to be visible
+    }
+  
+    html2canvas(dashboardElement, { scale: 2 }).then(canvas => {
+      this.spinner.hide()
+      const imgData = canvas.toDataURL('image/png');
+      const pdf = new jsPDF('p', 'mm', 'a4');
+      const imgWidth = 190;
+      const imgHeight = (canvas.height * imgWidth) / canvas.width;
+  
+      pdf.addImage(imgData, 'PNG', 10, 10, imgWidth, imgHeight);
+      pdf.save('dashboard_report.pdf');
+  
+      // Restore original table scroll settings
+      if (tableFixHeadR) {
+        tableFixHeadR.style.maxHeight = originalMaxHeight;
+        tableFixHeadR.style.overflowY = 'auto';
+      }
+  
+      // Restore the print icon after generating the PDF
+      if (printIcon) (printIcon as HTMLElement).style.display = 'inline-block';
+    });
+  }
 }
 
 
