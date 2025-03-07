@@ -95,6 +95,7 @@ export class DefaultComponent {  // ... (other properties)
     legend: { position: string };
   };
     monthlyCardDisplay: boolean=false;
+  lastSelectedYearIndex: any;
   
   constructor(
     private service: GeneralserviceService,
@@ -384,9 +385,29 @@ convertDate(dateStr: string): Date {
 //   }, 500);
 // }
 goBackToYearChart() {
-  this.selectedYear = null;  // Reset the selected year
-  this.monthlyCardDisplay = false; // Hide the monthly charts
+  this.selectedYear = null;  
+  this.monthlyCardDisplay = false; 
+
+  setTimeout(() => {
+    // Reapply highlight to the previously selected year
+    const bars = document.querySelectorAll(".apexcharts-bar-area");
+    bars.forEach((bar) => {
+      (bar as HTMLElement).style.stroke = "none";
+      (bar as HTMLElement).style.strokeWidth = "0";
+    });
+
+    if (this.lastSelectedYearIndex !== undefined) {
+      const selectedBar = document.querySelector(
+        `.apexcharts-bar-area[j="${this.lastSelectedYearIndex}"]`
+      );
+      if (selectedBar) {
+        (selectedBar as HTMLElement).style.stroke = "red";
+        (selectedBar as HTMLElement).style.strokeWidth = "2px";
+      }
+    }
+  }, 300); // Small timeout to ensure chart is fully rendered before applying styles
 }
+
 
 updatePieChart(selectedYear?: string) {
   this.spinner.show();
@@ -512,6 +533,7 @@ updateBarChart(data: any[]) {
         dataPointSelection: (event, chartContext, config) => {
           const selectedYear = years[config.dataPointIndex];
           console.log("Year selected:", selectedYear);
+          this.lastSelectedYearIndex = config.dataPointIndex;
           this.filterByYear(selectedYear);
           setTimeout(() => {
             this.updateMonthlyBarChart(selectedYear); // Load Monthly Data
