@@ -64,6 +64,7 @@ interface InvoiceItem {
   subtotal: number;
   grandTotal: number;
   amountInWords: string;
+  dateRangeValidator:any;
   status: string;
   invoiceUniqueNumber: string;
   proformaCardHeaderName:string
@@ -100,33 +101,104 @@ export class InvoiceReportsComponent {
   signature: string;
   loginData: any;
   grandTotalInvoices: any;
+  bsConfigToDate: { minDate: Date; };
   constructor(private service: GeneralserviceService, private spinner: NgxSpinnerService, private imageService: ImageService, private fb: FormBuilder) {
     this.bsConfig = {
       dateInputFormat: 'DD-MM-YYYY',
       containerClass: 'theme-blue', // Optional: Customize theme
     };
-
+  /*   this.bsConfigToDate = {
+      dateInputFormat: 'DD-MM-YYYY',
+      minDate: new Date() // Ensures no past dates are selected
+    };
+ */
 
   }
   ngOnInit(): void {
-    this.loginData = this.service.getLoginResponse()
-    console.log("this.loginData ", this.loginData)
-    this.getAllInvoice()
+    this.loginData = this.service.getLoginResponse();
+    console.log("this.loginData ", this.loginData);
+    this.getAllInvoice();
+  
     this.reportsForm = this.fb.group({
       fromDate: ['', Validators.required],
       toDate: ['', Validators.required],
       status: ['', Validators.required],
       invoiceType: ['', Validators.required],
     });
+  
+    // Listen for changes in "From Date" and update "To Date"
+    this.reportsForm.get('fromDate')?.valueChanges.subscribe((fromDate) => {
+      if (fromDate) {
+        const toDate = this.addDays(fromDate,0);
+        this.reportsForm.get('toDate')?.setValue(toDate);
+        
+        // Update date picker configuration
+        this.bsConfigToDate = { minDate: new Date(fromDate) };
+        
+        this.dateRangeValidator(this.reportsForm); // Validate form
+      }
+    });
+  
+    // Revalidate form on changes
+    this.reportsForm.valueChanges.subscribe(() => {
+      this.dateRangeValidator(this.reportsForm);
+    });
   }
-  formatDate(proformaInvoiceDate: string): string {
-    const date = new Date(proformaInvoiceDate);
+  
+  addDays(date: string, days: number): string {
+    const result = new Date(date);
+    result.setDate(result.getDate() + days);
+  
+    // Format date to dd-MM-yyyy
+    const day = String(result.getDate()).padStart(2, '0');
+    const month = String(result.getMonth() + 1).padStart(2, '0'); // Months are 0-based
+    const year = result.getFullYear();
+  
+    return `${day}-${month}-${year}`;
+  }
+  
+
+  dateRangeValidator(formGroup: FormGroup) {
+    const fromDate = formGroup.get('fromDate')?.value;
+    const toDate = formGroup.get('toDate')?.value;
+  
+    if (fromDate && toDate) {
+      const formattedFromDate = this.formatDate(fromDate);
+      const formattedToDate = this.formatDate(toDate);
+  
+      console.log("Formatted From Date:", formattedFromDate);
+      console.log("Formatted To Date:", formattedToDate);
+  
+      // Convert formatted date strings back to Date objects for comparison
+      const [fromDay, fromMonth, fromYear] = formattedFromDate.split('-').map(Number);
+      const [toDay, toMonth, toYear] = formattedToDate.split('-').map(Number);
+  
+      const fromDateObj = new Date(fromYear, fromMonth - 1, fromDay); // Months are 0-based
+      const toDateObj = new Date(toYear, toMonth - 1, toDay);
+  
+      console.log("fromDateObj:", fromDateObj);
+      console.log("toDateObj:", toDateObj);
+  
+      // Condition: `toDate` should be greater than or equal to `fromDate`
+      if (toDateObj < fromDateObj) {
+        formGroup.get('toDate')?.setErrors({ dateRangeInvalid: true });
+      } else {
+        formGroup.get('toDate')?.setErrors(null);
+      }
+    }
+  }
+  
+  
+  formatDate(dateString: string): string {
+    const date = new Date(dateString);
     const day = String(date.getDate()).padStart(2, '0');
     const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-based
     const year = date.getFullYear();
-
+  
     return `${day}-${month}-${year}`;
   }
+  
+
   get f() {
     return this.reportsForm.controls;
   }
@@ -497,7 +569,7 @@ selectInvoice(invoice: any) {
                   this.generateInvoiceHTMLProfoma1(invoiceItem);
                   // Additional checks if needed
                 }else if (invoiceItem.proformaCardHeaderId === "TAX") {
-                  this.generateInvoiceHTMLTax4(invoiceItem);
+                  this.generateInvoiceHTMLTax2(invoiceItem);
                 } else {
                   Swal.fire({
                     text: "No valid invoice type selected for printing.",
@@ -523,7 +595,7 @@ selectInvoice(invoice: any) {
                 this.generateInvoiceHTMLProfoma1(invoiceItem);
                 // Additional checks if needed
               }else if (invoiceItem.proformaCardHeaderId === "TAX") {
-                this.generateInvoiceHTMLTax4(invoiceItem);
+                this.generateInvoiceHTMLTax2(invoiceItem);
               } else {
                 Swal.fire({
                   text: "No valid invoice type selected for printing.",
@@ -543,10 +615,10 @@ generateInvoiceHTMLProfoma1(invoiceItem: InvoiceItem) {
   this.InvoiceLogo = this.imageService.getBase64WorldLogo();
   this.signature = this.imageService.getBase64Signature();
   const invoiceHTML = `
-
+ 
 <html>
 <head>
-
+ 
 <style>
     .invoice-container {
 margin: 10px;
@@ -573,7 +645,7 @@ font-family: Arial, sans-serif;
           background: #fff;
           box-sizing: border-box;
       }
-
+ 
       .header-section {
           display: flex;
           justify-content: space-between;
@@ -584,26 +656,26 @@ font-family: Arial, sans-serif;
   align-items: center;
   justify-content: space-between; /* Distributes space evenly */
 }
-
+ 
 .header-section .logo {
   display: flex;
   flex-direction: column;
   align-items: center; /* Center content vertically */
 }
-
+ 
 .header-section .left-logo {
   text-align: left; /* Align text to the left */
 }
-
+ 
 .header-section .right-logo {
   text-align: right; /* Align text to the right */
 }
-
+ 
 .header-section .company-name {
   text-align: center; /* Center the company name */
   flex-grow: 1; /* Allow the company name to take up available space */
 }
-
+ 
 .header-section img {
   max-width: 100px; /* Adjust as needed */
   height: auto;
@@ -612,7 +684,7 @@ font-family: Arial, sans-serif;
     border: 1px solid #ccc;
     width: 100%;
   }
-
+ 
   .booking-header {
     background-color: rgb(91, 85, 130);
     padding: 5px;
@@ -620,20 +692,20 @@ font-family: Arial, sans-serif;
       text-align: center;
     border-bottom: 1px solid #ccc;
   }
-
+ 
   .booking-data {
         padding: 5px;
   width: 100%;
   display: flex;
   font-size: 14px;
   }
-
+ 
   .data-item {
     display: inline-block;
     padding-right: 10px;
     border-right: 1px solid #ccc;
   }
-
+ 
   .data-item:last-child {
     border-right: none;
     padding-right: 0;
@@ -662,16 +734,17 @@ background-color: rgb(167, 166, 175);
   background: rgb(88 98 145) !important;
   color: white;
   }
-
+ 
   .table-bordered td {
   padding: 2px;
   }
   .booking-header bold{
+  font-size: 13px;
   background-color: rgb(91, 85, 130);
   color: white;
   }
  
-
+ 
  
      
   .bold {
@@ -690,23 +763,23 @@ background-color: rgb(167, 166, 175);
           width: 100%;
           margin-top: 10px;
       }
-
+ 
       .footer .logo {
           width: 50%;
       }
-
+ 
       .footer .logo img {
           width: 100%;
           height: auto;
       }
    
-
-
-
-
+ 
+ 
+ 
+ 
 @media print {
   .invoice-container {
-margin: 5px;
+margin: 0px;
 padding: 5px;
 border: 1px solid #ccc;
 background: #fff;
@@ -714,18 +787,18 @@ font-family: Arial, sans-serif;
 }
  body {
             font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 5px;
+            margin: 0px;
+            padding: 0px;
             background-color: white;
             -webkit-print-color-adjust: exact !important;
             print-color-adjust: exact !important;
-            font-size: 12px;
+         
           }
             .InvoiceHeader {
   background-color: rgb(181, 179, 200);
-    font-size: 15px;
+    font-size: 13px;
     color:white;
-    padding: 8px;
+    padding: 5px;
     text-align: center;
     font-weight: bold;
   }
@@ -734,11 +807,11 @@ font-family: Arial, sans-serif;
           width: 100%;
           margin: auto;
           border: 1px solid #ddd;
-          padding: 10px;
+          padding: 5px;
           background: #fff;
           box-sizing: border-box;
       }
-
+ 
       .header-section {
           display: flex;
           justify-content: space-between;
@@ -749,26 +822,26 @@ font-family: Arial, sans-serif;
   align-items: center;
   justify-content: space-between; /* Distributes space evenly */
 }
-
+ 
 .header-section .logo {
   display: flex;
   flex-direction: column;
   align-items: center; /* Center content vertically */
 }
-
+ 
 .header-section .left-logo {
   text-align: left; /* Align text to the left */
 }
-
+ 
 .header-section .right-logo {
   text-align: right; /* Align text to the right */
 }
-
+ 
 .header-section .company-name {
   text-align: center; /* Center the company name */
   flex-grow: 1; /* Allow the company name to take up available space */
 }
-
+ 
 .header-section img {
   max-width: 100px; /* Adjust as needed */
   height: auto;
@@ -777,7 +850,7 @@ font-family: Arial, sans-serif;
     border: 1px solid #ccc;
     width: 100%;
   }
-
+ 
   .booking-header {
     background-color: rgb(88, 98, 145);
     padding: 5px;
@@ -785,20 +858,20 @@ font-family: Arial, sans-serif;
       text-align: center;
     border-bottom: 1px solid #ccc;
   }
-
+ 
   .booking-data {
         padding: 5px;
   width: 100%;
   display: flex;
-  font-size: 14px;
+  font-size: 10px;
   }
-
+ 
   .data-item {
     display: inline-block;
     padding-right: 10px;
     border-right: 1px solid #ccc;
   }
-
+ 
   .data-item:last-child {
     border-right: none;
     padding-right: 0;
@@ -809,9 +882,9 @@ font-family: Arial, sans-serif;
   .orange-background {
  
    background-color: rgb(127, 127, 136);
-    font-size: 15px;
+    font-size: 13px;
     color:white;
-    padding: 8px;
+    padding: 3px;
     text-align: center;
     font-weight: bold;
   }
@@ -827,16 +900,17 @@ font-family: Arial, sans-serif;
    background-color: rgb(91, 85, 130);
   color: white;
   }
-
+ 
   .table-bordered td {
   padding: 2px;
   }
   .booking-header bold{
+ 
   background-color: rgb(88, 98, 145);
   color: white;
   }
  
-
+ 
  
      
   .bold {
@@ -855,17 +929,17 @@ font-family: Arial, sans-serif;
           width: 100%;
           margin-top: 10px;
       }
-
+   
       .footer .logo {
           width: 50%;
       }
-
+ 
       .footer .logo img {
           width: 100%;
           height: auto;
       }
-
-
+ 
+ 
 </style>
 </head>
 <body>
@@ -880,8 +954,8 @@ font-family: Arial, sans-serif;
  
   <table class="table-bordered">
     <tr>
-      <th class="bold">TO</th>
-      <th class="bold">FROM</th>
+      <th class="bold" style="font-size: 12px;">TO</th>
+      <th class="bold" style="font-size: 12px;">FROM</th>
     </tr>
     <tr>
       <td>${invoiceItem.header.ProformaCustomerName}<br>${invoiceItem.header.ProformaAddress}<br>${invoiceItem.header.ProformaCity}<br>${invoiceItem.header.ProformaPincode} <br><strong>GST NO:</strong>${invoiceItem.header.ProformaGstNo}<br>
@@ -889,24 +963,24 @@ font-family: Arial, sans-serif;
       <td><strong>INVOICE NO:</strong> ${invoiceItem.invoiceUniqueNumber}<br><strong>DATE: </strong>${invoiceItem.header.ProformaInvoiceDate}<br><strong>PAN NO</strong>:${invoiceItem.header.ProformaPanNO}<br><strong>GST NO: </strong>${invoiceItem.header.ProformaGstNumber}<br><strong>Type of Aircraft</strong>:${invoiceItem.header.ProformaTypeOfAircraft}<br><strong>Seating Capasity</strong>:${invoiceItem.header.ProformaSeatingCapasity}</td>
     </tr>
   </table>
-
+ 
   <div class="booking-details">
-<div class="booking-header bold">BOOKING  DETAILS</div>
+<div class="booking-header bold" style="font-size: 12px;">BOOKING  DETAILS</div>
 <div class="booking-data single-line">
     <div style="width:35%; text-align: center;" ><div class="bold">Date Of Journey</div> <div>03/03/25-04/03/2025</div></div>
     <div style="width:35%; text-align: center;" ><div class="bold">Sector</div> <div>${invoiceItem.header.BookingSector}</div></div>
     <div style="width:30%; text-align: center;" ><div class="bold">Billing Flying Time</div> <div>${invoiceItem.header.BookingBillingFlyingTime}</div></div>
 </div>
 </div>
-
+ 
   <table class="table-bordered">
             <thead>
               <tr>
-                <th class="booking-header bold">S.NO</th>
-                <th class="booking-header bold">DESCRIPATION</th>
-                <th class="booking-header bold">UNITS (Hrs.)</th>
-                <th class="booking-header bold">RATE(INR)</th>
-                <th class="booking-header bold">AMOUNT(INR)</th>
+                <th class="booking-header bold" style="font-size: 12px;">S.NO</th>
+                <th class="booking-header bold" style="font-size: 12px;">DESCRIPATION</th>
+                <th class="booking-header bold" style="font-size: 12px;">UNITS (Hrs.)</th>
+                <th class="booking-header bold" style="font-size: 12px;">RATE(INR)</th>
+                <th class="booking-header bold" style="font-size: 12px;">AMOUNT(INR)</th>
               </tr>
             </thead>
             <tbody>
@@ -942,7 +1016,7 @@ font-family: Arial, sans-serif;
                   <td></td>
                   <td></td>
             </tr>
-
+ 
               ${invoiceItem.taxList.map(tax => `
                 <tr>
                   <td></td>
@@ -952,7 +1026,7 @@ font-family: Arial, sans-serif;
                   <td class="text-right">${tax.amount}</td>
                 </tr>
               `).join('')}
-
+ 
               <tr>
               <td></td>
               <td></td>
@@ -960,8 +1034,8 @@ font-family: Arial, sans-serif;
                 <td class="text-right bold"  style="background-color: rgb(181, 179, 200);">GRAND TOTAL</td>
                 <td class="text-right bold"  style="background-color: rgb(181, 179, 200);">${invoiceItem.grandTotal ? invoiceItem.grandTotal.toFixed(2) : '0.00'}</td>
               </tr>
-               <tr>
-                  <td colspan="5" class="bold"> ${invoiceItem.amountInWords}</td>
+               <tr >
+                  <td colspan="5" class="bold" style="padding-top:8px !important"> ${invoiceItem.amountInWords}</td>
                </tr>
             </tbody>
           </table>
@@ -969,7 +1043,7 @@ font-family: Arial, sans-serif;
   <table class="table-bordered">
     <tr>
      
-      <th class="booking-header bold">BANK DETAILS</th>
+      <th class="booking-header bold" style="font-size: 12px;">BANK DETAILS</th>
    
     </tr>
     <tr>
@@ -978,14 +1052,21 @@ font-family: Arial, sans-serif;
     </tr>
   </table>
  
+   <div class="logo">
+  <p class="bold">Note:</p>
+  <p style="font-size: 12px;">
+    1. In case of any discrepancies, contact the accounts department within 5 days of receiving the bill. <br>
+    2. Payment must be made within 2 days of receiving the invoice. <br>
+    3. Payments delayed beyond 30 days will incur a penal interest of 18% per annum.
+  </p>
+</div>
 
+ 
   <div class="footer">
-          <div class="logo"> <p class="bold">Note:</p>
-  <p>${invoiceItem.header.notes}</p>
-  </div>
+        <div></div>
           <div class="text-center">
                 <div><h4>RITHWIK GREEN POWER & AVIATION PRIVATE LIMITED</h4></div>
-
+ 
               <div  > <img src="${this.signature}" alt="Company Logo" class="logo"></div>
                  Authorised Signatory
              
@@ -995,20 +1076,21 @@ font-family: Arial, sans-serif;
 </div>
 </body>
 </html>
-
-
+ 
+ 
   `;
-
+ 
   const newWindow = window.open('', '', 'height=600,width=800');
   if (newWindow) {
     newWindow.document.write(invoiceHTML);
     newWindow.document.close();
-
+ 
     setTimeout(() => {
       newWindow.print();
     }, 500);
   }
 };
+ 
 generateInvoiceHTMLProfoma2(invoiceItem: InvoiceItem) {
 
   this.logoUrl = this.imageService.getBase64FlightLogo();
@@ -1453,8 +1535,15 @@ font-family: Arial, sans-serif;
  
 
   <div class="footer">
-          <div class="logo"> <p class="bold">Note:</p>
-  <p>${invoiceItem.header.notes}</p>
+        <div class="logo">
+  <p class="bold">Note:</p>
+  <p style="font-size: 12px;">
+    1. In case of any discrepancies, contact the accounts department within 5 days of receiving the bill. <br>
+    2. Payment must be made within 2 days of receiving the invoice. <br>
+    3. Payments delayed beyond 30 days will incur a penal interest of 18% per annum.
+  </p>
+</div>
+
   </div>
           <div class="text-center">
                 <div><h4>RITHWIK GREEN POWER & AVIATION PRIVATE LIMITED</h4></div>
@@ -7005,18 +7094,19 @@ background-image: linear-gradient(to right, #7e22ce, #2563eb);
 
     /* Colors remain the same in print */
     .orange-background {
-        background-color: #edab32 !important;
+        background-color: rgb(181, 179, 200);
         color: white !important;
     }
 
     .billing-header, .shipping-header {
-         border: 2px solid black;
-        color: black !important;
+       
+        color: white !important;
+          background-color: #2f93b4;
     }
 
     .booking-header {
-     border: 2px solid black;
-        color: black !important;
+    color: white !important;
+          background-color: #2f93b4;
         
     }
 
@@ -7073,7 +7163,7 @@ background-image: linear-gradient(to right, #7e22ce, #2563eb);
         margin: 0px;
         }
         .booking-data{
-            padding: 0px;
+            padding: 5px;
         margin: 0px;
         }
 }
@@ -7181,7 +7271,14 @@ background-image: linear-gradient(to right, #7e22ce, #2563eb);
  
         <!-- Footer Section -->
         <div class="footer">
-            <div class="footer-notes"><strong>Note:</strong> <p>${invoiceItem.header.notes}</p></div>
+<div class="logo">
+  <p class="bold">Note:</p>
+  <p style="font-size: 12px;">
+    1. In case of any discrepancies, contact the accounts department within 5 days of receiving the bill. <br>
+    2. Payment must be made within 2 days of receiving the invoice. <br>
+    3. Payments delayed beyond 30 days will incur a penal interest of 18% per annum.
+  </p>
+</div>
             <div class="footer-signature">
                   <div><h4>RITHWIK GREEN POWER & AVIATION PRIVATE LIMITED</h4></div>
                 <img src="${this.signature}" alt="Signature">
