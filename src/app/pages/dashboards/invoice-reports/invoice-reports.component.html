@@ -19,11 +19,12 @@
         <div class="col-lg-2">
           <div class="form-group">
             <label>To Invoice Date</label>
-            <input type="text" formControlName="toDate" placeholder="Enter To Invoice Date"
-              class="form-control form-control-sm" [bsConfig]="bsConfig" bsDatepicker />
-            <div class="text-danger" *ngIf="submit && f['toDate'].errors">
-              To Invoice Date is required.
-            </div>
+            <input type="text" formControlName="toDate" class="form-control form-control-sm"
+            [bsConfig]="{ dateInputFormat: 'DD-MM-YYYY', minDate: reportsForm.get('fromDate')?.value }" placeholder="Enter To Invoice Date" bsDatepicker />
+          <div class="text-danger" *ngIf="f['toDate'].errors?.dateRangeInvalid">
+            To Invoice Date should be at least one day after From Invoice Date.
+          </div>
+          
           </div>
         </div>
         <div class="col-lg-2" >
@@ -58,9 +59,15 @@
         
         <div class="col-lg-4 mt-4 d-flex" style="text-align: end;">
           
-            <button class="btnCustomize btn-success btn-md" (click)="onChangeForm()">
+            <!-- <button class="btnCustomize btn-success btn-md" (click)="onChangeForm()">
               Get
-            </button>
+            </button> -->
+            <button class="btnCustomize btn-success btn-md" 
+            (click)="onChangeForm()" 
+            [disabled]="reportsForm.invalid">
+      Get
+    </button>
+    
             
             <button class="btnCustomize btn-primary btn-md " (click)="printData()">
               Print

@@ -64,6 +64,7 @@ interface InvoiceItem {
   subtotal: number;
   grandTotal: number;
   amountInWords: string;
+  dateRangeValidator:any;
   status: string;
   invoiceUniqueNumber: string;
   proformaCardHeaderName:string
@@ -100,33 +101,104 @@ export class InvoiceReportsComponent {
   signature: string;
   loginData: any;
   grandTotalInvoices: any;
+  bsConfigToDate: { minDate: Date; };
   constructor(private service: GeneralserviceService, private spinner: NgxSpinnerService, private imageService: ImageService, private fb: FormBuilder) {
     this.bsConfig = {
       dateInputFormat: 'DD-MM-YYYY',
       containerClass: 'theme-blue', // Optional: Customize theme
     };
-
+  /*   this.bsConfigToDate = {
+      dateInputFormat: 'DD-MM-YYYY',
+      minDate: new Date() // Ensures no past dates are selected
+    };
+ */
 
   }
   ngOnInit(): void {
-    this.loginData = this.service.getLoginResponse()
-    console.log("this.loginData ", this.loginData)
-    this.getAllInvoice()
+    this.loginData = this.service.getLoginResponse();
+    console.log("this.loginData ", this.loginData);
+    this.getAllInvoice();
+  
     this.reportsForm = this.fb.group({
       fromDate: ['', Validators.required],
       toDate: ['', Validators.required],
       status: ['', Validators.required],
       invoiceType: ['', Validators.required],
     });
+  
+    // Listen for changes in "From Date" and update "To Date"
+    this.reportsForm.get('fromDate')?.valueChanges.subscribe((fromDate) => {
+      if (fromDate) {
+        const toDate = this.addDays(fromDate,0);
+        this.reportsForm.get('toDate')?.setValue(toDate);
+        
+        // Update date picker configuration
+        this.bsConfigToDate = { minDate: new Date(fromDate) };
+        
+        this.dateRangeValidator(this.reportsForm); // Validate form
+      }
+    });
+  
+    // Revalidate form on changes
+    this.reportsForm.valueChanges.subscribe(() => {
+      this.dateRangeValidator(this.reportsForm);
+    });
   }
-  formatDate(proformaInvoiceDate: string): string {
-    const date = new Date(proformaInvoiceDate);
+  
+  addDays(date: string, days: number): string {
+    const result = new Date(date);
+    result.setDate(result.getDate() + days);
+  
+    // Format date to dd-MM-yyyy
+    const day = String(result.getDate()).padStart(2, '0');
+    const month = String(result.getMonth() + 1).padStart(2, '0'); // Months are 0-based
+    const year = result.getFullYear();
+  
+    return `${day}-${month}-${year}`;
+  }
+  
+
+  dateRangeValidator(formGroup: FormGroup) {
+    const fromDate = formGroup.get('fromDate')?.value;
+    const toDate = formGroup.get('toDate')?.value;
+  
+    if (fromDate && toDate) {
+      const formattedFromDate = this.formatDate(fromDate);
+      const formattedToDate = this.formatDate(toDate);
+  
+      console.log("Formatted From Date:", formattedFromDate);
+      console.log("Formatted To Date:", formattedToDate);
+  
+      // Convert formatted date strings back to Date objects for comparison
+      const [fromDay, fromMonth, fromYear] = formattedFromDate.split('-').map(Number);
+      const [toDay, toMonth, toYear] = formattedToDate.split('-').map(Number);
+  
+      const fromDateObj = new Date(fromYear, fromMonth - 1, fromDay); // Months are 0-based
+      const toDateObj = new Date(toYear, toMonth - 1, toDay);
+  
+      console.log("fromDateObj:", fromDateObj);
+      console.log("toDateObj:", toDateObj);
+  
+      // Condition: `toDate` should be greater than or equal to `fromDate`
+      if (toDateObj < fromDateObj) {
+        formGroup.get('toDate')?.setErrors({ dateRangeInvalid: true });
+      } else {
+        formGroup.get('toDate')?.setErrors(null);
+      }
+    }
+  }
+  
+  
+  formatDate(dateString: string): string {
+    const date = new Date(dateString);
     const day = String(date.getDate()).padStart(2, '0');
     const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-based
     const year = date.getFullYear();
-
+  
     return `${day}-${month}-${year}`;
   }
+  
+
   get f() {
     return this.reportsForm.controls;
   }
