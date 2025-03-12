@@ -33,6 +33,7 @@ confirmFieldTextType: boolean = false;
   submit: boolean=false;
   userUniqueId: any;
   loginData: any;
+  c: any;
   
  
 
@@ -311,7 +312,9 @@ confirmFieldTextType: boolean = false;
       }else{
          // Display success toast
          this.userCreationForm.reset()
+         
       this.modalService.dismissAll(modal);
+      this.c('Close click');
       this.getAllUserList()
       Swal.fire({
         title: '',

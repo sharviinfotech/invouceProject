@@ -80,9 +80,12 @@ interface InvoiceItem {
 })
 export class InvoiceReportsComponent {
   // @ViewChild('invoiceContent', { static: false }) invoiceContent!: ElementRef;
+ 
+itemsPerPage: number = 10;
+allInvoiceList: any[] = []; 
   bsConfig: Partial<BsDatepickerConfig>;
   invoiceItem: any;
-  allInvoiceList: any;
+  // allInvoiceList: any;
   invoice = {
     invoiceNumber: 'INV-5678',
     invoiceDate: '2025-01-25',
@@ -92,16 +95,25 @@ export class InvoiceReportsComponent {
     amount: '$500'
   };
   logoUrl: string;
+  pageSize = 10; 
+  currentPage = 1;
+  totalItems = 0; 
+  totalPages = 0; 
+  pages: number[] = []; 
+  pagedInvoiceList: any[] = [];
   InvoiceLogo: string;
-  reportsForm!: FormGroup;
+  reportsForm: FormGroup;
   filteredInvoices: any;
   uniqueInvoices: any;
+  
   submit: boolean = false;
-  minToDate: Date | undefined;
+  // minToDate: Date | undefined;
   signature: string;
   loginData: any;
   grandTotalInvoices: any;
-  bsConfigToDate: { minDate: Date; };
+  paginatedInvoices: any[];
+  cdr: any;
+  // bsConfigToDate: { minDate: Date; };
   constructor(private service: GeneralserviceService, private spinner: NgxSpinnerService, private imageService: ImageService, private fb: FormBuilder) {
     this.bsConfig = {
       dateInputFormat: 'DD-MM-YYYY',
@@ -125,127 +137,241 @@ export class InvoiceReportsComponent {
       status: ['', Validators.required],
       invoiceType: ['', Validators.required],
     });
-  
-    // Listen for changes in "From Date" and update "To Date"
-    this.reportsForm.get('fromDate')?.valueChanges.subscribe((fromDate) => {
-      if (fromDate) {
-        const toDate = this.addDays(fromDate,0);
-        this.reportsForm.get('toDate')?.setValue(toDate);
-        
-        // Update date picker configuration
-        this.bsConfigToDate = { minDate: new Date(fromDate) };
-        
-        this.dateRangeValidator(this.reportsForm); // Validate form
-      }
-    });
-  
-    // Revalidate form on changes
-    this.reportsForm.valueChanges.subscribe(() => {
-      this.dateRangeValidator(this.reportsForm);
-    });
+    this.calculateTotalPages();
+   
+   
+  }
+
+  calculateTotalPages() {
+    this.totalPages = Math.ceil(this.allInvoiceList.length / this.pageSize);
+    this.pages = Array.from({ length: this.totalPages }, (_, i) => i + 1);
   }
   
-  addDays(date: string, days: number): string {
-    const result = new Date(date);
-    result.setDate(result.getDate() + days);
   
-    // Format date to dd-MM-yyyy
-    const day = String(result.getDate()).padStart(2, '0');
-    const month = String(result.getMonth() + 1).padStart(2, '0'); // Months are 0-based
-    const year = result.getFullYear();
   
-    return `${day}-${month}-${year}`;
+
+  
+
+  calculatePages() {
+    this.totalPages = Math.ceil(this.totalItems / this.pageSize);
+    this.pages = Array.from({ length: this.totalPages }, (_, i) => i + 1);
   }
   
 
-  dateRangeValidator(formGroup: FormGroup) {
-    const fromDate = formGroup.get('fromDate')?.value;
-    const toDate = formGroup.get('toDate')?.value;
   
-    if (fromDate && toDate) {
-      const formattedFromDate = this.formatDate(fromDate);
-      const formattedToDate = this.formatDate(toDate);
-  
-      console.log("Formatted From Date:", formattedFromDate);
-      console.log("Formatted To Date:", formattedToDate);
-  
-      // Convert formatted date strings back to Date objects for comparison
-      const [fromDay, fromMonth, fromYear] = formattedFromDate.split('-').map(Number);
-      const [toDay, toMonth, toYear] = formattedToDate.split('-').map(Number);
-  
-      const fromDateObj = new Date(fromYear, fromMonth - 1, fromDay); // Months are 0-based
-      const toDateObj = new Date(toYear, toMonth - 1, toDay);
-  
-      console.log("fromDateObj:", fromDateObj);
-      console.log("toDateObj:", toDateObj);
-  
-      // Condition: `toDate` should be greater than or equal to `fromDate`
-      if (toDateObj < fromDateObj) {
-        formGroup.get('toDate')?.setErrors({ dateRangeInvalid: true });
-      } else {
-        formGroup.get('toDate')?.setErrors(null);
-      }
-    }
+  // When Page Size Changes, Reset Page & Recalculate Pagination
+  onPageSizeChange() {
+    this.currentPage = 1;  // Reset to first page
+    this.calculateTotalPages(); // Recalculate total pages
+    this.pageChanged(1); // Load first page
+  }
+
+  loadInvoices() {
+    // Assuming allInvoiceList is populated with data
+    this.totalPages = Math.ceil(this.allInvoiceList.length / this.itemsPerPage);
+    this.updatePagination();
+  }
+  pageChanged(newPage: number) {
+    this.currentPage = newPage;
+    this.updatePagination();
   }
   
-  
-  formatDate(dateString: string): string {
-    const date = new Date(dateString);
-    const day = String(date.getDate()).padStart(2, '0');
-    const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-based
-    const year = date.getFullYear();
-  
-    return `${day}-${month}-${year}`;
+  updatePagination() {
+    const startIndex = (this.currentPage - 1) * this.pageSize;
+    const endIndex = startIndex + this.pageSize;
+    this.paginatedInvoices = this.allInvoiceList.slice(startIndex, endIndex);
   }
+  
+
+
+
+
+  
+  // addDays(date: string, days: number): string {
+  //   const result = new Date(date);
+  //   result.setDate(result.getDate() + days);
+  
+  //   // Format date to dd-MM-yyyy
+  //   const day = String(result.getDate()).padStart(2, '0');
+  //   const month = String(result.getMonth() + 1).padStart(2, '0'); // Months are 0-based
+  //   const year = result.getFullYear();
+  
+  //   return `${day}-${month}-${year}`;
+  // }
+  
+
+  // dateRangeValidator(formGroup: FormGroup) {
+  //   const fromDate = formGroup.get('fromDate')?.value;
+  //   const toDate = formGroup.get('toDate')?.value;
+  
+  //   if (fromDate && toDate) {
+  //     const formattedFromDate = this.formatDate(fromDate);
+  //     const formattedToDate = this.formatDate(toDate);
+  
+  //     console.log("Formatted From Date:", formattedFromDate);
+  //     console.log("Formatted To Date:", formattedToDate);
+  
+  //     // Convert formatted date strings back to Date objects for comparison
+  //     const [fromDay, fromMonth, fromYear] = formattedFromDate.split('-').map(Number);
+  //     const [toDay, toMonth, toYear] = formattedToDate.split('-').map(Number);
+  
+  //     const fromDateObj = new Date(fromYear, fromMonth - 1, fromDay); // Months are 0-based
+  //     const toDateObj = new Date(toYear, toMonth - 1, toDay);
+  
+  //     console.log("fromDateObj:", fromDateObj);
+  //     console.log("toDateObj:", toDateObj);
+  
+  //     // Condition: `toDate` should be greater than or equal to `fromDate`
+  //     if (toDateObj < fromDateObj) {
+  //       formGroup.get('toDate')?.setErrors({ dateRangeInvalid: true });
+  //     } else {
+  //       formGroup.get('toDate')?.setErrors(null);
+  //     }
+  //   }
+  // }
+  
+  
+
   
 
   get f() {
     return this.reportsForm.controls;
   }
-  onChangeForm() {
+// onChangeForm() {
+//     console.log("this.reportsForm", this.reportsForm);
 
-    if (this.reportsForm.value.fromDate && this.reportsForm.value.toDate && this.reportsForm.value.status && this.reportsForm.value.invoiceType) {
-      this.filteredInvoices = [];  // Store or use the filtered data as needed
-      const fromD = this.reportsForm.value.fromDate;
-      const toD = this.reportsForm.value.toDate;
-      const selectedStatus = this.reportsForm.value.status;
-      const selectedInvoiceType = this.reportsForm.value.invoiceType; // Get selected invoice type
-     console.log("this.reportsForm",this.reportsForm)
-      // Convert fromDate and toDate to Date objects
-      const fromDateObj = this.convertToDate(fromD);
-      const toDateObj = this.convertToDate(toD);
+//     if (this.reportsForm.value.fromDate && this.reportsForm.value.toDate) {
+//       this.filteredInvoices  =[]
+//         const fromD = new Date(this.reportsForm.value.fromDate);
+//         const toD = new Date(this.reportsForm.value.toDate);
+//         const selectedStatus = this.reportsForm.value.status || '';
+//         const selectedInvoiceType = this.reportsForm.value.invoiceType || '';
 
-      console.log('From Date:', fromDateObj);
-      console.log('To Date:', toDateObj);
-      console.log("this.uniqueInvoices", this.uniqueInvoices)
-      // Filter invoices based on both date range and status
-      const filteredInvoices = this.uniqueInvoices.filter(invoice => {
-        // Convert invoice date string to Date object
-        const invoiceDate = this.convertToDate(invoice.header.ProformaInvoiceDate);
+//         // Extract Year & Month from From & To Dates
+//         const fromYear = fromD.getFullYear();
+//         const fromMonth = fromD.getMonth(); // (0 for Jan, 1 for Feb, ..., 11 for Dec)
+//         const toYear = toD.getFullYear();
+//         const toMonth = toD.getMonth();
 
-        // Check if invoice date is within the specified range
-        const isWithinDateRange = invoiceDate >= fromDateObj && invoiceDate <= toDateObj;
+//         if (fromD > toD) {
+//             console.log("Error: From Date cannot be greater than To Date");
+//             return;
+//         }
 
-        // Check if the status matches (case insensitive)
-        const isStatusMatch = selectedStatus === '' || invoice.status.toLowerCase() === selectedStatus.toLowerCase();
-        const isInvoiceTypeMatch = selectedInvoiceType === '' || invoice.proformaCardHeaderId === selectedInvoiceType; // Filter by invoice type
-        // Return only invoices that match both date range and status
-        return isWithinDateRange && isStatusMatch && isInvoiceTypeMatch;
-      });
+//         console.log('From Date:', fromD);
+//         console.log('To Date:', toD);
 
-      console.log('Filtered Invoices:', filteredInvoices);
-      this.filteredInvoices = filteredInvoices;  // Store or use the filtered data as needed
-      console.log('Filtered Invoices:', this.filteredInvoices);
-      this.allInvoiceList = this.filteredInvoices
-      console.log('this.allInvoiceList change', this.allInvoiceList);
-      this.submit = false
-    } else {
-      console.log('this.uniqueInvoices', this.uniqueInvoices);
-      this.submit = true
+//         // Filter invoices
+//         this.filteredInvoices = this.uniqueInvoices.filter(invoice => {
+//             const invoiceDate = new Date(invoice.header.ProformaInvoiceDate);
+//             const invoiceYear = invoiceDate.getFullYear();
+//             const invoiceMonth = invoiceDate.getMonth();
+
+//             // Condition to check same month or above
+//             const isWithinDateRange = 
+//                 (invoiceYear > fromYear || (invoiceYear === fromYear && invoiceMonth >= fromMonth)) &&
+//                 (invoiceYear < toYear || (invoiceYear === toYear && invoiceMonth <= toMonth));
+
+//             const isStatusMatch = selectedStatus === '' || invoice.status.toLowerCase() === selectedStatus.toLowerCase();
+//             const isInvoiceTypeMatch = selectedInvoiceType === '' || invoice.proformaCardHeaderId === selectedInvoiceType;
+
+//             return isWithinDateRange && isStatusMatch && isInvoiceTypeMatch;
+//         });
+
+//         console.log('Filtered Invoices:', this.filteredInvoices);
+//         this.allInvoiceList = this.filteredInvoices;
+//         this.submit = false;
+//     } else {
+//         console.log('Error: Please select From Date and To Date');
+//         this.submit = true;
+//     }
+// }
+onChangeForm() {
+  console.log("this.reportsForm", this.reportsForm);
+
+  if (this.reportsForm.value.fromDate && this.reportsForm.value.toDate) {
+    this.filteredInvoices = [];
+    const fromD = new Date(this.reportsForm.value.fromDate);
+    const toD = new Date(this.reportsForm.value.toDate);
+    const selectedStatus = this.reportsForm.value.status || '';
+    const selectedInvoiceType = this.reportsForm.value.invoiceType || '';
+
+    if (fromD > toD) {
+      console.log("Error: From Date cannot be greater than To Date");
+      return;
     }
-    console.log('this.uniqueInvoices', this.uniqueInvoices);
 
+    console.log('From Date:', fromD);
+    console.log('To Date:', toD);
+
+    // Filter invoices
+    this.filteredInvoices = this.uniqueInvoices.filter(invoice => {
+      const invoiceDate = new Date(invoice.header.ProformaInvoiceDate);
+      const isWithinDateRange = invoiceDate >= fromD && invoiceDate <= toD;
+      const isStatusMatch = selectedStatus === '' || invoice.status.toLowerCase() === selectedStatus.toLowerCase();
+      const isInvoiceTypeMatch = selectedInvoiceType === '' || invoice.proformaCardHeaderId === selectedInvoiceType;
+
+      return isWithinDateRange && isStatusMatch && isInvoiceTypeMatch;
+    });
+
+    console.log('Filtered Invoices:', this.filteredInvoices);
+    this.allInvoiceList = this.filteredInvoices;
+    
+    // 🔥 Reset pagination after filtering 🔥
+    this.currentPage = 1;
+    this.calculateTotalPages();
+    this.updatePagination();
+    
+    this.submit = false;
+  } else {
+    console.log('Error: Please select From Date and To Date');
+    this.submit = true;
   }
+}
+
+
+
+
+// Utility function to format date as YYYY-MM-DD
+formatDate(dateStr) {
+    if (!dateStr) return null;
+
+    const dateObj = new Date(dateStr);
+    const year = dateObj.getFullYear();
+    const month = String(dateObj.getMonth() + 1).padStart(2, '0'); // Ensure two digits
+    const day = String(dateObj.getDate()).padStart(2, '0'); // Ensure two digits
+
+    return `${year}-${month}-${day}`;
+}
+
+    // Helper method to convert date string to Date object
+    convertToDate(dateString: any): Date {
+      if (typeof dateString === 'string' && dateString.includes('-')) {
+        const [day, month, year] = dateString.split('-').map(val => parseInt(val, 10));
+        return new Date(year, month, day); // JS Date months are 0-indexed
+      } else if (dateString instanceof Date) {
+        return dateString;  // If the input is already a Date object, return it directly
+      } else {
+        console.error('Invalid date format:', dateString);
+        // return new Date(); // Return current date as fallback or handle accordingly
+       
+          return dateString ? new Date(dateString) : null;
+        
+        
+      }
+    }
+    isDateInRange(invoiceDate: Date, fromDate: Date, toDate: Date): boolean {
+      // Convert dates to comparable format (e.g., DD-MM-YYYY)
+      const invoiceDateParts = invoiceDate;
+      const fromDateParts = fromDate;
+      const toDateParts = toDate;
+  
+      const invoiceDateObj = new Date(Number(invoiceDateParts[2]), Number(invoiceDateParts[1]) - 1, Number(invoiceDateParts[0]));
+      const fromDateObj = new Date(Number(fromDateParts[2]), Number(fromDateParts[1]) - 1, Number(fromDateParts[0]));
+      const toDateObj = new Date(Number(toDateParts[2]), Number(toDateParts[1]) - 1, Number(toDateParts[0]));
+      console.log("isDateInRange:", invoiceDate,fromDate, toDate)
+      return invoiceDate >= fromDate && invoiceDate <= toDate;  
+      }
   reset() {
     this.reportsForm.reset()
     this.reportsForm.patchValue({
@@ -447,34 +573,7 @@ export class InvoiceReportsComponent {
   }
   
 
-  // Helper method to convert date string to Date object
-  convertToDate(dateString: any): Date {
-    if (typeof dateString === 'string' && dateString.includes('-')) {
-      const [day, month, year] = dateString.split('-').map(val => parseInt(val, 10));
-      return new Date(year, month - 1, day); // JS Date months are 0-indexed
-    } else if (dateString instanceof Date) {
-      return dateString;  // If the input is already a Date object, return it directly
-    } else {
-      console.error('Invalid date format:', dateString);
-      return new Date(); // Return current date as fallback or handle accordingly
-    }
-  }
 
-
-
-
-  isDateInRange(invoiceDate: string, fromDate: string, toDate: string): boolean {
-    // Convert dates to comparable format (e.g., DD-MM-YYYY)
-    const invoiceDateParts = invoiceDate.split('-');
-    const fromDateParts = fromDate.split('-');
-    const toDateParts = toDate.split('-');
-
-    const invoiceDateObj = new Date(Number(invoiceDateParts[2]), Number(invoiceDateParts[1]) - 1, Number(invoiceDateParts[0]));
-    const fromDateObj = new Date(Number(fromDateParts[2]), Number(fromDateParts[1]) - 1, Number(fromDateParts[0]));
-    const toDateObj = new Date(Number(toDateParts[2]), Number(toDateParts[1]) - 1, Number(toDateParts[0]));
-
-    return invoiceDateObj >= fromDateObj && invoiceDateObj <= toDateObj;
-  }
   getAllInvoice() {
     this.allInvoiceList = []
     this.spinner.show()
@@ -488,10 +587,13 @@ export class InvoiceReportsComponent {
       this.uniqueInvoices = [...this.allInvoiceList];
 
       console.log("this.uniqueInvoices", this.uniqueInvoices)
+      this.updatePagination();
     }, error => {
       this.spinner.hide()
     })
   }
+ 
+
 
 // Method to select and show an invoice
 selectInvoice(invoice: any) {

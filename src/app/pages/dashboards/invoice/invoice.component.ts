@@ -280,7 +280,7 @@ clearOtherCustomerFields() {
       ProformaGstNumber: ['36AAICS9057Q1ZD', Validators.required],
       proformatypeOfAircraft: ['', Validators.required],
       proformaseatingcapasity: ['', Validators.required],
-      notes: ['',Validators.required],
+      notes: ['', Validators.required],
       startBookingDateOfJourny: ['', Validators.required],
       endBookingDateOfJourny: ['', Validators.required],
       bookingsector: ['', Validators.required],

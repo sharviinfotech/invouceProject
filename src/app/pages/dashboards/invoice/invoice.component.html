@@ -552,14 +552,14 @@
           <div class="row">
             <div class="col-lg-12">
               <div class="notes-section form-group">
-                <label>Notes<span class="text-danger">*</span></label>
+                <label>Notes</label>
                 <textarea formControlName="notes" class="form-control"
                   placeholder="Notes - any relevant information not covered, additional terms and conditions" (input)="convertToUppercase($event)"></textarea>
               </div>
-              <div class="text-danger"
+              <!-- <div class="text-danger"
                   *ngIf="newInvoiceCreation.get('notes')?.hasError('required') && newInvoiceCreation.get('notes')?.touched && submited">
                   Notes is required.
-                </div>
+                </div> -->
             </div>
           </div>
         </div>
@@ -1190,14 +1190,14 @@
     <div class="row">
       <div class="col-lg-12">
         <div class="notes-section form-group">
-          <label>Notes<span class="text-danger">*</span></label>
+          <label>Notes</label>
           <textarea id="notes" class="form-control"  formControlName="notes"
             placeholder="Notes - any relevant information not covered, additional terms and conditions"></textarea>
         </div>
-        <div class="text-danger"
+        <!-- <div class="text-danger"
         *ngIf="newInvoiceCreation.get('notes')?.hasError('required') && newInvoiceCreation.get('notes')?.touched">
         Notes is required.
-      </div>
+      </div> -->
       </div>
       <!-- <div  contenteditable="true">RITHWIK GREEN POWER & AVIATION PRIVATE LIMITED</div> -->
 

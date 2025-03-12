@@ -206,7 +206,7 @@ newCustomerTemplate: any;
             this.submit = true;
             return;
           } else {
-            this.submit = true;
+            this.submit = false;
           }
        
           let creatObj = {
