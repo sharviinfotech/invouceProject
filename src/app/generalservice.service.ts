@@ -5,6 +5,11 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root'
 })
 export class GeneralserviceService {
+  searchTerm: string = '';
+  allInvoices: any[] = []; // Store all invoices
+  page: number = 1;
+  pageSize: number = 10; // Adjust as needed
+  data: any;
  
   resetPasswordData(): any {
     throw new Error('Method not implemented.');
@@ -22,6 +27,7 @@ export class GeneralserviceService {
   setLoginResponse(data){
     this.loginResponse = data;
 }
+
 getLoginResponse(){
    return this.loginResponse;
 }

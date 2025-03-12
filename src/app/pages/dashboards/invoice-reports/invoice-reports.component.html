@@ -110,7 +110,16 @@
       entries
     </label>
   </div>
+  <div id="tickets-table_filter" class="dataTables_filter">
+    <label class="d-inline-flex align-items-center">
+      Search:
+      <input type="text" name="searchTerm" class="form-control form-control-sm ms-2"
+        aria-controls="tickets-table" [(ngModel)]="service.searchTerm" (input)="resetPagination()" />
+    </label>
+  </div>
 </div>
+
+
 
 
 
@@ -133,9 +142,9 @@
         </thead>
         <tbody>
           <!-- (click)="invoice.status === 'Approved' ? openInvoicePopup(invoice) : null" -->
-          <tr *ngFor="let invoice of allInvoiceList" (click)="selectInvoice(invoice)"
-            [class.selected]="invoiceItem === invoice">
-            <td>
+          <tr *ngFor="let invoice of paginatedInvoices" (click)="selectInvoice(invoice)"
+          [class.selected]="invoiceItem === invoice">
+                  <td>
               <span [ngClass]="{
                 'text-green-600 underline cursor-pointer': invoice.status === 'Approved',
                 'text-orange-600': invoice.status === 'Pending',
@@ -173,32 +182,31 @@
       </table>
       <!-- <button printSectionId="invoice-content" ngxPrint>Print Invoice</button> -->
     </div>
-    <div class="row justify-content-end align-items-md-center mt-2">
+    <div class="row justify-content-center align-items-md-center mt-2">
       <ul class="pagination">
         <!-- Previous Button -->
         <li class="page-item" [class.disabled]="currentPage === 1">
-          <a class="page-link" (click)="currentPage > 1 && pageChanged(currentPage - 1)" 
-             style="background-color: blue; color: white;">
-            Previous
+          <a class="page-link" (click)="currentPage > 1 && pageChanged(currentPage - 1)">
+            &laquo; Previous
           </a>
         </li>
     
-        <!-- Display Current Page and Total Pages -->
-        <li class="page-item disabled">
-          <a class="page-link">
-            Page {{ currentPage }} of {{ totalPages }}
+        <!-- Page Numbers -->
+        <li *ngFor="let page of pages" class="page-item" [class.active]="currentPage === page">
+          <a class="page-link" (click)="pageChanged(page)">
+            {{ page }}
           </a>
         </li>
     
         <!-- Next Button -->
         <li class="page-item" [class.disabled]="currentPage === totalPages">
-          <a class="page-link" (click)="currentPage < totalPages && pageChanged(currentPage + 1)" 
-             style="background-color: green; color: white;">
-            Next
+          <a class="page-link" (click)="currentPage < totalPages && pageChanged(currentPage + 1)">
+            Next &raquo;
           </a>
         </li>
       </ul>
     </div>
+    
     
     
   </div>

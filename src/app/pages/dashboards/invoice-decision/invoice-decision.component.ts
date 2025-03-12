@@ -108,6 +108,15 @@ export class InvoiceDecisionComponent {
     },
     amount: '$500'
   };
+  itemsPerPage: number = 10;
+  pageSize = 10; 
+  currentPage = 1;
+  totalItems = 0; 
+totalPages: number;
+paginatedInvoices: any[] = [];
+ 
+  pages: number[] = []; 
+  pagedInvoiceList: any[] = [];
   decisionTaking: any;
   showSharePopup: boolean = false;
   logoUrl: string;
@@ -121,9 +130,11 @@ export class InvoiceDecisionComponent {
   invoiceService: any;
   activeModal: any;
   reviewedDescription: string;
+  // paginatedInvoices: any;
   
-  constructor(private fb: FormBuilder,  private numberToWordsService: NumberToWordsService,private service: GeneralserviceService, private spinner: NgxSpinnerService, private modalService: NgbModal,private imageService: ImageService,) {
+  constructor(private fb: FormBuilder,  private numberToWordsService: NumberToWordsService,public service: GeneralserviceService, private spinner: NgxSpinnerService, private modalService: NgbModal,private imageService: ImageService,) {
     this.createForm();
+    this.service = service;
 
   }
   createForm() {
@@ -170,23 +181,84 @@ export class InvoiceDecisionComponent {
     this.loginData = this.service.getLoginResponse()
     console.log("this.loginData ", this.loginData)
     this.getStates();
-    this.getAllInvoice()
+    this.getAllInvoice();
+    this.calculateTotalPages();
+   
   }
+
+
+calculateTotalPages() {
+  this.totalPages = Math.ceil(this.allInvoiceList.length / this.pageSize);
+  this.pages = Array.from({ length: this.totalPages }, (_, i) => i + 1);
+}
+
+
+onPageSizeChange() {
+  this.currentPage = 1;
+  this.calculateTotalPages();
+  this.pageChanged(1);
+}
+
+loadInvoices() {
+  this.totalPages = Math.ceil(this.allInvoiceList.length / this.itemsPerPage);
+  this.calculateTotalPages();
+  this.updatePagination();
+}
+
+pageChanged(newPage: number) {
+  if (newPage >= 1 && newPage <= this.totalPages) {
+    this.currentPage = newPage;
+    this.updatePagination();
+  }
+}
+updatePagination() {
+  const startIndex = (this.currentPage - 1) * this.pageSize;
+  const endIndex = startIndex + this.pageSize;
+  this.paginatedInvoices = this.allInvoiceList.slice(startIndex, endIndex);
+  console.log("Paginated Invoices: ", this.paginatedInvoices);
+}
+resetPagination() {
+  this.service.page = 1; // Reset the page number to 1
+}
+
   customDateValidator(control: any): { [key: string]: boolean } | null {
     const dateRegex = /^\d{2}-\d{2}-\d{4}$/;
     return dateRegex.test(control.value) ? null : { invalidDate: true };
   }
 
+  // getAllInvoice() {
+  //   this.allInvoiceList = []
+  //   this.spinner.show()
+  //   let obj={
+  //     "userActivity":this.loginData.data.userActivity
+  // }
+  //   this.service.getAllInvoice(obj).subscribe((res: any) => {
+  //     console.log("getAllInvoice", res);
+  //     this.spinner.hide()
+  //     this.allInvoiceList = res.data;
+  //   }, error => {
+  //     this.spinner.hide()
+  //   })
+  // }
   getAllInvoice() {
     this.allInvoiceList = []
+   
+      // this.allInvoiceList = data;
+      // this.calculateTotalPages();
+      // this.updatePagination();
     this.spinner.show()
     let obj={
-      "userActivity":this.loginData.data.userActivity
+      "userActivity":""
   }
     this.service.getAllInvoice(obj).subscribe((res: any) => {
       console.log("getAllInvoice", res);
       this.spinner.hide()
       this.allInvoiceList = res.data;
+      // this.uniqueInvoices = [...this.allInvoiceList];
+
+      // console.log("this.uniqueInvoices", this.uniqueInvoices)
+      this.updatePagination();
+      this.calculateTotalPages();
     }, error => {
       this.spinner.hide()
     })

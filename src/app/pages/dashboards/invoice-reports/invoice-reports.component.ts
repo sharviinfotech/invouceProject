@@ -81,10 +81,10 @@ interface InvoiceItem {
 export class InvoiceReportsComponent {
   // @ViewChild('invoiceContent', { static: false }) invoiceContent!: ElementRef;
  
-itemsPerPage: number = 10;
 allInvoiceList: any[] = []; 
   bsConfig: Partial<BsDatepickerConfig>;
   invoiceItem: any;
+  
   // allInvoiceList: any;
   invoice = {
     invoiceNumber: 'INV-5678',
@@ -95,6 +95,7 @@ allInvoiceList: any[] = [];
     amount: '$500'
   };
   logoUrl: string;
+  itemsPerPage: number = 10;
   pageSize = 10; 
   currentPage = 1;
   totalItems = 0; 
@@ -114,7 +115,9 @@ allInvoiceList: any[] = [];
   paginatedInvoices: any[];
   cdr: any;
   // bsConfigToDate: { minDate: Date; };
-  constructor(private service: GeneralserviceService, private spinner: NgxSpinnerService, private imageService: ImageService, private fb: FormBuilder) {
+  constructor(public service: GeneralserviceService,  private spinner: NgxSpinnerService, private imageService: ImageService, private fb: FormBuilder) {
+    this.service = service;
+    
     this.bsConfig = {
       dateInputFormat: 'DD-MM-YYYY',
       containerClass: 'theme-blue', // Optional: Customize theme
@@ -141,94 +144,40 @@ allInvoiceList: any[] = [];
    
    
   }
+calculateTotalPages() {
+  this.totalPages = Math.ceil(this.allInvoiceList.length / this.pageSize);
+  this.pages = Array.from({ length: this.totalPages }, (_, i) => i + 1);
+}
 
-  calculateTotalPages() {
-    this.totalPages = Math.ceil(this.allInvoiceList.length / this.pageSize);
-    this.pages = Array.from({ length: this.totalPages }, (_, i) => i + 1);
-  }
-  
-  
-  
 
-  
+onPageSizeChange() {
+  this.currentPage = 1;
+  this.calculateTotalPages();
+  this.pageChanged(1);
+}
 
-  calculatePages() {
-    this.totalPages = Math.ceil(this.totalItems / this.pageSize);
-    this.pages = Array.from({ length: this.totalPages }, (_, i) => i + 1);
-  }
-  
+loadInvoices() {
+  this.totalPages = Math.ceil(this.allInvoiceList.length / this.itemsPerPage);
+  this.calculateTotalPages();
+  this.updatePagination();
+}
 
-  
-  // When Page Size Changes, Reset Page & Recalculate Pagination
-  onPageSizeChange() {
-    this.currentPage = 1;  // Reset to first page
-    this.calculateTotalPages(); // Recalculate total pages
-    this.pageChanged(1); // Load first page
-  }
-
-  loadInvoices() {
-    // Assuming allInvoiceList is populated with data
-    this.totalPages = Math.ceil(this.allInvoiceList.length / this.itemsPerPage);
-    this.updatePagination();
-  }
-  pageChanged(newPage: number) {
+pageChanged(newPage: number) {
+  if (newPage >= 1 && newPage <= this.totalPages) {
     this.currentPage = newPage;
     this.updatePagination();
   }
-  
-  updatePagination() {
-    const startIndex = (this.currentPage - 1) * this.pageSize;
-    const endIndex = startIndex + this.pageSize;
-    this.paginatedInvoices = this.allInvoiceList.slice(startIndex, endIndex);
-  }
-  
+}
+updatePagination() {
+  const startIndex = (this.currentPage - 1) * this.pageSize;
+  const endIndex = startIndex + this.pageSize;
+  this.paginatedInvoices = this.allInvoiceList.slice(startIndex, endIndex);
+  console.log("Paginated Invoices: ", this.paginatedInvoices);
+}
+resetPagination() {
+  this.service.page = 1; // Reset the page number to 1
+}
 
-
-
-
-  
-  // addDays(date: string, days: number): string {
-  //   const result = new Date(date);
-  //   result.setDate(result.getDate() + days);
-  
-  //   // Format date to dd-MM-yyyy
-  //   const day = String(result.getDate()).padStart(2, '0');
-  //   const month = String(result.getMonth() + 1).padStart(2, '0'); // Months are 0-based
-  //   const year = result.getFullYear();
-  
-  //   return `${day}-${month}-${year}`;
-  // }
-  
-
-  // dateRangeValidator(formGroup: FormGroup) {
-  //   const fromDate = formGroup.get('fromDate')?.value;
-  //   const toDate = formGroup.get('toDate')?.value;
-  
-  //   if (fromDate && toDate) {
-  //     const formattedFromDate = this.formatDate(fromDate);
-  //     const formattedToDate = this.formatDate(toDate);
-  
-  //     console.log("Formatted From Date:", formattedFromDate);
-  //     console.log("Formatted To Date:", formattedToDate);
-  
-  //     // Convert formatted date strings back to Date objects for comparison
-  //     const [fromDay, fromMonth, fromYear] = formattedFromDate.split('-').map(Number);
-  //     const [toDay, toMonth, toYear] = formattedToDate.split('-').map(Number);
-  
-  //     const fromDateObj = new Date(fromYear, fromMonth - 1, fromDay); // Months are 0-based
-  //     const toDateObj = new Date(toYear, toMonth - 1, toDay);
-  
-  //     console.log("fromDateObj:", fromDateObj);
-  //     console.log("toDateObj:", toDateObj);
-  
-  //     // Condition: `toDate` should be greater than or equal to `fromDate`
-  //     if (toDateObj < fromDateObj) {
-  //       formGroup.get('toDate')?.setErrors({ dateRangeInvalid: true });
-  //     } else {
-  //       formGroup.get('toDate')?.setErrors(null);
-  //     }
-  //   }
-  // }
   
   
 
@@ -237,55 +186,7 @@ allInvoiceList: any[] = [];
   get f() {
     return this.reportsForm.controls;
   }
-// onChangeForm() {
-//     console.log("this.reportsForm", this.reportsForm);
 
-//     if (this.reportsForm.value.fromDate && this.reportsForm.value.toDate) {
-//       this.filteredInvoices  =[]
-//         const fromD = new Date(this.reportsForm.value.fromDate);
-//         const toD = new Date(this.reportsForm.value.toDate);
-//         const selectedStatus = this.reportsForm.value.status || '';
-//         const selectedInvoiceType = this.reportsForm.value.invoiceType || '';
-
-//         // Extract Year & Month from From & To Dates
-//         const fromYear = fromD.getFullYear();
-//         const fromMonth = fromD.getMonth(); // (0 for Jan, 1 for Feb, ..., 11 for Dec)
-//         const toYear = toD.getFullYear();
-//         const toMonth = toD.getMonth();
-
-//         if (fromD > toD) {
-//             console.log("Error: From Date cannot be greater than To Date");
-//             return;
-//         }
-
-//         console.log('From Date:', fromD);
-//         console.log('To Date:', toD);
-
-//         // Filter invoices
-//         this.filteredInvoices = this.uniqueInvoices.filter(invoice => {
-//             const invoiceDate = new Date(invoice.header.ProformaInvoiceDate);
-//             const invoiceYear = invoiceDate.getFullYear();
-//             const invoiceMonth = invoiceDate.getMonth();
-
-//             // Condition to check same month or above
-//             const isWithinDateRange = 
-//                 (invoiceYear > fromYear || (invoiceYear === fromYear && invoiceMonth >= fromMonth)) &&
-//                 (invoiceYear < toYear || (invoiceYear === toYear && invoiceMonth <= toMonth));
-
-//             const isStatusMatch = selectedStatus === '' || invoice.status.toLowerCase() === selectedStatus.toLowerCase();
-//             const isInvoiceTypeMatch = selectedInvoiceType === '' || invoice.proformaCardHeaderId === selectedInvoiceType;
-
-//             return isWithinDateRange && isStatusMatch && isInvoiceTypeMatch;
-//         });
-
-//         console.log('Filtered Invoices:', this.filteredInvoices);
-//         this.allInvoiceList = this.filteredInvoices;
-//         this.submit = false;
-//     } else {
-//         console.log('Error: Please select From Date and To Date');
-//         this.submit = true;
-//     }
-// }
 onChangeForm() {
   console.log("this.reportsForm", this.reportsForm);
 
@@ -576,6 +477,10 @@ formatDate(dateStr) {
 
   getAllInvoice() {
     this.allInvoiceList = []
+   
+      // this.allInvoiceList = data;
+      // this.calculateTotalPages();
+      // this.updatePagination();
     this.spinner.show()
     let obj={
       "userActivity":""
@@ -588,6 +493,7 @@ formatDate(dateStr) {
 
       console.log("this.uniqueInvoices", this.uniqueInvoices)
       this.updatePagination();
+      this.calculateTotalPages();
     }, error => {
       this.spinner.hide()
     })
