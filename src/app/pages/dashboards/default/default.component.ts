@@ -384,6 +384,31 @@ convertDate(dateStr: string): Date {
 //     this.spinner.hide();
 //   }, 500);
 // }
+
+
+// goBackToYearChart() {
+//   this.selectedYear = null;  
+//   this.monthlyCardDisplay = false; 
+
+//   setTimeout(() => {
+//     // Reapply highlight to the previously selected year
+//     const bars = document.querySelectorAll(".apexcharts-bar-area");
+//     bars.forEach((bar) => {
+//       (bar as HTMLElement).style.stroke = "none";
+//       (bar as HTMLElement).style.strokeWidth = "0";
+//     });
+
+//     if (this.lastSelectedYearIndex !== undefined) {
+//       const selectedBar = document.querySelector(
+//         `.apexcharts-bar-area[j="${this.lastSelectedYearIndex}"]`
+//       );
+//       if (selectedBar) {
+//         (selectedBar as HTMLElement).style.stroke = "red";
+//         (selectedBar as HTMLElement).style.strokeWidth = "2px";
+//       }
+//     }
+//   }, 300); // Small timeout to ensure chart is fully rendered before applying styles
+// }
 goBackToYearChart() {
   this.selectedYear = null;  
   this.monthlyCardDisplay = false; 
@@ -404,9 +429,15 @@ goBackToYearChart() {
         (selectedBar as HTMLElement).style.stroke = "red";
         (selectedBar as HTMLElement).style.strokeWidth = "2px";
       }
+
+      // Reapply the filter for the selected year
+      const selectedYear = this.barChartOptions.xaxis.categories[this.lastSelectedYearIndex];
+      this.filterByYear(selectedYear); // This will update the pie chart and table for the selected year
     }
   }, 300); // Small timeout to ensure chart is fully rendered before applying styles
 }
+
+
 
 
 updatePieChart(selectedYear?: string) {
@@ -490,6 +521,27 @@ filterTableByStatus(selectedStatus: string, selectedYear?: string) {
 
 
 
+// filterByYear(selectedYear: string) {
+//   console.log("Selected Year:", selectedYear);
+
+//   this.filteredInvoiceList = this.allInvoiceList.filter(invoice => {
+//     if (!invoice.header?.ProformaInvoiceDate) return false;
+//     const dateStr = invoice.header.ProformaInvoiceDate;
+//     const [day, month, year] = dateStr.split('-');
+//     return year === selectedYear;
+//   });
+
+//   if (!this.filteredInvoiceList.length) {
+//     console.warn("No invoices found for the selected year.");
+//     this.pieChartOptions.series = [];
+//     this.filteredInvoiceList = []; // Ensure it's cleared
+//     this.cdr.detectChanges();
+//     return;
+//   }
+
+//   // Update Pie Chart with filtered data
+//   this.updatePieChart(selectedYear);
+// }
 filterByYear(selectedYear: string) {
   console.log("Selected Year:", selectedYear);
 
@@ -510,6 +562,9 @@ filterByYear(selectedYear: string) {
 
   // Update Pie Chart with filtered data
   this.updatePieChart(selectedYear);
+
+  // Update the table with filtered data
+  this.cdr.detectChanges();
 }
 
 
