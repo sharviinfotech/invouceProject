@@ -1055,7 +1055,7 @@ font-family: Arial, sans-serif;
    
     </tr>
     <tr>
-      <td><strong>Account Name:</strong> RITHWIK GREEN POWER & AVIATION PRIVATE LIMITED<br><strong>Bank:</strong> KOTAK MAHINDRA BANK<br><strong>Account No:</strong> 0745211990<br><strong>Branch:</strong> BANJARAHILLS<br><strong>IFSC Code:</strong> KKBK00007461 (NEFT/RTGS)</td>
+      <td><strong>Account Name:</strong> RITHWIK GREEN POWER & AVIATION PRIVATE LIMITED<br><strong>Account No:</strong> 4437002100002340<br><strong>Bank:</strong> Punjab National Bank<br><strong>Branch:</strong> Large Corporate branch, Banjara Hills<br><strong>IFSC Code:</strong>PUNB0443700<br><strong>Account Type:</strong>Current Account</td>
      
     </tr>
   </table>
@@ -1536,7 +1536,7 @@ font-family: Arial, sans-serif;
    
     </tr>
     <tr>
-      <td><strong>Account Name:</strong> RITHWIK GREEN POWER & AVIATION PRIVATE LIMITED<br><strong>Bank:</strong> KOTAK MAHINDRA BANK<br><strong>Account No:</strong> 0745211990<br><strong>Branch:</strong> BANJARAHILLS<br><strong>IFSC Code:</strong> KKBK00007461 (NEFT/RTGS)</td>
+      <td><strong>Account Name:</strong> RITHWIK GREEN POWER & AVIATION PRIVATE LIMITED<br><strong>Account No:</strong> 4437002100002340<br><strong>Bank:</strong> Punjab National Bank<br><strong>Branch:</strong> Large Corporate branch, Banjara Hills<br><strong>IFSC Code:</strong>PUNB0443700<br><strong>Account Type:</strong>Current Account</td>
      
     </tr>
   </table>
@@ -7022,7 +7022,7 @@ background-image: linear-gradient(to right, #7e22ce, #2563eb);
             line-height: 1.6;
         }
         /* Footer Section */
-        .footer { display: flex; justify-content: space-between; align-items: flex-start; margin-top: 20px; }
+        .footer { display: flex; justify-content: space-between; align-items: flex-start; margin-top: 20px; justify-content: end;}
         .footer-notes { width: 60%; }
         .footer-signature { width: 35%; text-align: center; }
         .footer-signature img { max-width: 150px; height: auto; margin-bottom: 10px; }
@@ -7161,6 +7161,7 @@ background-image: linear-gradient(to right, #7e22ce, #2563eb);
 
     .footer {
         margin-top: 10px;
+        justify-content: end;
     }
 
     .footer-signature img {
@@ -7279,14 +7280,7 @@ background-image: linear-gradient(to right, #7e22ce, #2563eb);
  
         <!-- Footer Section -->
         <div class="footer">
-<div class="logo">
-  <p class="bold">Note:</p>
-  <p style="font-size: 12px;">
-    1. In case of any discrepancies, contact the accounts department within 5 days of receiving the bill. <br>
-    2. Payment must be made within 2 days of receiving the invoice. <br>
-    3. Payments delayed beyond 30 days will incur a penal interest of 18% per annum.
-  </p>
-</div>
+
             <div class="footer-signature">
                   <div><h4>RITHWIK GREEN POWER & AVIATION PRIVATE LIMITED</h4></div>
                 <img src="${this.signature}" alt="Signature">
@@ -7700,7 +7694,6 @@ background-color: rgb(93, 92, 98);
  
         <!-- Footer Section -->
         <div class="footer">
-            <div class="footer-notes"><strong>Note:</strong> <p>${invoiceItem.header.notes}</p></div>
             <div class="footer-signature">
                   <div><h4>RITHWIK GREEN POWER & AVIATION PRIVATE LIMITED</h4></div>
                 <img src="${this.signature}" alt="Signature">
@@ -8329,7 +8322,6 @@ font-size:14px;
       
  
       <div class="footer">
-            <div class="footer-notes" style="font-size:16px" ><strong>Note:</strong> <p>${invoiceItem.header.notes}</p></div>
             <div class="footer-signature">
                   <div><h4>RITHWIK GREEN POWER & AVIATION PRIVATE LIMITED</h4></div>
                 <img src="${this.signature}" alt="Signature">
@@ -8788,10 +8780,7 @@ font-size:14px;
              <div><strong>Amount in words:</strong> <p>${invoiceItem.amountInWords}</p></div>
           </div>
         </div>
-        <div class="notes">
-            <div><strong>Notes:</strong> <p>${invoiceItem.header.notes}</p></div>
-           
-        </div>
+        
  
         <div class="signatures">
             <div class="client-signature">
