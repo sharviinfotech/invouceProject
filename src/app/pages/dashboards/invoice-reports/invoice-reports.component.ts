@@ -8,6 +8,9 @@ import { BsDatepickerConfig, BsDatepickerModule } from 'ngx-bootstrap/datepicker
 
 import { Component, ElementRef, ViewChild, ViewEncapsulation } from '@angular/core';
 import { ImageService } from 'src/app/image.service';
+import html2canvas from 'html2canvas';
+import { jsPDF } from 'jspdf';
+
 
 interface ChargeItem {
   description: string;
@@ -110,10 +113,26 @@ allInvoiceList: any[] = [];
   submit: boolean = false;
   // minToDate: Date | undefined;
   signature: string;
+  Stamp:string;
+  Lighter:string;
+  Flammable:string;
+  Toxics:string;
+  Corrosives:string;
+  Pepper:string;
+  Flammablegas:String;
+  eCigarettes:string;
+  Infection:string;
+  Radio:string;
+  Explosives:string;
+  Lithium:string;
+  Power:string;
   loginData: any;
   grandTotalInvoices: any;
   paginatedInvoices: any[];
   cdr: any;
+  leftlogo: string;
+  bodyImage: string;
+  bodyImage1: any;
   // bsConfigToDate: { minDate: Date; };
   constructor(public service: GeneralserviceService,  private spinner: NgxSpinnerService, private imageService: ImageService, private fb: FormBuilder) {
     this.service = service;
@@ -574,7 +593,7 @@ selectInvoice(invoice: any) {
                 console.log('invoiceItem.proformaCardHeaderId',invoiceItem.proformaCardHeaderId)
                 // Check conditions before calling print functions
                 if (invoiceItem.proformaCardHeaderId === "PQ") {
-                  this.generateInvoiceHTMLProfoma1(invoiceItem);
+                  this.generateInvoiceHTMLProfoma11(invoiceItem);
                   // Additional checks if needed
                 }else if (invoiceItem.proformaCardHeaderId === "TAX") {
                   this.generateInvoiceHTMLTax2(invoiceItem);
@@ -600,7 +619,7 @@ selectInvoice(invoice: any) {
               console.log('invoiceItem.proformaCardHeaderId',invoiceItem.proformaCardHeaderId)
               // Check conditions before calling print functions
               if (invoiceItem.proformaCardHeaderId === "PQ") {
-                this.generateInvoiceHTMLProfoma1(invoiceItem);
+                this.generateInvoiceHTMLProfoma11(invoiceItem);
                 // Additional checks if needed
               }else if (invoiceItem.proformaCardHeaderId === "TAX") {
                 this.generateInvoiceHTMLTax2(invoiceItem);
@@ -618,9 +637,10 @@ selectInvoice(invoice: any) {
   }
 }
 generateInvoiceHTMLProfoma1(invoiceItem: InvoiceItem) {
- 
-  this.logoUrl = this.imageService.getBase64FlightLogo();
-  this.InvoiceLogo = this.imageService.getBase64WorldLogo();
+  this.leftlogo = this.imageService.getBase64FlightLogo();
+  // this.logoUrl = this.imageService.getBase64FlightWorldmapLogo();
+  this.logoUrl = this.imageService.getBase64FlightNewLogo();
+  this.InvoiceLogo = this.imageService.getBase64Flightworld2Logo();
   this.signature = this.imageService.getBase64Signature();
   const invoiceHTML = `
  
@@ -685,8 +705,8 @@ font-family: Arial, sans-serif;
 }
  
 .header-section img {
-  max-width: 100px; /* Adjust as needed */
-  height: auto;
+   max-width: 195px; /* Adjust as needed */
+  height: 110px;
 }
  .booking-details {
     border: 1px solid #ccc;
@@ -851,8 +871,8 @@ font-family: Arial, sans-serif;
 }
  
 .header-section img {
-  max-width: 100px; /* Adjust as needed */
-  height: auto;
+    max-width: 250px; /* Adjust as needed */
+  height: 170px;
 }
  .booking-details {
     border: 1px solid #ccc;
@@ -871,7 +891,7 @@ font-family: Arial, sans-serif;
         padding: 5px;
   width: 100%;
   display: flex;
-  font-size: 10px;
+  font-size: 14px;
   }
  
   .data-item {
@@ -890,9 +910,9 @@ font-family: Arial, sans-serif;
   .orange-background {
  
    background-color: rgb(127, 127, 136);
-    font-size: 13px;
+    font-size: 15px;
     color:white;
-    padding: 3px;
+    padding: 5px;
     text-align: center;
     font-weight: bold;
   }
@@ -904,13 +924,13 @@ font-family: Arial, sans-serif;
   }
    .table-bordered th {
       border: 1px solid white;
-  padding: 2px;
+  padding: 4px;
    background-color: rgb(91, 85, 130);
   color: white;
   }
  
   .table-bordered td {
-  padding: 2px;
+  padding: 3px;
   }
   .booking-header bold{
  
@@ -930,13 +950,21 @@ font-family: Arial, sans-serif;
   .text-center {
     text-align: center;
   }
+  .paka1 {
+        page-break-before: always; /* Ensures it starts on a new page */
+        page-break-inside: avoid;  /* Prevents content splitting */
+    }
+
+ 
+   
  .footer {
           display: flex;
           justify-content: space-between;
           align-items: center;
           width: 100%;
-          margin-top: 10px;
+          margin-top: 5px;
       }
+          
    
       .footer .logo {
           width: 50%;
@@ -953,8 +981,8 @@ font-family: Arial, sans-serif;
 <body>
 <div class="invoice-container">
   <div class="header-section">
+   <div class="logo left-logo"><img src="${this.leftlogo}" alt="Invoice Logo"></div>
          <div class="logo left-logo"><img src="${this.logoUrl}" alt="Invoice Logo"></div>
-    <div class="logo"><h3>RITHWIK GREEN POWER & AVIATION PRIVATE LIMITED</h3></div>
           <div class="logo right-logo"><img src="${this.InvoiceLogo}" alt="Company Logo"></div>
   </div>
   <div class="InvoiceHeader">${invoiceItem.proformaCardHeaderName}</div>
@@ -1059,15 +1087,17 @@ font-family: Arial, sans-serif;
      
     </tr>
   </table>
- 
+ <div>
    <div class="logo">
-  <p class="bold">Note:</p>
-  <p style="font-size: 12px;">
+   <div class = "paka1">
+  <p class="bold" style="font-size: 20px;">Note:</p>
+  <p style="font-size: 15px;">
     1. In case of any discrepancies, contact the accounts department within 5 days of receiving the bill. <br>
     2. Payment must be made within 2 days of receiving the invoice. <br>
-    3. Payments delayed beyond 30 days will incur a penal interest of 18% per annum.
+    3. Payments delayed beyond 30 days will be subject to a penalty interest of 18% per annum.
   </p>
 </div>
+
 
  
   <div class="footer">
@@ -1080,11 +1110,602 @@ font-family: Arial, sans-serif;
              
           </div>
       </div>
- 
+ </div>
+</div>
 </div>
 </body>
 </html>
  
+ 
+  `;
+ 
+  const newWindow = window.open('', '', 'height=600,width=800');
+  if (newWindow) {
+    newWindow.document.write(invoiceHTML);
+    newWindow.document.close();
+ 
+    setTimeout(() => {
+      newWindow.print();
+    }, 500);
+  }
+};
+generateInvoiceHTMLProfoma11(invoiceItem: InvoiceItem) {
+  this.leftlogo = this.imageService.getBase64FlightLogo();
+  // this.logoUrl = this.imageService.getBase64FlightWorldmapLogo();
+  this.logoUrl = this.imageService.getBase64FlightNewLogo();
+  this.InvoiceLogo = this.imageService.getBase64Flightworld2Logo();
+  this.signature = this.imageService.getBase64Signature();
+  this.Stamp = this.imageService.getBase64StampLogo();
+  this.Lighter=this.imageService.getBase64LighterLogo();
+  this.Flammable=this.imageService.getBase64FlammableLogo();
+  this.Toxics=this.imageService.getBase64ToxicsLogo();
+  this.Corrosives=this.imageService.getBase64CorrosivesLogo();
+  this.Pepper=this.imageService.getBase64PepperLogo();
+  this.Flammablegas=this.imageService.getBase64FlammableGasLogo();
+  this.eCigarettes=this.imageService.getBase64EcigarettesLogo();
+  this.Infection=this.imageService.getBase64InfectionLogo();
+  this.Radio=this.imageService.getBase64RadioactiveLodo();
+  this.Explosives=this.imageService.getBase64ExplosivesLogo();
+  this.bodyImage=this.imageService.getBase64FlightAviationwithLogo();
+  this.bodyImage1 = this.imageService.getBase64FlightFullNameLight();
+  this.Lithium=this.imageService.getBase64LithiumLogo();
+  this.Power=this.imageService.getBase64PowerLogo();
+  
+  console.log("this.bodyImage",this.bodyImage)
+  const invoiceHTML = `
+ 
+
+
+
+<html lang="en">
+<head>
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invoice</title>
+    <style>
+         body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: white;
+            font-size: 10px; /* Reduced font size for better fit */
+        }
+
+        .invoice-container {
+            width: 100%;
+            margin: auto;
+            background: #fff;
+            padding: 5px; /* Reduced padding */
+            border: 1px solid #ddd;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            box-sizing: border-box;
+        }
+
+        .header-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid blue;
+            margin-bottom: 5px; /* Reduced margin */
+        }
+
+        .header-section .logo {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .header-section img {
+            max-width: 80px; /* Reduced logo size */
+            height: auto;
+        }
+
+        .company-details {
+            padding: 5px; /* Reduced padding */
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .company-details p {
+            margin: 0;
+            font-size: 12px; /* Further reduced font size */
+            color: #333;
+        }
+
+        .company-details p:first-child {
+            font-size: 12px; /* Adjusted font size */
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .invoice-title {
+            text-align: center;
+            font-size: 15px;
+            font-weight: bold;
+            margin-bottom: 4px; /* Reduced margin */
+            background-color: rgb(181, 179, 200);
+        }
+
+        .from {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px; /* Reduced font size */
+
+        }
+
+        .table-bordered {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px; /* Reduced font size */
+        }
+
+        .table-bordered th,.table-bordered td {
+            border: 1px solid #ddd;
+            padding: 5px; /* Reduced padding */
+            text-align: center;
+        }
+            
+
+       
+        .total {
+            font-weight: bold;
+            text-align: right;
+        }
+
+        .booking-details, .remittance-details {
+            border: 1px solid black;
+            padding: 5px; /* Reduced padding */
+            margin-top: 5px; /* Reduced margin */
+        }
+
+        .booking-details p, .remittance-details p {
+            margin: 0;
+            font-size: 12px; /* Reduced font size */
+        }
+.signature {
+    font-family: Arial, sans-serif;
+    margin-top: 20px;
+    text-align: end;
+     margin-bottom:80px;
+    
+}
+
+.rr {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.jets {
+    display: flex;
+    align-items: center;
+    gap: 20px; /* Space between images */
+}
+
+.jets img {
+    width: 100px; /* Adjust size as needed */
+    height: auto;
+}
+
+.authorised {
+    font-weight: bold;
+       margin-right: 126px;
+       margin-top:1px;
+    text-align: center;
+}
+
+            .terms{
+                margin-bottom:20px;
+                }
+                .noallow{
+                display:flex;
+                justify-content:space-evenly;
+                }
+                  .remittance-container {
+            width: 50%;
+            border: 1px solid #000;
+            padding: 10px;
+        }
+        .remittance-container h3 {
+            margin-bottom: 5px;
+        }
+        .remittance-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .remittance-table td {
+            padding: 2px;
+            border: none;
+        }
+        .remittance-table td:first-child {
+            font-weight: bold;
+        }
+        .allow{
+        display:flex;
+        }
+            
+
+        @media print {
+    body {
+        font-size: 10px; /* Reduced font size */
+        margin: 0;
+        padding: 0;
+    }
+
+    .invoice-container {
+        width: 100%;
+        max-width: 100%;
+        padding: 5px;
+        border: 1px solid black;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+        page-break-inside: avoid;
+    }
+        .rcb{
+        background-image: url('${this.bodyImage1}') !important;
+        background-size: 100% !important;
+        background-position: center !important;
+        background-repeat: no-repeat !important;
+        padding-top:20px ;
+        }
+
+    .header-section {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 5px;
+    }
+
+    .header-section img {
+        max-width: 150px; /* Adjusted logo size */
+    }
+
+    .company-details p, .from, .table-bordered, .booking-details p, .remittance-details p {
+        font-size: 14px; /* Further reduced for compact layout */
+    }
+
+    .table-bordered {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 14px;
+    }
+
+    .table-bordered th,  {
+        border: 1px solid #ddd;
+        padding: 3px; /* Reduced padding */
+        text-align: center;
+    }
+    .table-bordered td {
+        border: 1px solid #ddd;
+        padding: 3px; /* Reduced padding */
+        text-align: center;
+        font-size:13px;
+    }
+
+    .total {
+        font-weight: bold;
+        text-align: right;
+    }
+
+    .booking-details, .remittance-details {
+        border: 1px solid black;
+        padding: 5px;
+        margin-top: 5px;
+    }
+
+    .remittance-container {
+        width: 70%;
+        padding: 5px;
+    }
+
+    .remittance-table td {
+        font-size: 12px;
+    }
+
+    .rr {
+        display: flex;
+        justify-content: flex-end; /* Moves signature to the right */
+        align-items: center;
+        width: 100%;
+    }
+
+    .jets {
+        text-align: right;
+    }
+  .invoice-title {
+            text-align: center;
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 5px; /* Reduced margin */
+            background-color: rgb(181, 179, 200);
+            color:white;
+        }
+    .authorised {
+        text-align: right;
+        margin-right: 10px;
+    }
+
+    /* Prevent page breaks */
+    .invoice-container, .table-bordered, .booking-details, .remittance-container {
+        page-break-inside: avoid;
+    }
+        .terms{
+         margin-bottom:110px;
+        font-size: 14px;
+        }
+        .allow{
+        display:flex;
+        }
+}
+
+    </style>
+</head>
+<body>
+
+    <div class="invoice-container">
+    
+         <div class="header-section">
+   <div class="logo left-logo"><img src="${this.leftlogo}" alt="Invoice Logo"></div>
+         <div class="logo left-logo"><img src="${this.logoUrl}" alt="Invoice Logo"></div>
+          <div class="logo right-logo"><img src="${this.InvoiceLogo}" alt="Company Logo"></div>
+  </div>
+   <div class ="rcb">
+  <div class="company-details">
+    <p style="font-size: 17px; "><b>RITHWIK GREEN POWER AND AVIATION PRIVATE LIMITED</b></p>
+    <p>${invoiceItem.header.ProformaCustomerName},${invoiceItem.header.ProformaAddress},${invoiceItem.header.ProformaCity},${invoiceItem.header.ProformaPincode}</p>
+    <p><strong>GSTIN:</strong>${invoiceItem.header.ProformaGstNo} ,<strong>PANNO:</strong> ${invoiceItem.header.ProformaPan}</p>
+  </div>
+        
+        <div class="invoice-title">
+          PROFOMA INVOICE
+        </div>
+
+       
+<div style="width:100%;display:flex">
+        <div style="width:50%;">
+        <table>
+            <tr>
+                <td><strong>INVOICE NUMBER</strong></td>
+                <td>: ${invoiceItem.invoiceUniqueNumber}</td>
+            </tr>
+            <tr>
+                <td><strong>PAN NO</strong></td>
+                <td>:${invoiceItem.header.ProformaPanNO}</td>
+            </tr>
+            <tr>
+                <td><strong>GST NO</strong></td>
+                <td>:${invoiceItem.header.ProformaGstNumber} </td>
+            </tr>
+           
+        </table>
+        </div>
+
+        <div style="width:50%;" >
+        <table>
+            
+            <tr>
+                <td><strong>DATE</strong></td>
+                <td>:${invoiceItem.header.ProformaInvoiceDate}</td>
+            </tr>
+           <tr>
+                <td><strong>TYPE OF AIRCRAFT</strong></td>
+                <td>:${invoiceItem.header.ProformaTypeOfAircraft}</td>
+            </tr>
+             <tr>
+                <td><strong>Seating Capacity</strong></td>
+                <td>: ${invoiceItem.header.ProformaSeatingCapasity}</td>
+            </tr>
+        </table>
+        </div>
+    </div>
+
+         <table class="table-bordered">
+            <thead>
+              <tr>
+                <th class="booking-header bold" style="font-size: 13px;">S.NO</th>
+                <th class="booking-header bold" style="font-size: 13px;">DESCRIPATION</th>
+                <th class="booking-header bold" style="font-size: 13px;">UNITS (Hrs.)</th>
+                <th class="booking-header bold" style="font-size: 13px;">RATE(INR)</th>
+                <th class="booking-header bold" style="font-size: 13px;">AMOUNT(INR)</th>
+              </tr>
+            </thead>
+            <tbody>
+           <tr>
+            <td>1</td>
+            <td class="bold" style="text-align:left;" colspan="0" ><b>CHARGES</b></td>
+            
+          </tr>
+              ${invoiceItem.chargesList.map((charge, index) => `
+                <tr>
+                 
+                   <td class="text-center"></td>
+                  <td>${charge.description}</td>
+                  <td class="text-center">${charge.units ? charge.units : ''}</td>
+                  <td class="text-right">${charge.rate}</td>
+                  <td class="text-right">${charge.amount}</td>
+                </tr>
+              `).join('')}
+             
+              <tr>
+              <td></td>
+              <td></td>
+              <td></td>
+                <td  class="text-right bold" style="background-color: rgb(181, 179, 200);">TOTAL</td>
+                <td class="text-right bold"  style="background-color: rgb(181, 179, 200);">${invoiceItem.subtotal}</td>
+              </tr>
+              <tr>
+            <td>2</td>
+                  <td class="bold" style="text-align:left;" colspan="0" ><b>TAXES:<b></td>
+                  
+                  
+            </tr>
+ 
+              ${invoiceItem.taxList.map(tax => `
+                <tr>
+                  <td></td>
+                  <td>${tax.description}</td>
+                  <td></td>
+                  <td></td>
+                  <td class="text-right">${tax.amount}</td>
+                </tr>
+              `).join('')}
+ 
+              <tr>
+              <td></td>
+              <td></td>
+              <td></td>
+                <td class="text-right bold"  style="background-color: rgb(181, 179, 200);">GRAND TOTAL</td>
+                <td class="text-right bold"  style="background-color: rgb(181, 179, 200);">${invoiceItem.grandTotal ? invoiceItem.grandTotal.toFixed(2) : '0.00'}</td>
+              </tr>
+               <tr >
+                  <td colspan="5" class="bold" style="text-align:left;" ><strong>Amount in words:</strong> ${invoiceItem.amountInWords}</td>
+               </tr>
+            </tbody>
+          </table>
+     
+<h2>Booking details:</h2>
+<div class="remittance-container">
+
+<table class="remittance-table">
+            <tr>
+                <td>Date Of Journey</td>
+                <td>: 03/03/25-04/03/2025</td>
+            </tr>
+            <tr>
+                <td>Sector</td>
+                <td>:${invoiceItem.header.BookingSector} </td>
+            </tr>
+            <tr>
+                <td>Billing Flying Time</td>
+                <td>: ${invoiceItem.header.BookingBillingFlyingTime}</td>
+            </tr>
+        </table>
+</div>
+<h2>Remittance details:</h2>
+<div class="remittance-container">
+        <table class="remittance-table">
+            <tr>
+                <td>Account Name</td>
+                <td>: RITHWIK GREEN POWER AND AVIATION PVT. LTD.</td>
+            </tr>
+            <tr>
+                <td>Account Number</td>
+                <td>: 4437002100002340</td>
+            </tr>
+            <tr>
+                <td>Bank</td>
+                <td>: Punjab National Bank.</td>
+            </tr>
+            <tr>
+                <td>RTGS/IFSC Code</td>
+                <td>: PUNB0443700</td>
+            </tr>
+           
+        </table>
+    </div>
+
+       <div class="signature">
+    <b >RITHWIK GREEN POWER AND AVIATION PVT. LTD:</b>
+    <div class="rr">
+        <div class="jets">
+            <img src="${this.signature}" alt="Company Signature" class="logo">
+            
+        </div>
+    </div>
+    <p class="authorised">Authorised Signatory</p> <!-- This now comes below both images -->
+</div>
+</div>
+
+        
+        
+        
+        <div class ="rcb">
+        <div class="terms">
+        <h3>Terms & Conditions:</h3>
+        <p>1. This is only a Quotation. The Charter will be confirmed only after receipt of 100% payment in advance</p>
+        <p >2. Additional sectors required after start of the flight itinerary will be on the sole discretion of RITHWIK GREEN AND AVIATION Pvt. Ltd.</p>
+        <p>3. The flight duty time and flight time will be governed by DGCA-CAR-7-JIII & IV dated 23.03.2021
+effective from 30.09.2022.</p>
+<p>4. Minimum booking value for a charter would be 2 Hrs of flying per booking per day.</p>
+<p>5. Any Flying Hrs. mentioned in the quotation is only indicative since:</p>
+<p>i. Any diversions due to weather or the air route not being available due decision of Airport
+Authority / Air Traffic Control or due to defense activity; will be billed at actuals after the flight
+is conducted in the final INVOICE.</p>
+<p>ii. Day & Night parking at some airports are subject to the availability of Parking Bays at these
+airports. In case of non-availability of Parking space we may have to move-out the aircraft / reposition the aircraft / go on a local flight to clear the parking bay for schedule flights - under
+such circumstances reschedule departure of the flight.</p>
+<p>6. Payment: 100% advance to be received at the time of booking, as 'confirmation charges'for
+confirming the charter. Payment can be made via cheque/DD/wire transfer in the name of 'RITHWIK GREEN AND AVIATION Pvt. Ltd' payable at Hyderabad.</p>
+<p>7. Cancellation</p>
+<p>a. Cancellation Charges would be levied as a percentage of the total INVOICE value, which would
+be as follows:-</p>
+<p>i. 10%- against flight preparation charges will be levied if flight is cancelled due to “force
+majeure” reasons.</p>
+<p>ii. 25% - if cancellation is done 6 days prior to departure of the flight</p>
+<p>iii. 50% - if cancellation is done less than 6 days but more than 72 hrs prior to schedule
+departure of the flight.</p>
+<p>iv. 100% of the total estimated charter cost will be levied if the flight is cancelled less than
+72 hrs of scheduled departure.</p>
+<p>b. Any cancellations/changes (if the same cannot be executed due to operational reasons / lapse or
+lack of relevant permissions) in flight sectors after the commencement of the 'flight program' will
+be termed as a as 'a last minute cancellation' - and the cancellation clause of 100% would apply.</p>
+<p>8.Other Charges:</p>
+<p>a. Day Detention charges @ INR 50,000/- per hour {for Domestic} and US$ 350 per hour {for
+International airports} will be charged after 4 hours of free waiting.</p>
+<p>b. The cost of re-positioning of aircraft will be billed at actuals after the flight is conducted in the
+final INVOICE.</p>
+<p>9. The Courts of Hyderabad shall have exclusive jurisdiction in connection with any matter arising out
+of this Quotation</p>
+<p>10. Check-in Time: Passengers are advised to reach airport 60 min before departure.</p>
+<p>11. Valid ID proof needed: All passengers shall carry a valid photo identification proof (Driver License,
+Aadhar Card, Pan Card or any other Government recognized photo identification)<br>
+</p>
+
+        </div>
+        </div>
+        <div><p style="font-size: 25px; color: blue;"> <i class="fa-solid fa-ban" style="color: red; font-size: 25px;"></i>  Not Allowed</p>
+</div>
+
+
+<div class="noallow">    <div class="logo left-logo" ><img src="${this.Lighter}" alt="Invoice Logo">
+<p style="margin-left: 38px;" >Lighters</p></div>
+<div class="logo left-logo" ><img src="${this.Flammable}" alt="Invoice Logo">
+<p style="margin-left: 38px;" >Flammable</p></div>
+<div class="logo left-logo" ><img src="${this.Toxics}" alt="Invoice Logo">
+<p style="margin-left: 38px;" >Toxics</p></div>
+<div class="logo left-logo" ><img src="${this.Corrosives}" alt="Invoice Logo">
+<p style="margin-left: 38px;" >Corrorsives</p></div>
+<div class="logo left-logo" ><img src="${this.Pepper}" alt="Invoice Logo">
+<p style="margin-left: 30px;" >Pepper</p></div>
+
+</div>
+<div class="noallow">    <div class="logo left-logo" ><img src="${this.Flammablegas}" alt="Invoice Logo">
+<p style="margin-left: 38px;" >Flammablegas</p></div>
+<div class="logo left-logo" ><img src="${this.eCigarettes}" alt="Invoice Logo">
+<p style="margin-left: 38px;" >e Cigarettes </p></div>
+<div class="logo left-logo" ><img src="${this.Infection}" alt="Invoice Logo">
+<p style="margin-left: 38px;" >Infection Substance</p></div>
+<div class="logo left-logo" ><img src="${this.Radio}" alt="Invoice Logo">
+<p style="margin-left: 38px;" >Radioactive Materials</p></div>
+<div class="logo left-logo" ><img src="${this.Explosives}" alt="Invoice Logo">
+<p style="margin-left: 30px;" >Explosives</p></div>
+
+</div>
+        <div><p style="font-size: 25px; color: blue;"> <i class="fa-solid fa-circle-check" style="color: green; font-size: 25px;"></i> Allowed</p>
+</div>
+<div class="allow">  
+  <div class="logo left-logo" ><img src="${this.Lithium}" alt="Invoice Logo">
+<p style="margin-left: 38px;" >Lithium Batteries</p></div>
+<div class="logo left-logo" ><img src="${this.Power}" alt="Invoice Logo">
+<p style="margin-left: 38px;" >Power Bank </p></div>
+</div>
+    </div>
+
+</body>
+</html>
+
  
   `;
  
@@ -1548,7 +2169,7 @@ font-family: Arial, sans-serif;
   <p style="font-size: 12px;">
     1. In case of any discrepancies, contact the accounts department within 5 days of receiving the bill. <br>
     2. Payment must be made within 2 days of receiving the invoice. <br>
-    3. Payments delayed beyond 30 days will incur a penal interest of 18% per annum.
+    3. Payments delayed beyond 30 days will be subject to a penalty interest of 18% per annum.
   </p>
 </div>
 

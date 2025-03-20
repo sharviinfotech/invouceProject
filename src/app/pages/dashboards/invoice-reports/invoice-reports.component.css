@@ -56,7 +56,7 @@
   }
 ::ng-deep  .rejected_Reversed{
   background: linear-gradient(135deg, #FFA500, #FF4500) !important;
-  -webkit-background-clip: text !important;
+  /* -webkit-background-clip: text !important; */
   -webkit-text-fill-color: transparent !important;
   font-weight: bold !important;
 }
