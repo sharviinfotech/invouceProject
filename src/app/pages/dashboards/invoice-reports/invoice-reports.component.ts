@@ -132,7 +132,9 @@ allInvoiceList: any[] = [];
   cdr: any;
   leftlogo: string;
   bodyImage: string;
+  AllowImage:any;
   bodyImage1: any;
+  centerLogo:any;
   // bsConfigToDate: { minDate: Date; };
   constructor(public service: GeneralserviceService,  private spinner: NgxSpinnerService, private imageService: ImageService, private fb: FormBuilder) {
     this.service = service;
@@ -1150,6 +1152,7 @@ generateInvoiceHTMLProfoma11(invoiceItem: InvoiceItem) {
   this.bodyImage1 = this.imageService.getBase64FlightFullNameLight();
   this.Lithium=this.imageService.getBase64LithiumLogo();
   this.Power=this.imageService.getBase64PowerLogo();
+  this.centerLogo=this.imageService.getBase64CenterLogo();
   
   console.log("this.bodyImage",this.bodyImage)
   const invoiceHTML = `
@@ -1325,6 +1328,14 @@ generateInvoiceHTMLProfoma11(invoiceItem: InvoiceItem) {
         .allow{
         display:flex;
         }
+    .NotAllow {
+    padding-top: 20px;
+}
+
+
+    .NotAllow div:first-child {
+        margin-bottom: 20px; /* Add space below the "Not Allowed" line */
+    }
             
 
         @media print {
@@ -1359,7 +1370,8 @@ generateInvoiceHTMLProfoma11(invoiceItem: InvoiceItem) {
     }
 
     .header-section img {
-        max-width: 150px; /* Adjusted logo size */
+        max-width: 190px; /* Adjusted logo size */
+        height:110px;
     }
 
     .company-details p, .from, .table-bordered, .booking-details p, .remittance-details p {
@@ -1396,13 +1408,24 @@ generateInvoiceHTMLProfoma11(invoiceItem: InvoiceItem) {
     }
 
     .remittance-container {
-        width: 70%;
+        width: 80%;
         padding: 5px;
     }
 
-    .remittance-table td {
-        font-size: 12px;
-    }
+    .remittance-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .remittance-table td:first-child {
+    width: 150px;
+    text-align: left;
+    padding-right: 10px;
+  }
+
+  .remittance-table td:last-child {
+    text-align: left;
+  }
 
     .rr {
         display: flex;
@@ -1438,6 +1461,16 @@ generateInvoiceHTMLProfoma11(invoiceItem: InvoiceItem) {
         .allow{
         display:flex;
         }
+        .abd{
+      margin-top:10px;
+
+        }
+       .NotAllow {
+    padding-top: 20px;
+}
+    .NotAllow div:first-child {
+        margin-bottom: 20px; /* Add space below the "Not Allowed" line */
+    }
 }
 
     </style>
@@ -1446,11 +1479,11 @@ generateInvoiceHTMLProfoma11(invoiceItem: InvoiceItem) {
 
     <div class="invoice-container">
     
-         <div class="header-section">
-   <div class="logo left-logo"><img src="${this.leftlogo}" alt="Invoice Logo"></div>
-         <div class="logo left-logo"><img src="${this.logoUrl}" alt="Invoice Logo"></div>
-          <div class="logo right-logo"><img src="${this.InvoiceLogo}" alt="Company Logo"></div>
-  </div>
+  <div class="header-section">
+  <div class="logo left-logo"><img src="${this.leftlogo}" alt="Invoice Logo" style="height: 100px; width: 180px;"></div>
+  <div class="logo left-logo"><img src="${this.centerLogo}" alt="Invoice Logo" style="height: 95px; width: 230px;"></div>
+  <div class="logo right-logo"><img src="${this.InvoiceLogo}" alt="Company Logo" style="height: 80px; width: 190px;" ></div>
+</div>
    <div class ="rcb">
   <div class="company-details">
     <p style="font-size: 17px; "><b>RITHWIK GREEN POWER AND AVIATION PRIVATE LIMITED</b></p>
@@ -1557,7 +1590,7 @@ generateInvoiceHTMLProfoma11(invoiceItem: InvoiceItem) {
               <td></td>
               <td></td>
                 <td class="text-right bold"  style="background-color: rgb(181, 179, 200);">GRAND TOTAL</td>
-                <td class="text-right bold"  style="background-color: rgb(181, 179, 200);">${invoiceItem.grandTotal ? invoiceItem.grandTotal.toFixed(2) : '0.00'}</td>
+                <td class="text-right bold"  style="background-color: rgb(181, 179, 200);">${invoiceItem.grandTotal ? invoiceItem.grandTotal.toFixed(0) : '0.00'}</td>
               </tr>
                <tr >
                   <td colspan="5" class="bold" style="text-align:left;" ><strong>Amount in words:</strong> ${invoiceItem.amountInWords}</td>
@@ -1565,46 +1598,46 @@ generateInvoiceHTMLProfoma11(invoiceItem: InvoiceItem) {
             </tbody>
           </table>
      
-<h2>Booking details:</h2>
-<div class="remittance-container">
-
-<table class="remittance-table">
-            <tr>
-                <td>Date Of Journey</td>
-                <td>: 03/03/25-04/03/2025</td>
-            </tr>
-            <tr>
-                <td>Sector</td>
-                <td>:${invoiceItem.header.BookingSector} </td>
-            </tr>
-            <tr>
-                <td>Billing Flying Time</td>
-                <td>: ${invoiceItem.header.BookingBillingFlyingTime}</td>
-            </tr>
-        </table>
+<h2>BOOKING DETAILS:</h2>
+<div class="remittance-container" style="display: flex; justify-content: center; align-items: center; width: 80%;">
+    <table class="remittance-table" style="border-collapse: collapse; width: 100%;">
+        <tr>
+            <td style="padding: 4px; vertical-align: top;"><strong>Date Of Journey</strong></td>
+            <td style="padding: 4px; vertical-align: top;">: 03/03/25-04/03/2025</td>
+        </tr>
+        <tr>
+            <td style="padding: 4px; vertical-align: top;"><strong>Sector</strong></td>
+            <td style="padding: 4px; vertical-align: top;">:${invoiceItem.header.BookingSector}</td>
+        </tr>
+        <tr>
+            <td style="padding: 4px; vertical-align: top;"><strong>Billing Flying Time</strong></td>
+            <td style="padding: 5px; vertical-align: top;">: ${invoiceItem.header.BookingBillingFlyingTime}</td>
+        </tr>
+       
+    </table>
 </div>
-<h2>Remittance details:</h2>
-<div class="remittance-container">
-        <table class="remittance-table">
-            <tr>
-                <td>Account Name</td>
-                <td>: RITHWIK GREEN POWER AND AVIATION PVT. LTD.</td>
-            </tr>
-            <tr>
-                <td>Account Number</td>
-                <td>: 4437002100002340</td>
-            </tr>
-            <tr>
-                <td>Bank</td>
-                <td>: Punjab National Bank.</td>
-            </tr>
-            <tr>
-                <td>RTGS/IFSC Code</td>
-                <td>: PUNB0443700</td>
-            </tr>
-           
-        </table>
-    </div>
+
+<h2> REMITTANCE DETAILS:</h2>
+<div class="remittance-container" style="display: flex; justify-content: center; align-items: center; width: 80%;">
+    <table class="remittance-table" style="border-collapse: collapse; width: 100%;">
+        <tr>
+            <td style="padding: 4px; vertical-align: top;"><strong>Account Name</strong></td>
+            <td style="padding: 4px; vertical-align: top;">: RITHWIK GREEN POWER AND AVIATION PVT. LTD.</td>
+        </tr>
+        <tr>
+            <td style="padding: 4px; vertical-align: top;"><strong>Account Number</strong></td>
+            <td style="padding: 4px; vertical-align: top;">: 4437002100002340</td>
+        </tr>
+        <tr>
+            <td style="padding: 4px; vertical-align: top;"><strong>Bank</strong></td>
+            <td style="padding: 5px; vertical-align: top;">: Punjab National Bank.</td>
+        </tr>
+        <tr>
+            <td style="padding: 4px; vertical-align: top;"><strong>IFSC Code</strong></td>
+            <td style="padding: 4px; vertical-align: top;">: PUNB0443700</td>
+        </tr>
+    </table>
+</div>
 
        <div class="signature">
     <b >RITHWIK GREEN POWER AND AVIATION PVT. LTD:</b>
@@ -1665,41 +1698,75 @@ Aadhar Card, Pan Card or any other Government recognized photo identification)<b
 
         </div>
         </div>
-        <div><p style="font-size: 25px; color: blue;"> <i class="fa-solid fa-ban" style="color: red; font-size: 25px;"></i>  Not Allowed</p>
+       
+       
+        <div class="NotAllow" style="padding-top: 20px;">
+    <div style="margin-bottom: 10px;"> 
+        <p style="font-size: 25px; color: blue; margin-top: 20px;">
+            <i class="fa-solid fa-ban" style="color: red; font-size: 25px;"></i>&nbsp;Not Allowed
+        </p>
+    </div>
+    <div>
+        <p style="font-size: 14px;">
+            These items are Dangerous Goods and are not permitted to be carried as hand baggage or check-in baggage.
+        </p>
+    </div>
 </div>
 
 
-<div class="noallow">    <div class="logo left-logo" ><img src="${this.Lighter}" alt="Invoice Logo">
-<p style="margin-left: 38px;" >Lighters</p></div>
-<div class="logo left-logo" ><img src="${this.Flammable}" alt="Invoice Logo">
-<p style="margin-left: 38px;" >Flammable</p></div>
-<div class="logo left-logo" ><img src="${this.Toxics}" alt="Invoice Logo">
-<p style="margin-left: 38px;" >Toxics</p></div>
-<div class="logo left-logo" ><img src="${this.Corrosives}" alt="Invoice Logo">
-<p style="margin-left: 38px;" >Corrorsives</p></div>
-<div class="logo left-logo" ><img src="${this.Pepper}" alt="Invoice Logo">
-<p style="margin-left: 30px;" >Pepper</p></div>
+<div style="display: flex; flex-wrap: wrap; width: 600px; /* Adjust width as needed */"> 
+  <div style="width: 20%; text-align: center; margin-bottom: 10px;">
+    <img src="${this.Lighter}" alt="Invoice Logo" style="width: 80px; height:80px;">
+    <p style="font-size: 12px; margin: 5px 0;">Lighters</p>
+  </div>
+  <div style="width: 20%; text-align: center; margin-bottom: 10px;">
+    <img src="${this.Flammable}" alt="Invoice Logo" style="width: 80px; height: 80px;">
+    <p style="font-size: 12px; margin: 5px 0;">Flammable</p>
+  </div>
+  <div style="width: 20%; text-align: center; margin-bottom: 10px;">
+    <img src="${this.Toxics}" alt="Invoice Logo" style="width: 80px; height: 80px;">
+    <p style="font-size: 12px; margin: 5px 0;">Toxics</p>
+  </div>
+  <div style="width: 20%; text-align: center; margin-bottom: 10px;">
+    <img src="${this.Corrosives}" alt="Invoice Logo" style="width: 80px; height: 80px;">
+    <p style="font-size: 12px; margin: 5px 0;">Corrosives</p>
+  </div>
+  <div style="width: 20%; text-align: center; margin-bottom: 10px;">
+    <img src="${this.Pepper}" alt="Invoice Logo" style="width: 80px; height: 80px;">
+    <p style="font-size: 12px; margin: 5px 0;">Pepper</p>
+  </div>
 
-</div>
-<div class="noallow">    <div class="logo left-logo" ><img src="${this.Flammablegas}" alt="Invoice Logo">
-<p style="margin-left: 38px;" >Flammablegas</p></div>
-<div class="logo left-logo" ><img src="${this.eCigarettes}" alt="Invoice Logo">
-<p style="margin-left: 38px;" >e Cigarettes </p></div>
-<div class="logo left-logo" ><img src="${this.Infection}" alt="Invoice Logo">
-<p style="margin-left: 38px;" >Infection Substance</p></div>
-<div class="logo left-logo" ><img src="${this.Radio}" alt="Invoice Logo">
-<p style="margin-left: 38px;" >Radioactive Materials</p></div>
-<div class="logo left-logo" ><img src="${this.Explosives}" alt="Invoice Logo">
-<p style="margin-left: 30px;" >Explosives</p></div>
-
+  <div style="width: 20%; text-align: center; margin-bottom: 10px;">
+    <img src="${this.Flammablegas}" alt="Invoice Logo" style="width: 80px; height: 80px;">
+    <p style="font-size: 12px; margin: 5px 0;">Flammablegas</p>
+  </div>
+  <div style="width: 20%; text-align: center; margin-bottom: 10px;">
+    <img src="${this.eCigarettes}" alt="Invoice Logo" style="width: 80px; height: 80px;">
+    <p style="font-size: 12px; margin: 5px 0;">e Cigarettes</p>
+  </div>
+  <div style="width: 20%; text-align: center; margin-bottom: 10px;">
+    <img src="${this.Infection}" alt="Invoice Logo" style="width: 80px; height: 80px;">
+    <p style="font-size: 12px; margin: 5px 0;">Infection Substance</p>
+  </div>
+  <div style="width: 20%; text-align: center; margin-bottom: 10px;">
+    <img src="${this.Radio}" alt="Invoice Logo" style="width: 80px; height: 80px;">
+    <p style="font-size: 12px; margin: 5px 0;">Radioactive Materials</p>
+  </div>
+  <div style="width: 20%; text-align: center; margin-bottom: 10px;">
+    <img src="${this.Explosives}" alt="Invoice Logo" style="width: 80px; height: 80px;">
+    <p style="font-size: 12px; margin: 5px 0;">Explosives</p>
+  </div>
 </div>
         <div><p style="font-size: 25px; color: blue;"> <i class="fa-solid fa-circle-check" style="color: green; font-size: 25px;"></i> Allowed</p>
 </div>
-<div class="allow">  
-  <div class="logo left-logo" ><img src="${this.Lithium}" alt="Invoice Logo">
-<p style="margin-left: 38px;" >Lithium Batteries</p></div>
-<div class="logo left-logo" ><img src="${this.Power}" alt="Invoice Logo">
-<p style="margin-left: 38px;" >Power Bank </p></div>
+<div style="display: flex; flex-wrap: wrap; width: 600px; /* Adjust width as needed */"> 
+  <div style="width: 20%; text-align: center; margin-bottom: 10px;">
+    <img src="${this.Lithium}" alt="Invoice Logo" style="width: 80px; height: 80px;">
+    <p style="font-size: 12px; margin: 5px 0;">Lithium Batteries</p>
+  </div>
+ <div style="width: 20%; text-align: center; margin-bottom: 10px;">
+    <img src="${this.Power}" alt="Invoice Logo" style="width: 80px; height: 80px;">
+    <p style="font-size: 12px; margin: 5px 0;">Power Bank </p>
 </div>
     </div>
 
