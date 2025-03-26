@@ -41,7 +41,7 @@ export class Login2Component implements OnInit {
     // 'assets/images/boardingpass.jpg',
     'assets/images/flightparking.jpg',
     'assets/images/flightHalf.jpg',
-    // 'assets/images/airportfromflightstepdown.png',
+    'assets/images/Flight38.jpeg',
     'assets/images/aircraftinsky.png',
 
 
