@@ -131,6 +131,7 @@ allInvoiceList: any[] = [];
   paginatedInvoices: any[];
   cdr: any;
   leftlogo: string;
+  rightLogo:string;
   bodyImage: string;
   AllowImage:any;
   bodyImage1: any;
@@ -621,7 +622,7 @@ selectInvoice(invoice: any) {
                 console.log('invoiceItem.proformaCardHeaderId',invoiceItem.proformaCardHeaderId)
                 // Check conditions before calling print functions
                 if (invoiceItem.proformaCardHeaderId === "PQ") {
-                  this.generateInvoiceHTMLProfoma1(invoiceItem);
+                  this.Finalprofoma1_29_03_2025(invoiceItem);
                   // Additional checks if needed
                 }else if (invoiceItem.proformaCardHeaderId === "TAX") {
                   this.generateInvoiceHTMLTax2(invoiceItem);
@@ -647,7 +648,7 @@ selectInvoice(invoice: any) {
               console.log('invoiceItem.proformaCardHeaderId',invoiceItem.proformaCardHeaderId)
               // Check conditions before calling print functions
               if (invoiceItem.proformaCardHeaderId === "PQ") {
-                this.generateInvoiceHTMLProfomalast(invoiceItem);
+                this.Finalprofoma1_29_03_2025(invoiceItem);
                 // Additional checks if needed
               }else if (invoiceItem.proformaCardHeaderId === "TAX") {
                 this.generateInvoiceHTMLTax2(invoiceItem);
@@ -664,11 +665,12 @@ selectInvoice(invoice: any) {
     
   }
 }
-generateInvoiceHTMLProfoma1(invoiceItem: InvoiceItem) {
-  this.leftlogo = this.imageService.getBase64FlightWorldmapLogo();
+Finalprofoma1_29_03_2025(invoiceItem: InvoiceItem) {
+  this.leftlogo = this.imageService.rrGlobalImageYellow();
   // this.logoUrl = this.imageService.getBase64FlightWorldmapLogo();
   this.logoUrl = this.imageService.getBase64FlightNewLogo();
-  this.InvoiceLogo = this.imageService.getBase64Flightworld2Logo();
+  // this.InvoiceLogo = this.imageService.getBase64FlightNewLogo();
+  this.rightLogo = this.imageService.getBase64FlightLogo();
   this.signature = this.imageService.getBase64Signature();
   this.bodyImage1 = this.imageService.getBase64FlightFullNameLight();
   this.background1 = this.imageService.getBase64BackgroundLogo();
@@ -761,7 +763,7 @@ font-family: Arial, sans-serif;
  
 .header-section img {
    max-width: 195px; /* Adjust as needed */
-  height: 110px;
+  height: 130px !important;
 }
  .booking-details {
     border: 1px solid #ccc;
@@ -933,7 +935,7 @@ font-family: Arial, sans-serif;
  
 .header-section img {
     max-width: 200px; /* Adjust as needed */
-  height: 110px;
+  height: 130px !important;
 }
  .booking-details {
     border: 1px solid #ccc;
@@ -1058,10 +1060,14 @@ font-family: Arial, sans-serif;
 <div class="invoice-container">
   <div class="header-section">
    <div class="logo left-logo"><img src="${this.leftlogo}" alt="Invoice Logo" style="height: 90px; width: 170px;"></div>
-<div class="logo left-logo" style="font-family: 'Times New Roman', serif; font-size: 18px; font-weight: bold; width: 300px; text-transform: uppercase;">
-    <p style="margin: 0; font-style: italic; color: #2a2a2a;">RITHWIK GREEN POWER & AVIATION PRIVATE LIMITED</p>
+<div class="logo left-logo" style="font-family: 'Times New Roman', serif; font-size: 20px; font-weight: bold; width: 300px; text-transform: uppercase;">
+    <p style="margin: 0; font-style: italic; color: #2a2a2a; text-align: center;">
+        RITHWIK GREEN POWER <br>
+        AVIATION <br>
+        PRIVATE LIMITED
+    </p>
 </div>
-          <div class="logo right-logo"><img src="${this.InvoiceLogo}" alt="Company Logo" style="height: 80px; width: 150px;"></div>
+          <div class="logo right-logo"><img src="${this.rightLogo}" alt="Company Logo" style="height: 80px; width: 150px;"></div>
   </div>
   <div class="InvoiceHeader">${invoiceItem.proformaCardHeaderName}</div>
   <br>
@@ -1349,7 +1355,7 @@ Aadhar Card, Pan Card or any other Government recognized photo identification)<b
   }
 };
 generateInvoiceHTMLProfomalast(invoiceItem: InvoiceItem) {
-  this.leftlogo = this.imageService.getBase64FlightWorldmapLogo();
+  this.leftlogo = this.imageService.rrGlobalImageYellow();
   // this.logoUrl = this.imageService.getBase64FlightWorldmapLogo();
   this.logoUrl = this.imageService.getBase64FlightNewLogo();
   this.InvoiceLogo = this.imageService.getBase64Flightworld2Logo();
@@ -8480,8 +8486,11 @@ background-image: linear-gradient(to right, #7e22ce, #2563eb);
   };
   generateInvoiceHTMLTax2(invoiceItem: InvoiceItem) {
  
-    this.logoUrl = this.imageService.getBase64FlightLogo();
-    this.InvoiceLogo = this.imageService.getBase64WorldLogo();
+    this.leftlogo = this.imageService.rrGlobalImageYellow();
+    // this.logoUrl = this.imageService.getBase64FlightWorldmapLogo();
+    this.logoUrl = this.imageService.getBase64FlightNewLogo();
+    // this.InvoiceLogo = this.imageService.getBase64FlightNewLogo();
+    this.rightLogo = this.imageService.getBase64FlightLogo();
     this.signature = this.imageService.getBase64Signature();
     const invoiceHTML = `
 
@@ -8607,7 +8616,12 @@ background-image: linear-gradient(to right, #7e22ce, #2563eb);
             justify-content: space-between;
             align-items: center;
         }
-
+     .back{
+     background-image: url('${this.background1}') !important;
+        background-size: 60% !important;
+        background-position: center !important;
+        background-repeat: no-repeat !important;
+       }
       .header-section {
             display: flex;
             justify-content: space-between;
@@ -8754,13 +8768,19 @@ background-image: linear-gradient(to right, #7e22ce, #2563eb);
         <!-- Header Section -->
         
     <div class="header-section">
-           <div class="logo left-logo"><img src="${this.logoUrl}" alt="Invoice Logo"></div>
-      <div class="logo"><h3>RITHWIK GREEN POWER & AVIATION PRIVATE LIMITED</h3></div>
-            <div class="logo right-logo"><img src="${this.InvoiceLogo}" alt="Company Logo"></div>
-    </div>
+   <div class="logo left-logo"><img src="${this.leftlogo}" alt="Invoice Logo" style="height: 90px; width: 170px;"></div>
+<div class="logo left-logo" style="font-family: 'Times New Roman', serif; font-size: 20px; font-weight: bold; width: 300px; text-transform: uppercase;">
+    <p style="margin: 0; font-style: italic; color: #2a2a2a; text-align: center;">
+        RITHWIK GREEN POWER <br>
+        AVIATION <br>
+        PRIVATE LIMITED
+    </p>
+</div>
+          <div class="logo right-logo"><img src="${this.rightLogo}" alt="Company Logo" style="height: 80px; width: 150px;"></div>
+  </div>
     <div class="orange-background">${invoiceItem.proformaCardHeaderName}</div>
 
-      <div class="invoice-container">
+      <div class="invoice-container back">
     <div class="billing-shipping-container">
         <div class="billing-box">
             <div class="billing-header">TO</div>
