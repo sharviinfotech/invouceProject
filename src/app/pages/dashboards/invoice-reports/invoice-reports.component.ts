@@ -676,7 +676,7 @@ Finalprofoma1_29_03_2025(invoiceItem: InvoiceItem) {
   this.signature = this.imageService.getBase64Signature();
   this.bodyImage1 = this.imageService.getBase64FlightFullNameLight();
   this.background1 = this.imageService.BackgroundLogoOnlyFlight();
-  this.background1 = this.imageService.rrJetsFlightlogowithText();
+  // this.background1 = this.imageService.rrJetsFlightlogowithText();
 
   this.Lighter=this.imageService.getBase64LighterLogo();
   this.Flammable=this.imageService.getBase64FlammableLogo();
@@ -890,7 +890,7 @@ font-family: Arial, sans-serif;
          
           }
             .InvoiceHeader {
-                background-color: rgb(181, 179, 200);
+                background-color: rgb(91, 85, 130);
                 font-size: 15px;
                 color:black;
                 padding: 4px;
@@ -999,7 +999,7 @@ font-family: Arial, sans-serif;
    .table-bordered th {
       border: 1px solid white;
   padding: 5px;
-   background-color: rgb(91, 85, 130);
+   background-color:rgb(115 124 167) !important;
   color: white;
   }
  
@@ -1016,7 +1016,7 @@ font-family: Arial, sans-serif;
         background-size: 85% !important;
         background-position: center !important;
         background-repeat: no-repeat !important;
-        padding-top:20px ;
+        padding-top:50px ;
         }
   .terms{
          margin-bottom:0px;
@@ -1064,24 +1064,21 @@ font-family: Arial, sans-serif;
 <div class="invoice-container">
   <div class="header-section">
    <div class="logo left-logo"><img src="${this.leftlogo}" alt="Invoice Logo" style="height: 90px; width: 170px;"></div>
-<div class="logo left-logo" style="font-family: 'Times New Roman', serif; font-size: 20px; font-weight: bold; width: 300px; text-transform: uppercase;">
-    <p style="margin: 0; font-style: italic; color: #2a2a2a; text-align: center;">
-        RITHWIK GREEN POWER <br>
-        AVIATION <br>
+<div class="logo left-logo" style="font-family: 'Times New Roman', serif; font-size: 25px; font-weight: 700; width: 400px; text-transform: uppercase;">
+    <p style="margin: 0;  color: #2a2a2a; text-align: center;">
+        RITHWIK   <br>
+        GREEN POWER  & AVIATION <br>
         PRIVATE LIMITED
     </p>
 </div>
           <div class="logo right-logo"><img src="${this.rightLogo}" alt="Company Logo" style="height: 80px; width: 150px;"></div>
   </div>
-  <div class="InvoiceHeader">${invoiceItem.proformaCardHeaderName}</div>
   <br>
  <div class="back">
+   <div class="booking-header bold">${invoiceItem.proformaCardHeaderName}</div>
   <table class="table-bordered">
     <tr>
-      <th class="bold" style="font-size: 12px; width:50%;">TO</th>
-      <th class="bold" style="font-size: 12px;  width:50%;">FROM</th>
-    </tr>
-    <tr>
+      <strong> TO</strong>
       <td>${invoiceItem.header.ProformaCustomerName}<br>${invoiceItem.header.ProformaAddress}<br>${invoiceItem.header.ProformaCity}<br>${invoiceItem.header.ProformaPincode} <br><strong>GST NO:</strong>${invoiceItem.header.ProformaGstNo}<br>
               <strong>PAN NO:</strong> ${invoiceItem.header.ProformaPan}</td>
 <td style="padding: 3px; vertical-align: top;">
@@ -1137,8 +1134,8 @@ font-family: Arial, sans-serif;
               <td></td>
               <td></td>
               <td></td>
-                <td  class="text-right bold" style="background-color: rgb(181, 179, 200);">TOTAL</td>
-                <td class="text-right bold"  style="background-color: rgb(181, 179, 200);">${invoiceItem.subtotal}</td>
+                <td  class="text-right bold" style="background-color: rgb(115 124 167);color:white">TOTAL</td>
+                <td class="text-right bold"  style="background-color: rgb(115 124 167);color:white">${invoiceItem.subtotal}</td>
               </tr>
               <tr>
             <td>2</td>
@@ -1162,8 +1159,8 @@ font-family: Arial, sans-serif;
               <td></td>
               <td></td>
               <td></td>
-                <td class="text-right bold"  style="background-color: rgb(181, 179, 200);">GRAND TOTAL</td>
-                <td class="text-right bold"  style="background-color: rgb(181, 179, 200);">${invoiceItem.grandTotal ? invoiceItem.grandTotal.toFixed(0) : '0.00'}</td>
+                <td class="text-right bold"  style="background-color: rgb(115 124 167);color:white"">GRAND TOTAL</td>
+                <td class="text-right bold"  style="background-color: rgb(115 124 167);color:white">${invoiceItem.grandTotal ? invoiceItem.grandTotal.toFixed(0) : '0.00'}</td>
               </tr>
                <tr >
                   <td colspan="5" class="bold" style="padding-top:3px !important"> ${invoiceItem.amountInWords}</td>
@@ -1342,6 +1339,7 @@ ProfomaYellow(invoiceItem: InvoiceItem) {
   this.signature = this.imageService.getBase64Signature();
   this.bodyImage1 = this.imageService.getBase64FlightFullNameLight();
   this.background1 = this.imageService.BackgroundLogoOnlyFlight();
+  // this.background1 = this.imageService.rrJetsFlightlogowithText();
   this.Lighter=this.imageService.getBase64LighterLogo();
   this.Flammable=this.imageService.getBase64FlammableLogo();
   this.Toxics=this.imageService.getBase64ToxicsLogo();
