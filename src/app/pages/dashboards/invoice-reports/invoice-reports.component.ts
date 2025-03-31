@@ -145,6 +145,12 @@ allInvoiceList: any[] = [];
   Flight6Logo: string;
   searchTerm: string = ''
   filteredData: any[];
+  backgroundlight: any;
+  FlightImagewhite: any;
+  FlightImage2: string;
+  FlightImage01: string;
+  FlightImage02: string;
+  FlightImage03: string;
   // bsConfigToDate: { minDate: Date; };
   constructor(public service: GeneralserviceService,  private spinner: NgxSpinnerService, private imageService: ImageService, private fb: FormBuilder) {
     this.service = service;
@@ -693,12 +699,16 @@ Finalprofoma1_29_03_2025(invoiceItem: InvoiceItem) {
   this.Lithium=this.imageService.getBase64LithiumLogo();
   this.Power=this.imageService.getBase64PowerLogo();
   this.centerLogo=this.imageService.getBase64CenterLogo();
-  this.Flight1Logo=this.imageService.getBase64Flight1Logo();
-  this.Flight2Logo=this.imageService.getBase64Flight2Logo();
+  this.FlightImagewhite = this.imageService.getBase64Flight1Logo();
+  this.FlightImage2=this.imageService.getBase64Flight2Logo();
   this.Flight3Logo=this.imageService.getBase64Flight3Logo();
   this.Flight4Logo=this.imageService.getBase64Flight4Logo();
   this.Flight5Logo=this.imageService.getBase64Flight5Logo();
   this.Flight6Logo=this.imageService.getBase64Flight6Logo();
+  this.backgroundlight=this.imageService.BackgroundLogoLight();
+  this.FlightImage01=this.imageService.FlightImage11();
+  this.FlightImage02 = this.imageService.FlightImage12();
+  this.FlightImage03 = this.imageService.FlightImage13();
 
 
 
@@ -812,7 +822,7 @@ background-color: rgb(167, 166, 175);
     font-weight: bold;
   }
     .back{
-     background-image: url('${this.background1}') !important;
+     background-image: url('${this.backgroundlight}') !important;
         background-size: 60% !important;
         background-position: center !important;
         background-repeat: no-repeat !important;
@@ -891,7 +901,7 @@ font-family: Arial, sans-serif;
           }
             .InvoiceHeader {
                 background-color: rgb(91, 85, 130);
-                font-size: 15px;
+                font-size: 14px;
                 color:black;
                 padding: 4px;
                 text-align: center;
@@ -939,7 +949,7 @@ font-family: Arial, sans-serif;
  
 .header-section img {
     max-width: 200px; /* Adjust as needed */
-  height: 130px !important;
+  height: 110px !important;
 }
  .booking-details {
     border: 1px solid #ccc;
@@ -961,7 +971,7 @@ font-family: Arial, sans-serif;
   font-size: 12px;
   }
   .back{
-     background-image: url('${this.background1}') !important;
+     background-image: url('${this.backgroundlight}') !important;
         background-size: 85% !important;
         background-position: center !important;
         background-repeat: no-repeat !important;
@@ -986,14 +996,14 @@ font-family: Arial, sans-serif;
    background-color: rgb(127, 127, 136);
     font-size: 12px;
     color:white;
-    padding: 5px;
+    padding: 4px;
     text-align: center;
     font-weight: bold;
   }
   .table-bordered {
     border-collapse: collapse;
     width: 100%;
-    margin-bottom: 5px;
+    margin-bottom: 4px;
     // background-color:rgb(193, 205, 217); /* Added background color */
   }
    .table-bordered th {
@@ -1004,7 +1014,7 @@ font-family: Arial, sans-serif;
   }
  
   .table-bordered td {
-  padding: 5px;
+  padding: 4px;
   }
   .booking-header bold{
  
@@ -1012,15 +1022,16 @@ font-family: Arial, sans-serif;
   color: white;
   }
    .rcb{
-        background-image: url('${this.background1}') !important;
-        background-size: 85% !important;
+        background-image: url('${this.backgroundlight}') !important;
+        background-size: 65%!important;
         background-position: center !important;
         background-repeat: no-repeat !important;
-        padding-top:50px ;
+        padding-top:5px ;
         }
   .terms{
          margin-bottom:0px;
-        font-size: 14px;
+        font-size: 12x;
+        
         }
  
  
@@ -1043,7 +1054,8 @@ font-family: Arial, sans-serif;
           justify-content: space-between;
           align-items: center;
           width: 100%;
-          margin-top: 0px;
+          margin: 0px;
+          padding:0px;
       }
           
    
@@ -1055,7 +1067,7 @@ font-family: Arial, sans-serif;
           width: 100%;
           height: auto;
       }
- 
+}
  
 </style>
 </head>
@@ -1064,7 +1076,7 @@ font-family: Arial, sans-serif;
 <div class="invoice-container">
   <div class="header-section">
    <div class="logo left-logo"><img src="${this.leftlogo}" alt="Invoice Logo" style="height: 90px; width: 170px;"></div>
-<div class="logo left-logo" style="font-family: 'Times New Roman', serif; font-size: 25px; font-weight: 700; width: 400px; text-transform: uppercase;">
+<div class="logo left-logo" style="font-family: 'Times New Roman', serif; font-size: 23px; font-weight: 700; width: 400px; text-transform: uppercase;">
     <p style="margin: 0;  color: #2a2a2a; text-align: center;">
         RITHWIK   <br>
         GREEN POWER  & AVIATION <br>
@@ -1078,22 +1090,17 @@ font-family: Arial, sans-serif;
    <div class="booking-header bold">${invoiceItem.proformaCardHeaderName}</div>
   <table class="table-bordered">
     <tr>
-      <strong> TO</strong>
+      <th class="bold">TO</th>
+      <th class="bold">FROM</th>
+    </tr>
+    <tr>
       <td>${invoiceItem.header.ProformaCustomerName}<br>${invoiceItem.header.ProformaAddress}<br>${invoiceItem.header.ProformaCity}<br>${invoiceItem.header.ProformaPincode} <br><strong>GST NO:</strong>${invoiceItem.header.ProformaGstNo}<br>
               <strong>PAN NO:</strong> ${invoiceItem.header.ProformaPan}</td>
-<td style="padding: 3px; vertical-align: top;">
-                <strong>INVOICE NO:</strong> ${invoiceItem.invoiceUniqueNumber}<br>
-                <strong>DATE:</strong> ${invoiceItem.header.ProformaInvoiceDate}<br>
-                <strong>PAN NO:</strong> ${invoiceItem.header.ProformaPanNO}<br>
-                <strong>GST NO:</strong> ${invoiceItem.header.ProformaGstNumber}<br>
-                <strong>Type of Aircraft:</strong> ${invoiceItem.header.ProformaTypeOfAircraft}<br>
-                <strong>Seating Capacity:</strong> ${invoiceItem.header.ProformaSeatingCapasity}
-            </td>
+      <td><strong>INVOICE NO:</strong> ${invoiceItem.invoiceUniqueNumber}<br><strong>DATE: </strong>${invoiceItem.header.ProformaInvoiceDate}<br><strong>PAN NO</strong>:${invoiceItem.header.ProformaPanNO}<br><strong>GST NO: </strong>${invoiceItem.header.ProformaGstNumber}<br><strong>Type of Aircraft</strong>:${invoiceItem.header.ProformaTypeOfAircraft}<br><strong>Seating Capasity</strong>:${invoiceItem.header.ProformaSeatingCapasity}</td>
     </tr>
   </table>
-  
   <div class="booking-details">
-<div class="booking-header bold" style="font-size: 14px;">BOOKING  DETAILS</div>
+<div class="booking-header bold" style="font-size: 13px;">BOOKING  DETAILS</div>
 <div class="booking-data single-line">
     <div style="width:35%; text-align: center; font-size: 12px;" ><div class="bold">DATE OF JOURNEY</div> <div>03/03/25-04/03/2025</div></div>
     <div style="width:35%; text-align: center;  font-size: 12px;" ><div class="bold">SECTOR</div> <div>${invoiceItem.header.BookingSector}</div></div>
@@ -1172,20 +1179,20 @@ font-family: Arial, sans-serif;
 <div class="remittance-container" style="display: flex; justify-content: center; align-items: center; width: 80%;">
     <table class="remittance-table" style="border-collapse: collapse; width: 100%;">
         <tr>
-            <td style="padding: 5px; vertical-align: top;"><strong>Account Name</strong></td>
-            <td style="padding: 5px; vertical-align: top;">: RITHWIK GREEN POWER AND AVIATION PVT. LTD.</td>
+            <td style="padding: 4px; vertical-align: top;"><strong>Account Name</strong></td>
+            <td style="padding: 4px; vertical-align: top;">: RITHWIK GREEN POWER AND AVIATION PVT. LTD.</td>
         </tr>
         <tr>
-            <td style="padding: 5px; vertical-align: top;"><strong>Account Number</strong></td>
-            <td style="padding: 5px; vertical-align: top;">: 4437002100002340</td>
+            <td style="padding: 4px; vertical-align: top;"><strong>Account Number</strong></td>
+            <td style="padding: 4px; vertical-align: top;">: 4437002100002340</td>
         </tr>
         <tr>
-            <td style="padding: 5px; vertical-align: top;"><strong>Bank</strong></td>
-            <td style="padding: 5px; vertical-align: top;">: Punjab National Bank.</td>
+            <td style="padding: 4px; vertical-align: top;"><strong>Bank</strong></td>
+            <td style="padding: 4px; vertical-align: top;">: Punjab National Bank.</td>
         </tr>
         <tr>
-            <td style="padding: 5px; vertical-align: top;"><strong>IFSC Code</strong></td>
-            <td style="padding: 5px; vertical-align: top;">: PUNB0443700</td>
+            <td style="padding: 4px; vertical-align: top;"><strong>IFSC Code</strong></td>
+            <td style="padding: 4px; vertical-align: top;">: PUNB0443700</td>
         </tr>
     </table>
 </div>
@@ -1196,7 +1203,14 @@ font-family: Arial, sans-serif;
 
 
   <div class="footer">
-        <div></div>
+        <div class="note">
+        <b>Note:</b>
+         <p>1. In case of any discrepancies, contact the accounts department within 5 days of receiving the bill. </p>
+         <p> 2. Payment must be made within 2 days of receiving the invoice. </p>
+         <p> 3. Payments delayed beyond 30 days will be subject to a penalty interest of 18% per annum.
+         </p>
+        
+        </div>
           <div class="text-center">
                 <div><h4>RITHWIK GREEN POWER & AVIATION PRIVATE LIMITED</h4></div>
  
@@ -1208,34 +1222,68 @@ font-family: Arial, sans-serif;
       </div>
  </div>
 
-<div class ="rcb">
-        <div class="terms">
-        <h3>Terms & Conditions:</h3>
-       <p>1. In case of any discrepancies, contact the accounts department within 5 days of receiving the bill. </p>
-   <p> 2. Payment must be made within 2 days of receiving the invoice. </p>
-   <p> 3. Payments delayed beyond 30 days will be subject to a penalty interest of 18% per annum.
-  </p>
-  <p>4. Additional sectors required after start of the flight itinerary will be on the sole discretion of RITHWIK GREEN AND AVIATION Pvt. Ltd.</p>
+<div class="rcb">
+<div class="terms">
+<h3>Terms & Conditions:</h3>
+<p>* Charges: For Flight Clearance, Permissions and Revisions, Overflying's on International / Domestic Flight Handling at all 
 
-   <p>5. Day & Night parking at some airports are subject to the availability of Parking Bays at these
-    airports. In case of non-availability of Parking space we may have to move-out the aircraft / reposition the aircraft / go on a local flight to clear the parking bay for schedule flights - under
-    such circumstances reschedule departure of the flight.</p>
-    <p>6. Payment: 100% advance to be received at the time of booking, as 'confirmation charges'for
-    confirming the charter. Payment can be made via cheque/DD/wire transfer in the name of 'RITHWIK GREEN AND AVIATION Pvt. Ltd' payable at Hyderabad.</p>
-    <p>b. Any cancellations/changes (if the same cannot be executed due to operational reasons / lapse or
-    lack of relevant permissions) in flight sectors after the commencement of the 'flight program' will
-    be termed as a as 'a last minute cancellation' - and the cancellation clause of 100% would apply.</p>
-   <p>7. Check-in Time: Passengers are advised to reach airport 60 min before departure.</p>
-   <p>8. Valid ID proof needed: All passengers shall carry a valid photo identification proof (Driver License,
-   Aadhar Card, Pan Card or any other Government recognized photo identification)<br>
-   </p>
+        Airports including Private Airfields are to be paid by you. The additional Insurance cost for any uncovered destinations is to 
 
-        </div>
-        </div>
+        be borne by you.</p>
+ 
+        <p>* If parking is not permitted at a destination, ferry Flying Cost for Parking at nearest Airport is additional, if/as applicable.</p>
+ 
+        <p>* Watch Hour Extensions: Charges are extra as per Bills. Boarding / Lodging / Local Transportation for Crew is to be arranged 
+
+        and paid by you or payable for all nights & days beyond 2 hours of destination (As Above). Any changes per day Rs: 10,000/- 
+
+        for VIP Flight Signing.</p>
+ 
+        <p>* The flying time quoted shall be approximate and may vary. The final settlement of bills shall be done on actual HRS flown 
+
+        over and above the estimated flying time (i.e. Engines on to off from our base at Hyderabad and Back to Base). Minimum 2 Hours 
+
+        flying will be charged on an everyday basis plus all additional charges if/as applicable.</p>
+ 
+        <p>* Should the flight be curtailed/cancelled/diverted/held-over due to factors beyond our control like weather, or actual 
+
+        flying time is longer than the indicated time (due to ATC Clearance, density of air traffic, wind and weather conditions, etc.), 
+
+        payment would have to be made on the basis of flying / overnight halt / waiting etc., over and above the minimum estimated 
+
+        flying time.</p>
+ 
+        <p>* Payment: For confirmation, we require 100% advance, based on the indicated flying time, overnight stay, waiting charges, 
+
+        etc., via Draft in favor of 'RITHWIK GREEN POWER & AVIATION PRIVATE LIMITED' payable at Hyderabad (Post Flight Payment not to 
+
+        exceed 7 days on submission of Invoice).</p>
+ 
+        <p>* Cancellation Policy: In case of cancellation before one week, 25% will be deducted; within one week to one day before take-off, 
+
+        50% will be deducted; and for the same day, 100% of the charter cost shall be deducted as cancellation charges. After take-off, 
+
+        no refund will be provided.</p>
+ 
+        <p>* Goods and Service Tax: As per Government rates, extra on all charges billed to you (At Present 18% GST).</p>
+ 
+        <p>* Force Majeure: RGPAPL, as an operator, ensures best of their effort for the performance. Any cancellation or diversion due 
+
+        to reasons beyond human control, the operator will not be held responsible for the operation.</p>
+ 
+        <p>* The customer taking the charter and their agent indemnifies RGPAPL, its Company Directors & employees against any claim, 
+
+        liability, and risk against any unforeseen incidents before, during, and after the flight.</p>
+ 
+        <p>* We require all names, nationality, copies of Passport and Visa, etc., of Foreigners to obtain prior permissions for each trip.</p>
+</div>
+</div>
+
+ 
 
 <div class="NotAllow" style="padding-top:5px;">
-    <div style="margin-bottom: 10px;"> 
-        <p style="font-size: 25px; color: blue; margin-top: 20px;">
+    <div style="margin-bottom:5px;"> 
+        <p style="font-size: 25px; color: blue; margin-top: 5px;">
             <i class="fa-solid fa-ban" style="color: red; font-size: 25px;"></i>&nbsp;Not Allowed
         </p>
     </div>
@@ -1249,44 +1297,44 @@ font-family: Arial, sans-serif;
 
 <div style="display: flex; flex-wrap: wrap; width: 600px; /* Adjust width as needed */"> 
   <div style="width: 20%; text-align: center; margin-bottom: 10px;">
-    <img src="${this.Lighter}" alt="Invoice Logo" style="width: 80px; height:80px;">
+    <img src="${this.Lighter}" alt="Invoice Logo" style="width: 80px; height:50px;">
     <p style="font-size: 12px; margin: 5px 0;">Lighters</p>
   </div>
   <div style="width: 20%; text-align: center; margin-bottom: 10px;">
-    <img src="${this.Flammable}" alt="Invoice Logo" style="width: 80px; height: 80px;">
+    <img src="${this.Flammable}" alt="Invoice Logo" style="width: 80px; height: 50px;">
     <p style="font-size: 12px; margin: 5px 0;">Flammable</p>
   </div>
   <div style="width: 20%; text-align: center; margin-bottom: 10px;">
-    <img src="${this.Toxics}" alt="Invoice Logo" style="width: 80px; height: 80px;">
+    <img src="${this.Toxics}" alt="Invoice Logo" style="width: 80px; height: 50px;">
     <p style="font-size: 12px; margin: 5px 0;">Toxics</p>
   </div>
   <div style="width: 20%; text-align: center; margin-bottom: 10px;">
-    <img src="${this.Corrosives}" alt="Invoice Logo" style="width: 80px; height: 80px;">
+    <img src="${this.Corrosives}" alt="Invoice Logo" style="width: 80px; height: 50px;">
     <p style="font-size: 12px; margin: 5px 0;">Corrosives</p>
   </div>
   <div style="width: 20%; text-align: center; margin-bottom: 10px;">
-    <img src="${this.Pepper}" alt="Invoice Logo" style="width: 80px; height: 80px;">
+    <img src="${this.Pepper}" alt="Invoice Logo" style="width: 80px; height: 50px;">
     <p style="font-size: 12px; margin: 5px 0;">Pepper</p>
   </div>
 
   <div style="width: 20%; text-align: center; margin-bottom: 10px;">
-    <img src="${this.Flammablegas}" alt="Invoice Logo" style="width: 80px; height: 80px;">
+    <img src="${this.Flammablegas}" alt="Invoice Logo" style="width: 80px; height: 50px;">
     <p style="font-size: 12px; margin: 5px 0;">Flammablegas</p>
   </div>
   <div style="width: 20%; text-align: center; margin-bottom: 10px;">
-    <img src="${this.eCigarettes}" alt="Invoice Logo" style="width: 80px; height: 80px;">
+    <img src="${this.eCigarettes}" alt="Invoice Logo" style="width: 80px; height: 50px;">
     <p style="font-size: 12px; margin: 5px 0;">e Cigarettes</p>
   </div>
   <div style="width: 20%; text-align: center; margin-bottom: 10px;">
-    <img src="${this.Infection}" alt="Invoice Logo" style="width: 80px; height: 80px;">
+    <img src="${this.Infection}" alt="Invoice Logo" style="width: 80px; height: 50px;">
     <p style="font-size: 12px; margin: 5px 0;">Infection Substance</p>
   </div>
   <div style="width: 20%; text-align: center; margin-bottom: 10px;">
-    <img src="${this.Radio}" alt="Invoice Logo" style="width: 80px; height: 80px;">
+    <img src="${this.Radio}" alt="Invoice Logo" style="width: 80px; height: 50px;">
     <p style="font-size: 12px; margin: 5px 0;">Radioactive Materials</p>
   </div>
   <div style="width: 20%; text-align: center; margin-bottom: 10px;">
-    <img src="${this.Explosives}" alt="Invoice Logo" style="width: 80px; height: 80px;">
+    <img src="${this.Explosives}" alt="Invoice Logo" style="width: 80px; height: 50px;">
     <p style="font-size: 12px; margin: 5px 0;">Explosives</p>
   </div>
 </div>
@@ -1295,23 +1343,87 @@ font-family: Arial, sans-serif;
 </div>
 <div style="display: flex; flex-wrap: wrap; width: 600px; /* Adjust width as needed */"> 
   <div style="width: 20%; text-align: center; margin-bottom: 10px;">
-    <img src="${this.Lithium}" alt="Invoice Logo" style="width: 80px; height: 80px;">
+    <img src="${this.Lithium}" alt="Invoice Logo" style="width: 80px; height: 50px;">
     <p style="font-size: 12px; margin: 5px 0;">Lithium Batteries</p>
   </div>
  <div style="width: 20%; text-align: center; margin-bottom: 10px;">
-    <img src="${this.Power}" alt="Invoice Logo" style="width: 80px; height: 80px;">
+    <img src="${this.Power}" alt="Invoice Logo" style="width: 80px; height: 50px;">
     <p style="font-size: 12px; margin: 5px 0;">Power Bank </p>
 </div>
 </div>
-<div class="srk" style="display: flex; flex-wrap: wrap; width: 100%;">
- <div class="flight-group-1" style="width: 50%; text-align: center; margin-bottom: 10px; display: flex; flex-direction: column;">
-    <img src="${this.Flight1Logo}" alt="Invoice Logo" >
-  </div>
-   <div class="flight-group-1" style="width: 50%; text-align: center; margin-bottom: 10px; display: flex; flex-direction: column;">
-    <img src="${this.Flight2Logo}" alt="Invoice Logo" style="width: 110%;">
-  </div>
-  
+
+  <div class="srk" style="display: flex; flex-wrap: wrap; width: 100%;">
+    <!-- First Column (50% Width) -->
+    <div style="width: 50%; text-align: center; display: flex; flex-direction: column; justify-content: center;">
+        <img src="${this.FlightImagewhite}" alt="Invoice Logo" style="width: 100%;" />
+    </div>
+
+    <!-- Second Column (50% Width) -->
+    <div style="width: 50%; display: flex; flex-direction: column;">
+        <!-- Row with Two Images -->
+        <div style="display: flex; width: 100%;">
+            <img src="${this.FlightImage01}" alt="Invoice Logo" style="width: 49%;" />
+            <img src="${this.FlightImage02}" alt="Invoice Logo" style="width: 49%;margin-left:5px;" />
+        </div>
+        <!-- Single Image Below -->
+        <div style="width: 100%; margin-top: 10px;">
+            <img src="${this.FlightImage03}" alt="Invoice Logo" style="width: 100%; height: 150px;" />
+        </div>
+    </div>
 </div>
+
+<div class="subscription">
+    <h3>EXCLUSIVE SUBSCRIPTION PRICING FOR B-250 GT (VT-VIN)</h3>
+    <ul style="list-style: none; padding: 0;">
+        <li>✅ <b>07 PAX + 2 CREW</b> - SEATING</li>
+        <li>✅ <b>2019</b> - YEAR OF MANUFACTURE</li>
+        <li>✅ <b>₹1,50,000/-</b> RATE PER HOUR</li>
+        <li>✅ <b>₹1,65,000/-</b> PER HOUR - INDIVIDUAL CHARTER</li>
+        <li>✅ <b>₹1,45,000/-</b> 1 YEAR OR 6 MONTHS WITH 100 HOURS</li>
+        <li>✅ <b>₹1,50,000/-</b> 1 YEAR OR 6 MONTHS WITH 60 HOURS</li>
+        <li>✅ <b>₹1,60,000/-</b> 1 YEAR OR 6 MONTHS WITH 40 HOURS</li>
+    </ul>
+</div>
+
+
+
+<div class="srk" style="display: flex; flex-wrap: wrap; width: 100%;">
+  <div style="width: 50%; text-align: center; display: flex; flex-direction: column; justify-content: center;">
+    <img src="${this.FlightImage2}" alt="Invoice Logo" style="width: 99%; max-height: 232px;" /> 
+  </div>
+
+  <div style="width: 50%; display: flex; flex-direction: column;">
+    <div style="display: flex; width: 100%;">
+      <img src="${this.Flight5Logo}" alt="Invoice Logo" style="width: 49%; max-height: 120px;" />
+      <img src="${this.Flight6Logo}" alt="Invoice Logo" style="width: 49%; margin-left: 2%; max-height: 120px;" />
+    </div>
+    <div style="display: flex; width: 100%; margin-top: 5px; ">
+      <img src="${this.Flight3Logo}" alt="Invoice Logo" style="width: 49%; max-height: 120px;" />
+      <img src="${this.Flight4Logo}" alt="Invoice Logo" style="width: 49%; margin-left: 2%; max-height: 120px;" />
+    </div>
+  </div>
+</div>
+   <div class="subscription">
+      <h3>EXCLUSIVE SUBSCRIPTION PRICING FOR LEGACY 600 (VT-VIK)</h3>
+      <ul style="list-style: none; padding: 0; margin:0px;">
+          <li>✅ <b>13PAX + 2 CREW+1CC</b> - SEATING</li>
+          <li>✅ <b>₹5,75,000/-</b> RATE PER HOUR</li>
+          <li>✅ <b>₹5,75,000/-</b> PER HOUR - INDIVIDUAL CHARTER</li>
+          <li>✅ <b>₹1,45,000/-</b> PER HOUR -  60 HOURS PER MONTH(ONE SET OF CREW)</li>
+          <li>✅ <b>₹1,50,000/-</b> PER HOUR -  120 HOURS PER MONTH (TWO SET OF CREW)</li>
+         
+      </ul>
+  </div>
+  <h1>Why Choose RR Jets?</h1>
+<ul>
+  <li><strong>Exclusive Comfort:</strong> Spacious cabin with VIP seating</li>
+  <li><strong>Privacy & Security:</strong> Fly with complete discretion</li>
+  <li><strong>Flexible Scheduling:</strong> Your time, your schedule</li>
+  <li><strong>Personalized Services:</strong> Concierge, ground transport, and more</li>
+  <li><strong>Global Reach:</strong> Access to top destinations worldwide</li>
+</ul>
+
+
 
 </div>
     </div>
@@ -2516,7 +2628,7 @@ generateInvoiceHTMLProfoma11(invoiceItem: InvoiceItem) {
     <p class="authorised">Authorised Signatory</p> <!-- This now comes below both images -->
 </div>
 </div>
-
+</div>
         
         
         

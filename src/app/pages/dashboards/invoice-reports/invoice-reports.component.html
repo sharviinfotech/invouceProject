@@ -1,16 +1,22 @@
 <div class="card">
   <div class="card-header text-center">
-    <h5>All Invoice Reports </h5>
+    <h5>All Invoice Reports</h5>
   </div>
   <div class="card-body">
-
     <form [formGroup]="reportsForm">
-      <div class="row"> <!-- Add a row to align fields in one line -->
+      <div class="row">
+        <!-- Add a row to align fields in one line -->
         <div class="col-lg-2">
           <div class="form-group">
             <label>From Invoice Date</label>
-            <input type="text" formControlName="fromDate" class="form-control form-control-sm" [bsConfig]="bsConfig"
-              placeholder="Enter From Invoice Date" bsDatepicker />
+            <input
+              type="text"
+              formControlName="fromDate"
+              class="form-control form-control-sm"
+              [bsConfig]="bsConfig"
+              placeholder="Enter From Invoice Date"
+              bsDatepicker
+            />
             <div class="text-danger" *ngIf="submit && f['fromDate'].errors">
               From Invoice Date is required.
             </div>
@@ -19,72 +25,103 @@
         <div class="col-lg-2">
           <div class="form-group">
             <label>To Invoice Date</label>
-            <input type="text" formControlName="toDate" class="form-control form-control-sm"
-            [bsConfig]="{ dateInputFormat: 'DD-MM-YYYY', minDate: reportsForm.get('fromDate')?.value }" placeholder="Enter To Invoice Date" bsDatepicker />
-          <div class="text-danger" *ngIf="f['toDate'].errors?.dateRangeInvalid">
-            To Invoice Date should be at least one day after From Invoice Date.
-          </div>
-          
+            <input
+              type="text"
+              formControlName="toDate"
+              class="form-control form-control-sm"
+              [bsConfig]="{
+                dateInputFormat: 'DD-MM-YYYY',
+                minDate: reportsForm.get('fromDate')?.value
+              }"
+              placeholder="Enter To Invoice Date"
+              bsDatepicker
+            />
+            <div
+              class="text-danger"
+              *ngIf="f['toDate'].errors?.dateRangeInvalid"
+            >
+              To Invoice Date should be at least one day after From Invoice
+              Date.
+            </div>
           </div>
         </div>
-        <div class="col-lg-2" >
+        <div class="col-lg-2">
           <div class="form-group">
-              <label>Invoice Type</label>
-              <select class="form-control form-control-sm" formControlName="invoiceType">
-                  <option value="">Select</option>
-                  <option value="PQ">PQ</option>
-                  <option value="TAX">TAX</option>
-              </select>
-              <div class="text-danger" *ngIf="submit && f['invoiceType'].errors">
-                  Invoice Type is required.
-              </div>
+            <label>Invoice Type</label>
+            <select
+              class="form-control form-control-sm"
+              formControlName="invoiceType"
+            >
+              <option value="">Select</option>
+              <option value="PQ">PQ</option>
+              <option value="TAX">TAX</option>
+            </select>
+            <div class="text-danger" *ngIf="submit && f['invoiceType'].errors">
+              Invoice Type is required.
+            </div>
           </div>
-      </div>
-        
+        </div>
+
         <div class="col-lg-2">
           <div class="form-group">
             <label>Status</label>
-            <select class="form-control form-control-sm" formControlName="status">
+            <select
+              class="form-control form-control-sm"
+              formControlName="status"
+            >
               <option value="">Select</option>
-              <option value="approved" *ngIf="this.reportsForm.value.invoiceType == 'PQ'">Approved</option>
-              <option value="rejected" *ngIf="this.reportsForm.value.invoiceType == 'PQ'"> Rejected</option>
-              <option value="pending" *ngIf="this.reportsForm.value.invoiceType == 'PQ'">Pending</option>
-              <option value="Amount Received" *ngIf="this.reportsForm.value.invoiceType == 'TAX'">Amount Received</option>
+              <option
+                value="approved"
+                *ngIf="this.reportsForm.value.invoiceType == 'PQ'"
+              >
+                Approved
+              </option>
+              <option
+                value="rejected"
+                *ngIf="this.reportsForm.value.invoiceType == 'PQ'"
+              >
+                Rejected
+              </option>
+              <option
+                value="pending"
+                *ngIf="this.reportsForm.value.invoiceType == 'PQ'"
+              >
+                Pending
+              </option>
+              <option
+                value="Amount Received"
+                *ngIf="this.reportsForm.value.invoiceType == 'TAX'"
+              >
+                Amount Received
+              </option>
             </select>
             <div class="text-danger" *ngIf="submit && f['status'].errors">
               Status is required.
             </div>
           </div>
         </div>
-        
-        <div class="col-lg-4 mt-4 d-flex" style="text-align: end;">
-          
-            <!-- <button class="btnCustomize btn-success btn-md" (click)="onChangeForm()">
+
+        <div class="col-lg-4 mt-4 d-flex" style="text-align: end">
+          <!-- <button class="btnCustomize btn-success btn-md" (click)="onChangeForm()">
               Get
             </button> -->
-            <button class="btnCustomize btn-success btn-md" 
-            (click)="onChangeForm()" 
-            [disabled]="reportsForm.invalid">
-      Get
-    </button>
-    
-            
-            <button class="btnCustomize btn-primary btn-md " (click)="printData()">
-              Print
+          <button
+            class="btnCustomize btn-success btn-md"
+            (click)="onChangeForm()"
+            [disabled]="reportsForm.invalid"
+          >
+            Get
           </button>
-          <button class="btnCustomize btn-danger btn-md " (click)="reset()">
+
+          <button class="btnCustomize btn-primary btn-md" (click)="printData()">
+            Print
+          </button>
+          <button class="btnCustomize btn-danger btn-md" (click)="reset()">
             Reset
           </button>
-          
         </div>
-
       </div>
     </form>
-    
-
-
-
-
 
     <!-- <div class="row">
       <div class="col-lg-4">
@@ -95,128 +132,152 @@
       </div>
 
     </div> -->
-   <div class = "card p-2">
- <div class="d-flex justify-content-between align-items-center mb-3">
-  <div>
-    <label class="d-inline-flex align-items-center">
-      Show
-      <select [(ngModel)]="pageSize" (ngModelChange)="onPageSizeChange()" [ngModelOptions]="{ standalone: true }"> 
-        <option [value]="5">5</option>
-        <option [value]="10">10</option>
-        <option [value]="20">20</option>
-        <option [value]="25">25</option>
-        <option [value]="30">30</option>
-      </select>
-      entries
-    </label>
-  </div>
-  <div id="tickets-table_filter" class="dataTables_filter">
-    <label class="d-inline-flex align-items-center">
-      Search:
-      <input type="text" name="searchTerm" class="form-control form-control-sm ms-2"
-        aria-controls="tickets-table" [(ngModel)]="service.searchTerm" (input)="resetPagination()" />
-    </label>
-    <!-- <button class="btn btn-sm btn-outline-secondary ms-2" (click)="resetTable()" title="Reset">
+    <div class="card p-2">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+          <label class="d-inline-flex align-items-center">
+            Show
+            <select
+              [(ngModel)]="pageSize"
+              (ngModelChange)="onPageSizeChange()"
+              [ngModelOptions]="{ standalone: true }"
+            >
+              <option [value]="5">5</option>
+              <option [value]="10">10</option>
+              <option [value]="20">20</option>
+              <option [value]="25">25</option>
+              <option [value]="30">30</option>
+            </select>
+            entries
+          </label>
+        </div>
+        <div id="tickets-table_filter" class="dataTables_filter">
+          <label class="d-inline-flex align-items-center">
+            Search:
+            <input
+              type="text"
+              name="searchTerm"
+              class="form-control form-control-sm ms-2"
+              aria-controls="tickets-table"
+              [(ngModel)]="service.searchTerm"
+              (input)="resetPagination()"
+            />
+          </label>
+          <!-- <button class="btn btn-sm btn-outline-secondary ms-2" (click)="resetTable()" title="Reset">
       <i class="fas fa-sync-alt"></i>
     </button> -->
-  </div>
-</div>
+        </div>
+      </div>
 
+      <div class="table-responsive">
+        <table class="table table-bordered table-stripped">
+          <thead class="thead-light">
+            <tr>
+              <th class="text-nowrap">Invoice Number</th>
+              <th class="text-nowrap">Invoice Date</th>
+              <th class="text-nowrap">Customer Name</th>
+              <th class="text-nowrap">Type Of Aircraft</th>
+              <th class="text-nowrap">City</th>
+              <th class="text-nowrap">Destination</th>
+              <th class="text-nowrap">Date Of Journey</th>
+              <th class="text-nowrap">Total Amount</th>
+              <th class="text-nowrap">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- (click)="invoice.status === 'Approved' ? openInvoicePopup(invoice) : null" -->
+            <tr
+              *ngFor="let invoice of paginatedInvoices"
+              (click)="selectInvoice(invoice)"
+              [class.selected]="invoiceItem === invoice"
+            >
+              <td>
+                <span
+                  [ngClass]="{
+                    'text-green-600 underline cursor-pointer':
+                      invoice.status === 'Approved',
+                    'text-orange-600': invoice.status === 'Pending',
+                    'text-red-600': invoice.status === 'Rejected',
+                    'text-Amount_Received underline cursor-pointer':
+                      invoice.status === 'Amount Received',
+                    rejected_Reversed: invoice.status === 'Rejected_Reversed'
+                  }"
+                >
+                  {{ invoice.invoiceUniqueNumber }}
+                </span>
+              </td>
+              <td>{{ invoice.header.ProformaInvoiceDate }}</td>
+              <td>{{ invoice.header.ProformaCustomerName }}</td>
+              <td>{{ invoice.header.ProformaTypeOfAircraft }}</td>
+              <td>{{ invoice.header.ProformaCity }}</td>
+              <td>{{ invoice.header.BookingSector }}</td>
+              <td class="text-nowrap">
+                {{ invoice.header.startBookingDateOfJourny }}/{{
+                  invoice.header.endBookingDateOfJourny
+                }}
+              </td>
+              <td>{{ invoice.grandTotal | number : "1.2-2" }}</td>
+              <td
+                [ngClass]="{
+                  'text-green-600': invoice.status === 'Approved',
+                  'text-orange-600': invoice.status === 'Pending',
+                  'text-red-600': invoice.status === 'Rejected',
+                  'text-Amount_Received  ':
+                    invoice.status === 'Amount Received',
+                  rejected_Reversed: invoice.status === 'Rejected_Reversed'
+                }"
+              >
+                {{ invoice.status }}
+              </td>
+            </tr>
+            <tr *ngIf="allInvoiceList.length === 0">
+              <td colspan="8" style="text-align: center">
+                <label cols> No Data </label>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <!-- <button printSectionId="invoice-content" ngxPrint>Print Invoice</button> -->
+      </div>
+      <div class="row justify-content-center align-items-md-center mt-2">
+        <ul class="pagination" style="justify-content: end">
+          <!-- Previous Button -->
+          <li class="page-item" [class.disabled]="currentPage === 1">
+            <a
+              class="page-link"
+              (click)="currentPage > 1 && pageChanged(currentPage - 1)"
+            >
+              &laquo; Previous
+            </a>
+          </li>
 
+          <!-- Page Numbers -->
+          <li
+            *ngFor="let page of pages"
+            class="page-item"
+            [class.active]="currentPage === page"
+          >
+            <a class="page-link" (click)="pageChanged(page)">
+              {{ page }}
+            </a>
+          </li>
 
-
-
-
-
-    <div class="table-responsive">
-      <table class="table table-bordered table-stripped">
-        <thead class="thead-light">
-          <tr>
-            <th class="text-nowrap">Invoice Number</th>
-            <th class="text-nowrap">Invoice Date</th>
-            <th class="text-nowrap">Customer Name</th>
-            <th class="text-nowrap">Type Of Aircraft</th>
-            <th class="text-nowrap">City</th>
-            <th class="text-nowrap">Destination</th>
-            <th class="text-nowrap">Date Of Journey</th>
-            <th class="text-nowrap">Total Amount</th>
-            <th class="text-nowrap">Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          <!-- (click)="invoice.status === 'Approved' ? openInvoicePopup(invoice) : null" -->
-          <tr *ngFor="let invoice of paginatedInvoices" (click)="selectInvoice(invoice)"
-          [class.selected]="invoiceItem === invoice">
-                  <td>
-              <span [ngClass]="{
-                'text-green-600 underline cursor-pointer': invoice.status === 'Approved',
-                'text-orange-600': invoice.status === 'Pending',
-                'text-red-600': invoice.status === 'Rejected',
-                'text-Amount_Received underline cursor-pointer': invoice.status === 'Amount Received',
-                'rejected_Reversed':invoice.status === 'Rejected_Reversed'
-              }">
-                {{ invoice.invoiceUniqueNumber }}
-              </span>
-            </td>
-            <td >{{ invoice.header.ProformaInvoiceDate }}</td>
-            <td>{{ invoice.header.ProformaCustomerName }}</td>
-            <td>{{ invoice.header.ProformaTypeOfAircraft }}</td>
-            <td>{{ invoice.header.ProformaCity }}</td>
-            <td>{{ invoice.header.BookingSector }}</td>
-            <td class="text-nowrap">{{ invoice.header.startBookingDateOfJourny }}/{{ invoice.header.endBookingDateOfJourny }}</td>
-            <td>{{ invoice.grandTotal | number: '1.2-2'}}</td>
-            <td [ngClass]="{
-                'text-green-600': invoice.status === 'Approved',
-                'text-orange-600': invoice.status === 'Pending',
-                'text-red-600': invoice.status === 'Rejected',
-                'text-Amount_Received  ': invoice.status === 'Amount Received',
-                'rejected_Reversed':invoice.status === 'Rejected_Reversed'
-              }">
-              {{ invoice.status }}
-            </td>
-
-          </tr>
-          <tr *ngIf="allInvoiceList.length === 0">
-            <td colspan="8" style="text-align: center;"> <label cols> No Data </label></td>
-
-
-          </tr>
-        </tbody>
-      </table>
-      <!-- <button printSectionId="invoice-content" ngxPrint>Print Invoice</button> -->
+          <!-- Next Button -->
+          <li class="page-item" [class.disabled]="currentPage === totalPages">
+            <a
+              class="page-link"
+              (click)="currentPage < totalPages && pageChanged(currentPage + 1)"
+              style="background-color: green; color: white"
+            >
+              Next &raquo;
+            </a>
+          </li>
+        </ul>
+      </div>
     </div>
-    <div class="row justify-content-center align-items-md-center mt-2">
-      <ul class="pagination" style="justify-content: end;">
-        <!-- Previous Button -->
-        <li class="page-item" [class.disabled]="currentPage === 1">
-          <a class="page-link" (click)="currentPage > 1 && pageChanged(currentPage - 1)">
-            &laquo; Previous
-          </a>
-        </li>
-    
-        <!-- Page Numbers -->
-        <li *ngFor="let page of pages" class="page-item" [class.active]="currentPage === page">
-          <a class="page-link" (click)="pageChanged(page)">
-            {{ page }}
-          </a>
-        </li>
-    
-        <!-- Next Button -->
-        <li class="page-item" [class.disabled]="currentPage === totalPages">
-          <a class="page-link" (click)="currentPage < totalPages && pageChanged(currentPage + 1)"
-          style="background-color: green; color: white;">
-            Next &raquo;
-          </a>
-        </li>
-      </ul>
-    </div>
-    
-    
-    
   </div>
-</div>
 
-<!-- <div id="invoice-content" class="m-2">
+  <!-- <div id="invoice-content" class="m-2">
     <h2>Invoice Details</h2>
     <p><strong>Invoice Number:</strong> {{ invoice.invoiceNumber }}</p>
     <p><strong>Invoice Date:</strong> {{ invoice.invoiceDate }}</p>
@@ -224,8 +285,7 @@
     <p><strong>Amount:</strong> {{ invoice.amount }}</p>
   </div> -->
 
-
-<!-- <div class="container my-5 p-4 border" #invoiceContent id="invoiceContent" style="max-width: 800px; background-color: white;">
+  <!-- <div class="container my-5 p-4 border" #invoiceContent id="invoiceContent" style="max-width: 800px; background-color: white;">
 
     <div class="text-center mb-4">
       <h3 class="company-name">RITHWIK GREEN POWER & AVIATION PRIVATE LIMITED</h3>
@@ -373,8 +433,6 @@
     </div>
   </div> -->
 
-
-
   <!-- // <div class="flight-group-1" style="width: 30%; text-align: center; margin-bottom: 10px; display: flex; flex-direction: column;">
     //   <img src="${this.Flight1Logo}" alt="Invoice Logo" style="width: 210px; height:200px; margin-bottom: 10px;">
     //   <img src="${this.Flight2Logo}" alt="Invoice Logo" style="width: 210px; height: 200px;">
@@ -386,3 +444,5 @@
     // <div class="flight-group-3" style="width: 40%; text-align: center; margin-bottom: 10px; border-bo:1px solid white">
     //   <img src="${this.Flight5Logo}" alt="Invoice Logo" style="width: 290px; height: 410px;">
     // </div> -->
+
+
