@@ -675,7 +675,9 @@ Finalprofoma1_29_03_2025(invoiceItem: InvoiceItem) {
   this.rightLogo = this.imageService.getBase64FlightLogo();
   this.signature = this.imageService.getBase64Signature();
   this.bodyImage1 = this.imageService.getBase64FlightFullNameLight();
-  this.background1 = this.imageService.getBase64BackgroundLogo();
+  this.background1 = this.imageService.BackgroundLogoOnlyFlight();
+  this.background1 = this.imageService.rrJetsFlightlogowithText();
+
   this.Lighter=this.imageService.getBase64LighterLogo();
   this.Flammable=this.imageService.getBase64FlammableLogo();
   this.Toxics=this.imageService.getBase64ToxicsLogo();
@@ -1339,7 +1341,7 @@ ProfomaYellow(invoiceItem: InvoiceItem) {
   this.InvoiceLogo = this.imageService.getBase64Flightworld2Logo();
   this.signature = this.imageService.getBase64Signature();
   this.bodyImage1 = this.imageService.getBase64FlightFullNameLight();
-  this.background1 = this.imageService.getBase64BackgroundLogo();
+  this.background1 = this.imageService.BackgroundLogoOnlyFlight();
   this.Lighter=this.imageService.getBase64LighterLogo();
   this.Flammable=this.imageService.getBase64FlammableLogo();
   this.Toxics=this.imageService.getBase64ToxicsLogo();
