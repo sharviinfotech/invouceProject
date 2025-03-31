@@ -886,13 +886,13 @@ font-family: Arial, sans-serif;
          
           }
             .InvoiceHeader {
-  background-color: rgb(181, 179, 200);
-    font-size: 12px;
-    color:white;
-    padding: 4px;
-    text-align: center;
-    font-weight: bold;
-  }
+                background-color: rgb(181, 179, 200);
+                font-size: 15px;
+                color:black;
+                padding: 4px;
+                text-align: center;
+                font-weight: 700;
+           }
      
         .invoice-container {
           width: 100%;
@@ -1015,7 +1015,7 @@ font-family: Arial, sans-serif;
         padding-top:20px ;
         }
   .terms{
-         margin-bottom:90px;
+         margin-bottom:0px;
         font-size: 14px;
         }
  
@@ -1188,8 +1188,8 @@ font-family: Arial, sans-serif;
         </tr>
     </table>
 </div>
- <div>
- <br>
+
+
    <div class="logo">
    
 
@@ -1206,53 +1206,33 @@ font-family: Arial, sans-serif;
       </div>
       </div>
  </div>
-</div>
+
 <div class ="rcb">
         <div class="terms">
         <h3>Terms & Conditions:</h3>
-        <p>1. This is only a Quotation. The Charter will be confirmed only after receipt of 100% payment in advance</p>
-        <p >2. Additional sectors required after start of the flight itinerary will be on the sole discretion of RITHWIK GREEN AND AVIATION Pvt. Ltd.</p>
-        <p>3. The flight duty time and flight time will be governed by DGCA-CAR-7-JIII & IV dated 23.03.2021
-effective from 30.09.2022.</p>
-<p>4. Minimum booking value for a charter would be 2 Hrs of flying per booking per day.</p>
-<p>5. Any Flying Hrs. mentioned in the quotation is only indicative since:</p>
-<p>i. Any diversions due to weather or the air route not being available due decision of Airport
-Authority / Air Traffic Control or due to defense activity; will be billed at actuals after the flight
-is conducted in the final INVOICE.</p>
-<p>ii. Day & Night parking at some airports are subject to the availability of Parking Bays at these
-airports. In case of non-availability of Parking space we may have to move-out the aircraft / reposition the aircraft / go on a local flight to clear the parking bay for schedule flights - under
-such circumstances reschedule departure of the flight.</p>
-<p>6. Payment: 100% advance to be received at the time of booking, as 'confirmation charges'for
-confirming the charter. Payment can be made via cheque/DD/wire transfer in the name of 'RITHWIK GREEN AND AVIATION Pvt. Ltd' payable at Hyderabad.</p>
-<p>7. Cancellation</p>
-<p>a. Cancellation Charges would be levied as a percentage of the total INVOICE value, which would
-be as follows:-</p>
-<p>i. 10%- against flight preparation charges will be levied if flight is cancelled due to “force
-majeure” reasons.</p>
-<p>ii. 25% - if cancellation is done 6 days prior to departure of the flight</p>
-<p>iii. 50% - if cancellation is done less than 6 days but more than 72 hrs prior to schedule
-departure of the flight.</p>
-<p>iv. 100% of the total estimated charter cost will be levied if the flight is cancelled less than
-72 hrs of scheduled departure.</p>
-<p>b. Any cancellations/changes (if the same cannot be executed due to operational reasons / lapse or
-lack of relevant permissions) in flight sectors after the commencement of the 'flight program' will
-be termed as a as 'a last minute cancellation' - and the cancellation clause of 100% would apply.</p>
-<p>8.Other Charges:</p>
-<p>a. Day Detention charges @ INR 50,000/- per hour {for Domestic} and US$ 350 per hour {for
-International airports} will be charged after 4 hours of free waiting.</p>
-<p>b. The cost of re-positioning of aircraft will be billed at actuals after the flight is conducted in the
-final INVOICE.</p>
-<p>9. The Courts of Hyderabad shall have exclusive jurisdiction in connection with any matter arising out
-of this Quotation</p>
-<p>10. Check-in Time: Passengers are advised to reach airport 60 min before departure.</p>
-<p>11. Valid ID proof needed: All passengers shall carry a valid photo identification proof (Driver License,
-Aadhar Card, Pan Card or any other Government recognized photo identification)<br>
-</p>
+       <p>1. In case of any discrepancies, contact the accounts department within 5 days of receiving the bill. </p>
+   <p> 2. Payment must be made within 2 days of receiving the invoice. </p>
+   <p> 3. Payments delayed beyond 30 days will be subject to a penalty interest of 18% per annum.
+  </p>
+  <p>4. Additional sectors required after start of the flight itinerary will be on the sole discretion of RITHWIK GREEN AND AVIATION Pvt. Ltd.</p>
+
+   <p>5. Day & Night parking at some airports are subject to the availability of Parking Bays at these
+    airports. In case of non-availability of Parking space we may have to move-out the aircraft / reposition the aircraft / go on a local flight to clear the parking bay for schedule flights - under
+    such circumstances reschedule departure of the flight.</p>
+    <p>6. Payment: 100% advance to be received at the time of booking, as 'confirmation charges'for
+    confirming the charter. Payment can be made via cheque/DD/wire transfer in the name of 'RITHWIK GREEN AND AVIATION Pvt. Ltd' payable at Hyderabad.</p>
+    <p>b. Any cancellations/changes (if the same cannot be executed due to operational reasons / lapse or
+    lack of relevant permissions) in flight sectors after the commencement of the 'flight program' will
+    be termed as a as 'a last minute cancellation' - and the cancellation clause of 100% would apply.</p>
+   <p>7. Check-in Time: Passengers are advised to reach airport 60 min before departure.</p>
+   <p>8. Valid ID proof needed: All passengers shall carry a valid photo identification proof (Driver License,
+   Aadhar Card, Pan Card or any other Government recognized photo identification)<br>
+   </p>
 
         </div>
         </div>
 
-<div class="NotAllow" style="padding-top: 20px;">
+<div class="NotAllow" style="padding-top:5px;">
     <div style="margin-bottom: 10px;"> 
         <p style="font-size: 25px; color: blue; margin-top: 20px;">
             <i class="fa-solid fa-ban" style="color: red; font-size: 25px;"></i>&nbsp;Not Allowed
@@ -1310,7 +1290,7 @@ Aadhar Card, Pan Card or any other Government recognized photo identification)<b
   </div>
 </div>
 <div>
-        <div><p style="font-size: 25px; color: blue;"> <i class="fa-solid fa-circle-check" style="color: green; font-size: 25px;"></i> Allowed</p>
+        <div><p style="font-size: 25px; color: blue;"> <i class="fa-solid fa-circle-check" style="color: green; "></i> Allowed</p>
 </div>
 <div style="display: flex; flex-wrap: wrap; width: 600px; /* Adjust width as needed */"> 
   <div style="width: 20%; text-align: center; margin-bottom: 10px;">
@@ -1323,17 +1303,13 @@ Aadhar Card, Pan Card or any other Government recognized photo identification)<b
 </div>
 </div>
 <div class="srk" style="display: flex; flex-wrap: wrap; width: 100%;">
-  <div class="flight-group-1" style="width: 30%; text-align: center; margin-bottom: 10px; display: flex; flex-direction: column;">
-    <img src="${this.Flight1Logo}" alt="Invoice Logo" style="width: 210px; height:200px; margin-bottom: 10px;">
-    <img src="${this.Flight2Logo}" alt="Invoice Logo" style="width: 210px; height: 200px;">
+ <div class="flight-group-1" style="width: 50%; text-align: center; margin-bottom: 10px; display: flex; flex-direction: column;">
+    <img src="${this.Flight1Logo}" alt="Invoice Logo" >
   </div>
-  <div class="flight-group-2" style="width: 30%; text-align: center; margin-bottom: 10px; display: flex; flex-direction: column;">
-    <img src="${this.Flight3Logo}" alt="Invoice Logo" style="width: 210px; height:200px; margin-bottom: 10px;">
-    <img src="${this.Flight4Logo}" alt="Invoice Logo" style="width: 210px; height:200px;">
+   <div class="flight-group-1" style="width: 50%; text-align: center; margin-bottom: 10px; display: flex; flex-direction: column;">
+    <img src="${this.Flight2Logo}" alt="Invoice Logo" style="width: 110%;">
   </div>
-  <div class="flight-group-3" style="width: 40%; text-align: center; margin-bottom: 10px; border-bo:1px solid white">
-    <img src="${this.Flight5Logo}" alt="Invoice Logo" style="width: 290px; height: 410px;">
-  </div>
+  
 </div>
 
 </div>
