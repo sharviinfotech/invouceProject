@@ -623,6 +623,7 @@ selectInvoice(invoice: any) {
                 // Check conditions before calling print functions
                 if (invoiceItem.proformaCardHeaderId === "PQ") {
                   this.Finalprofoma1_29_03_2025(invoiceItem);
+                  // this.ProfomaYellow(invoiceItem)
                   // Additional checks if needed
                 }else if (invoiceItem.proformaCardHeaderId === "TAX") {
                   this.generateInvoiceHTMLTax2(invoiceItem);
@@ -649,6 +650,7 @@ selectInvoice(invoice: any) {
               // Check conditions before calling print functions
               if (invoiceItem.proformaCardHeaderId === "PQ") {
                 this.Finalprofoma1_29_03_2025(invoiceItem);
+                // this.ProfomaYellow(invoiceItem)
                 // Additional checks if needed
               }else if (invoiceItem.proformaCardHeaderId === "TAX") {
                 this.generateInvoiceHTMLTax2(invoiceItem);
@@ -1330,7 +1332,7 @@ font-family: Arial, sans-serif;
     }, 500);
   }
 };
-generateInvoiceHTMLProfomalast(invoiceItem: InvoiceItem) {
+ProfomaYellow(invoiceItem: InvoiceItem) {
   this.leftlogo = this.imageService.rrGlobalImageYellow();
   // this.logoUrl = this.imageService.getBase64FlightWorldmapLogo();
   this.logoUrl = this.imageService.getBase64FlightNewLogo();
