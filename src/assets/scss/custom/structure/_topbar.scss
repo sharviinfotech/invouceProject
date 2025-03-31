@@ -34,6 +34,10 @@
     padding: 10px;
     text-align: center;
     width: $navbar-brand-box-width;
+    padding: 10px;
+    text-align: center;
+    width: 250px;
+    height: 250px;
 }
 
 .logo {
@@ -246,8 +250,11 @@ body[data-topbar="dark"] {
 }
 
 body[data-sidebar="dark"] {
+    
     .navbar-brand-box {
         background: $sidebar-dark-bg;
+        height: 288px !important;
+    margin-top: 10px !important;
     }
 
     .logo-dark {
