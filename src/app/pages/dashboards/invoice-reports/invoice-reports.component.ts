@@ -821,12 +821,7 @@ background-color: rgb(167, 166, 175);
     text-align: center;
     font-weight: bold;
   }
-    .back{
-     background-image: url('${this.backgroundlight}') !important;
-        background-size: 60% !important;
-        background-position: center !important;
-        background-repeat: no-repeat !important;
-    }
+ 
   .table-bordered {
     border-collapse: collapse;
     width: 100%;
@@ -854,6 +849,9 @@ background-color: rgb(167, 166, 175);
      
   .bold {
     font-weight: bold;
+    font-size:14px;
+    
+
   }
   .text-right {
     text-align: right;
@@ -906,6 +904,7 @@ font-family: Arial, sans-serif;
                 padding: 4px;
                 text-align: center;
                 font-weight: 700;
+                
            }
      
         .invoice-container {
@@ -915,7 +914,78 @@ font-family: Arial, sans-serif;
           padding: 4px;
           background: #fff;
           box-sizing: border-box;
+           background-image: url('${this.backgroundlight}') !important;
+        background-size: 85% !important;
+        background-position: center !important;
+        background-repeat: no-repeat !important;
       }
+        .second-page{
+        width: 100%;
+          margin: auto;
+           
+          border: 1px solid #ddd;
+          padding: 4px;
+          background: #fff;
+          box-sizing: border-box;
+        }
+      
+    @page {
+        size: A4;
+        margin: 10mm;
+    }
+
+    .second-page {
+        width: 100%;
+        height: 100vh;
+        position: relative;
+        overflow: hidden;
+        page-break-inside: avoid;
+    }
+
+    .rcb {
+        background-size: 65%;
+        background-position: center;
+        background-repeat: no-repeat;
+        padding-top: 25px;
+        width: 100%;
+        page-break-inside: avoid;
+    }
+
+    .terms {
+        font-size: 12px;
+        line-height: 1.3;
+        
+        overflow: hidden;
+        page-break-inside: avoid;
+        margin: 0;
+        padding: 0 5px;
+    }
+
+    .NotAllow, .Allowed {
+        page-break-inside: avoid;
+        font-size: 12px;
+        line-height: 1.2;
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    .NotAllow img, .Allowed img {
+        width: 60px;
+        height: 40px;
+    }
+
+    .NotAllow div, .Allowed div {
+        width: 20%;
+        text-align: center;
+    }
+
+    /* Scale content to fit */
+    body {
+        transform: scale(1);
+        transform-origin: top left;
+    }
+
+
  
       .header-section {
           display: flex;
@@ -970,12 +1040,7 @@ font-family: Arial, sans-serif;
   display: flex;
   font-size: 12px;
   }
-  .back{
-     background-image: url('${this.backgroundlight}') !important;
-        background-size: 85% !important;
-        background-position: center !important;
-        background-repeat: no-repeat !important;
-    }
+ 
  
   .data-item {
     display: inline-block;
@@ -1007,26 +1072,28 @@ font-family: Arial, sans-serif;
     // background-color:rgb(193, 205, 217); /* Added background color */
   }
    .table-bordered th {
-      border: 1px solid white;
+      border: 0px solid white;
   padding: 5px;
    background-color:rgb(115 124 167) !important;
   color: white;
   }
  
   .table-bordered td {
-  padding: 4px;
+  padding: 3px;
   }
   .booking-header bold{
  
   background-color: rgb(88, 98, 145);
   color: white;
+  margin-bottom:4px;
+  
   }
    .rcb{
         background-image: url('${this.backgroundlight}') !important;
         background-size: 65%!important;
         background-position: center !important;
         background-repeat: no-repeat !important;
-        padding-top:5px ;
+        padding-top:25px ;
         }
   .terms{
          margin-bottom:0px;
@@ -1045,7 +1112,11 @@ font-family: Arial, sans-serif;
   .text-center {
     text-align: center;
   }
- 
+ .note p {
+    margin: 0;
+    display: inline-block;
+}
+
 
  
    
@@ -1064,7 +1135,7 @@ font-family: Arial, sans-serif;
       }
  
       .footer .logo img {
-          width: 100%;
+          width: 60%;
           height: auto;
       }
 }
@@ -1083,28 +1154,67 @@ font-family: Arial, sans-serif;
         PRIVATE LIMITED
     </p>
 </div>
-          <div class="logo right-logo"><img src="${this.rightLogo}" alt="Company Logo" style="height: 80px; width: 150px;"></div>
+          <div class="logo right-logo"><img src="${this.rightLogo}" alt="Company Logo" style="height: 90px; width: 150px;"></div>
   </div>
   <br>
  <div class="back">
    <div class="booking-header bold">${invoiceItem.proformaCardHeaderName}</div>
-  <table class="table-bordered">
-    <tr>
-      <th class="bold">TO</th>
-      <th class="bold">FROM</th>
-    </tr>
-    <tr>
-      <td>${invoiceItem.header.ProformaCustomerName}<br>${invoiceItem.header.ProformaAddress}<br>${invoiceItem.header.ProformaCity}<br>${invoiceItem.header.ProformaPincode} <br><strong>GST NO:</strong>${invoiceItem.header.ProformaGstNo}<br>
-              <strong>PAN NO:</strong> ${invoiceItem.header.ProformaPan}</td>
-      <td><strong>INVOICE NO:</strong> ${invoiceItem.invoiceUniqueNumber}<br><strong>DATE: </strong>${invoiceItem.header.ProformaInvoiceDate}<br><strong>PAN NO</strong>:${invoiceItem.header.ProformaPanNO}<br><strong>GST NO: </strong>${invoiceItem.header.ProformaGstNumber}<br><strong>Type of Aircraft</strong>:${invoiceItem.header.ProformaTypeOfAircraft}<br><strong>Seating Capasity</strong>:${invoiceItem.header.ProformaSeatingCapasity}</td>
-    </tr>
-  </table>
+<div class="TO" style="display: flex; width: 100%;">
+  <!-- First Section (Left) -->
+  <div class="remittance-container" style="width: 52%; padding-top: 3px; font-size:12px;">
+    <table class="remittance-table" style="border-collapse: collapse; width: 100%;">
+      <tr><td><strong>TO</strong></td></tr>
+      <tr>
+        <td style="padding: 3px; font-size:13px;">
+          ${invoiceItem.header.ProformaCustomerName}<br>
+          ${invoiceItem.header.ProformaAddress}<br>
+          ${invoiceItem.header.ProformaCity},
+          ${invoiceItem.header.ProformaPincode} <br>
+          <strong>GST NO:</strong> ${invoiceItem.header.ProformaGstNo}<br>
+          <strong>PAN NO:</strong> ${invoiceItem.header.ProformaPan}
+        </td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- Second Section (Right) -->
+  <div class="remittance-container" style="width: 46%; padding: 5px; font-size:12px;">
+    <table class="remittance-table" style="border-collapse: collapse; width: 100%;">
+      <tr>
+        <td style="padding: 3px; vertical-align: top; font-size:13px;"><strong>INVOICE NO</strong></td>
+        <td style="padding: 3px; vertical-align: top; font-size:13px;">: ${invoiceItem.invoiceUniqueNumber}</td>
+      </tr>
+      <tr>
+        <td style="padding: 3px; vertical-align: top;font-size:13px;"><strong>DATE</strong></td>
+        <td style="padding: 3px; vertical-align: top;font-size:13px;">: ${invoiceItem.header.ProformaInvoiceDate}</td>
+      </tr>
+      <tr>
+        <td style="padding: 3px; vertical-align: top;font-size:13px;"><strong>PAN NO</strong></td>
+        <td style="padding: 3px; vertical-align: top;font-size:13px;">: ${invoiceItem.header.ProformaPanNO}</td>
+      </tr>
+      <tr>
+        <td style="padding: 3px; vertical-align: top; font-size:13px;"><strong>GST NO</strong></td>
+        <td style="padding: 3px; vertical-align: top;font-size:13px;">: ${invoiceItem.header.ProformaGstNumber}</td>
+      </tr>
+      <tr>
+        <td style="padding: 3px; vertical-align: top;font-size:13px;"><strong>TYPE OF AIRCRAFT</strong></td>
+        <td style="padding: 3px; vertical-align: top;font-size:13px;">: ${invoiceItem.header.ProformaTypeOfAircraft}</td>
+      </tr>
+      <tr>
+        <td style="padding: 3px; vertical-align: top;font-size:13px;"><strong>Seating Capacity</strong></td>
+        <td style="padding: 3px; vertical-align: top;font-size:13px;">: ${invoiceItem.header.ProformaSeatingCapasity}</td>
+      </tr>
+    </table>
+  </div>
+</div>
+
+  </div>
   <div class="booking-details">
 <div class="booking-header bold" style="font-size: 13px;">BOOKING  DETAILS</div>
 <div class="booking-data single-line">
-    <div style="width:35%; text-align: center; font-size: 12px;" ><div class="bold">DATE OF JOURNEY</div> <div>03/03/25-04/03/2025</div></div>
-    <div style="width:35%; text-align: center;  font-size: 12px;" ><div class="bold">SECTOR</div> <div>${invoiceItem.header.BookingSector}</div></div>
-    <div style="width:30%; text-align: center;  font-size: 12px;" ><div class="bold">BILLING FLYING TIME</div> <div>${invoiceItem.header.BookingBillingFlyingTime}</div></div>
+    <div style="width:35%; text-align: center; font-size: 11px;" ><div class="bold">DATE OF JOURNEY</div> <div>03/03/25-04/03/2025</div></div>
+    <div style="width:35%; text-align: center;  font-size: 11px;" ><div class="bold">SECTOR</div> <div>${invoiceItem.header.BookingSector}</div></div>
+    <div style="width:30%; text-align: center;  font-size: 11px;" ><div class="bold">BILLING FLYING TIME</div> <div>${invoiceItem.header.BookingBillingFlyingTime}</div></div>
 </div>
 </div>
 
@@ -1129,11 +1239,11 @@ font-family: Arial, sans-serif;
               ${invoiceItem.chargesList.map((charge, index) => `
                 <tr>
                  
-                   <td class="text-center"></td>
-                  <td>${charge.description}</td>
-                  <td class="text-center">${charge.units ? charge.units : ''}</td>
-                  <td class="text-right">${charge.rate}</td>
-                  <td class="text-right">${charge.amount}</td>
+                   <td class="text-center" style="font-size:12px;"></td>
+                  <td style="font-size:12px;">${charge.description}</td>
+                  <td class="text-center" style="font-size:12px;">${charge.units ? charge.units : ''}</td>
+                  <td class="text-right" style="font-size:12px;">${charge.rate}</td>
+                  <td class="text-right" style="font-size:12px;">${charge.amount}</td>
                 </tr>
               `).join('')}
              
@@ -1141,7 +1251,7 @@ font-family: Arial, sans-serif;
               <td></td>
               <td></td>
               <td></td>
-                <td  class="text-right bold" style="background-color: rgb(115 124 167);color:white">TOTAL</td>
+                <td  class="text-right bold" style="background-color: rgb(115 124 167);color:white ">TOTAL</td>
                 <td class="text-right bold"  style="background-color: rgb(115 124 167);color:white">${invoiceItem.subtotal}</td>
               </tr>
               <tr>
@@ -1154,11 +1264,11 @@ font-family: Arial, sans-serif;
  
               ${invoiceItem.taxList.map(tax => `
                 <tr>
-                  <td></td>
-                  <td>${tax.description}</td>
-                  <td></td>
-                  <td></td>
-                  <td class="text-right">${tax.amount}</td>
+                  <td style="font-size:12px;"></td>
+                  <td style="font-size:12px;">${tax.description}</td>
+                  <td style="font-size:12px;"></td>
+                  <td style="font-size:12px;"></td>
+                  <td class="text-right" style="font-size:10px;">${tax.amount}</td>
                 </tr>
               `).join('')}
  
@@ -1179,20 +1289,20 @@ font-family: Arial, sans-serif;
 <div class="remittance-container" style="display: flex; justify-content: center; align-items: center; width: 80%;">
     <table class="remittance-table" style="border-collapse: collapse; width: 100%;">
         <tr>
-            <td style="padding: 4px; vertical-align: top;"><strong>Account Name</strong></td>
-            <td style="padding: 4px; vertical-align: top;">: RITHWIK GREEN POWER AND AVIATION PVT. LTD.</td>
+            <td style="padding: 3px; vertical-align: top; font-size:13px;"><strong>Account Name</strong></td>
+            <td style="padding: 3px; vertical-align: top;font-size:13px;">: RITHWIK GREEN POWER AND AVIATION PVT. LTD.</td>
         </tr>
         <tr>
-            <td style="padding: 4px; vertical-align: top;"><strong>Account Number</strong></td>
-            <td style="padding: 4px; vertical-align: top;">: 4437002100002340</td>
+            <td style="padding: 3px; vertical-align: top; font-size:13px;"><strong>Account Number</strong></td>
+            <td style="padding: 3px; vertical-align: top;font-size:13px;">: 4437002100002340</td>
         </tr>
         <tr>
-            <td style="padding: 4px; vertical-align: top;"><strong>Bank</strong></td>
-            <td style="padding: 4px; vertical-align: top;">: Punjab National Bank.</td>
+            <td style="padding: 3px; vertical-align: top;font-size:13px;"><strong>Bank</strong></td>
+            <td style="padding: 3px; vertical-align: top;font-size:13px;">: Punjab National Bank.</td>
         </tr>
         <tr>
-            <td style="padding: 4px; vertical-align: top;"><strong>IFSC Code</strong></td>
-            <td style="padding: 4px; vertical-align: top;">: PUNB0443700</td>
+            <td style="padding: 3px; vertical-align: top;font-size:13px;"><strong>IFSC Code</strong></td>
+            <td style="padding: 3px; vertical-align: top;font-size:13px;">: PUNB0443700</td>
         </tr>
     </table>
 </div>
@@ -1203,7 +1313,7 @@ font-family: Arial, sans-serif;
 
 
   <div class="footer">
-        <div class="note">
+        <div class="note" style="width:55%;">
         <b>Note:</b>
          <p>1. In case of any discrepancies, contact the accounts department within 5 days of receiving the bill. </p>
          <p> 2. Payment must be made within 2 days of receiving the invoice. </p>
@@ -1221,7 +1331,8 @@ font-family: Arial, sans-serif;
       </div>
       </div>
  </div>
-
+ <p style="text-align: center; font-size:12px;">Plot No: 1308-A,   Road No; 65,   Jubilee Hills,  Hyderabad,  Telangana -5000333</p>
+<div class ="second-page">
 <div class="rcb">
 <div class="terms">
 <h3>Terms & Conditions:</h3>
@@ -1284,14 +1395,10 @@ font-family: Arial, sans-serif;
 <div class="NotAllow" style="padding-top:5px;">
     <div style="margin-bottom:5px;"> 
         <p style="font-size: 25px; color: blue; margin-top: 5px;">
-            <i class="fa-solid fa-ban" style="color: red; font-size: 25px;"></i>&nbsp;Not Allowed
+<i class="fa-solid fa-ban" style="color: red; font-size: 25px;"></i> Not Allowed
         </p>
     </div>
-    <div>
-        <p style="font-size: 14px;">
-            These items are Dangerous Goods and are not permitted to be carried as hand baggage or check-in baggage.
-        </p>
-    </div>
+   
 </div>
 
 
@@ -1351,7 +1458,9 @@ font-family: Arial, sans-serif;
     <p style="font-size: 12px; margin: 5px 0;">Power Bank </p>
 </div>
 </div>
-
+</div>
+</div>
+<div class ="second-page">
   <div class="srk" style="display: flex; flex-wrap: wrap; width: 100%;">
     <!-- First Column (50% Width) -->
     <div style="width: 50%; text-align: center; display: flex; flex-direction: column; justify-content: center;">
@@ -8949,7 +9058,7 @@ background-image: linear-gradient(to right, #7e22ce, #2563eb);
     </table>
 
     <div class="booking-details">
-        <div class="booking-header">BOOKING DETAILS</div>
+        <div class="booking-header" style="text-align: center;">BOOKING DETAILS</div>
         <div class="booking-data">
             <div><strong>Date Of Journey:</strong> 03/03/25-04/03/2025</div>
             <div><strong>Sector:</strong> ${invoiceItem.header.BookingSector}</div>
