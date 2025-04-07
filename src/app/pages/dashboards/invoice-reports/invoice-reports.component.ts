@@ -8691,6 +8691,9 @@ background-image: linear-gradient(to right, #7e22ce, #2563eb);
     // this.InvoiceLogo = this.imageService.getBase64FlightNewLogo();
     this.rightLogo = this.imageService.getBase64FlightLogo();
     this.signature = this.imageService.getBase64Signature();
+    this.background1 = this.imageService.BackgroundLogoOnlyFlight();
+    this.backgroundlight=this.imageService.BackgroundLogoLight();
+
     const invoiceHTML = `
 
 <html>
@@ -8727,7 +8730,7 @@ background-image: linear-gradient(to right, #7e22ce, #2563eb);
             border: 1px solid #ddd;
             padding: 20px;
             border-radius: 6px;
-            background-color: #f9f9f9;
+          
         }
 
         .billing-header, .shipping-header {
@@ -8744,38 +8747,38 @@ background-image: linear-gradient(to right, #7e22ce, #2563eb);
             margin: 8px 0;
             line-height: 1.6;
         }
-
         .table-bordered {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 30px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        .table-bordered th, .table-bordered td {
-            border: 1px solid #ddd;
-            padding: 12px 15px;
-            text-align: left;
-        }
-
-        .table-bordered th {
-            background-color: #f0f0f0;
-            font-weight: 600;
-        }
-
-        .table-bordered tbody tr:nth-child(even) {
-            background-color: #f9f9f9;
-        }
+    border-collapse: collapse;
+    width: 100%;
+    margin-bottom: 10px;
+    // background-color:rgb(193, 205, 217); /* Added background color */
+  }
+   .table-bordered th {
+      border: 1px solid white;
+  padding: 2px;
+background: rgb(179 187 227) !important;
+  color: white;
+  }
+ 
+  .table-bordered td {
+  padding: 2px;
+  }
+  .booking-header bold{
+  font-size: 13px;
+  background-color: rgb(198, 191, 240);
+  color: white;
+  }
+ 
+ 
+ 
+       
 
         .charges {
             font-weight: 600;
             
         }
 
-        .total-row, .grand-total {
-            background-color: #e0e0e0;
-            font-weight: 600;
-        }
+       
 
         .booking-details {
             border: 1px solid #ddd;
@@ -8816,8 +8819,8 @@ background-image: linear-gradient(to right, #7e22ce, #2563eb);
             align-items: center;
         }
      .back{
-     background-image: url('${this.background1}') !important;
-        background-size: 60% !important;
+           background-image: url('${this.backgroundlight}') !important;
+        background-size: 80% !important;
         background-position: center !important;
         background-repeat: no-repeat !important;
        }
@@ -8874,6 +8877,30 @@ background-image: linear-gradient(to right, #7e22ce, #2563eb);
         padding: 6px;
         font-size: 14px;
     }
+        .table-bordered {
+    border-collapse: collapse;
+    width: 100%;
+    margin-bottom: 10px;
+    // background-color:rgb(193, 205, 217); /* Added background color */
+  }
+   .table-bordered th {
+      border: 1px solid white;
+  padding: 2px;
+background: rgb(179 187 227) !important;
+color: white;
+  }
+ 
+  .table-bordered td {
+  padding: 2px;
+  }
+  .booking-header bold{
+  font-size: 13px;
+  background-color: rgb(91, 85, 130);
+  color: white;
+  }
+ 
+ 
+ 
 
     .footer-notes, .footer-signature {
         font-size: 12px;
@@ -8901,13 +8928,6 @@ background-image: linear-gradient(to right, #7e22ce, #2563eb);
         
     }
 
-    .table-bordered th {
-        background-color: #f0f0f0 !important;
-    }
-
-    .total-row, .grand-total {
-        background-color: #e0e0e0 !important;
-    }
 
     /* Hide unnecessary elements in print */
     .no-print {
@@ -8979,11 +8999,12 @@ background-image: linear-gradient(to right, #7e22ce, #2563eb);
   </div>
     <div class="orange-background">${invoiceItem.proformaCardHeaderName}</div>
 
-      <div class="invoice-container back">
+      <div class="invoice-container">
+      <div class = "back">
     <div class="billing-shipping-container">
         <div class="billing-box">
             <div class="billing-header">TO</div>
-            <div class="billing-content">
+            <div class="billing-content" >
                 <p>${invoiceItem.header.ProformaCustomerName}<br>
                 ${invoiceItem.header.ProformaAddress}<br>
                 ${invoiceItem.header.ProformaCity}<br>
@@ -8994,77 +9015,125 @@ background-image: linear-gradient(to right, #7e22ce, #2563eb);
         </div>
         <div class="shipping-box">
             <div class="shipping-header">FROM</div>
-            <div class="shipping-content">
-                <p><strong>INVOICE NO:</strong> ${invoiceItem.invoiceUniqueNumber}<br>
-                <strong>DATE:</strong> ${invoiceItem.header.ProformaInvoiceDate}<br>
-                <strong>PAN NO:</strong> ${invoiceItem.header.ProformaPanNO}<br>
-                <strong>GST NO:</strong> ${invoiceItem.header.ProformaGstNumber}<br>
-                <strong>Type of Aircraft</strong>:${invoiceItem.header.ProformaTypeOfAircraft}<br>
-                <strong>Seating Capasity</strong>:${invoiceItem.header.ProformaSeatingCapasity}</p>
-            </div>
-        </div>
-    </div>
-
-    <table class="table-bordered">
-        <thead>
-            <tr>
-                <th>S.NO</th>
-                <th>DESCRIPTION</th>
-                <th>UNITS (Hrs.)</th>
-                <th>RATE (INR)</th>
-                <th>AMOUNT (INR)</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>1</td>
-                <td colspan="4" class="charges">CHARGES</td>
-            </tr>
-            ${invoiceItem.chargesList.map(charge => `
-            <tr>
-                <td></td>
-                <td>${charge.description}</td>
-                <td>${charge.units || ''}</td>
-                <td style="text-align: right">${charge.rate}</td>
-                <td style="text-align: right">${charge.amount}</td>
-            </tr>
-            `).join('')}
-            <tr class="total-row">
-                <td colspan="3"></td>
-                <td><strong>TOTAL</strong></td>
-                <td style="text-align: right">${invoiceItem.subtotal}</td>
-            </tr>
-            <tr>
-                <td>2</td>
-                <td colspan="4" class="charges">TAXES</td>
-            </tr>
-            ${invoiceItem.taxList.map(tax => `
-            <tr>
-                <td></td>
-                <td style="text-align: right">${tax.description}</td>
-                <td colspan="2"></td>
-                <td style="text-align: right">${tax.amount}</td>
-            </tr>
-            `).join('')}
-            <tr class="grand-total">
-                <td colspan="3"></td>
-                <td><strong>GRAND TOTAL</strong></td>
-                <td style="text-align: right">${invoiceItem.grandTotal}</td>
-            </tr>
-            <tr>
-                <td colspan="5"><strong>${invoiceItem.amountInWords}</strong></td>
-            </tr>
-        </tbody>
+             <div class="remittance-container" style="width: 100%; padding: 5px; margin-top:0px; font-size:12px;">
+    <table class="remittance-table" style="border-collapse: collapse; width: 100%;">
+      <tr>
+        <td style="padding: 3px; vertical-align: top; font-size:13px;"><strong>INVOICE NO</strong></td>
+        <td style="padding: 3px; vertical-align: top; font-size:13px;">: ${invoiceItem.invoiceUniqueNumber}</td>
+      </tr>
+      <tr>
+        <td style="padding: 3px; vertical-align: top;font-size:13px;"><strong>DATE</strong></td>
+        <td style="padding: 3px; vertical-align: top;font-size:13px;">: ${invoiceItem.header.ProformaInvoiceDate}</td>
+      </tr>
+      <tr>
+        <td style="padding: 3px; vertical-align: top;font-size:13px;"><strong>PAN NO</strong></td>
+        <td style="padding: 3px; vertical-align: top;font-size:13px;">: ${invoiceItem.header.ProformaPanNO}</td>
+      </tr>
+      <tr>
+        <td style="padding: 3px; vertical-align: top; font-size:13px;"><strong>GST NO</strong></td>
+        <td style="padding: 3px; vertical-align: top;font-size:13px;">: ${invoiceItem.header.ProformaGstNumber}</td>
+      </tr>
+      <tr>
+        <td style="padding: 3px; vertical-align: top;font-size:13px;"><strong>TYPE OF AIRCRAFT</strong></td>
+        <td style="padding: 3px; vertical-align: top;font-size:13px;">: ${invoiceItem.header.ProformaTypeOfAircraft}</td>
+      </tr>
+      <tr>
+        <td style="padding: 3px; vertical-align: top;font-size:13px;"><strong>Seating Capacity</strong></td>
+        <td style="padding: 3px; vertical-align: top;font-size:13px;">: ${invoiceItem.header.ProformaSeatingCapasity}</td>
+      </tr>
     </table>
-
-    <div class="booking-details">
-        <div class="booking-header" style="text-align: center;">BOOKING DETAILS</div>
-        <div class="booking-data">
-            <div><strong>Date Of Journey:</strong> 03/03/25-04/03/2025</div>
-            <div><strong>Sector:</strong> ${invoiceItem.header.BookingSector}</div>
-            <div><strong>Billing Flying Time:</strong> ${invoiceItem.header.BookingBillingFlyingTime}</div>
+  </div>
         </div>
     </div>
+
+     <table class="table-bordered">
+            <thead>
+              <tr>
+                <th class="booking-header bold" style="font-size: 12px;">S.NO</th>
+                <th class="booking-header bold" style="font-size: 12px;">DESCRIPATION</th>
+                <th class="booking-header bold" style="font-size: 12px;">UNITS (Hrs.)</th>
+                <th class="booking-header bold" style="font-size: 12px;">RATE(INR)</th>
+                <th class="booking-header bold" style="font-size: 12px;">AMOUNT(INR)</th>
+              </tr>
+            </thead>
+            <tbody>
+           <tr>
+            <td>1</td>
+            <td class="bold">CHARGES</td>
+            <td class="text-right"></td>
+            <td class="text-right"></td>
+            <td></td>
+          </tr>
+              ${invoiceItem.chargesList.map((charge, index) => `
+                <tr>
+                 
+                   <td class="text-center" style="font-size:12px;"></td>
+                  <td style="font-size:12px;">${charge.description}</td>
+                  <td class="text-center" style="font-size:12px;">${charge.units ? charge.units : ''}</td>
+                  <td class="text-right" style="font-size:12px;">${charge.rate}</td>
+                  <td class="text-right" style="font-size:12px;">${charge.amount}</td>
+                </tr>
+              `).join('')}
+             
+              <tr>
+              <td></td>
+              <td></td>
+              <td></td>
+                <td  class="text-right bold" style="background-color: rgb(115 124 167);color:white ">TOTAL</td>
+                <td class="text-right bold"  style="background-color: rgb(115 124 167);color:white">${invoiceItem.subtotal}</td>
+              </tr>
+              <tr>
+            <td>2</td>
+                  <td class="bold">TAXES:</td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+            </tr>
+ 
+              ${invoiceItem.taxList.map(tax => `
+                <tr>
+                  <td style="font-size:12px;"></td>
+                  <td style="font-size:12px;">${tax.description}</td>
+                  <td style="font-size:12px;"></td>
+                  <td style="font-size:12px;"></td>
+                  <td class="text-right" style="font-size:10px;">${tax.amount}</td>
+                </tr>
+              `).join('')}
+ 
+              <tr>
+              <td></td>
+              <td></td>
+              <td></td>
+                <td class="text-right bold"  style="background-color: rgb(115 124 167);color:white"">GRAND TOTAL</td>
+                <td class="text-right bold"  style="background-color: rgb(115 124 167);color:white">${invoiceItem.grandTotal ? invoiceItem.grandTotal.toFixed(0) : '0.00'}</td>
+              </tr>
+               <tr >
+                  <td colspan="5" class="bold" style="padding-top:3px !important"> ${invoiceItem.amountInWords}</td>
+               </tr>
+            </tbody>
+          </table>
+ 
+ <div style="border: 1px solid #ddd;">
+  <div class="booking-header bold" style="font-size:12px;  background-color: #2f93b4;
+  text-align: center;">BOOKING DETAILS</div>
+<div class="remittance-container" style="display: flex; justify-content: center; align-items: center; width: 80%;">
+    <table class="remittance-table" style="border-collapse: collapse; width: 100%;">
+        <tr>
+            <td style="padding: 3px; vertical-align: top; font-size:13px;"><strong>Date Of Journey</strong></td>
+            <td style="padding: 3px; vertical-align: top; font-size:13px;">: 03/03/25 - 04/03/2025</td>
+        </tr>
+        <tr>
+            <td style="padding: 3px; vertical-align: top; font-size:13px;"><strong>Sector</strong></td>
+            <td style="padding: 3px; vertical-align: top; font-size:13px;">: ${invoiceItem.header.BookingSector}</td>
+        </tr>
+        <tr>
+            <td style="padding: 3px; vertical-align: top; font-size:13px;"><strong>Billing Flying Time</strong></td>
+            <td style="padding: 3px; vertical-align: top; font-size:13px;">: ${invoiceItem.header.BookingBillingFlyingTime}</td>
+        </tr>
+    </table>
+</div>
+</div>
+
 
  
         <!-- Footer Section -->
@@ -9075,6 +9144,7 @@ background-image: linear-gradient(to right, #7e22ce, #2563eb);
                 <img src="${this.signature}" alt="Signature">
                 <p>Authorised Signatory</p>
             </div>
+        </div>
         </div>
     </div>
 </body>
