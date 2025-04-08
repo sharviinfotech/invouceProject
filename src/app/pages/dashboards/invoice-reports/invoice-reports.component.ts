@@ -9058,7 +9058,7 @@ color: white;
             <tbody>
            <tr>
             <td>1</td>
-            <td class="bold">CHARGES</td>
+            <td class="bold"><b>CHARGES</b></td>
             <td class="text-right"></td>
             <td class="text-right"></td>
             <td></td>
@@ -9078,12 +9078,12 @@ color: white;
               <td></td>
               <td></td>
               <td></td>
-                <td  class="text-right bold" style="background-color: rgb(115 124 167);color:white ">TOTAL</td>
+                <td  class="text-right bold" style="background-color: rgb(115 124 167);color:white "><b>TOTAL</b></td>
                 <td class="text-right bold"  style="background-color: rgb(115 124 167);color:white">${invoiceItem.subtotal}</td>
               </tr>
               <tr>
             <td>2</td>
-                  <td class="bold">TAXES:</td>
+                  <td class="bold"><b>TAXES:</b></td>
                   <td></td>
                   <td></td>
                   <td></td>
@@ -9103,11 +9103,11 @@ color: white;
               <td></td>
               <td></td>
               <td></td>
-                <td class="text-right bold"  style="background-color: rgb(115 124 167);color:white"">GRAND TOTAL</td>
+                <td class="text-right bold"  style="background-color: rgb(115 124 167);color:white""><b>GRAND TOTAL</b></td>
                 <td class="text-right bold"  style="background-color: rgb(115 124 167);color:white">${invoiceItem.grandTotal ? invoiceItem.grandTotal.toFixed(0) : '0.00'}</td>
               </tr>
                <tr >
-                  <td colspan="5" class="bold" style="padding-top:3px !important"> ${invoiceItem.amountInWords}</td>
+                  <td colspan="5" class="bold" style="padding-top:3px !important"> <b>${invoiceItem.amountInWords}</b></td>
                </tr>
             </tbody>
           </table>
