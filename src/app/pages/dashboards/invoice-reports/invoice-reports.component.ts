@@ -1068,26 +1068,25 @@ font-family: Arial, sans-serif;
   .table-bordered {
     border-collapse: collapse;
     width: 100%;
-    margin-bottom: 4px;
+    margin-bottom: 10px;
     // background-color:rgb(193, 205, 217); /* Added background color */
   }
    .table-bordered th {
-      border: 0px solid white;
-  padding: 5px;
-   background-color:rgb(115 124 167) !important;
+      border: 1px solid white;
+  padding: 2px;
+  background: rgb(88 98 145) !important;
   color: white;
   }
  
   .table-bordered td {
-  padding: 3px;
+  padding: 2px;
   }
   .booking-header bold{
- 
-  background-color: rgb(88, 98, 145);
+  font-size: 13px;
+  background-color: rgb(91, 85, 130);
   color: white;
-  margin-bottom:4px;
-  
   }
+ 
    .rcb{
         background-image: url('${this.backgroundlight}') !important;
         background-size: 65%!important;
