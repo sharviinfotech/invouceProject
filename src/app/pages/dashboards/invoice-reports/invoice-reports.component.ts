@@ -628,11 +628,11 @@ selectInvoice(invoice: any) {
                 console.log('invoiceItem.proformaCardHeaderId',invoiceItem.proformaCardHeaderId)
                 // Check conditions before calling print functions
                 if (invoiceItem.proformaCardHeaderId === "PQ") {
-                  this.Finalprofoma1_29_03_2025(invoiceItem);
+                  this.final_Profarma_12_04_2025(invoiceItem);
                   // this.ProfomaYellow(invoiceItem)
                   // Additional checks if needed
                 }else if (invoiceItem.proformaCardHeaderId === "TAX") {
-                  this.generateInvoiceHTMLTax2(invoiceItem);
+                  this.final_tax_12_04_2025(invoiceItem);
                 } else {
                   Swal.fire({
                     text: "No valid invoice type selected for printing.",
@@ -655,11 +655,11 @@ selectInvoice(invoice: any) {
               console.log('invoiceItem.proformaCardHeaderId',invoiceItem.proformaCardHeaderId)
               // Check conditions before calling print functions
               if (invoiceItem.proformaCardHeaderId === "PQ") {
-                this.Finalprofoma1_29_03_2025(invoiceItem);
+                this.final_Profarma_12_04_2025(invoiceItem);
                 // this.ProfomaYellow(invoiceItem)
                 // Additional checks if needed
               }else if (invoiceItem.proformaCardHeaderId === "TAX") {
-                this.generateInvoiceHTMLTax2(invoiceItem);
+                this.final_tax_12_04_2025(invoiceItem);
               } else {
                 Swal.fire({
                   text: "No valid invoice type selected for printing.",
@@ -673,7 +673,7 @@ selectInvoice(invoice: any) {
     
   }
 }
-Finalprofoma1_29_03_2025(invoiceItem: InvoiceItem) {
+final_Profarma_12_04_2025(invoiceItem: InvoiceItem) {
   this.leftlogo = this.imageService.rrGlobalImageYellow();
   // this.logoUrl = this.imageService.getBase64FlightWorldmapLogo();
   this.logoUrl = this.imageService.getBase64FlightNewLogo();
@@ -1074,7 +1074,7 @@ font-family: Arial, sans-serif;
    .table-bordered th {
       border: 1px solid white;
   padding: 2px;
-  background: rgb(88 98 145) !important;
+  background: rgb(179 187 227) !important;
   color: white;
   }
  
@@ -1250,8 +1250,8 @@ font-family: Arial, sans-serif;
               <td></td>
               <td></td>
               <td></td>
-                <td  class="text-right bold" style="background-color: rgb(115 124 167);color:white ">TOTAL</td>
-                <td class="text-right bold"  style="background-color: rgb(115 124 167);color:white">${invoiceItem.subtotal}</td>
+                <td  class="text-right bold" style="background-color: rgb(179 187 227);color:white ">TOTAL</td>
+                <td class="text-right bold"  style="background-color: rgb(179 187 227);color:white">${invoiceItem.subtotal}</td>
               </tr>
               <tr>
             <td>2</td>
@@ -1275,8 +1275,8 @@ font-family: Arial, sans-serif;
               <td></td>
               <td></td>
               <td></td>
-                <td class="text-right bold"  style="background-color: rgb(115 124 167);color:white"">GRAND TOTAL</td>
-                <td class="text-right bold"  style="background-color: rgb(115 124 167);color:white">${invoiceItem.grandTotal ? invoiceItem.grandTotal.toFixed(0) : '0.00'}</td>
+                <td class="text-right bold"  style="background-color: rgb(179 187 227);color:white"">GRAND TOTAL</td>
+                <td class="text-right bold"  style="background-color: rgb(179 187 227);color:white">${invoiceItem.grandTotal ? invoiceItem.grandTotal.toFixed(0) : '0.00'}</td>
               </tr>
                <tr >
                   <td colspan="5" class="bold" style="padding-top:3px !important"> ${invoiceItem.amountInWords}</td>
@@ -1530,10 +1530,16 @@ font-family: Arial, sans-serif;
   <li><strong>Personalized Services:</strong> Concierge, ground transport, and more</li>
   <li><strong>Global Reach:</strong> Access to top destinations worldwide</li>
 </ul>
-
-
+<div style="text-align: center;font-size:15px ;font-weight:bold;border-top:1px solid #ccc;padding-top:10px">
+ RITHWIK GREEN POWER & AVIATION PRIVATE LIMITED <br>
+  Contact <br>
+   Mr. Srinivas +91 7337276769
 
 </div>
+</div>
+
+
+
     </div>
 </body>
 </html>
@@ -8682,7 +8688,7 @@ background-image: linear-gradient(to right, #7e22ce, #2563eb);
       }, 500);
     }
   };
-  generateInvoiceHTMLTax2(invoiceItem: InvoiceItem) {
+  final_tax_12_04_2025(invoiceItem: InvoiceItem) {
  
     this.leftlogo = this.imageService.rrGlobalImageYellow();
     // this.logoUrl = this.imageService.getBase64FlightWorldmapLogo();
@@ -8988,9 +8994,9 @@ color: white;
     <div class="header-section">
    <div class="logo left-logo"><img src="${this.leftlogo}" alt="Invoice Logo" style="height: 90px; width: 170px;"></div>
 <div class="logo left-logo" style="font-family: 'Times New Roman', serif; font-size: 20px; font-weight: bold; width: 300px; text-transform: uppercase;">
-    <p style="margin: 0; font-style: italic; color: #2a2a2a; text-align: center;">
-        RITHWIK GREEN POWER <br>
-        AVIATION <br>
+     <p style="margin: 0;  color: #2a2a2a; text-align: center;">
+        RITHWIK   <br>
+        GREEN POWER  & AVIATION <br>
         PRIVATE LIMITED
     </p>
 </div>
@@ -9078,8 +9084,8 @@ color: white;
               <td></td>
               <td></td>
               <td></td>
-                <td  class="text-right bold" style="background-color: rgb(115 124 167);color:white "><b>TOTAL</b></td>
-                <td class="text-right bold"  style="background-color: rgb(115 124 167);color:white">${invoiceItem.subtotal}</td>
+                <td  class="text-right bold" style="background-color: rgb(179 187 227);color:white "><b>TOTAL</b></td>
+                <td class="text-right bold"  style="background-color: rgb(179 187 227);color:white">${invoiceItem.subtotal}</td>
               </tr>
               <tr>
             <td>2</td>
@@ -9103,8 +9109,8 @@ color: white;
               <td></td>
               <td></td>
               <td></td>
-                <td class="text-right bold"  style="background-color: rgb(115 124 167);color:white""><b>GRAND TOTAL</b></td>
-                <td class="text-right bold"  style="background-color: rgb(115 124 167);color:white">${invoiceItem.grandTotal ? invoiceItem.grandTotal.toFixed(0) : '0.00'}</td>
+                <td class="text-right bold"  style="background-color: rgb(179 187 227);color:white""><b>GRAND TOTAL</b></td>
+                <td class="text-right bold"  style="background-color: rgb(179 187 227);color:white">${invoiceItem.grandTotal ? invoiceItem.grandTotal.toFixed(0) : '0.00'}</td>
               </tr>
                <tr >
                   <td colspan="5" class="bold" style="padding-top:3px !important"> <b>${invoiceItem.amountInWords}</b></td>
