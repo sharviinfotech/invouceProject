@@ -30,9 +30,10 @@ export class Login2Component implements OnInit {
   // fieldTextType !: boolean;
   
   images = [
-    // 'assets/images/worldMapImage.png',
+    
     // 'assets/images/AircraftFlight.png',
     'assets/images/Flight38.jpeg',
+    'assets/images/flightwhite.jpeg',
      'assets/images/flightAndSky.jpg',
      'assets/images/flight_ground.jpg',
     //  'assets/images/fightinground.jpg',
