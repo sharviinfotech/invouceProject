@@ -1075,7 +1075,7 @@ font-family: Arial, sans-serif;
       border: 1px solid white;
   padding: 2px;
   background: rgb(179 187 227) !important;
-  color: white;
+  color: black;
   }
  
   .table-bordered td {
@@ -1145,7 +1145,7 @@ font-family: Arial, sans-serif;
 
 <div class="invoice-container">
   <div class="header-section">
-   <div class="logo left-logo"><img src="${this.leftlogo}" alt="Invoice Logo" style="height: 90px; width: 170px;"></div>
+   <div class="logo left-logo"><img src="${this.rightLogo}" alt="Invoice Logo" style="height: 90px; width: 170px;"></div>
 <div class="logo left-logo" style="font-family: 'Times New Roman', serif; font-size: 23px; font-weight: 700; width: 400px; text-transform: uppercase;">
     <p style="margin: 0;  color: #2a2a2a; text-align: center;">
         RITHWIK   <br>
@@ -1250,8 +1250,8 @@ font-family: Arial, sans-serif;
               <td></td>
               <td></td>
               <td></td>
-                <td  class="text-right bold" style="background-color: rgb(179 187 227);color:white ">TOTAL</td>
-                <td class="text-right bold"  style="background-color: rgb(179 187 227);color:white">${invoiceItem.subtotal}</td>
+                <td  class="text-right bold" style="background-color: rgb(179 187 227);color:black ">TOTAL</td>
+                <td class="text-right bold"  style="background-color: rgb(179 187 227);color:black">${invoiceItem.subtotal}</td>
               </tr>
               <tr>
             <td>2</td>
@@ -1275,8 +1275,8 @@ font-family: Arial, sans-serif;
               <td></td>
               <td></td>
               <td></td>
-                <td class="text-right bold"  style="background-color: rgb(179 187 227);color:white"">GRAND TOTAL</td>
-                <td class="text-right bold"  style="background-color: rgb(179 187 227);color:white">${invoiceItem.grandTotal ? invoiceItem.grandTotal.toFixed(0) : '0.00'}</td>
+                <td class="text-right bold"  style="background-color: rgb(179 187 227);color:black"">GRAND TOTAL</td>
+                <td class="text-right bold"  style="background-color: rgb(179 187 227);color:black">${invoiceItem.grandTotal ? invoiceItem.grandTotal.toFixed(0) : '0.00'}</td>
               </tr>
                <tr >
                   <td colspan="5" class="bold" style="padding-top:3px !important"> ${invoiceItem.amountInWords}</td>
@@ -8762,7 +8762,7 @@ background-image: linear-gradient(to right, #7e22ce, #2563eb);
       border: 1px solid white;
   padding: 2px;
 background: rgb(179 187 227) !important;
-  color: white;
+  color: black;
   }
  
   .table-bordered td {
@@ -8892,7 +8892,7 @@ background: rgb(179 187 227) !important;
       border: 1px solid white;
   padding: 2px;
 background: rgb(179 187 227) !important;
-color: white;
+color: black;
   }
  
   .table-bordered td {
@@ -8992,7 +8992,7 @@ color: white;
         <!-- Header Section -->
         
     <div class="header-section">
-   <div class="logo left-logo"><img src="${this.leftlogo}" alt="Invoice Logo" style="height: 90px; width: 170px;"></div>
+   <div class="logo left-logo"><img src="${this.rightLogo}" alt="Invoice Logo" style="height: 90px; width: 170px;"></div>
 <div class="logo left-logo" style="font-family: 'Times New Roman', serif; font-size: 20px; font-weight: bold; width: 300px; text-transform: uppercase;">
      <p style="margin: 0;  color: #2a2a2a; text-align: center;">
         RITHWIK   <br>
@@ -9054,11 +9054,11 @@ color: white;
      <table class="table-bordered">
             <thead>
               <tr>
-                <th class="booking-header bold" style="font-size: 12px;">S.NO</th>
-                <th class="booking-header bold" style="font-size: 12px;">DESCRIPATION</th>
-                <th class="booking-header bold" style="font-size: 12px;">UNITS (Hrs.)</th>
-                <th class="booking-header bold" style="font-size: 12px;">RATE(INR)</th>
-                <th class="booking-header bold" style="font-size: 12px;">AMOUNT(INR)</th>
+                <th  style="font-size: 12px;color:black !important">S.NO</th>
+                <th  style="font-size: 12px;color:black !important">DESCRIPATION</th>
+                <th  style="font-size: 12px;color:black !important">UNITS (Hrs.)</th>
+                <th  style="font-size: 12px;color:black !important">RATE(INR)</th>
+                <th  style="font-size: 12px;color:black !important">AMOUNT(INR)</th>
               </tr>
             </thead>
             <tbody>
@@ -9084,8 +9084,8 @@ color: white;
               <td></td>
               <td></td>
               <td></td>
-                <td  class="text-right bold" style="background-color: rgb(179 187 227);color:white "><b>TOTAL</b></td>
-                <td class="text-right bold"  style="background-color: rgb(179 187 227);color:white">${invoiceItem.subtotal}</td>
+                <td  class="text-right bold" style="background-color: rgb(179 187 227);color:black "><b>TOTAL</b></td>
+                <td class="text-right bold"  style="background-color: rgb(179 187 227);color:black">${invoiceItem.subtotal}</td>
               </tr>
               <tr>
             <td>2</td>
@@ -9109,8 +9109,8 @@ color: white;
               <td></td>
               <td></td>
               <td></td>
-                <td class="text-right bold"  style="background-color: rgb(179 187 227);color:white""><b>GRAND TOTAL</b></td>
-                <td class="text-right bold"  style="background-color: rgb(179 187 227);color:white">${invoiceItem.grandTotal ? invoiceItem.grandTotal.toFixed(0) : '0.00'}</td>
+                <td class="text-right bold"  style="background-color: rgb(179 187 227);color:black""><b>GRAND TOTAL</b></td>
+                <td class="text-right bold"  style="background-color: rgb(179 187 227);color:black">${invoiceItem.grandTotal ? invoiceItem.grandTotal.toFixed(0) : '0.00'}</td>
               </tr>
                <tr >
                   <td colspan="5" class="bold" style="padding-top:3px !important"> <b>${invoiceItem.amountInWords}</b></td>

@@ -81,7 +81,7 @@ export class InvoiceComponent implements OnInit {
     this.proformaCardHeaderId = type
     this.selectedPQUniqueId = 0
     if(this.proformaCardHeaderId == "PQ"){
-     this.proformaCardHeaderName = "PROFORMA FLYING QUOTATION"
+     this.proformaCardHeaderName = "PROFORMA INVOICE"
     }else{
       this.proformaCardHeaderName = "TAX INVOICE"
 
