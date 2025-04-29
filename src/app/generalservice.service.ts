@@ -97,7 +97,10 @@ getLoginResponse(){
     return this.http.post(environment.baseUrl+'invoice/resetPassword',obj);
  
   }
- 
+  UpdateCharges(data){
+    return this.http.post(environment.baseUrl+'invoice/UpdateCharges',data)
+
+  }
   verifyedAndUpdated(obj){
     return this.http.post(environment.baseUrl+'invoice/verifyedAndUpdated',obj);
  
