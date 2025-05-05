@@ -1241,8 +1241,8 @@ font-family: Arial, sans-serif;
                    <td class="text-center" style="font-size:12px;"></td>
                   <td style="font-size:12px;">${charge.description}</td>
                   <td class="text-center" style="font-size:12px;">${charge.units ? charge.units : ''}</td>
-                  <td class="text-right" style="font-size:12px;">${Number(charge.rate).toLocaleString()}</td>
-                  <td class="text-right" style="font-size:12px;">${Number(charge.amount).toLocaleString()}</td>
+                  <td class="text-right" style="font-size:12px;">${Number(charge.rate).toFixed(2).toLocaleString()}</td>
+                  <td class="text-right" style="font-size:12px;">${Number(charge.amount).toFixed(2).toLocaleString()}</td>
                 </tr>
               `).join('')}
              
@@ -1251,7 +1251,7 @@ font-family: Arial, sans-serif;
               <td></td>
               <td></td>
                 <td  class="text-right bold" style="background-color: rgb(179 187 227);color:black ">TOTAL</td>
-                <td class="text-right bold"  style="background-color: rgb(179 187 227);color:black">${Number(invoiceItem.subtotal).toLocaleString()}
+                <td class="text-right bold"  style="background-color: rgb(179 187 227);color:black">${Number(invoiceItem.subtotal).toFixed(2).toLocaleString()}
 </td>
               </tr>
               <tr>
@@ -1268,7 +1268,7 @@ font-family: Arial, sans-serif;
                   <td style="font-size:12px;">${tax.description}</td>
                   <td style="font-size:12px;"></td>
                   <td style="font-size:12px;"></td>
-                  <td class="text-right" style="font-size:10px;">${Number(tax.amount).toLocaleString()}</td>
+                  <td class="text-right" style="font-size:10px;">${Number(tax.amount).toFixed(2).toLocaleString()}</td>
                 </tr>
               `).join('')}
  
@@ -1277,7 +1277,7 @@ font-family: Arial, sans-serif;
               <td></td>
               <td></td>
                 <td class="text-right bold"  style="background-color: rgb(179 187 227);color:black"">GRAND TOTAL</td>
-                <td class="text-right bold"  style="background-color: rgb(179 187 227);color:black">${invoiceItem.grandTotal ? Number(invoiceItem.grandTotal).toLocaleString() : '0.00'}</td>
+                <td class="text-right bold"  style="background-color: rgb(179 187 227);color:black">${invoiceItem.grandTotal ? Number(invoiceItem.grandTotal).toFixed(2).toLocaleString() : '0.00'}</td>
               </tr>
                <tr >
                   <td colspan="5" class="bold" style="padding-top:3px !important"> ${invoiceItem.amountInWords}</td>
@@ -9094,8 +9094,8 @@ color: black;
                    <td class="text-center" style="font-size:12px;"></td>
                   <td style="font-size:12px;">${charge.description}</td>
                   <td class="text-center" style="font-size:12px; text-align:center;">${charge.units ? charge.units : ''}</td>
-                  <td class="text-right" style="font-size:12px;text-align:right;">${Number(charge.rate).toLocaleString()}</td>
-                  <td class="text-right" style="font-size:12px;text-align:right;">${Number(charge.amount).toLocaleString()}</td>
+                  <td class="text-right" style="font-size:12px;text-align:right;">${Number(charge.rate).toFixed(2).toLocaleString()}</td>
+                  <td class="text-right" style="font-size:12px;text-align:right;">${Number(charge.amount).toFixed(2).toLocaleString()}</td>
                 </tr>
               `).join('')}
              
@@ -9104,7 +9104,7 @@ color: black;
               <td></td>
               <td></td>
                 <td  class="text-right bold" style="background-color: rgb(179 187 227);color:black; text-align:right; "><b>TOTAL</b></td>
-                <td class="text-right bold"  style="background-color: rgb(179 187 227);color:black;text-align:right;">${Number(invoiceItem.subtotal).toLocaleString()}
+                <td class="text-right bold"  style="background-color: rgb(179 187 227);color:black;text-align:right;">${Number(invoiceItem.subtotal).toFixed(2).toLocaleString()}
 </td>
               </tr>
               <tr>
@@ -9121,7 +9121,7 @@ color: black;
                   <td style="font-size:12px;">${tax.description}</td>
                   <td style="font-size:12px;"></td>
                   <td style="font-size:12px;"></td>
-                  <td class="text-right" style="font-size:10px; text-align:right;">${Number(tax.amount).toLocaleString()}</td>
+                  <td class="text-right" style="font-size:10px; text-align:right;">${Number(tax.amount).toFixed(2).toLocaleString()}</td>
                 </tr>
               `).join('')}
  
@@ -9130,7 +9130,7 @@ color: black;
               <td></td>
               <td></td>
                 <td class="text-right bold"  style="background-color: rgb(179 187 227);color:black; text-align:right;"><b>GRAND TOTAL</b></td>
-                <td class="text-right bold"  style="background-color: rgb(179 187 227);color:black; text-align:right;">${invoiceItem.grandTotal ? Number(invoiceItem.grandTotal).toLocaleString() : '0.00'}</td>
+                <td class="text-right bold"  style="background-color: rgb(179 187 227);color:black; text-align:right;">${invoiceItem.grandTotal ? Number(invoiceItem.grandTotal).toFixed(2).toLocaleString() : '0.00'}</td>
               </tr>
                <tr >
                   <td colspan="5" class="bold" style="padding-top:3px !important"> <b>${invoiceItem.amountInWords}</b></td>
