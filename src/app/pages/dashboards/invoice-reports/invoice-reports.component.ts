@@ -1200,7 +1200,7 @@ font-family: Arial, sans-serif;
         <td style="padding: 3px; vertical-align: top;font-size:13px;">: ${invoiceItem.header.ProformaTypeOfAircraft}</td>
       </tr>
       <tr>
-        <td style="padding: 3px; vertical-align: top;font-size:13px;"><strong>Seating Capacity</strong></td>
+        <td style="padding: 3px; vertical-align: top;font-size:13px;"><strong>SEATING CAPACITY</strong></td>
         <td style="padding: 3px; vertical-align: top;font-size:13px;">: ${invoiceItem.header.ProformaSeatingCapasity}</td>
       </tr>
     </table>
@@ -1241,8 +1241,8 @@ font-family: Arial, sans-serif;
                    <td class="text-center" style="font-size:12px;"></td>
                   <td style="font-size:12px;">${charge.description}</td>
                   <td class="text-center" style="font-size:12px;">${charge.units ? charge.units : ''}</td>
-                  <td class="text-right" style="font-size:12px;">${charge.rate}</td>
-                  <td class="text-right" style="font-size:12px;">${charge.amount}</td>
+                  <td class="text-right" style="font-size:12px;">${Number(charge.rate).toLocaleString()}</td>
+                  <td class="text-right" style="font-size:12px;">${Number(charge.amount).toLocaleString()}</td>
                 </tr>
               `).join('')}
              
@@ -1251,7 +1251,8 @@ font-family: Arial, sans-serif;
               <td></td>
               <td></td>
                 <td  class="text-right bold" style="background-color: rgb(179 187 227);color:black ">TOTAL</td>
-                <td class="text-right bold"  style="background-color: rgb(179 187 227);color:black">${invoiceItem.subtotal}</td>
+                <td class="text-right bold"  style="background-color: rgb(179 187 227);color:black">${Number(invoiceItem.subtotal).toLocaleString()}
+</td>
               </tr>
               <tr>
             <td>2</td>
@@ -1267,7 +1268,7 @@ font-family: Arial, sans-serif;
                   <td style="font-size:12px;">${tax.description}</td>
                   <td style="font-size:12px;"></td>
                   <td style="font-size:12px;"></td>
-                  <td class="text-right" style="font-size:10px;">${tax.amount}</td>
+                  <td class="text-right" style="font-size:10px;">${Number(tax.amount).toLocaleString()}</td>
                 </tr>
               `).join('')}
  
@@ -1276,7 +1277,7 @@ font-family: Arial, sans-serif;
               <td></td>
               <td></td>
                 <td class="text-right bold"  style="background-color: rgb(179 187 227);color:black"">GRAND TOTAL</td>
-                <td class="text-right bold"  style="background-color: rgb(179 187 227);color:black">${invoiceItem.grandTotal ? invoiceItem.grandTotal.toFixed(0) : '0.00'}</td>
+                <td class="text-right bold"  style="background-color: rgb(179 187 227);color:black">${invoiceItem.grandTotal ? Number(invoiceItem.grandTotal).toLocaleString() : '0.00'}</td>
               </tr>
                <tr >
                   <td colspan="5" class="bold" style="padding-top:3px !important"> ${invoiceItem.amountInWords}</td>
@@ -8705,7 +8706,7 @@ background-image: linear-gradient(to right, #7e22ce, #2563eb);
 <head>
    
     <style>
-        body { font-family: Arial, sans-serif; margin: 0; padding: 20px; }
+        body { font-family: Arial, sans-serif; margin: 0; padding: 0px; }
         .invoice-container1 { width: 80%; margin: auto; background-color: white; padding: 20px; border: 1px solid #ddd; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); box-sizing: border-box; }
         
            .header-section {
@@ -8718,22 +8719,28 @@ background-image: linear-gradient(to right, #7e22ce, #2563eb);
       background-color: rgb(181, 179, 200);
       font-size: 15px;
       color:white;
-      padding: 8px;
+      padding: 5px;
       text-align: center;
       font-weight: bold;
     }
+      .back{
+           background-image: url('${this.backgroundlight}') !important;
+        background-size: 80% !important;
+        background-position: center !important;
+        background-repeat: no-repeat !important;
+       }
       /* Booking Details Container */
 .billing-shipping-container {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 25px;
+            
             gap: 10px;
         }
 
         .billing-box, .shipping-box {
             width: 48%;
             border: 1px solid #ddd;
-            padding: 20px;
+            padding: 5px;
             border-radius: 6px;
           
         }
@@ -8741,7 +8748,7 @@ background-image: linear-gradient(to right, #7e22ce, #2563eb);
         .billing-header, .shipping-header {
            
           
-            padding: 10px;
+            padding: 5px;
             border-radius: 4px 4px 0 0;
             margin-bottom: 15px;
             font-weight: 600;
@@ -8749,7 +8756,7 @@ background-image: linear-gradient(to right, #7e22ce, #2563eb);
         }
 
         .billing-content p, .shipping-content p {
-            margin: 8px 0;
+            margin: px 0;
             line-height: 1.6;
         }
         .table-bordered {
@@ -8787,7 +8794,7 @@ background: rgb(179 187 227) !important;
 
         .booking-details {
             border: 1px solid #ddd;
-            padding: 20px;
+            padding: 10px;
             border-radius: 6px;
             margin-bottom: 30px;
             background-color: #f9f9f9;
@@ -8796,15 +8803,15 @@ background: rgb(179 187 227) !important;
         .booking-header {
            
            
-            padding: 10px;
+            padding: 5px;
             border-radius: 4px 4px 0 0;
-            margin-bottom: 15px;
+            margin-bottom: 5px;
             font-weight: 600;
             font-size: 1.1em;
         }
 
         .booking-data div {
-            margin: 8px 0;
+            margin: 5px 0;
             line-height: 1.6;
         }
         /* Footer Section */
@@ -8815,8 +8822,16 @@ background: rgb(179 187 227) !important;
 
         /* Print Media Adjustments */
        @media print {
-    body { font-family: Arial, sans-serif; margin: 0; padding: 20px; }
-        .invoice-container1 { width: 80%; margin: auto; background-color: white; padding: 20px; border: 1px solid #ddd; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);  }
+   body {
+            font-family: Arial, sans-serif;
+            margin: 0px;
+            padding: 0px;
+            background-color: white;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+         
+          }
+        .invoice-container1 { width: 80%; margin: auto; background-color: white; padding: 10px; border: 1px solid #ddd; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);  }
         .invoice-container1 { width: 99%; margin: auto; background-color: white; padding: 10px; border: 1px solid #ddd; }
            .header-section {
             display: flex;
@@ -8834,6 +8849,10 @@ background: rgb(179 187 227) !important;
             justify-content: space-between;
             align-items: center;
         }
+              @page {
+        size: A4;
+        margin: 10mm;
+    }
  
 
 .header-section .logo {
@@ -8864,28 +8883,28 @@ background: rgb(179 187 227) !important;
     }
 
     .table-bordered th, .table-bordered td {
-        padding: 8px;
+        padding: 3px;
         font-size: 11px;
     }
   .billing-shipping-container {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 25px;
+            margin-bottom: 3px;
             gap: 10px;
         }
     .billing-box, .shipping-box {
         width: 48%;
-        padding: 10px;
+        padding: 5px;
     }
 
     .booking-header, .billing-header, .shipping-header {
-        padding: 6px;
+        padding: 4px;
         font-size: 14px;
     }
         .table-bordered {
     border-collapse: collapse;
     width: 100%;
-    margin-bottom: 10px;
+    margin-bottom: 5px;
     // background-color:rgb(193, 205, 217); /* Added background color */
   }
    .table-bordered th {
@@ -8953,13 +8972,13 @@ color: black;
     }
 
     .table-bordered th, .table-bordered td {
-        padding: 6px;
+        padding: 5px;
         font-size: 10px;
     }
 
     .billing-box, .shipping-box {
         width: 48%;
-        padding: 8px;
+        padding: 5px;
     }
 
     .booking-header, .billing-header, .shipping-header {
@@ -8968,7 +8987,7 @@ color: black;
     }
 
     .footer {
-        margin-top: 10px;
+       
         justify-content: end;
     }
 
@@ -8980,7 +8999,7 @@ color: black;
         margin: 0px;
         }
         .booking-data{
-            padding: 5px;
+            padding: 2px;
         margin: 0px;
         }
 }
@@ -9074,9 +9093,9 @@ color: black;
                  
                    <td class="text-center" style="font-size:12px;"></td>
                   <td style="font-size:12px;">${charge.description}</td>
-                  <td class="text-center" style="font-size:12px;">${charge.units ? charge.units : ''}</td>
-                  <td class="text-right" style="font-size:12px;">${charge.rate}</td>
-                  <td class="text-right" style="font-size:12px;">${charge.amount}</td>
+                  <td class="text-center" style="font-size:12px; text-align:center;">${charge.units ? charge.units : ''}</td>
+                  <td class="text-right" style="font-size:12px;text-align:right;">${Number(charge.rate).toLocaleString()}</td>
+                  <td class="text-right" style="font-size:12px;text-align:right;">${Number(charge.amount).toLocaleString()}</td>
                 </tr>
               `).join('')}
              
@@ -9084,8 +9103,9 @@ color: black;
               <td></td>
               <td></td>
               <td></td>
-                <td  class="text-right bold" style="background-color: rgb(179 187 227);color:black "><b>TOTAL</b></td>
-                <td class="text-right bold"  style="background-color: rgb(179 187 227);color:black">${invoiceItem.subtotal}</td>
+                <td  class="text-right bold" style="background-color: rgb(179 187 227);color:black; text-align:right; "><b>TOTAL</b></td>
+                <td class="text-right bold"  style="background-color: rgb(179 187 227);color:black;text-align:right;">${Number(invoiceItem.subtotal).toLocaleString()}
+</td>
               </tr>
               <tr>
             <td>2</td>
@@ -9101,7 +9121,7 @@ color: black;
                   <td style="font-size:12px;">${tax.description}</td>
                   <td style="font-size:12px;"></td>
                   <td style="font-size:12px;"></td>
-                  <td class="text-right" style="font-size:10px;">${tax.amount}</td>
+                  <td class="text-right" style="font-size:10px; text-align:right;">${Number(tax.amount).toLocaleString()}</td>
                 </tr>
               `).join('')}
  
@@ -9109,8 +9129,8 @@ color: black;
               <td></td>
               <td></td>
               <td></td>
-                <td class="text-right bold"  style="background-color: rgb(179 187 227);color:black""><b>GRAND TOTAL</b></td>
-                <td class="text-right bold"  style="background-color: rgb(179 187 227);color:black">${invoiceItem.grandTotal ? invoiceItem.grandTotal.toFixed(0) : '0.00'}</td>
+                <td class="text-right bold"  style="background-color: rgb(179 187 227);color:black; text-align:right;"><b>GRAND TOTAL</b></td>
+                <td class="text-right bold"  style="background-color: rgb(179 187 227);color:black; text-align:right;">${invoiceItem.grandTotal ? Number(invoiceItem.grandTotal).toLocaleString() : '0.00'}</td>
               </tr>
                <tr >
                   <td colspan="5" class="bold" style="padding-top:3px !important"> <b>${invoiceItem.amountInWords}</b></td>
@@ -9152,6 +9172,9 @@ color: black;
         </div>
         </div>
     </div>
+    </div>
+     <p style="text-align: center; font-size:12px;">Plot No: 1308-A,   Road No; 65,   Jubilee Hills,  Hyderabad,  Telangana -5000333</p>
+
 </body>
 </html>
  
