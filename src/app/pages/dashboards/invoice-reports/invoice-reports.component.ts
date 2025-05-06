@@ -9104,7 +9104,7 @@ color: black;
               <td></td>
               <td></td>
                 <td  class="text-right bold" style="background-color: rgb(179 187 227);color:black; text-align:right; "><b>TOTAL</b></td>
-                <td class="text-right bold"  style="background-color: rgb(179 187 227);color:black;text-align:right;">${Number(invoiceItem.subtotal).toFixed(2).toLocaleString()}
+                <td class="text-right bold"  style="background-color: rgb(179 187 227);color:black;text-align:right;"><b>${Number(invoiceItem.subtotal).toFixed(2).toLocaleString()}</b>
 </td>
               </tr>
               <tr>
@@ -9130,7 +9130,7 @@ color: black;
               <td></td>
               <td></td>
                 <td class="text-right bold"  style="background-color: rgb(179 187 227);color:black; text-align:right;"><b>GRAND TOTAL</b></td>
-                <td class="text-right bold"  style="background-color: rgb(179 187 227);color:black; text-align:right;">${invoiceItem.grandTotal ? Number(invoiceItem.grandTotal).toFixed(2).toLocaleString() : '0.00'}</td>
+                <td class="text-right bold"  style="background-color: rgb(179 187 227);color:black; text-align:right;"><b>${invoiceItem.grandTotal ? Number(invoiceItem.grandTotal).toFixed(2).toLocaleString() : '0.00'}</b></td>
               </tr>
                <tr >
                   <td colspan="5" class="bold" style="padding-top:3px !important"> <b>${invoiceItem.amountInWords}</b></td>
