@@ -143,30 +143,32 @@
                 </div>
               </div>
               <div class="col-lg-4">
-                <div class="form-group">
-                  <label>Customer Name<span class="text-danger">*</span></label>
-                  <!-- <input type="text" formControlName="ProformaCustomerName" placeholder="" (input)="convertToUppercase($event)" > -->
-                 <ng-select
-    [items]="customerList"
-    bindLabel="customerName"
-    placeholder="Select or Add Location"
-    [multiple]="false"
-    [addTag]="true"
-    [searchable]="true"
-    formControlName="ProformaCustomerName"
-    (change)="onCustomerSelectChange($event)"
->
-</ng-select>
-                </div>
-                <div class="text-danger" style="color: red;"
-                  *ngIf="newInvoiceCreation.get('ProformaCustomerName')?.hasError('required') && newInvoiceCreation.get('ProformaCustomerName')?.touched && submited">
-                  Customer Name is required.
-                </div>
-              </div>
+  <div class="form-group">
+    <label>Customer Name<span class="text-danger">*</span></label>
+    <ng-select
+      [items]="customerList"
+      bindLabel="customerName"
+      placeholder="Select or Add Customer"
+      [multiple]="false"
+      [addTag]="true"
+      [searchable]="true"
+      formControlName="ProformaCustomerName"
+      (change)="onCustomerSelectChange($event)" 
+      (add)="onAddCustomer($event)"
+    >
+    </ng-select>
+  </div>
+  <div class="text-danger" 
+    *ngIf="newInvoiceCreation.get('ProformaCustomerName')?.hasError('required') && 
+           newInvoiceCreation.get('ProformaCustomerName')?.touched && 
+           submited">
+    Customer Name is required.
+  </div>
+</div>
               <div class="col-lg-4">
                 <div class="form-group">
                   <label>Address<span class="text-danger">*</span></label>
-                  <input type="text" formControlName="ProformaAddress" placeholder="" (input)="convertToUppercase($event)" >
+                  <input type="text" formControlName="ProformaAddress" placeholder="" (input)="capitalizeFirstLetter($event)" >
                 </div>
                 <div class="text-danger"
                   *ngIf="newInvoiceCreation.get('ProformaAddress')?.hasError('required') && newInvoiceCreation.get('ProformaAddress')?.touched && submited">
@@ -176,7 +178,7 @@
               <div class="col-lg-4">
                 <div class="form-group">
                   <label>City<span class="text-danger">*</span></label>
-                  <input type="text" formControlName="ProformaCity" placeholder="" (input)="convertToUppercase($event)" >
+                  <input type="text" formControlName="ProformaCity" placeholder="" (input)="capitalizeFirstLetter($event)" >
                 </div>
                 <div class="text-danger"
                   *ngIf="newInvoiceCreation.get('ProformaCity')?.hasError('required') && newInvoiceCreation.get('ProformaCity')?.touched && submited">
@@ -270,7 +272,7 @@
                 <div class="form-group">
                   <label>PAN Number<span class="text-danger">*</span></label>
                   <input id="ProformaPanNumber" type="text" formControlName="ProformaPan" maxlength="10"
-                    placeholder="Enter PAN Number (e.g., ABCD1234E)" (input)="convertToUppercase($event)" />
+                    placeholder="Enter PAN Number (e.g., ABCD1234E)" (input)="capitalizeFirstLetter($event)" />
                   <div
                     *ngIf="newInvoiceCreation.get('ProformaPan')?.hasError('pattern') && newInvoiceCreation.get('ProformaPan')?.touched && submited">
                     PAN number must be in the format: 4 capital letters, 4 numbers, and 1 capital letter (e.g.,
@@ -285,7 +287,7 @@
               <div class="col-lg-4">
                 <div class="form-group">
                   <label>GST No<span class="text-danger">*</span></label>
-                  <input type="text" formControlName="ProformaGstNumber" class="form-control" placeholder="" (input)="convertToUppercase($event)" >
+                  <input type="text" formControlName="ProformaGstNumber" class="form-control" placeholder="" (input)="capitalizeFirstLetter($event)" >
                 </div>
                 <div class="text-danger"
                   *ngIf="newInvoiceCreation.get('ProformaGstNumber')?.hasError('required') && newInvoiceCreation.get('ProformaGstNumber')?.touched && submited">
@@ -295,7 +297,7 @@
               <div class="col-lg-4">
                 <div class="form-group">
                   <label>Type of Aircraft<span class="text-danger">*</span></label>
-                  <input type="text" formControlName="proformatypeOfAircraft" class="form-control" placeholder="" (input)="convertToUppercase($event)" >
+                  <input type="text" formControlName="proformatypeOfAircraft" class="form-control" placeholder="" (input)="capitalizeFirstLetter($event)">
                 </div>
                 <div class="text-danger"
                   *ngIf="newInvoiceCreation.get('proformatypeOfAircraft')?.hasError('required') && newInvoiceCreation.get('proformatypeOfAircraft')?.touched && submited">
@@ -343,7 +345,7 @@
                <div class="col-lg-6">
                 <label>Start Date<span class="text-danger">*</span></label>
                 <input type="text" placeholder="Date" formControlName="startBookingDateOfJourny"
-                class="form-control form-control-sm" [bsConfig]="bsConfig" bsDatepicker  (input)="convertToUppercase($event)"/>
+                class="form-control form-control-sm" [bsConfig]="bsConfig" bsDatepicker  (input)="capitalizeFirstLetter($event)"/>
                 <div class="text-danger"
                 *ngIf="newInvoiceCreation.get('startBookingDateOfJourny')?.hasError('required') && newInvoiceCreation.get('startBookingDateOfJourny')?.touched && submited">
                 Start Date  is required.
@@ -353,7 +355,7 @@
                <div class="col-lg-6">
                 <label>End Date<span class="text-danger">*</span></label>
                 <input type="text" placeholder="Date" formControlName="endBookingDateOfJourny"
-                class="form-control form-control-sm" [bsConfig]="bsConfig" bsDatepicker  (input)="convertToUppercase($event)"/>
+                class="form-control form-control-sm" [bsConfig]="bsConfig" bsDatepicker  (input)="capitalizeFirstLetter($event)"/>
                 <div class="text-danger"
                 *ngIf="newInvoiceCreation.get('endBookingDateOfJourny')?.hasError('required') && newInvoiceCreation.get('endBookingDateOfJourny')?.touched && submited">
                 End Date  is required.
@@ -368,7 +370,7 @@
                 <label>Sector<span class="text-danger">*</span></label>
                 <!-- <input type="text" formControlName="bookingsector" class="form-control" placeholder="" (input)="convertToUppercase($event)"> -->
                 <input type="text" formControlName="bookingsector" class="form-control"
-                (input)="updateChargeItem(0, 'description', $event.target.value);convertToUppercase($event)">
+                (input)="updateChargeItem(0, 'description', $event.target.value);capitalizeFirstLetter($event)">
               </div>
               <div class="text-danger"
                 *ngIf="newInvoiceCreation.get('bookingsector')?.hasError('required') && newInvoiceCreation.get('bookingsector')?.touched && submited">
@@ -471,13 +473,13 @@
                       [disabled]="i === 0"
                       [ngModelOptions]="{standalone: true}"
                       class="description-input"
-                      (input)="calculateTotals(); convertToUppercase($event)"
+                      (input)="calculateTotals(); capitalizeFirstLetter($event)"
                   />
               </div>
           
               </td>
             <td class="text-right">
-              <input *ngIf="i === 0" type="text" [disabled]="i === 0" [(ngModel)]="item.units" [ngModelOptions]="{standalone: true}" class="units-input" (input)="calculateTotals();convertToUppercase($event)">
+              <input *ngIf="i === 0" type="text" [disabled]="i === 0" [(ngModel)]="item.units" [ngModelOptions]="{standalone: true}" class="units-input" (input)="calculateTotals();capitalizeFirstLetter($event)">
             </td>
             <td class="text-right">
               <input type="text" [(ngModel)]="item.rate" [ngModelOptions]="{standalone: true}" class="rate-input" (input)="calculateTotals();numbersOnly($event)">
@@ -554,7 +556,7 @@
               <div class="notes-section form-group">
                 <label>Notes</label>
                 <textarea formControlName="notes" class="form-control"
-                  placeholder="Notes - any relevant information not covered, additional terms and conditions" (input)="convertToUppercase($event)"></textarea>
+                  placeholder="Notes - any relevant information not covered, additional terms and conditions" (input)="capitalizeFirstLetter($event)"></textarea>
               </div>
               <!-- <div class="text-danger"
                   *ngIf="newInvoiceCreation.get('notes')?.hasError('required') && newInvoiceCreation.get('notes')?.touched && submited">
@@ -941,7 +943,7 @@
               <div class="col-lg-4">
                 <div class="form-group">
                   <label>Type of Aircraft<span class="text-danger">*</span></label>
-                  <input type="text" formControlName="proformatypeOfAircraft" class="form-control" placeholder=""  (input)="convertToUppercase($event)">
+                  <input type="text" formControlName="proformatypeOfAircraft" class="form-control" placeholder=""  (input)="capitalizeFirstLetter($event)">
                 </div>
                 <div class="text-danger" style="color: red;"
                   *ngIf="newInvoiceCreation.get('proformatypeOfAircraft')?.hasError('required') && newInvoiceCreation.get('proformatypeOfAircraft')?.touched">
@@ -981,7 +983,7 @@
                <div class="col-lg-6">
                 <label>Start Date<span class="text-danger">*</span></label>
                 <input type="text" placeholder="Date" formControlName="startBookingDateOfJourny"
-                class="form-control form-control-sm" [bsConfig]="bsConfig" bsDatepicker  (input)="convertToUppercase($event)"/>
+                class="form-control form-control-sm" [bsConfig]="bsConfig" bsDatepicker  (input)="capitalizeFirstLetter($event)"/>
                 <div class="text-danger"
                 *ngIf="newInvoiceCreation.get('startBookingDateOfJourny')?.hasError('required') && newInvoiceCreation.get('startBookingDateOfJourny')?.touched && submited">
                 Start Date  is required.
@@ -991,7 +993,7 @@
                <div class="col-lg-6">
                 <label>End Date<span class="text-danger">*</span></label>
                 <input type="text" placeholder="Date" formControlName="endBookingDateOfJourny"
-                class="form-control form-control-sm" [bsConfig]="bsConfig" bsDatepicker  (input)="convertToUppercase($event)"/>
+                class="form-control form-control-sm" [bsConfig]="bsConfig" bsDatepicker  (input)="capitalizeFirstLetter($event)"/>
                 <div class="text-danger"
                 *ngIf="newInvoiceCreation.get('endBookingDateOfJourny')?.hasError('required') && newInvoiceCreation.get('endBookingDateOfJourny')?.touched && submited">
                 End Date  is required.
@@ -1109,13 +1111,13 @@
                       [disabled]="i === 0"
                       [ngModelOptions]="{standalone: true}"
                       class="description-input"
-                      (input)="calculateTotals(); convertToUppercase($event)"
+                      (input)="calculateTotals(); capitalizeFirstLetter($event)"
                   />
               </div>
           
               </td>
             <td class="text-right">
-              <input *ngIf="i === 0" type="text" [disabled]="i === 0" [(ngModel)]="item.units" [ngModelOptions]="{standalone: true}" class="units-input" (input)="calculateTotals();convertToUppercase($event)">
+              <input *ngIf="i === 0" type="text" [disabled]="i === 0" [(ngModel)]="item.units" [ngModelOptions]="{standalone: true}" class="units-input" (input)="calculateTotals();capitalizeFirstLetter($event)">
             </td>
             <td class="text-right">
               <input type="text" [(ngModel)]="item.rate" [ngModelOptions]="{standalone: true}" class="rate-input" (input)="calculateTotals();numbersOnly($event)">

@@ -73,6 +73,14 @@ export class InvoiceComponent implements OnInit {
     this.isDropdownOpen = !this.isDropdownOpen;
    
   }
+  toTitleCase(str: string): string {
+  return str
+    .toLowerCase()
+    .split(' ')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
+}
+
   selectInvoiceType(type){
     this.resetAll()
     this.submited = false
@@ -81,9 +89,9 @@ export class InvoiceComponent implements OnInit {
     this.proformaCardHeaderId = type
     this.selectedPQUniqueId = 0
     if(this.proformaCardHeaderId == "PQ"){
-     this.proformaCardHeaderName = "PROFORMA INVOICE"
+     this.proformaCardHeaderName = "Profoma Invoice"
     }else{
-      this.proformaCardHeaderName = "TAX INVOICE"
+      this.proformaCardHeaderName = "Tax Invoice"
 
 
 
@@ -462,6 +470,18 @@ clearOtherCustomerFields() {
       this.calculateTotals();
     }
   }
+onAddCustomer(newTag: string) {
+  const formatted = this.toTitleCase(newTag);
+
+  // Add to list if not already present (optional duplicate check)
+  if (!this.customerList.some(c => c.customerName === formatted)) {
+    this.customerList.push({ customerName: formatted });
+  }
+
+  // Set the formatted value to the form control
+  this.newInvoiceCreation.get('ProformaCustomerName')?.setValue(formatted);
+}
+
 
 
   getAllInvoice() {
@@ -965,7 +985,7 @@ if(this.InvoiceLogo== ''|| this.InvoiceLogo == null){
 
     this.grandTotal = Math.round(this.subtotal + this.taxItems.reduce((sum, tax) => sum + (Number(tax.amount) || 0), 0));
 
-    this.amountInWords = this.numberToWordsService.convert(this.grandTotal).toUpperCase();
+this.amountInWords = this.toTitleCase(this.numberToWordsService.convert(this.grandTotal));
 
     console.log("chargeItems", this.chargeItems);
     console.log("taxItems", this.taxItems);
@@ -1358,7 +1378,19 @@ if (
   }
   convertToUppercase(event: any) {
     event.target.value = event.target.value.toUpperCase();
+    console.log("convertToUppercase",event.target.value);
   }
+  capitalizeFirstLetter(event: any) {
+    let input = event.target.value;
+    if (input.length === 0) return;
+  
+    const formatted = input.charAt(0).toUpperCase() + input.slice(1).toLowerCase();
+    event.target.value = formatted;
+  
+    // Update the FormControl value manually
+    this.newInvoiceCreation.get('proformatypeOfAircraft')?.setValue(formatted, { emitEvent: false });
+  }
+  
   
   restrictToNumbers(event: KeyboardEvent) {
     const pattern = /[0-9]/;

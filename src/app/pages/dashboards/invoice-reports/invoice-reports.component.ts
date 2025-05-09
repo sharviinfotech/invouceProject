@@ -1162,15 +1162,15 @@ font-family: Arial, sans-serif;
   <!-- First Section (Left) -->
   <div class="remittance-container" style="width: 52%; padding-top: 3px; font-size:12px;">
     <table class="remittance-table" style="border-collapse: collapse; width: 100%;">
-      <tr><td><strong>TO</strong></td></tr>
+      <tr><td><strong>To</strong></td></tr>
       <tr>
         <td style="padding: 3px; font-size:13px;">
           ${invoiceItem.header.ProformaCustomerName}<br>
           ${invoiceItem.header.ProformaAddress}<br>
           ${invoiceItem.header.ProformaCity},
           ${invoiceItem.header.ProformaPincode} <br>
-          <strong>GST NO:</strong> ${invoiceItem.header.ProformaGstNo}<br>
-          <strong>PAN NO:</strong> ${invoiceItem.header.ProformaPan}
+          <strong>Gst No:</strong> ${invoiceItem.header.ProformaGstNo}<br>
+          <strong>Pan No:</strong> ${invoiceItem.header.ProformaPan}
         </td>
       </tr>
     </table>
@@ -1180,27 +1180,27 @@ font-family: Arial, sans-serif;
   <div class="remittance-container" style="width: 46%; padding: 5px; font-size:12px;">
     <table class="remittance-table" style="border-collapse: collapse; width: 100%;">
       <tr>
-        <td style="padding: 3px; vertical-align: top; font-size:13px;"><strong>INVOICE NO</strong></td>
+        <td style="padding: 3px; vertical-align: top; font-size:13px;"><strong>Invoice No</strong></td>
         <td style="padding: 3px; vertical-align: top; font-size:13px;">: ${invoiceItem.invoiceUniqueNumber}</td>
       </tr>
       <tr>
-        <td style="padding: 3px; vertical-align: top;font-size:13px;"><strong>DATE</strong></td>
+        <td style="padding: 3px; vertical-align: top;font-size:13px;"><strong>Date</strong></td>
         <td style="padding: 3px; vertical-align: top;font-size:13px;">: ${invoiceItem.header.ProformaInvoiceDate}</td>
       </tr>
       <tr>
-        <td style="padding: 3px; vertical-align: top;font-size:13px;"><strong>PAN NO</strong></td>
+        <td style="padding: 3px; vertical-align: top;font-size:13px;"><strong>Pan No</strong></td>
         <td style="padding: 3px; vertical-align: top;font-size:13px;">: ${invoiceItem.header.ProformaPanNO}</td>
       </tr>
       <tr>
-        <td style="padding: 3px; vertical-align: top; font-size:13px;"><strong>GST NO</strong></td>
+        <td style="padding: 3px; vertical-align: top; font-size:13px;"><strong>Gst No</strong></td>
         <td style="padding: 3px; vertical-align: top;font-size:13px;">: ${invoiceItem.header.ProformaGstNumber}</td>
       </tr>
       <tr>
-        <td style="padding: 3px; vertical-align: top;font-size:13px;"><strong>TYPE OF AIRCRAFT</strong></td>
+        <td style="padding: 3px; vertical-align: top;font-size:13px;"><strong>Type Of Aircraft</strong></td>
         <td style="padding: 3px; vertical-align: top;font-size:13px;">: ${invoiceItem.header.ProformaTypeOfAircraft}</td>
       </tr>
       <tr>
-        <td style="padding: 3px; vertical-align: top;font-size:13px;"><strong>SEATING CAPACITY</strong></td>
+        <td style="padding: 3px; vertical-align: top;font-size:13px;"><strong>Seating Capacity</strong></td>
         <td style="padding: 3px; vertical-align: top;font-size:13px;">: ${invoiceItem.header.ProformaSeatingCapasity}</td>
       </tr>
     </table>
@@ -1209,28 +1209,28 @@ font-family: Arial, sans-serif;
 
   </div>
   <div class="booking-details">
-<div class="booking-header bold" style="font-size: 13px;">BOOKING  DETAILS</div>
+<div class="booking-header bold" style="font-size: 13px;">Booking  Details</div>
 <div class="booking-data single-line">
-    <div style="width:35%; text-align: center; font-size: 11px;" ><div class="bold">DATE OF JOURNEY</div> <div>03/03/25-04/03/2025</div></div>
-    <div style="width:35%; text-align: center;  font-size: 11px;" ><div class="bold">SECTOR</div> <div>${invoiceItem.header.BookingSector}</div></div>
-    <div style="width:30%; text-align: center;  font-size: 11px;" ><div class="bold">BILLING FLYING TIME</div> <div>${invoiceItem.header.BookingBillingFlyingTime}</div></div>
+    <div style="width:35%; text-align: center; font-size: 11px;" ><div class="bold">Date Of Journey</div> <div>03/03/25-04/03/2025</div></div>
+    <div style="width:35%; text-align: center;  font-size: 11px;" ><div class="bold">Sector</div> <div>${invoiceItem.header.BookingSector}</div></div>
+    <div style="width:30%; text-align: center;  font-size: 11px;" ><div class="bold">Billing Flying Time</div> <div>${invoiceItem.header.BookingBillingFlyingTime}</div></div>
 </div>
 </div>
 
   <table class="table-bordered">
             <thead>
               <tr>
-                <th class="booking-header bold" style="font-size: 12px;">S.NO</th>
-                <th class="booking-header bold" style="font-size: 12px;">DESCRIPATION</th>
-                <th class="booking-header bold" style="font-size: 12px;">UNITS (Hrs.)</th>
-                <th class="booking-header bold" style="font-size: 12px;">RATE(INR)</th>
-                <th class="booking-header bold" style="font-size: 12px;">AMOUNT(INR)</th>
+                <th class="booking-header bold" style="font-size: 12px;">S.No</th>
+                <th class="booking-header bold" style="font-size: 12px;">Descripation</th>
+                <th class="booking-header bold" style="font-size: 12px;">Units (Hrs.)</th>
+                <th class="booking-header bold" style="font-size: 12px;">Rate(Inr)</th>
+                <th class="booking-header bold" style="font-size: 12px;">Amount(Inr)</th>
               </tr>
             </thead>
             <tbody>
            <tr>
             <td>1</td>
-            <td class="bold">CHARGES</td>
+            <td class="bold">Charges</td>
             <td class="text-right"></td>
             <td class="text-right"></td>
             <td></td>
@@ -1250,13 +1250,13 @@ font-family: Arial, sans-serif;
               <td></td>
               <td></td>
               <td></td>
-                <td  class="text-right bold" style="background-color: rgb(179 187 227);color:black ">TOTAL</td>
+                <td  class="text-right bold" style="background-color: rgb(179 187 227);color:black ">Total</td>
                 <td class="text-right bold"  style="background-color: rgb(179 187 227);color:black">${Number(invoiceItem.subtotal).toFixed(2).toLocaleString()}
 </td>
               </tr>
               <tr>
             <td>2</td>
-                  <td class="bold">TAXES:</td>
+                  <td class="bold">Taxes:</td>
                   <td></td>
                   <td></td>
                   <td></td>
@@ -1276,7 +1276,7 @@ font-family: Arial, sans-serif;
               <td></td>
               <td></td>
               <td></td>
-                <td class="text-right bold"  style="background-color: rgb(179 187 227);color:black"">GRAND TOTAL</td>
+                <td class="text-right bold"  style="background-color: rgb(179 187 227);color:black"">Grand Total</td>
                 <td class="text-right bold"  style="background-color: rgb(179 187 227);color:black">${invoiceItem.grandTotal ? Number(invoiceItem.grandTotal).toFixed(2).toLocaleString() : '0.00'}</td>
               </tr>
                <tr >
@@ -1285,7 +1285,7 @@ font-family: Arial, sans-serif;
             </tbody>
           </table>
  
- <div class="booking-header bold" style="font-size:12px" >BANK DETAILS</div>
+ <div class="booking-header bold" style="font-size:12px" >Bank Details</div>
 <div class="remittance-container" style="display: flex; justify-content: center; align-items: center; width: 80%;">
     <table class="remittance-table" style="border-collapse: collapse; width: 100%;">
         <tr>
@@ -9027,38 +9027,38 @@ color: black;
       <div class = "back">
     <div class="billing-shipping-container">
         <div class="billing-box">
-            <div class="billing-header">TO</div>
+            <div class="billing-header">To</div>
             <div class="billing-content" >
                 <p>${invoiceItem.header.ProformaCustomerName}<br>
                 ${invoiceItem.header.ProformaAddress}<br>
                 ${invoiceItem.header.ProformaCity}<br>
                 ${invoiceItem.header.ProformaPincode}<br>
-                <strong>GST NO:</strong> ${invoiceItem.header.ProformaGstNo}<br>
-                <strong>PAN NO:</strong> ${invoiceItem.header.ProformaPan}</p>
+                <strong>Gst No:</strong> ${invoiceItem.header.ProformaGstNo}<br>
+                <strong>Pan No:</strong> ${invoiceItem.header.ProformaPan}</p>
             </div>
         </div>
         <div class="shipping-box">
-            <div class="shipping-header">FROM</div>
+            <div class="shipping-header">From</div>
              <div class="remittance-container" style="width: 100%; padding: 5px; margin-top:0px; font-size:12px;">
     <table class="remittance-table" style="border-collapse: collapse; width: 100%;">
       <tr>
-        <td style="padding: 3px; vertical-align: top; font-size:13px;"><strong>INVOICE NO</strong></td>
+        <td style="padding: 3px; vertical-align: top; font-size:13px;"><strong>Inovice No</strong></td>
         <td style="padding: 3px; vertical-align: top; font-size:13px;">: ${invoiceItem.invoiceUniqueNumber}</td>
       </tr>
       <tr>
-        <td style="padding: 3px; vertical-align: top;font-size:13px;"><strong>DATE</strong></td>
+        <td style="padding: 3px; vertical-align: top;font-size:13px;"><strong>Date</strong></td>
         <td style="padding: 3px; vertical-align: top;font-size:13px;">: ${invoiceItem.header.ProformaInvoiceDate}</td>
       </tr>
       <tr>
-        <td style="padding: 3px; vertical-align: top;font-size:13px;"><strong>PAN NO</strong></td>
+        <td style="padding: 3px; vertical-align: top;font-size:13px;"><strong>Pan No</strong></td>
         <td style="padding: 3px; vertical-align: top;font-size:13px;">: ${invoiceItem.header.ProformaPanNO}</td>
       </tr>
       <tr>
-        <td style="padding: 3px; vertical-align: top; font-size:13px;"><strong>GST NO</strong></td>
+        <td style="padding: 3px; vertical-align: top; font-size:13px;"><strong>Gst No</strong></td>
         <td style="padding: 3px; vertical-align: top;font-size:13px;">: ${invoiceItem.header.ProformaGstNumber}</td>
       </tr>
       <tr>
-        <td style="padding: 3px; vertical-align: top;font-size:13px;"><strong>TYPE OF AIRCRAFT</strong></td>
+        <td style="padding: 3px; vertical-align: top;font-size:13px;"><strong>Type Of Aircraft</strong></td>
         <td style="padding: 3px; vertical-align: top;font-size:13px;">: ${invoiceItem.header.ProformaTypeOfAircraft}</td>
       </tr>
       <tr>
@@ -9073,17 +9073,17 @@ color: black;
      <table class="table-bordered">
             <thead>
               <tr>
-                <th  style="font-size: 12px;color:black !important">S.NO</th>
-                <th  style="font-size: 12px;color:black !important">DESCRIPATION</th>
-                <th  style="font-size: 12px;color:black !important">UNITS (Hrs.)</th>
-                <th  style="font-size: 12px;color:black !important">RATE(INR)</th>
-                <th  style="font-size: 12px;color:black !important">AMOUNT(INR)</th>
+                <th  style="font-size: 12px;color:black !important">S.No</th>
+                <th  style="font-size: 12px;color:black !important">Descripation</th>
+                <th  style="font-size: 12px;color:black !important">Units (Hrs.)</th>
+                <th  style="font-size: 12px;color:black !important">Rate(INR)</th>
+                <th  style="font-size: 12px;color:black !important">Amount(INR)</th>
               </tr>
             </thead>
             <tbody>
            <tr>
             <td>1</td>
-            <td class="bold"><b>CHARGES</b></td>
+            <td class="bold"><b>Charges</b></td>
             <td class="text-right"></td>
             <td class="text-right"></td>
             <td></td>
@@ -9103,13 +9103,13 @@ color: black;
               <td></td>
               <td></td>
               <td></td>
-                <td  class="text-right bold" style="background-color: rgb(179 187 227);color:black; text-align:right; "><b>TOTAL</b></td>
+                <td  class="text-right bold" style="background-color: rgb(179 187 227);color:black; text-align:right; "><b>Total</b></td>
                 <td class="text-right bold"  style="background-color: rgb(179 187 227);color:black;text-align:right;"><b>${Number(invoiceItem.subtotal).toFixed(2).toLocaleString()}</b>
 </td>
               </tr>
               <tr>
             <td>2</td>
-                  <td class="bold"><b>TAXES:</b></td>
+                  <td class="bold"><b>Taxes:</b></td>
                   <td></td>
                   <td></td>
                   <td></td>
@@ -9129,7 +9129,7 @@ color: black;
               <td></td>
               <td></td>
               <td></td>
-                <td class="text-right bold"  style="background-color: rgb(179 187 227);color:black; text-align:right;"><b>GRAND TOTAL</b></td>
+                <td class="text-right bold"  style="background-color: rgb(179 187 227);color:black; text-align:right;"><b>Grand Total</b></td>
                 <td class="text-right bold"  style="background-color: rgb(179 187 227);color:black; text-align:right;"><b>${invoiceItem.grandTotal ? Number(invoiceItem.grandTotal).toFixed(2).toLocaleString() : '0.00'}</b></td>
               </tr>
                <tr >
@@ -9140,7 +9140,7 @@ color: black;
  
  <div style="border: 1px solid #ddd;">
   <div class="booking-header bold" style="font-size:12px;  background-color: #2f93b4;
-  text-align: center;">BOOKING DETAILS</div>
+  text-align: center;">Booking Details</div>
 <div class="remittance-container" style="display: flex; justify-content: center; align-items: center; width: 80%;">
     <table class="remittance-table" style="border-collapse: collapse; width: 100%;">
         <tr>
