@@ -946,7 +946,7 @@ if(this.InvoiceLogo== ''|| this.InvoiceLogo == null){
   
   updateChargeItem(index: number, field: string, value: any) {
     if (this.chargeItems.length > index) {
-      this.chargeItems[index][field] = value.toUpperCase(); // Convert to uppercase
+      this.chargeItems[index][field] = value; // Convert to uppercase
     }
     this.calculateTotals()
   }

@@ -370,7 +370,7 @@
                 <label>Sector<span class="text-danger">*</span></label>
                 <!-- <input type="text" formControlName="bookingsector" class="form-control" placeholder="" (input)="convertToUppercase($event)"> -->
                 <input type="text" formControlName="bookingsector" class="form-control"
-                (input)="updateChargeItem(0, 'description', $event.target.value);capitalizeFirstLetter($event)">
+                (input)="updateChargeItem(0, 'description', $event.target.value);">
               </div>
               <div class="text-danger"
                 *ngIf="newInvoiceCreation.get('bookingsector')?.hasError('required') && newInvoiceCreation.get('bookingsector')?.touched && submited">
@@ -400,7 +400,7 @@
               <tr>
                 <th>S.No</th>
                 <th>Description</th>
-                <th>Units (Hrs.)</th>
+                <th>Units (Hrs)</th>
                 <th>Rate</th>
                 <th>Amount (INR)</th>
               </tr>
@@ -473,7 +473,7 @@
                       [disabled]="i === 0"
                       [ngModelOptions]="{standalone: true}"
                       class="description-input"
-                      (input)="calculateTotals(); capitalizeFirstLetter($event)"
+                      (input)="calculateTotals();"
                   />
               </div>
           

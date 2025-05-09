@@ -210,9 +210,9 @@ newCustomerTemplate: any;
           }
        
           let creatObj = {
-            "customerName": this.CustomerCreationForm.value.customerName.toUpperCase(),
-            "customerAddress": this.CustomerCreationForm.value.customerAddress.toUpperCase(),
-            "customerCity": this.CustomerCreationForm.value.customerCity.toUpperCase(),
+            "customerName": this.CustomerCreationForm.value.customerName,
+            "customerAddress": this.CustomerCreationForm.value.customerAddress,
+            "customerCity": this.CustomerCreationForm.value.customerCity,
             "customerState": this.CustomerCreationForm.value.customerState.toUpperCase(),
             "customerPincode": this.CustomerCreationForm.value.customerPincode,
             "customerGstNo": this.CustomerCreationForm.value.customerGstNo.toUpperCase(),

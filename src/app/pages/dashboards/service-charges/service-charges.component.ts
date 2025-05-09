@@ -79,7 +79,7 @@ export class ServiceChargesComponent implements OnInit {
     }
 
     let data = {
-      chargesName: this.chargesName.value.toUpperCase(),
+      chargesName: this.chargesName.value,
     };
     this.spinner.show()
     this.service.SaveCharges(data).subscribe((res: any) => {

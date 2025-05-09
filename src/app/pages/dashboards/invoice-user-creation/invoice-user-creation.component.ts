@@ -314,7 +314,7 @@ confirmFieldTextType: boolean = false;
          this.userCreationForm.reset()
          
       this.modalService.dismissAll(modal);
-      this.c('Close click');
+      // this.c('Close click');
       this.getAllUserList()
       Swal.fire({
         title: '',

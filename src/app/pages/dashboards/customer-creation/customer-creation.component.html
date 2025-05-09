@@ -88,8 +88,8 @@
                 <div class="col-lg-4 col-md-4 col-sm-4">
                     <div class="form-group">
                         <label>Customer Name<span class="text-danger">*</span></label>
-                        <input class="form-control form-control-sm" formControlName="customerName" type="text" placeholder="Enter Customer Name" style="text-transform: uppercase;" 
-                        (input)="convertToUpperCase($event)">
+                        <input class="form-control form-control-sm" formControlName="customerName" type="text" placeholder="Enter Customer Name" 
+                        >
                         <div class="text-danger" *ngIf="submit && f['customerName'].errors">
                             Customer Name is required.
                         </div>
@@ -100,8 +100,8 @@
                 <div class="col-lg-4 col-md-4 col-sm-4">
                     <div class="form-group">
                         <label>Address<span class="text-danger">*</span></label>
-                        <input class="form-control form-control-sm" formControlName="customerAddress" type="text" placeholder="Enter Address" style="text-transform: uppercase;" 
-                        (input)="convertToUpperCase($event)">
+                        <input class="form-control form-control-sm" formControlName="customerAddress" type="text" placeholder="Enter Address" 
+                        >
                         <div class="text-danger" *ngIf="submit && f['customerAddress'].errors">
                             Address is required.
                         </div>
@@ -112,8 +112,8 @@
                 <div class="col-lg-4 col-md-4 col-sm-4">
                     <div class="form-group">
                         <label>City<span class="text-danger">*</span></label>
-                        <input class="form-control form-control-sm" formControlName="customerCity" type="text" placeholder="Enter City" style="text-transform: uppercase;" 
-                        (input)="convertToUpperCase($event)">
+                        <input class="form-control form-control-sm" formControlName="customerCity" type="text" placeholder="Enter City" 
+                        >
                         <div class="text-danger" *ngIf="submit && f['customerCity'].errors">
                             City is required.
                         </div>
