@@ -294,10 +294,10 @@
                   GST No is required.
                 </div>
               </div>
-              <div class="col-lg-4">
+            <div class="col-lg-4">
                 <div class="form-group">
                   <label>Type of Aircraft<span class="text-danger">*</span></label>
-                  <input type="text" formControlName="proformatypeOfAircraft" class="form-control" placeholder="" (input)="capitalizeFirstLetter($event)">
+                  <input type="text" formControlName="proformatypeOfAircraft" class="form-control" placeholder="" (input)="convertToUppercase($event)" >
                 </div>
                 <div class="text-danger"
                   *ngIf="newInvoiceCreation.get('proformatypeOfAircraft')?.hasError('required') && newInvoiceCreation.get('proformatypeOfAircraft')?.touched && submited">

@@ -1388,7 +1388,6 @@ if (
     event.target.value = formatted;
   
     // Update the FormControl value manually
-    this.newInvoiceCreation.get('proformatypeOfAircraft')?.setValue(formatted, { emitEvent: false });
   }
   
   
