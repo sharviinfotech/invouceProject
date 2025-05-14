@@ -32,8 +32,8 @@ interface Customer {
   customerGstNo: string;
   customerPanNo: string;
 }
-
-
+ 
+ 
 @Component({
   selector: 'app-invoice',
   templateUrl: './invoice.component.html',
@@ -51,7 +51,7 @@ export class InvoiceComponent implements OnInit {
   selectedInvoiceType: string | null = null;
   // selectedInvoiceType: string = '';
   activeTab: string = 'AllInvoice'; // Change this based on tab logic
-  
+ 
   logoUrl: string | null = null;
   InvoiceLogo:string | null = null;
   isHoveringLogo: boolean = false;
@@ -59,7 +59,13 @@ export class InvoiceComponent implements OnInit {
   StateName: string = '';
   showCGST_SGST = false;
   customerList: any[] = [];
-  
+   toTitleCase(str: string): string {
+  return str
+    .toLowerCase()
+    .split(' ')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
+}
   showIGST = false;
   proformaCardHeaderName: any;
   proformaCardHeaderId: null;
@@ -73,12 +79,15 @@ export class InvoiceComponent implements OnInit {
     this.isDropdownOpen = !this.isDropdownOpen;
    
   }
-  toTitleCase(str: string): string {
-  return str
-    .toLowerCase()
-    .split(' ')
-    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(' ');
+  onAddCustomer(newTag: string) {
+  const formatted = this.toTitleCase(newTag.trim());
+
+  // Optional: Avoid duplicate entries
+  if (!this.customerList.some(c => c.customerName === formatted)) {
+    this.customerList.push({ customerName: formatted });
+  }
+
+  this.newInvoiceCreation.get('ProformaCustomerName')?.setValue(formatted);
 }
 
   selectInvoiceType(type){
@@ -89,12 +98,12 @@ export class InvoiceComponent implements OnInit {
     this.proformaCardHeaderId = type
     this.selectedPQUniqueId = 0
     if(this.proformaCardHeaderId == "PQ"){
-     this.proformaCardHeaderName = "Profoma Invoice"
+     this.proformaCardHeaderName = "PROFORMA FLYING QUOTATION"
     }else{
-      this.proformaCardHeaderName = "Tax Invoice"
-
-
-
+      this.proformaCardHeaderName = "TAX INVOICE"
+ 
+ 
+ 
     }
     this.activeTab = "NewInvoice";
     this.isDropdownOpen = false
@@ -105,13 +114,13 @@ export class InvoiceComponent implements OnInit {
     this.newInvoiceCreation.controls['PQInvoiceNumber'].setValidators(Validators.required);
     this.PQList = this.allInvoiceList.filter(invoice => invoice.pqStatus === "inComplete" && invoice.status === "Approved");
     console.log('this.PQList',this.PQList)
-
+ 
   } else {
     this.newInvoiceCreation.controls['PQInvoiceNumber'].clearValidators();
   }
-
+ 
   this.newInvoiceCreation.controls['PQInvoiceNumber'].updateValueAndValidity();
-
+ 
   }
  
   onCustomerSelectChange(selectedCustomer: Customer | string | null) {
@@ -155,7 +164,7 @@ var extractedNumber
   if (event?.invoiceUniqueNumber) {
     const match = event.invoiceUniqueNumber.match(/PQ-(\d+)\//);
      extractedNumber = match ? parseInt(match[1], 10) : null;
-
+ 
    
   }
   console.log("Extracted Number:", extractedNumber);
@@ -163,9 +172,9 @@ var extractedNumber
   this.selectedPQUniqueId = event.originalUniqueId
   this.pathPQDataToTAX(event);
 }
-
-
-
+ 
+ 
+ 
 clearOtherCustomerFields() {
   this.newInvoiceCreation.patchValue({
       ProformaAddress: '',
@@ -176,14 +185,14 @@ clearOtherCustomerFields() {
       ProformaPanNO: ''
   });
 }
-
-  
-  
-  
-  
-  
-
-  hoveredIndex: number = -1; 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+  hoveredIndex: number = -1;
   // chargeItems: ChargeItem[] = [
   //   {
   //     description: 'HYDERABAD-CHENNAI-HYDERABAD',
@@ -233,13 +242,13 @@ clearOtherCustomerFields() {
   subtotal: number;
   grandTotal: number;
   amountInWords: string = '';
-
+ 
   @ViewChild('logoInput') logoInput!: ElementRef;
   allInvoiceList: any;
   originalUniqueId: number;
-
+ 
   // getstateList: any;
-
+ 
   bsConfig = {
     dateInputFormat: 'DD-MM-YYYY', // Set the date format
     containerClass: 'theme-blue', // Optional: Use a predefined theme
@@ -274,7 +283,7 @@ clearOtherCustomerFields() {
           Validators.pattern(/^[A-Z]{5}[0-9]{4}[A-Z]$/)  // Correct PAN format
         ]
       ],
-
+ 
       ProformaInvoiceNumber: [''],
       ProformaInvoiceDate: ['', Validators.required],
       ProformaPan: [
@@ -284,7 +293,7 @@ clearOtherCustomerFields() {
           Validators.pattern(/^[A-Z]{5}[0-9]{4}[A-Z]$/)  // PAN format validation: 4 capital letters, 4 digits, 1 capital letter
         ]
       ],
-
+ 
       ProformaGstNumber: ['36AAICS9057Q1ZD', Validators.required],
       proformatypeOfAircraft: ['', Validators.required],
       proformaseatingcapasity: ['', Validators.required],
@@ -299,10 +308,10 @@ clearOtherCustomerFields() {
       // branch:[''],
       // ifscCode: ['']
     });
-
-
+ 
+ 
   }
-
+ 
   ngOnInit(): void {
     this.loginData = null
     this.loginData= this.service.getLoginResponse()
@@ -312,10 +321,10 @@ clearOtherCustomerFields() {
     this.getAllInvoice()
     this.getStates();
     this.getAllCharges();
-    this.logoUrl = this.imageService.getBase64FlightLogo(); 
-    this.InvoiceLogo = this.imageService.getBase64WorldLogo(); 
+    this.logoUrl = this.imageService.getBase64FlightLogo();
+    this.InvoiceLogo = this.imageService.getBase64WorldLogo();
    
-
+ 
   }
   onChargeSelectionChange(item: any, selectedChargeName: string) {
     if (selectedChargeName) { // Check if a charge was actually selected
@@ -352,43 +361,43 @@ clearOtherCustomerFields() {
       }
     );
   }
-
+ 
   formatTime(event: any) {
     let inputValue = event.target.value;
     // Remove non-numeric, : and .
     inputValue = inputValue.replace(/[^0-9:.]/g, '');
-
+ 
     // Split by : or .
     const parts = inputValue.split(/[:.]/);
-
+ 
     if (parts.length > 2) {
       // More than one : or .
       inputValue = parts.slice(0, 2).join(':'); // Or '.', depending on your preference
     }
-
+ 
     if (parts.length === 2) {
       // Limit minutes to 2 digits
       parts[1] = parts[1].slice(0, 2);
       inputValue = parts.join(inputValue.includes(':') ? ':' : '.');
     }
-
+ 
     // Limit hours to 2 digits
     if (parts[0]) {
       parts[0] = parts[0].slice(0, 2);
       inputValue = parts.join(inputValue.includes(':') ? ':' : '.');
     }
-
+ 
     this.newInvoiceCreation.get('bookingbillingflyingtime')?.setValue(inputValue);
     this.updateChargeItem(0, 'units', inputValue); // Update your charge item
   }
-
+ 
   validateTimeInput(event: KeyboardEvent) {
     const charCode = event.which ? event.which : event.keyCode;
     if ((charCode < 48 || charCode > 57) && charCode !== 58 && charCode !== 46) {
       event.preventDefault(); // Prevent non-numeric, : and . input
     }
   }
-
+ 
   // onCustomerChange(customerId: string) {
   //   if (customerId) {
   //     const selectedCustomer = this.customerList.find((customer) => customer.customerId === parseInt(customerId));
@@ -435,13 +444,13 @@ clearOtherCustomerFields() {
       }
     );
   }
-  
+ 
   onChangeState() {
     this.taxItems = [];
     const selectedState = this.newInvoiceCreation.value.ProformaState;
     const selectedObj = this.statesList.find(item => item.stateName === selectedState);
     console.log("selectedObj", selectedObj);
-  
+ 
     if (selectedObj && selectedObj.stateName === 'TELANGANA') {
       this.taxItems = [
         {
@@ -464,26 +473,14 @@ clearOtherCustomerFields() {
         }
       ];
     }
-  
+ 
     // Recalculate totals if needed
     if (this.activeTab === 'Edit' && this.subtotal) {
       this.calculateTotals();
     }
   }
-onAddCustomer(newTag: string) {
-  const formatted = this.toTitleCase(newTag);
-
-  // Add to list if not already present (optional duplicate check)
-  if (!this.customerList.some(c => c.customerName === formatted)) {
-    this.customerList.push({ customerName: formatted });
-  }
-
-  // Set the formatted value to the form control
-  this.newInvoiceCreation.get('ProformaCustomerName')?.setValue(formatted);
-}
-
-
-
+ 
+ 
   getAllInvoice() {
     this.allInvoiceList = []
     this.getAllCustomerList()
@@ -499,13 +496,13 @@ onAddCustomer(newTag: string) {
       this.spinner.hide()
     })
   }
-
-
-
+ 
+ 
+ 
   selectedInvoice: any = null; // Stores the selected invoice
   isEditing = false; // Determines whether edit mode is active
-
-
+ 
+ 
   // Field configurations for form rendering
   invoiceFields = [
     { label: 'Company Name', controlName: 'companyName', placeholder: 'Enter company name' },
@@ -519,7 +516,22 @@ spinnerHideMethod(){
     this.spinner.hide()
   }, 1000); // Delay of 2 seconds
 }
+capitalizeFirstLetter(event: any) {
+  let input = event.target.value;
+  if (input.length === 0) return;
 
+  const formatted = input.charAt(0).toUpperCase() + input.slice(1).toLowerCase();
+  event.target.value = formatted;
+
+  }
+convertToLowercase(event: any): void {
+  const input = event.target;
+  const lowercaseValue = input.value.toLowerCase();
+  input.value = lowercaseValue;
+  this.newInvoiceCreation.get('bookingsector')?.setValue(lowercaseValue);
+}
+
+ 
   // Method to select and show an invoice
   selectInvoice(invoice: any) {
    
@@ -530,8 +542,8 @@ spinnerHideMethod(){
       console.log("invoice", invoice)
       console.log("this.invoiceItem", this.invoiceItem.invoiceReferenceNo);
       console.log("this.invoiceItem.header.status", this.invoiceItem.header.status)
-      
-      
+     
+     
        if (this.invoiceItem.status == "Approved" && this.invoiceItem.pqStatus == "inComplete") {
         console.log("If approved")
         Swal.fire({
@@ -580,7 +592,7 @@ spinnerHideMethod(){
             console.log("this.invoiceItem", this.invoiceItem)
             this.activeTab = 'Preview'
             this.spinnerHideMethod()
-            
+           
           } else {
             // this.spinnerHideMethod()
             this.getAllInvoice()
@@ -590,7 +602,7 @@ spinnerHideMethod(){
         });
       }
       else {
-  
+ 
         if (this.invoiceItem.status == "Rejected") {
           console.log("If rejected")
           Swal.fire({
@@ -624,8 +636,8 @@ spinnerHideMethod(){
               // this.spinnerHideMethod()
             }
           });
-  
-  
+ 
+ 
           // Swal.fire({
           //   // title: 'question',
           //   text: 'The selected invoice has been rejected',
@@ -678,14 +690,14 @@ spinnerHideMethod(){
               // this.spinnerHideMethod()
             }
           });
-  
+ 
         }
-  
+ 
       }
     }
    
-
-
+ 
+ 
   }
   pathPQDataToTAX(invoice) {
    
@@ -717,10 +729,10 @@ spinnerHideMethod(){
       // bankname: this.selectedInvoice.bankDetails.bank,
       // accountNumber: this.selectedInvoice.bankDetails.accountNumber,
       // branch:this.selectedInvoice.bankDetails.branch,
-      // ifscCode:this.selectedInvoice.bankDetails.ifscCode 
-      
+      // ifscCode:this.selectedInvoice.bankDetails.ifscCode
+     
     })
-
+ 
     this.chargeItems = this.selectedInvoice.chargesList;
     this.taxItems = this.selectedInvoice.taxList;
     this.subtotal = this.selectedInvoice.subtotal;
@@ -728,19 +740,19 @@ spinnerHideMethod(){
     this.amountInWords = this.selectedInvoice.amountInWords
     this.logoUrl = this.selectedInvoice.header.invoiceImage
     this.InvoiceLogo = this.selectedInvoice.header.invoiceHeader
-    this.reSubmitInvoiceStatus =this.selectedInvoice.status 
+    this.reSubmitInvoiceStatus =this.selectedInvoice.status
     this.reason =this.selectedInvoice.reason ,
     this.invoiceApprovedOrRejectedByUser =this.selectedInvoice.invoiceApprovedOrRejectedByUser ,
     this.invoiceApprovedOrRejectedDateAndTime =this.selectedInvoice.invoiceApprovedOrRejectedDateAndTime,
     // this.proformaCardHeaderId = this.selectedInvoice.proformaCardHeaderId,
-    // this.proformaCardHeaderName  =this.selectedInvoice.proformaCardHeaderName 
+    // this.proformaCardHeaderName  =this.selectedInvoice.proformaCardHeaderName
     this.reviewedFlag = this.selectedInvoice.reviewed
 if(this.logoUrl == ''|| this.logoUrl == null){
-  this.logoUrl = this.imageService.getBase64FlightLogo(); 
+  this.logoUrl = this.imageService.getBase64FlightLogo();
 }
 if(this.InvoiceLogo== ''|| this.InvoiceLogo == null){
-  this.InvoiceLogo = this.imageService.getBase64WorldLogo(); 
-
+  this.InvoiceLogo = this.imageService.getBase64WorldLogo();
+ 
 }
     console.log("this.selectedInvoice.header.invoiceUniqueNumber", this.selectedInvoice.invoiceUniqueNumber)
     console.log("this.newInvoiceCreation", this.newInvoiceCreation.value.ProformaInvoiceNumber)
@@ -793,10 +805,10 @@ if(this.InvoiceLogo== ''|| this.InvoiceLogo == null){
       // bankname: this.selectedInvoice.bankDetails.bank,
       // accountNumber: this.selectedInvoice.bankDetails.accountNumber,
       // branch:this.selectedInvoice.bankDetails.branch,
-      // ifscCode:this.selectedInvoice.bankDetails.ifscCode 
-      
+      // ifscCode:this.selectedInvoice.bankDetails.ifscCode
+     
     })
-
+ 
     this.chargeItems = this.selectedInvoice.chargesList;
     this.taxItems = this.selectedInvoice.taxList;
     this.subtotal = this.selectedInvoice.subtotal;
@@ -804,24 +816,24 @@ if(this.InvoiceLogo== ''|| this.InvoiceLogo == null){
     this.amountInWords = this.selectedInvoice.amountInWords
     this.logoUrl = this.selectedInvoice.header.invoiceImage
     this.InvoiceLogo = this.selectedInvoice.header.invoiceHeader
-    this.reSubmitInvoiceStatus =this.selectedInvoice.status 
+    this.reSubmitInvoiceStatus =this.selectedInvoice.status
     this.reason =this.selectedInvoice.reason ,
     this.invoiceApprovedOrRejectedByUser =this.selectedInvoice.invoiceApprovedOrRejectedByUser ,
     this.invoiceApprovedOrRejectedDateAndTime =this.selectedInvoice.invoiceApprovedOrRejectedDateAndTime,
     this.proformaCardHeaderId = this.selectedInvoice.proformaCardHeaderId,
-    this.proformaCardHeaderName  =this.selectedInvoice.proformaCardHeaderName 
+    this.proformaCardHeaderName  =this.selectedInvoice.proformaCardHeaderName
     this.reviewedFlag = this.selectedInvoice.reviewed
 if(this.logoUrl == ''|| this.logoUrl == null){
-  this.logoUrl = this.imageService.getBase64FlightLogo(); 
+  this.logoUrl = this.imageService.getBase64FlightLogo();
 }
 if(this.InvoiceLogo== ''|| this.InvoiceLogo == null){
-  this.InvoiceLogo = this.imageService.getBase64WorldLogo(); 
-
+  this.InvoiceLogo = this.imageService.getBase64WorldLogo();
+ 
 }
     console.log("this.selectedInvoice.header.invoiceUniqueNumber", this.selectedInvoice.invoiceUniqueNumber)
     console.log("this.newInvoiceCreation", this.newInvoiceCreation.value.ProformaInvoiceNumber)
     this.pqSameforTAX = this.selectedInvoice.pqSameforTAX,
-    this.rePQStatus =this.selectedInvoice.pqStatus 
+    this.rePQStatus =this.selectedInvoice.pqStatus
   }
   resetAll() {
     // this.logoUrl = ""
@@ -858,7 +870,7 @@ if(this.InvoiceLogo== ''|| this.InvoiceLogo == null){
       // bankname: "",
       // accountNumber:"",
       // branch:"",
-      // ifscCode:"" 
+      // ifscCode:""
     })
     this.submited = false
     setTimeout(() => {
@@ -866,18 +878,18 @@ if(this.InvoiceLogo== ''|| this.InvoiceLogo == null){
       console.log("enter into new or all spinner")
     }, 1000); // Delay of 2 seconds
   }
-
+ 
   backButton() {
     this.show = true
     this.activeTab = "AllInvoice"
   }
-
+ 
   // Method to preview an invoice
   previewInvoice(invoice: any) {
     this.selectedInvoice = invoice;
     this.isEditing = false;
   }
-
+ 
   // Method to edit an invoice
   editInvoice(invoice: any) {
     this.selectedInvoice = invoice;
@@ -885,14 +897,14 @@ if(this.InvoiceLogo== ''|| this.InvoiceLogo == null){
   }
   setTab(tabName: string) {
     this.spinner.show()
-    
+   
     if(tabName == 'AllInvoice' || tabName == 'NewInvoice'){
       this.activeTab = tabName;
       this.invoiceItem = null
       console.log("this.activeTab", this.activeTab);
       this.resetAll()
       this.show=true
-      
+     
     }else{
       this.activeTab = tabName;
       setTimeout(() => {
@@ -904,30 +916,30 @@ if(this.InvoiceLogo== ''|| this.InvoiceLogo == null){
      
     }
    
-    
+   
   }
-
-
+ 
+ 
   onLogoSelected(event: Event) {
     const input = event.target as HTMLInputElement;
-
+ 
     if (input.files && input.files[0]) {
       const reader = new FileReader();
-
+ 
       reader.onload = () => {
         this.logoUrl = reader.result as string; // Store the image URL
         console.log("Image logoUrl:", this.logoUrl);
       };
-
+ 
       reader.readAsDataURL(input.files[0]); // Convert file to base64 URL
     }
   }
-
+ 
   removeLogo(event: Event): void {
     event.preventDefault();
     this.logoUrl = 'assets/images/AircraftFlight.png';
   }
-
+ 
   addChargeItem() {
     if (this.newInvoiceCreation.value.ProformaState) {
       const newChargeItem = {
@@ -936,36 +948,36 @@ if(this.InvoiceLogo== ''|| this.InvoiceLogo == null){
         rate: 0,
         amount: 0
       };
-  
+ 
       this.chargeItems.push(newChargeItem);
       console.log("this.chargeItems addChargeItem", this.chargeItems);
     } else {
       Swal.fire(`Please select State and Add Charges`);
     }
   }
-  
+ 
   updateChargeItem(index: number, field: string, value: any) {
     if (this.chargeItems.length > index) {
       this.chargeItems[index][field] = value; // Convert to uppercase
     }
     this.calculateTotals()
   }
-  
+ 
   deleteChargeItem(index: number) {
     this.chargeItems.splice(index, 1); // Remove the selected item
     this.calculateTotals(); // Recalculate totals
     console.log("this.chargeItems",this.chargeItems)
   }
-  
-
+ 
+ 
   addTaxItem(): void {
     this.taxItems.push({ description: '', percentage: 0, amount: 0 });
   }
-
+ 
   calculateTotals() {
     this.subtotal = 0;
     this.grandTotal = 0;
-
+ 
     this.chargeItems.forEach(item => {
         if (item.units) {
             const unitsInHours = this.convertUnitsToHours(item.units);
@@ -976,36 +988,35 @@ if(this.InvoiceLogo== ''|| this.InvoiceLogo == null){
             item.amount = 0;
         }
     });
-
+ 
     this.subtotal = this.chargeItems.reduce((sum, item) => sum + (Number(item.amount) || 0), 0);
-
+ 
     this.taxItems.forEach(tax => {
         tax.amount = Math.round(this.subtotal * (Number(tax.percentage) / 100));
     });
-
+ 
     this.grandTotal = Math.round(this.subtotal + this.taxItems.reduce((sum, tax) => sum + (Number(tax.amount) || 0), 0));
-
-this.amountInWords = this.toTitleCase(this.numberToWordsService.convert(this.grandTotal));
-
+ 
+this.amountInWords = this.toTitleCase(this.numberToWordsService.convert(this.grandTotal)); 
     console.log("chargeItems", this.chargeItems);
     console.log("taxItems", this.taxItems);
     console.log("subtotal", this.subtotal);
     console.log("grandTotal", this.grandTotal);
     console.log("amountInWords", this.amountInWords);
 }
-
+ 
 convertUnitsToHours(units: string | null): number {
   if (!units || units.trim() === '') return 0;
-
+ 
   let cleanUnits = units.trim().toLowerCase();
   cleanUnits = cleanUnits.replace(/ hrs?$/, '');
-
+ 
   const dotParts = cleanUnits.split('.');
   const colonParts = cleanUnits.split(':');
-
+ 
   let hours = 0;
   let minutes = 0;
-
+ 
   if (dotParts.length === 2) {
       hours = Number(dotParts[0]);
       minutes = Number(dotParts[1]);
@@ -1020,12 +1031,12 @@ convertUnitsToHours(units: string | null): number {
       }
       return 0; // Invalid format
   }
-
+ 
   if (isNaN(hours) || isNaN(minutes)) return 0;
-
+ 
   if (hours > 24) hours = 24;
   if (minutes >= 60) return 0; // Reject minutes >= 60
-
+ 
   return hours + minutes / 60;
 }
   formatDate(proformaInvoiceDate: string): string {
@@ -1033,25 +1044,25 @@ convertUnitsToHours(units: string | null): number {
     const day = String(date.getDate()).padStart(2, '0');
     const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-based
     const year = date.getFullYear();
-
+ 
     return `${day}-${month}-${year}`;
   }
-
+ 
   CreateInvoice(): void {
-    
-
+   
+ 
     console.log('this.newInvoiceCreation', this.newInvoiceCreation.invalid);
     if (this.newInvoiceCreation.invalid) {
       console.log('this.newInvoiceCreation', this.newInvoiceCreation);
       this.submited = true; // Ensure it's set before checking invalid fields
       this.newInvoiceCreation.markAllAsTouched();
-    
+   
       // Find the first invalid control and focus on it
       for (const key of Object.keys(this.newInvoiceCreation.controls)) {
         if (this.newInvoiceCreation.controls[key].invalid) {
           setTimeout(() => {
             let invalidControl = document.querySelector(`[formControlName="${key}"]`);
-    
+   
             if (invalidControl) {
               const ngSelectInput = invalidControl.querySelector('input'); // Get the input inside ng-select
               if (ngSelectInput) {
@@ -1080,14 +1091,14 @@ convertUnitsToHours(units: string | null): number {
       let invoiceDate = this.newInvoiceCreation.value.ProformaInvoiceDate;
       let startBookingDate = this.newInvoiceCreation.value.startBookingDateOfJourny;
       let endBbookingDate = this.newInvoiceCreation.value.endBookingDateOfJourny;
-  
+ 
       // ✅ Check if the date is already in 'DD-MM-YYYY' format
       const dateRegex = /^\d{2}-\d{2}-\d{4}$/;
-  
+ 
       if (!dateRegex.test(invoiceDate)) {
         invoiceDate = this.formatDate(invoiceDate);
       }
-  
+ 
       if (!dateRegex.test(startBookingDate)) {
         startBookingDate = this.formatDate(startBookingDate);
       }
@@ -1096,9 +1107,9 @@ convertUnitsToHours(units: string | null): number {
       }
       console.log("invoiceDateSplit", invoiceDate, "startBookingDate",startBookingDate,"endBbookingDate", endBbookingDate);
 console.log("this.newInvoiceCreation.value.ProformaCustomerName", this.newInvoiceCreation.value.ProformaCustomerName);
-
+ 
 let customerNameObj;
-
+ 
 // Check if ProformaCustomerName is an object and has the expected property
 if (
   this.newInvoiceCreation.value.ProformaCustomerName &&
@@ -1109,14 +1120,14 @@ if (
 } else {
   customerNameObj = this.newInvoiceCreation.value.ProformaCustomerName;
 }
-    var statusUpdate 
+    var statusUpdate
     var pqStatus
     var pqUniqueId
    if(this.proformaCardHeaderId == "PQ"){
        statusUpdate = "Pending",
        pqStatus = "inComplete"
        pqUniqueId = 0
-
+ 
    }else{
        statusUpdate = "Amount Received"
        pqStatus = "Completed",
@@ -1165,7 +1176,7 @@ if (
         "pqSameforTAX":this.pqSameforTAX?this.pqSameforTAX:0,
         "pqStatus":pqStatus,
         "pqUniqueId":pqUniqueId,
-        
+       
         // "bankDetails":{
         //     "accountName":this.newInvoiceCreation.value.accountName,
         //     "bank":this.newInvoiceCreation.value.bank,
@@ -1181,10 +1192,10 @@ if (
        
         const resp = response.data;
         if (response.status === 200 && resp) {
-          
+         
           this.getAllInvoice()
-          this.getAllCharges(); 
-
+          this.getAllCharges();
+ 
           this.activeTab = 'AllInvoice'
           // Reset form and related data
           this.newInvoiceCreation.reset();
@@ -1201,7 +1212,7 @@ if (
             showConfirmButton: true
           });
           this.spinner.hide()
-
+ 
         } else {
           this.spinner.hide()
           Swal.fire({
@@ -1222,32 +1233,32 @@ if (
       });
     }
   }
-
+ 
   numbersOnly(event: any) {
     const charCode = event.charCode;
     if (!(charCode >= 48 && charCode <= 57) && ![8, 9, 37, 39, 46].includes(charCode)) {
       event.preventDefault();
     }
   }
-
+ 
   UpdateInvoice(): void {
-    
-
+   
+ 
     if (this.newInvoiceCreation.valid) {
       console.log('Invoice Updated', this.newInvoiceCreation.value);
-
-
+ 
+ 
       let invoiceDate = this.newInvoiceCreation.value.ProformaInvoiceDate;
       let startBookingDate = this.newInvoiceCreation.value.startBookingDateOfJourny;
       let endBbookingDate = this.newInvoiceCreation.value.endBookingDateOfJourny;
-  
+ 
       // ✅ Check if the date is already in 'DD-MM-YYYY' format
       const dateRegex = /^\d{2}-\d{2}-\d{4}$/;
-  
+ 
       if (!dateRegex.test(invoiceDate)) {
         invoiceDate = this.formatDate(invoiceDate);
       }
-  
+ 
       if (!dateRegex.test(startBookingDate)) {
         startBookingDate = this.formatDate(startBookingDate);
       }
@@ -1267,10 +1278,10 @@ if (
          statusUpdate = this.reSubmitInvoiceStatus,
           rePQStatus = 'inComplete'
      }
-    
+   
       // Implement update logic here
       let updateobj = {
-
+ 
         "originalUniqueId": this.originalUniqueId,
         "header": {
           // "invoiceHeader": this.InvoiceLogo,
@@ -1313,7 +1324,7 @@ if (
         "reviewedReSubmited":false,
            "pqSameforTAX":this.pqSameforTAX?this.pqSameforTAX:0,
            "pqStatus":rePQStatus,
-
+ 
         // "bankDetails":{
         //     "accountName":this.newInvoiceCreation.value.accountName,
         //     "bank":this.newInvoiceCreation.value.bank,
@@ -1329,7 +1340,7 @@ if (
         const resp = response.updatedInvoice;
         if (response.status === 200 && resp) {
           this.getAllInvoice()
-          this.getAllCharges(); 
+          this.getAllCharges();
           // Reset form and related data
           this.newInvoiceCreation.reset();
           // this.logoUrl = '';
@@ -1347,7 +1358,7 @@ if (
             showConfirmButton: true
           });
           this.invoiceItem = null
-
+ 
         } else {
           this.spinner.hide()
           Swal.fire({
@@ -1378,23 +1389,12 @@ if (
   }
   convertToUppercase(event: any) {
     event.target.value = event.target.value.toUpperCase();
-    console.log("convertToUppercase",event.target.value);
   }
-  capitalizeFirstLetter(event: any) {
-    let input = event.target.value;
-    if (input.length === 0) return;
-  
-    const formatted = input.charAt(0).toUpperCase() + input.slice(1).toLowerCase();
-    event.target.value = formatted;
-  
-    // Update the FormControl value manually
-  }
-  
-  
+ 
   restrictToNumbers(event: KeyboardEvent) {
     const pattern = /[0-9]/;
     const inputChar = event.key;
-  
+ 
     if (!pattern.test(inputChar)) {
       event.preventDefault(); // Prevent non-numeric input
     }
@@ -1403,14 +1403,15 @@ if (
     this.service.getAllCharges().subscribe((res: any) => {
       this.allCharges = res.data; // Update the allCharges array with the fetched data
       console.log('allCharges:', this.allCharges);
-      
+     
     }, error => {
       console.error("Error fetching charges:", error);
     });
   }
-  
-
-
-
-
+ 
+ 
+ 
+ 
+ 
 }
+ 

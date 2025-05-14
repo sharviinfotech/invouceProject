@@ -142,7 +142,7 @@
                   Proforma Invoice NUmber is required.
                 </div>
               </div>
-              <div class="col-lg-4">
+    <div class="col-lg-4">
   <div class="form-group">
     <label>Customer Name<span class="text-danger">*</span></label>
     <ng-select
@@ -154,17 +154,18 @@
       [searchable]="true"
       formControlName="ProformaCustomerName"
       (change)="onCustomerSelectChange($event)" 
-      (add)="onAddCustomer($event)"
-    >
+      (add)="onAddCustomer($event)">
     </ng-select>
   </div>
+
   <div class="text-danger" 
-    *ngIf="newInvoiceCreation.get('ProformaCustomerName')?.hasError('required') && 
-           newInvoiceCreation.get('ProformaCustomerName')?.touched && 
+    *ngIf="newInvoiceCreation.get('ProformaCustomerName')?.hasError('required') &&
+           newInvoiceCreation.get('ProformaCustomerName')?.touched &&
            submited">
     Customer Name is required.
   </div>
 </div>
+
               <div class="col-lg-4">
                 <div class="form-group">
                   <label>Address<span class="text-danger">*</span></label>
@@ -272,7 +273,7 @@
                 <div class="form-group">
                   <label>PAN Number<span class="text-danger">*</span></label>
                   <input id="ProformaPanNumber" type="text" formControlName="ProformaPan" maxlength="10"
-                    placeholder="Enter PAN Number (e.g., ABCD1234E)" (input)="capitalizeFirstLetter($event)" />
+                    placeholder="Enter PAN Number (e.g., ABCD1234E)" (input)="convertToUppercase($event)" />
                   <div
                     *ngIf="newInvoiceCreation.get('ProformaPan')?.hasError('pattern') && newInvoiceCreation.get('ProformaPan')?.touched && submited">
                     PAN number must be in the format: 4 capital letters, 4 numbers, and 1 capital letter (e.g.,
@@ -287,7 +288,7 @@
               <div class="col-lg-4">
                 <div class="form-group">
                   <label>GST No<span class="text-danger">*</span></label>
-                  <input type="text" formControlName="ProformaGstNumber" class="form-control" placeholder="" (input)="capitalizeFirstLetter($event)" >
+                  <input type="text" formControlName="ProformaGstNumber" class="form-control" placeholder="" (input)="convertToUppercase($event)" >
                 </div>
                 <div class="text-danger"
                   *ngIf="newInvoiceCreation.get('ProformaGstNumber')?.hasError('required') && newInvoiceCreation.get('ProformaGstNumber')?.touched && submited">
@@ -365,18 +366,18 @@
               </div>
               
             </div>
-            <div class="col-lg-4 pt-4" style="border-left: 2px solid blue;">
-              <div class="form-group">
-                <label>Sector<span class="text-danger">*</span></label>
-                <!-- <input type="text" formControlName="bookingsector" class="form-control" placeholder="" (input)="convertToUppercase($event)"> -->
-                <input type="text" formControlName="bookingsector" class="form-control"
-                (input)="updateChargeItem(0, 'description', $event.target.value);">
-              </div>
-              <div class="text-danger"
-                *ngIf="newInvoiceCreation.get('bookingsector')?.hasError('required') && newInvoiceCreation.get('bookingsector')?.touched && submited">
-                Sector is required.
-              </div>
-            </div>
+           <div class="col-lg-4 pt-4" style="border-left: 2px solid blue;">
+  <div class="form-group">
+    <label>Sector<span class="text-danger">*</span></label>
+    <input type="text" formControlName="bookingsector" class="form-control"
+      (input)="convertToLowercase($event)">
+  </div>
+  <div class="text-danger"
+    *ngIf="newInvoiceCreation.get('bookingsector')?.hasError('required') && newInvoiceCreation.get('bookingsector')?.touched && submited">
+    Sector is required.
+  </div>
+</div>
+
             <div class="col-lg-4 pt-4" style="border-left: 2px solid blue;">
               <div class="form-group">
                 <label>Billing Flying Time<span class="text-danger">*</span></label>
@@ -666,7 +667,7 @@
               <tr >
                 <th>S.No</th>
                 <th>Description</th>
-                <th>Units (Hrs.)</th>
+                <th>Units (Hrs)</th>
                 <th>Rate (INR)</th>
                 <th>Amount (INR)</th>
               </tr>
@@ -938,12 +939,12 @@
                   GST No is required.
                 </div>
 
-
+ 
               </div>
               <div class="col-lg-4">
                 <div class="form-group">
                   <label>Type of Aircraft<span class="text-danger">*</span></label>
-                  <input type="text" formControlName="proformatypeOfAircraft" class="form-control" placeholder=""  (input)="capitalizeFirstLetter($event)">
+                  <input type="text" formControlName="proformatypeOfAircraft" class="form-control" placeholder="">
                 </div>
                 <div class="text-danger" style="color: red;"
                   *ngIf="newInvoiceCreation.get('proformatypeOfAircraft')?.hasError('required') && newInvoiceCreation.get('proformatypeOfAircraft')?.touched">

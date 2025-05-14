@@ -1222,7 +1222,7 @@ font-family: Arial, sans-serif;
               <tr>
                 <th class="booking-header bold" style="font-size: 12px;">S.No</th>
                 <th class="booking-header bold" style="font-size: 12px;">Descripation</th>
-                <th class="booking-header bold" style="font-size: 12px;">Units (Hrs.)</th>
+                <th class="booking-header bold" style="font-size: 12px;">Units (Hrs)</th>
                 <th class="booking-header bold" style="font-size: 12px;">Rate(Inr)</th>
                 <th class="booking-header bold" style="font-size: 12px;">Amount(Inr)</th>
               </tr>
@@ -9075,7 +9075,7 @@ color: black;
               <tr>
                 <th  style="font-size: 12px;color:black !important">S.No</th>
                 <th  style="font-size: 12px;color:black !important">Descripation</th>
-                <th  style="font-size: 12px;color:black !important">Units (Hrs.)</th>
+                <th  style="font-size: 12px;color:black !important">Units (Hrs)</th>
                 <th  style="font-size: 12px;color:black !important">Rate(INR)</th>
                 <th  style="font-size: 12px;color:black !important">Amount(INR)</th>
               </tr>
