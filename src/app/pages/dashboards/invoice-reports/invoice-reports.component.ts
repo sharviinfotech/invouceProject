@@ -1241,8 +1241,12 @@ font-family: Arial, sans-serif;
                    <td class="text-center" style="font-size:12px;"></td>
                   <td style="font-size:12px;">${charge.description}</td>
                   <td class="text-center" style="font-size:12px;">${charge.units ? charge.units : ''}</td>
-                  <td class="text-right" style="font-size:12px;">${Number(charge.rate).toFixed(2).toLocaleString()}</td>
-                  <td class="text-right" style="font-size:12px;">${Number(charge.amount).toFixed(2).toLocaleString()}</td>
+<td class="text-right" style="font-size:12px;">
+  ${Number(charge.rate).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+</td>
+<td class="text-right" style="font-size:12px;">
+  ${Number(charge.amount).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+</td>
                 </tr>
               `).join('')}
              
@@ -1251,7 +1255,9 @@ font-family: Arial, sans-serif;
               <td></td>
               <td></td>
                 <td  class="text-right bold" style="background-color: rgb(179 187 227);color:black ">Total</td>
-                <td class="text-right bold"  style="background-color: rgb(179 187 227);color:black">${Number(invoiceItem.subtotal).toFixed(2).toLocaleString()}
+<td class="text-right bold" style="background-color: rgb(179 187 227); color:black">
+  ${Number(invoiceItem.subtotal).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+</td>
 </td>
               </tr>
               <tr>
@@ -1268,7 +1274,9 @@ font-family: Arial, sans-serif;
                   <td style="font-size:12px;">${tax.description}</td>
                   <td style="font-size:12px;"></td>
                   <td style="font-size:12px;"></td>
-                  <td class="text-right" style="font-size:10px;">${Number(tax.amount).toFixed(2).toLocaleString()}</td>
+<td class="text-right" style="font-size:10px;">
+  ${Number(tax.amount).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+</td>
                 </tr>
               `).join('')}
  
@@ -1277,7 +1285,9 @@ font-family: Arial, sans-serif;
               <td></td>
               <td></td>
                 <td class="text-right bold"  style="background-color: rgb(179 187 227);color:black"">Grand Total</td>
-                <td class="text-right bold"  style="background-color: rgb(179 187 227);color:black">${invoiceItem.grandTotal ? Number(invoiceItem.grandTotal).toFixed(2).toLocaleString() : '0.00'}</td>
+<td class="text-right bold" style="background-color: rgb(179 187 227); color:black">
+  ${invoiceItem.grandTotal ? Number(invoiceItem.grandTotal).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '0.00'}
+</td>
               </tr>
                <tr >
                   <td colspan="5" class="bold" style="padding-top:3px !important"> ${invoiceItem.amountInWords}</td>
@@ -9094,8 +9104,12 @@ color: black;
                    <td class="text-center" style="font-size:12px;"></td>
                   <td style="font-size:12px;">${charge.description}</td>
                   <td class="text-center" style="font-size:12px; text-align:center;">${charge.units ? charge.units : ''}</td>
-                  <td class="text-right" style="font-size:12px;text-align:right;">${Number(charge.rate).toFixed(2).toLocaleString()}</td>
-                  <td class="text-right" style="font-size:12px;text-align:right;">${Number(charge.amount).toFixed(2).toLocaleString()}</td>
+<td class="text-right" style="font-size:12px; text-align:end;">
+  ${Number(charge.rate).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+</td>
+<td class="text-right" style="font-size:12px; text-align:end;">
+  ${Number(charge.amount).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+</td>
                 </tr>
               `).join('')}
              
@@ -9104,7 +9118,9 @@ color: black;
               <td></td>
               <td></td>
                 <td  class="text-right bold" style="background-color: rgb(179 187 227);color:black; text-align:right; "><b>Total</b></td>
-                <td class="text-right bold"  style="background-color: rgb(179 187 227);color:black;text-align:right;"><b>${Number(invoiceItem.subtotal).toFixed(2).toLocaleString()}</b>
+<td class="text-right bold" style="background-color: rgb(179 187 227); color:black; text-align:end;"><b>
+  ${Number(invoiceItem.subtotal).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</b>
+</td>
 </td>
               </tr>
               <tr>
@@ -9121,7 +9137,9 @@ color: black;
                   <td style="font-size:12px;">${tax.description}</td>
                   <td style="font-size:12px;"></td>
                   <td style="font-size:12px;"></td>
-                  <td class="text-right" style="font-size:10px; text-align:right;">${Number(tax.amount).toFixed(2).toLocaleString()}</td>
+<td class="text-right" style="font-size:10px; text-align:end;">
+  ${Number(tax.amount).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+</td>
                 </tr>
               `).join('')}
  
@@ -9130,7 +9148,9 @@ color: black;
               <td></td>
               <td></td>
                 <td class="text-right bold"  style="background-color: rgb(179 187 227);color:black; text-align:right;"><b>Grand Total</b></td>
-                <td class="text-right bold"  style="background-color: rgb(179 187 227);color:black; text-align:right;"><b>${invoiceItem.grandTotal ? Number(invoiceItem.grandTotal).toFixed(2).toLocaleString() : '0.00'}</b></td>
+<td class="text-right bold" style="background-color: rgb(179 187 227); color:black; text-align:end;"><b>
+  ${invoiceItem.grandTotal ? Number(invoiceItem.grandTotal).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '0.00'}</b>
+</td>
               </tr>
                <tr >
                   <td colspan="5" class="bold" style="padding-top:3px !important"> <b>${invoiceItem.amountInWords}</b></td>
