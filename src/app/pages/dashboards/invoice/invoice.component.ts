@@ -98,9 +98,9 @@ export class InvoiceComponent implements OnInit {
     this.proformaCardHeaderId = type
     this.selectedPQUniqueId = 0
     if(this.proformaCardHeaderId == "PQ"){
-     this.proformaCardHeaderName = "PROFORMA FLYING QUOTATION"
+     this.proformaCardHeaderName = "Proforma Invoice"
     }else{
-      this.proformaCardHeaderName = "TAX INVOICE"
+      this.proformaCardHeaderName = "Tax Invoice"
  
  
  
@@ -110,7 +110,7 @@ export class InvoiceComponent implements OnInit {
     console.log("this.proformaCardHeaderId",this.proformaCardHeaderId,this.proformaCardHeaderName)
      // Update validation dynamically
      this.PQList = []
-  if (this.proformaCardHeaderName === "TAX INVOICE") {
+  if (this.proformaCardHeaderName === "Tax Invoice") {
     this.newInvoiceCreation.controls['PQInvoiceNumber'].setValidators(Validators.required);
     this.PQList = this.allInvoiceList.filter(invoice => invoice.pqStatus === "inComplete" && invoice.status === "Approved");
     console.log('this.PQList',this.PQList)
