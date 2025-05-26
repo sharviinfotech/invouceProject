@@ -764,33 +764,30 @@ input:focus {
   color: white !important;
 }
 
-.card-header{
-  padding: 8px !important;
-  /* background-color: rgb(85 110 230) !important; */
-  color: white !important;
-  border-radius: 0px !important;
-  /* background: radial-gradient(circle, rgba(63,94,251,1) 0%, rgba(225,70,252,1) 100%); */
-  background: #6ba3cd !important;
-  
-}
-.card-body{
-  padding: 10px !important;
-}
+
+
 /* General Styles for Card and Modal */
 .card {
   border-radius: 8px;
   margin-bottom: 20px;
-  background-color: #ffffff;
+  // background-color: #ffffff;
+  background: url("/assets/images/bg2.jpg") no-repeat center center / cover !important;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .card-header {
-  background-color: #f8f9fa;
+  // background-color: #f8f9fa;
   font-size: 16px;
   font-weight: bold;
-  text-align: center;
   height: 36px;
   padding: 15px;
+  text-align: center;
+  padding: 8px !important;
+  /* background-color: rgb(85 110 230) !important; */
+  color: #cfb10f !important;
+  border-radius: 0px !important;
+  /* background: radial-gradient(circle, rgba(63,94,251,1) 0%, rgba(225,70,252,1) 100%); */
+  border-bottom: 2px solid green;
 }
 .modal-header {
   padding: 10px !important;
@@ -803,9 +800,9 @@ input:focus {
  
 
 .card-body {
-  padding: 20px;
-  background-color: #f9f9f9;
-  border-radius: 8px;
+  padding: 10px;
+  // background-color: #f9f9f9;
+  border-radius: 0px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
@@ -948,6 +945,9 @@ input:focus {
 .table-striped tbody tr:nth-child(odd) {
   background-color: #f2f2f2;
 }
+.imagePadding{
+  padding: 20px 10px 0px 10px;
+}
 
 /* Responsive Styles */
 @media (max-width: 768px) {
@@ -956,11 +956,29 @@ input:focus {
   .col-sm-4 {
       width: 100%;
       margin-bottom: 10px;
+      font-size: 9px;
   }
   
   .table {
-      font-size: 12px;
+      font-size: 9px;
   }
+  .imagePadding{
+    padding: 0px !important;
+  }
+}
+@media (max-width: 992px) {
+  body[data-sidebar=dark] .navbar-brand-box {
+    // background: #6ba3cd;
+    height: 50px !important;
+  margin-top: 0px !important; 
+
+}
+.logo {
+  line-height: 0px !important;
+}
+.imagePadding{
+  padding: 0px !important;
+}
 }
 .input-group-text {
   cursor: pointer;

@@ -110,7 +110,10 @@
 
 .page-content {
     padding: calc(#{$header-height} + #{$grid-gutter-width}) calc(#{$grid-gutter-width} * 0.75) $footer-height calc(#{$grid-gutter-width} * 0.75);
-    background: #96a3a7;
+    // background: #96a3a7;
+    background: url("/assets/images/bg5.jpg") no-repeat center center / cover !important;
+
+
 }
 
 .header-item {
@@ -252,7 +255,15 @@ body[data-topbar="dark"] {
 body[data-sidebar="dark"] {
     
     .navbar-brand-box {
-        background: $sidebar-dark-bg;
+        // background: $sidebar-dark-bg;
+  background: url("/assets/images/flightwhite.jpeg") no-repeat center center / cover !important;
+  background-image: linear-gradient(to top, #f1e7d95e, #dcd5cfa8) !important;
+  border-bottom: 1px solid white;
+        // background-image: linear-gradient(to top, #6ba3cd, #031c2e) !important;
+          // background: url("/assets/images/bg3.jpg") no-repeat center center / cover !important;
+        //   background: url("/assets/images/flightwhite.jpeg") no-repeat center center / cover !important;
+
+
         height: 288px !important;
     margin-top: 10px !important;
     }

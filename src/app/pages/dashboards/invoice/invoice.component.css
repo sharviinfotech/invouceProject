@@ -561,18 +561,7 @@ input:focus {
   color: white;
 }
 
-.card-header{
-  padding: 8px !important;
-  /* background-color: rgb(85 110 230) !important; */
-  color: white !important;
-  border-radius: 0px !important;
-  /* background: radial-gradient(circle, rgba(63,94,251,1) 0%, rgba(225,70,252,1) 100%); */
-  background: #6ba3cd !important;
-}
-.card-body{
 
-  padding: 10px !important;
-}
 
 
 

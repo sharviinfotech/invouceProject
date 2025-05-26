@@ -1,15 +1,16 @@
 
 <div class="flex w-full flex-auto flex-col" id="dashboard-container" >
-  <div class="mx-auto flex w-full max-w-screen-xl flex-wrap p-1 shadow-md">
-    <div class="card-header d-flex justify-content-between align-items-center">
-      <div class="flex-grow-1 text-center fw-bold">Invoice Data Visualization</div>
-      <div>
-        <i class="fas fa-print fs-4 text-white cursor-pointer" (click)="downloadPDF()"></i>
-      </div>
-    </div>
+ 
+   
 
-    <div class="card">
-      <div class="rounded">
+    <div class="card mx-auto flex w-full max-w-screen-xl flex-wrap p-1 shadow-md">
+      <div class="card-header d-flex justify-content-between align-items-center">
+        <div class="flex-grow-1">Invoice Data Visualization</div>
+        <div>
+          <i class="fas fa-print fs-4 text-gold cursor-pointer" (click)="downloadPDF()"></i>
+        </div>
+      </div>
+      <div class="card-body rounded">
         <div class="left-side">
           <div class="status-box total-records" role="button" (click)="OnClickCard('1')" style="position: relative;">
             <div class="flex items-center">
@@ -118,10 +119,12 @@
         </div>
       </div>
     </div>
+    
+  
     <div class="card">
       <div class="row" *ngIf="monthlyCardDisplay">
         <div class="col-lg-11 col-md-11 col-xl-11">
-          <div  style="background-color: #6ba3cd !important; color: white;padding: 10px;">SELECTED YEAR: {{ selectedYear }}</div>
+          <div  style="background-color:white !important; color: gold;padding: 10px;">SELECTED YEAR: {{ selectedYear }}</div>
         </div>
 
         <div class="col-lg-1 col-md-1 col-xl-1" style="text-align: right; padding: 0px;">
@@ -222,7 +225,6 @@
     </div> -->
 <!-- below is comentad by sunil  end-->
 
-  </div>
 
 
 

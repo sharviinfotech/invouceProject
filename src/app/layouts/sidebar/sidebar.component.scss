@@ -1,5 +1,7 @@
 .vertical-menu {
-  background-image: linear-gradient(to bottom, #6ba3cd, #031c2e) !important;
+  // background-image: linear-gradient(to bottom, #6ba3cd, #031c2e) !important;
+  background: url("/assets/images/flightwhite.jpeg") no-repeat center center / cover !important;
+
 //   background: url("/assets/images/flightland.jpg") no-repeat center center / cover !important;
 //   background-size: cover;
 // background-position: center;
@@ -22,10 +24,12 @@
 }
  
 .sub-menu .active {
-  background-image: linear-gradient(to bottom, #828b84, #031c2e) !important;
+  // background-image: linear-gradient(to bottom, #828b84, #031c2e) !important;
+  background-image: linear-gradient(to bottom, #92cbe863, #5f91b5) !important;
+
   color: #303773;
   font-weight: bold;
-  border-left: 4px solid #7e56b6;
+  border-left: 2px solid white;
 }
  
 .sub-menu .active:hover {
@@ -34,10 +38,11 @@
 }
  
 .mm-active {
-  background-image: linear-gradient(to bottom,  #6ba3cd, #031c2e) !important;
+  // background-image: linear-gradient(to bottom,  #6ba3cd, #031c2e) !important;
+  background-image: linear-gradient(to bottom, #92cbe863, #5f91b5) !important;
   color: #303773;
   font-weight: bold;
-  border-left: 4px solid #7e56b6;
+  border: 2px solid white;
 }
  
 /* Override mm-active when a sub-menu item is active */

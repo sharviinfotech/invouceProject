@@ -58,6 +58,9 @@
 #sidebar-menu {
     padding: 30px 0 30px 0;
     margin-top: 85px !important;
+    backdrop-filter: blur(0px) brightness(0.9);
+    // background: url("/assets/images/flightAndSky.jpg") no-repeat center center / cover !important;
+
     .mm-active {
         >.has-arrow {
             &:after {
@@ -84,8 +87,9 @@
                 padding: .625rem 1.5rem;
                 color: $sidebar-menu-item-color;
                 position: relative;
-                font-size: 13px;
+                font-size: 16px;
                 transition: all .4s;
+                font-weight: bold;
 
                 i {
                     display: inline-block;
@@ -118,7 +122,7 @@
 
                     a {
                         padding: .4rem 1.5rem .4rem 3.5rem;
-                        font-size: 13px;
+                        font-size: 16px;
                         color: $sidebar-menu-sub-item-color;
 
                         &:hover {
@@ -132,7 +136,7 @@
                         li {
                             a {
                                 padding: .4rem 1.5rem .4rem 4.5rem;
-                                font-size: 13px;
+                                font-size: 16px;
 
 
                             }
@@ -372,6 +376,8 @@
 body[data-sidebar="dark"] {
     .vertical-menu {
         background: $sidebar-dark-bg;
+        // background: url("/assets/images/bg9.jpg") no-repeat center center / cover !important;
+
     }
 
     #sidebar-menu {

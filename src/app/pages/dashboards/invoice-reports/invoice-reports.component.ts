@@ -1290,7 +1290,7 @@ font-family: Arial, sans-serif;
 </td>
               </tr>
                <tr >
-                  <td colspan="5" class="bold" style="padding-top:3px !important"> ${invoiceItem.amountInWords}</td>
+                  <td colspan="5" class="bold" style="padding-top:3px !important"><b> Amount In Words  :${invoiceItem.amountInWords} </b></td>
                </tr>
             </tbody>
           </table>
@@ -9153,7 +9153,7 @@ color: black;
 </td>
               </tr>
                <tr >
-                  <td colspan="5" class="bold" style="padding-top:3px !important"> <b>${invoiceItem.amountInWords}</b></td>
+                  <td colspan="5" class="bold" style="padding-top:3px !important"> <b>Amount In Words : ${invoiceItem.amountInWords}</b></td>
                </tr>
             </tbody>
           </table>

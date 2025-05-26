@@ -59,11 +59,19 @@ export class InvoiceComponent implements OnInit {
   StateName: string = '';
   showCGST_SGST = false;
   customerList: any[] = [];
-   toTitleCase(str: string): string {
+//    toTitleCase(str: string): string {
+//   return str
+//     .toLowerCase()
+//     .split(' ')
+//     .map(word => word.charAt(0) + word.slice(1))
+//     .join(' ');
+// }
+
+toTitleCase(str: string): string {
   return str
     .toLowerCase()
     .split(' ')
-    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
     .join(' ');
 }
   showIGST = false;
