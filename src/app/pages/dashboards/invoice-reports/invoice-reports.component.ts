@@ -1300,19 +1300,24 @@ font-family: Arial, sans-serif;
     <table class="remittance-table" style="border-collapse: collapse; width: 100%;">
         <tr>
             <td style="padding: 3px; vertical-align: top; font-size:13px;"><strong>Account Name</strong></td>
-            <td style="padding: 3px; vertical-align: top;font-size:13px;">: RITHWIK GREEN POWER AND AVIATION PVT. LTD.</td>
+            <td style="padding: 3px; vertical-align: top;font-size:13px;">: Rithwik Green Power and Aviation Pvt Ltd</td>
+        </tr>
+        <tr>
+            <td style="padding: 3px; vertical-align: top;font-size:13px;"><strong>Bank</strong></td>
+            <td style="padding: 3px; vertical-align: top;font-size:13px;">:Punjab National Bank</td>
         </tr>
         <tr>
             <td style="padding: 3px; vertical-align: top; font-size:13px;"><strong>Account Number</strong></td>
             <td style="padding: 3px; vertical-align: top;font-size:13px;">: 4437002100002340</td>
         </tr>
-        <tr>
-            <td style="padding: 3px; vertical-align: top;font-size:13px;"><strong>Bank</strong></td>
-            <td style="padding: 3px; vertical-align: top;font-size:13px;">: Punjab National Bank.</td>
-        </tr>
+        
         <tr>
             <td style="padding: 3px; vertical-align: top;font-size:13px;"><strong>IFSC Code</strong></td>
             <td style="padding: 3px; vertical-align: top;font-size:13px;">: PUNB0443700</td>
+        </tr>
+        <tr>
+            <td style="padding: 3px; vertical-align: top;font-size:13px;"><strong>Branch</strong></td>
+            <td style="padding: 3px; vertical-align: top;font-size:13px;">: Banjara Hills</td>
         </tr>
     </table>
 </div>
